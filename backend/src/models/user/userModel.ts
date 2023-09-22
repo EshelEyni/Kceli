@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { IUser } from "../../types/iTypes";
 import { User } from "../../../../shared/types/user";
+import calorieService from "../../services/calorie/calorieService";
 
 const userSchema: Schema<IUser> = new Schema(
   {
@@ -55,6 +56,18 @@ const userSchema: Schema<IUser> = new Schema(
       default:
         "https://res.cloudinary.com/dng9sfzqt/image/upload/v1681677382/user-chirper_ozii7u.png",
     },
+    weight: { type: Number, required: [true, "Please provide your weight"] },
+    height: { type: Number, required: [true, "Please provide your height"] },
+    gender: {
+      type: String,
+      enum: {
+        values: ["male", "female"],
+        message: "Gender must be either male or female",
+      },
+      required: [true, "Please provide your gender"],
+    },
+    birthdate: { type: Date, required: [true, "Please provide your birthdate"] },
+    targetCaloricIntakePerDay: { type: Number, default: 0 },
     isAdmin: { type: Boolean, default: false },
     active: { type: Boolean, default: true },
     loginAttempts: { type: Number, default: 0 },
@@ -98,6 +111,25 @@ userSchema.pre("save", async function (next) {
   if (!isPasswordModified) return next();
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = "";
+  next();
+});
+
+userSchema.pre("save", async function (next) {
+  // Password is only modified when creating a new user or updating the password after a reset
+  const [weight, height, gender, birthdate] = [
+    this.weight,
+    this.height,
+    this.gender,
+    this.birthdate,
+  ];
+  const age = new Date().getFullYear() - birthdate.getFullYear();
+
+  this.targetCaloricIntakePerDay = calorieService.calculateTargetCaloricIntakePerDay({
+    weight,
+    height,
+    gender,
+    age,
+  });
   next();
 });
 

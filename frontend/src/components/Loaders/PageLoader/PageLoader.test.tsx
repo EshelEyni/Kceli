@@ -18,10 +18,10 @@ describe("PageLoader", () => {
     expect(screen.getByTestId("spinner-loader")).toBeInTheDocument();
   });
 
-  it("renders the Logo and progress bar when isBirdLoader is true", () => {
+  it("renders the Logo and progress bar when isLogoLoader is true", () => {
     render(
       <MemoryRouter>
-        <PageLoader isBirdLoader={true} />
+        <PageLoader isLogoLoader={true} />
       </MemoryRouter>
     );
     expect(screen.getByTestId("logo")).toBeInTheDocument();

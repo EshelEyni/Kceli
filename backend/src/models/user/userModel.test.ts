@@ -51,6 +51,22 @@ describe("User Model", () => {
         field: "fullname",
         msg: "Please provide your full name",
       },
+      {
+        field: "weight",
+        msg: "Please provide your weight",
+      },
+      {
+        field: "height",
+        msg: "Please provide your height",
+      },
+      {
+        field: "gender",
+        msg: "Please provide your gender",
+      },
+      {
+        field: "birthdate",
+        msg: "Please provide your birthdate",
+      },
     ];
 
     it.each(requiredFields)("should enforce required $field", async required => {
@@ -215,6 +231,31 @@ describe("User Model", () => {
       await UserModel.findByIdAndDelete(userWithUniqueUsername._id);
     });
 
+    it("should enforce gender constraints", async () => {
+      const [userCredsWithInvalidGender, userCredsWithValidGender] = [
+        createValidUserCreds(),
+        createValidUserCreds(),
+        createValidUserCreds(),
+      ];
+
+      userCredsWithInvalidGender.gender = "other" as any;
+      const userWithInvalidEmail = new UserModel(userCredsWithInvalidGender);
+      const userWithValidEmail = new UserModel(userCredsWithValidGender);
+
+      const expectedErrMsg = "Gender must be either male or female";
+
+      await expect(userWithInvalidEmail.save()).rejects.toThrow(
+        expect.objectContaining({
+          name: "ValidationError",
+          message: expect.stringContaining(expectedErrMsg),
+        })
+      );
+
+      await expect(userWithValidEmail.save()).resolves.toBeDefined();
+
+      await UserModel.findByIdAndDelete(userWithValidEmail._id);
+    });
+
     it("should set default values", async () => {
       const userCreds = createValidUserCreds();
 
@@ -261,13 +302,7 @@ describe("User Model", () => {
     });
   });
 
-  describe("User Model Pre-save Hook", () => {
-    // beforeAll(() => {
-    //   spyHashPassword.mockRestore();
-    // });
-
-    // // afterAll(() => {});
-
+  describe("1) Pre-save Hook - Hash Password", () => {
     it("should hash password before saving if password was modified", async () => {
       const spyHashPassword = jest.spyOn(bcrypt, "hash");
       const userCreds = createValidUserCreds();
@@ -297,6 +332,18 @@ describe("User Model", () => {
       expect(user.passwordConfirm).toEqual("");
       await UserModel.findByIdAndDelete(user._id);
       spyHashPassword.mockRestore();
+    });
+  });
+
+  describe("2) Pre-save Hook - Calculate Target Caloric Intake Per Day", () => {
+    it("should calculate target calorie intake and saved it to user", async () => {
+      const userCreds = createValidUserCreds();
+      const user = new UserModel(userCreds);
+
+      await user.save();
+
+      expect(user.targetCaloricIntakePerDay).toBeDefined();
+      expect(typeof user.targetCaloricIntakePerDay === "number").toBe(true);
     });
   });
 

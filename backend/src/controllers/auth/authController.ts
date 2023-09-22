@@ -114,6 +114,10 @@ const _validateUserCreds = (userCreds: UserCredenitials) => {
     "passwordConfirm",
     "email",
     "fullname",
+    "weight",
+    "height",
+    "gender",
+    "birthdate",
   ];
   const isUserCredsEmpty = Object.keys(userCreds).length === 0;
   if (isUserCredsEmpty) return { isValid: false, msg: "User credentials are required" };

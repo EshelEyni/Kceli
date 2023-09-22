@@ -126,7 +126,7 @@ describe("User Router: Admin Actions", () => {
       expect(res.body.status).toEqual("success");
       const user = res.body.data as User;
       expect(user.id).toEqual(userId);
-      expect(user.bio).toEqual(testUser.bio);
+      expect(user.fullname).toEqual(testUser.fullname);
       await deleteTestUser(userId);
     });
 

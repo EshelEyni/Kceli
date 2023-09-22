@@ -2,17 +2,22 @@
 
 .login-signup-msg {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: rem(200px);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: rem(10px) 7.5%;
+  padding: rem(35px);
+  border-radius: 25px;
   background-color: var(--color-primary);
   color: white;
 
   .login-signup-msg-text-container {
+    align-self: flex-start;
     margin-inline-start: rem(100px);
 
     h1 {

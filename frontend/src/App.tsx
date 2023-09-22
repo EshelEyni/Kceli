@@ -2,7 +2,6 @@ import { useEffect, Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { routes, nestedRoutes } from "./routes";
-import { LoginSignupMsg } from "./components/Msg/LoginSignupMsg/LoginSignupMsg";
 import { Route as TypeOfRoute } from "./routes";
 import { PageLoader } from "./components/Loaders/PageLoader/PageLoader";
 import { AuthGuard } from "./guards/AuthGuard";
@@ -44,14 +43,13 @@ function App() {
   return (
     <div id="app" className="app">
       <div className="app-content" id="app-content">
-        <Suspense fallback={<PageLoader isBirdLoader={isPageLoading} />}>
+        <Suspense fallback={<PageLoader isLogoLoader={isPageLoading} />}>
           <Routes>
             <Route index element={<Navigate replace to="/home" />} />
             {getRoutes()}
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
-        {!loggedInUser && <LoginSignupMsg />}
       </div>
     </div>
   );

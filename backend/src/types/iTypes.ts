@@ -1,4 +1,5 @@
 import { Document } from "mongoose";
+import { Gender } from "../../../shared/types/system";
 
 export interface IUser extends Document {
   username: string;
@@ -10,6 +11,11 @@ export interface IUser extends Document {
   passwordResetExpires?: Date;
   fullname: string;
   imgUrl: string;
+  weight: number;
+  height: number;
+  gender: Gender;
+  birthdate: Date;
+  targetCaloricIntakePerDay: number;
   isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -8,7 +8,6 @@ import { UserModel } from "../../models/user/userModel";
 type CreateTestUserOptions = {
   id?: string;
   isAdmin?: boolean;
-  isBot?: boolean;
 };
 
 async function createManyTestUsers(numOfUsers: number): Promise<User[]> {
@@ -25,16 +24,11 @@ async function deleteManyTestUsers(ids: string[]) {
   await UserModel.deleteMany({ _id: { $in: ids } });
 }
 
-async function createTestUser({
-  id,
-  isAdmin = false,
-  isBot = false,
-}: CreateTestUserOptions = {}): Promise<User> {
+async function createTestUser({ id, isAdmin = false }: CreateTestUserOptions = {}): Promise<User> {
   const validId = id || getMongoId();
   await UserModel.findByIdAndDelete(validId).setOptions({ active: false });
   const user = createValidUserCreds(validId) as unknown as User;
   if (isAdmin) user.isAdmin = true;
-  if (isBot) user.isBot = true;
   return (await UserModel.create(user)).toObject() as unknown as User;
 }
 
@@ -64,6 +58,10 @@ function createValidUserCreds(id?: string): UserCredenitials {
     email: `${username}@testemail.com`,
     password,
     passwordConfirm: password,
+    weight: 120,
+    height: 180,
+    gender: "male",
+    birthdate: new Date("1990-01-01"),
   } as UserCredenitials;
 }
 
@@ -74,10 +72,8 @@ function getLoginTokenStrForTest(validUserId: string) {
 
 function getMockedUser({
   id,
-  isBot = false,
 }: {
   id?: string | mongoose.Types.ObjectId;
-  isBot?: boolean;
 } = {}) {
   return {
     _id: id?.toString() || getMongoId(),
@@ -87,7 +83,6 @@ function getMockedUser({
     imgUrl: "imgUrl1",
     isApprovedLocation: true,
     active: true,
-    isBot,
     toObject: jest.fn().mockReturnThis(),
   };
 }

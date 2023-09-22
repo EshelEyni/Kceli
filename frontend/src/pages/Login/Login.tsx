@@ -10,8 +10,8 @@ const LoginPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const [user, setUser] = useState({
-    username: "eshel23",
-    password: "12341234",
+    username: "eshel2",
+    password: "eshel123",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,9 +1,15 @@
+import { Gender } from "./system";
+
 export interface UserCredenitials {
   username: string;
   fullname: string;
   password: string;
   passwordConfirm: string;
   email: string;
+  weight: number;
+  height: number;
+  gender: Gender;
+  birthdate: Date;
 }
 
 export interface UserCredenitialsWithId extends UserCredenitials {
@@ -15,18 +21,10 @@ export interface User {
   username: string;
   fullname: string;
   email: string;
-  bio: string;
   imgUrl: string;
   isAdmin: boolean;
-  isVerified: boolean;
-  isBot: boolean;
-  isApprovedLocation: boolean;
-  followingCount: number;
-  followersCount: number;
+  targetCaloricIntakePerDay: number;
   createdAt: string;
-  isFollowing?: boolean;
-  isMuted?: boolean;
-  isBlocked?: boolean;
 }
 
 export type FollowingResult = {

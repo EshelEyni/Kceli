@@ -4,16 +4,16 @@ import { SpinnerLoader } from "../SpinnerLoader/SpinnerLoader";
 import "./PageLoader.scss";
 
 type PageLoaderProps = {
-  isBirdLoader?: boolean;
+  isLogoLoader?: boolean;
 };
 
-export const PageLoader: FC<PageLoaderProps> = ({ isBirdLoader = false }) => {
+export const PageLoader: FC<PageLoaderProps> = ({ isLogoLoader = false }) => {
   return (
     <div className="page-loader">
-      {isBirdLoader ? (
+      {isLogoLoader ? (
         <>
           <span className="progress-bar" data-testid="progress-bar" />
-          <Logo size={{ height: 400, width: 400 }} autoAnimate={true} />
+          <Logo size={{ height: 400, width: 400 }} />
         </>
       ) : (
         <SpinnerLoader />

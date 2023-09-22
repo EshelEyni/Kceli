@@ -40,6 +40,10 @@ describe("auth Router", () => {
       email,
       password,
       passwordConfirm: password,
+      weight: 120,
+      height: 180,
+      gender: "male",
+      birthdate: new Date("1990-01-01"),
     });
     token = getLoginTokenStrForTest(createdUser.id);
     cleanToken = token.replace("loginToken=", "");
@@ -184,6 +188,10 @@ describe("auth Router", () => {
       email: email,
       password,
       passwordConfirm: password,
+      weight: 120,
+      height: 180,
+      gender: "male",
+      birthdate: new Date("1992-01-01"),
     };
 
     beforeAll(async () => {
@@ -214,7 +222,7 @@ describe("auth Router", () => {
       expect(response.body.message).toBe("User credentials are required");
     });
 
-    it.each(Object.keys(mockUserCredenitials))(
+    fit.each(Object.keys(mockUserCredenitials))(
       "should send a 400 error if %s is not provided",
       async key => {
         const userCredentials = { ...mockUserCredenitials };

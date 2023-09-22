@@ -28,7 +28,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <ReactQueryDevtools initialIsOpen={false} />
           <Router>
             <App />
-
             <Toaster
               position="bottom-center"
               gutter={12}

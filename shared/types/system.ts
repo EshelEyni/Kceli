@@ -26,3 +26,13 @@ export interface UserMsg {
     fn: Function;
   };
 }
+
+export type Gender = "male" | "female";
+
+
+export type UserCaloricData = {
+  weight: number;
+  height: number;
+  age: number;
+  gender: Gender;
+};

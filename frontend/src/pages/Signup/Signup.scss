@@ -1,6 +1,24 @@
 .signup-page {
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  fieldset {
+    border-radius: 1rem;
+  }
+
+  label:focus-within {
+    fieldset {
+      border-color: rebeccapurple;
+    }
+  }
+
   input {
-    background-color: black;
-    color: white;
+    // background-color: black;
+    // color: white;
   }
 }

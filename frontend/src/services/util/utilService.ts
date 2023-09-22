@@ -183,6 +183,10 @@ function getToolTipStyles(options?: React.CSSProperties): React.CSSProperties {
   };
 }
 
+function capitializeFirstLetter(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export {
   formatDateToRelativeTime,
   formatNumToK,
@@ -201,4 +205,5 @@ export {
   DAY_IN_MS,
   HOUR_IN_MS,
   MINUTE_IN_MS,
+  capitializeFirstLetter,
 };
