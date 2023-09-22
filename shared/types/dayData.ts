@@ -1,6 +1,6 @@
-import { IntakeItem } from "./intake";
+import { Intake } from "./intake";
 
 export type DayData = {
   date: Date;
-  foodItems: IntakeItem[];
+  intakes: Intake[];
 };

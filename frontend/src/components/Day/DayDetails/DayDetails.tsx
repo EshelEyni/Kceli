@@ -13,11 +13,14 @@ export const DayDetails = () => {
 
   const remainingCalories =
     loggedInUser.targetCaloricIntakePerDay -
-    data.foodItems.reduce((acc, curr) => acc + curr.calories, 0);
+    data.intakes.reduce(
+      (acc, curr) => curr.items.reduce((acc, curr) => acc + curr.calories, acc),
+      0
+    );
 
   return (
     <section>
-      <CaloriePie foodItems={data.foodItems} />
+      <CaloriePie intakes={data.intakes} remainingCalories={remainingCalories} />
       <RemainingCaloriesTitle remainingCalories={remainingCalories} />
       <FoodItemEdit />
     </section>

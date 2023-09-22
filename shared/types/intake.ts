@@ -1,12 +1,14 @@
 export type IntakeItem = {
+  id: string;
+  unit: "g" | "ml" | "unit";
   amount: number;
   name: string;
   calories: number;
 };
 
-export type IntakeEntry = {
+export type Intake = {
   id: string;
   items: IntakeItem[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 };

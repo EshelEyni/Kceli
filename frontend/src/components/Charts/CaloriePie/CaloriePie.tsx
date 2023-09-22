@@ -1,23 +1,26 @@
 import { FC } from "react";
-import { PieChart, Pie, Cell } from "recharts";
-import { FoodItem } from "../../../../../shared/types/food";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { Intake } from "../../../../../shared/types/intake";
 
 type CaloriePieProps = {
-  foodItems: FoodItem[];
+  intakes: Intake[];
+  remainingCalories: number;
 };
 
-export const CaloriePie: FC<CaloriePieProps> = ({ foodItems }) => {
-  const totalCalories = 2250;
-  const consumedCalories = foodItems.reduce((acc, curr) => acc + curr.calories, 0);
-  const remainingCalories = {
-    name: "remaining",
-    calories: totalCalories - consumedCalories,
-  };
-
-  const pieData = [remainingCalories, ...foodItems].map(item => ({
-    name: item.name,
-    value: (item.calories / totalCalories) * 100, // Percentage of total calories
-  }));
+export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) => {
+  const pieData = [
+    {
+      name: "intakes",
+      value: intakes.reduce(
+        (acc, curr) => acc + curr.items.reduce((acc, curr) => acc + curr.calories, 0),
+        0
+      ),
+    },
+    {
+      name: "remaining",
+      value: remainingCalories,
+    },
+  ];
 
   // Colors for each section of the pie chart
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
@@ -38,7 +41,7 @@ export const CaloriePie: FC<CaloriePieProps> = ({ foodItems }) => {
           return <Cell key={`cell-${index}`} fill={fill} />;
         })}
       </Pie>
-      {/* <Legend /> */}
+      <Tooltip />
     </PieChart>
   );
 };
