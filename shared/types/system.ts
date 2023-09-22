@@ -13,3 +13,16 @@ export interface JsendResponse<T = any> {
 export interface IAsyncLocalStorageStore {
   loggedInUser?: User;
 }
+
+export interface UserMsg {
+  type: "info" | "success" | "error" | "warning" | "";
+  text: string;
+  link?: {
+    text?: string;
+    url: string;
+  };
+  btn?: {
+    text: string;
+    fn: Function;
+  };
+}

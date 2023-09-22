@@ -1,0 +1,37 @@
+// COLOR PALETTE
+:root {
+  --color-primary: rgb(29, 155, 240);
+  --color-primary-light: rgb(29, 155, 240, 0.2);
+  --color-warning: rgb(255, 212, 0);
+  --color-danger: rgb(244, 33, 46);
+  --color-danger-light: rgb(244, 33, 46, 0.25);
+  --color-success: rgb(0, 186, 124);
+  --color-info: rgb(29, 155, 240);
+  --color-like: rgb(249, 24, 128);
+
+  --color-border: rgb(207, 217, 222);
+  --color-secondary-border: rgb(239, 243, 244);
+  --color-hover: rgb(0, 0, 0, 0.15);
+  --color-hover-medium: rgb(0, 0, 0, 0.1);
+  --color-hover-light: rgb(0, 0, 0, 0.05);
+
+  --color-background: rgb(255, 255, 255);
+
+  --color-text: rgb(15, 20, 25);
+  --color-text-light: rgb(15, 20, 25, 0.1);
+  --color-text-gray: rgb(83, 100, 113);
+
+  --font-primary: Roboto, Montserrat, sans-serif;
+}
+
+// LAYOUT
+$layoutPadding: 20px;
+
+// LAYOUT BREAKPOINTS
+$break-narrow: 1200px;
+$break-normal: 1360px;
+$break-wide: 1920px;
+
+$padded-break-narrow: $break-narrow + $layoutPadding * 2;
+$padded-break-normal: $break-normal + $layoutPadding * 2;
+$padded-break-wide: $break-wide + $layoutPadding * 2;

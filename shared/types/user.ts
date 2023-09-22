@@ -17,9 +17,19 @@ export interface User {
   email: string;
   bio: string;
   imgUrl: string;
-  weight: number;
-  height: number;
-  birthday: string;
+  isAdmin: boolean;
+  isVerified: boolean;
+  isBot: boolean;
+  isApprovedLocation: boolean;
+  followingCount: number;
+  followersCount: number;
   createdAt: string;
-  updatedAt: string;
+  isFollowing?: boolean;
+  isMuted?: boolean;
+  isBlocked?: boolean;
 }
+
+export type FollowingResult = {
+  loggedInUser: User;
+  targetUser: User;
+};
