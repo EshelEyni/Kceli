@@ -29,7 +29,7 @@ describe("User Model", () => {
       await DailyDataModel.deleteMany({});
     });
 
-    it("should create a new daily data", async () => {
+    fit("should create a new daily data", async () => {
       const validDailyData = new DailyDataModel(dailyData);
       const savedDailyData = (await validDailyData.save()).toObject();
       expect(savedDailyData._id).toBeDefined();
@@ -106,7 +106,7 @@ describe("User Model", () => {
     });
   });
 
-  fdescribe("intakeItemSchema", () => {
+  describe("intakeItemSchema", () => {
     const mockIntakeItem: NewIntakeItem = {
       tempId: "tempId",
       name: "Apple",

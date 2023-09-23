@@ -6,6 +6,7 @@ import tokenService from "../token/tokenService";
 import { UserModel } from "../../models/user/userModel";
 import { MeasurementUnit, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
 import { DailyDataModel } from "../../models/day/dailyDataModel";
+import { getLoggedInUserIdFromReq } from "../ALSService";
 
 type CreateTestUserOptions = {
   id?: string;
@@ -120,13 +121,22 @@ function getMockIntakeItem(): NewIntakeItem {
   };
 }
 
+function mockGetLoggedInUserIdFromReq(value?: string): string {
+  const userId: string = value !== undefined ? value : getMongoId();
+  (getLoggedInUserIdFromReq as jest.Mock).mockReturnValue(userId);
+  return userId;
+}
+
 export {
   getLoginTokenStrForTest,
+  mockGetLoggedInUserIdFromReq,
   createManyTestUsers,
   deleteManyTestUsers,
   createTestUser,
   createValidUserCreds,
   createTestDailyData,
+  getNewMockIntake,
+  getMockIntakeItem,
   getMongoId,
   getMockedUser,
   deleteTestUser,

@@ -30,7 +30,7 @@ jest.mock("../util/utilService", () => ({
   };
 });
 
-xdescribe("Factory Service", () => {
+describe("Factory Service", () => {
   function setMocks() {
     APIFeaturesMock.filter.mockReturnThis();
     APIFeaturesMock.sort.mockReturnThis();

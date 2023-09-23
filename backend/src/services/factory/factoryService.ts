@@ -26,7 +26,7 @@ const getAll = <T>(model: Model<T>) =>
 const getOne = <T>(model: Model<T>, popOptions?: string) =>
   asyncErrorCatcher(async (req: Request, res: Response, next: NextFunction) => {
     const { collectionName } = model.collection;
-    const dataName = collectionName.slice(0, collectionName.length - 1);
+    const dataName = _getDataName(collectionName);
     const { id } = req.params;
     validateIds({ id, entityName: dataName });
     const query = model.findById(id);
@@ -51,7 +51,7 @@ const createOne = <T>(model: Model<T>) =>
 const updateOne = <T>(model: Model<T>, allowedFields?: string[]) =>
   asyncErrorCatcher(async (req: Request, res: Response, next: NextFunction) => {
     const { collectionName } = model.collection;
-    const dataName = collectionName.slice(0, collectionName.length - 1);
+    const dataName = _getDataName(collectionName);
     const { id } = req.params;
     validateIds({ id, entityName: dataName });
     validatePatchRequestBody(req.body);
@@ -74,7 +74,7 @@ const updateOne = <T>(model: Model<T>, allowedFields?: string[]) =>
 const deleteOne = <T>(model: Model<T>) =>
   asyncErrorCatcher(async (req: Request, res: Response, next: NextFunction) => {
     const { collectionName } = model.collection;
-    const dataName = collectionName.slice(0, collectionName.length - 1);
+    const dataName = _getDataName(collectionName);
     const { id } = req.params;
     validateIds({ id, entityName: dataName });
     const doc = await model.findByIdAndDelete(id);
@@ -86,5 +86,14 @@ const deleteOne = <T>(model: Model<T>) =>
       data: null,
     });
   });
+
+function _getDataName(collectionName: string): string {
+  const lastLetter = collectionName[collectionName.length - 1].toLocaleLowerCase();
+  let dataName =
+    lastLetter === "s" ? collectionName.slice(0, collectionName.length - 1) : collectionName;
+
+  dataName = dataName.replace(/_/g, " ");
+  return dataName;
+}
 
 export { getAll, getOne, createOne, updateOne, deleteOne };

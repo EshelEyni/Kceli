@@ -1,4 +1,6 @@
 import { User } from "../../../../shared/types/user";
+import { DayData } from "../../../../shared/types/dayData";
+import { Intake, IntakeItem, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
 
 function assertUser(user: User) {
   expect(user).toEqual(
@@ -15,4 +17,39 @@ function assertUser(user: User) {
   expect(typeof user.createdAt === "string" || typeof user.createdAt === "object").toBeTruthy();
 }
 
-export { assertUser };
+function assertDailyData(dailyData: DayData) {
+  expect(dailyData).toEqual(
+    expect.objectContaining({
+      id: expect.any(String),
+      // date: expect.any(Date),
+      userId: expect.any(String),
+      intakes: expect.any(Array),
+    })
+  );
+
+  dailyData.intakes.forEach(assertIntake);
+}
+
+function assertIntake(intake: NewIntake | Intake) {
+  expect(intake).toEqual(
+    expect.objectContaining({
+      name: expect.any(String),
+      items: expect.any(Array),
+    })
+  );
+
+  intake.items.forEach(assertIntakeItem);
+}
+
+function assertIntakeItem(item: NewIntakeItem | IntakeItem) {
+  expect(item).toEqual(
+    expect.objectContaining({
+      name: expect.any(String),
+      quantity: expect.any(Number),
+      unit: expect.any(String),
+      calories: expect.any(Number),
+    })
+  );
+}
+
+export { assertUser, assertDailyData, assertIntake, assertIntakeItem };

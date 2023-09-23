@@ -8,4 +8,6 @@ export interface BasicDayData {
 export interface DayData extends BasicDayData {
   readonly userId: string;
   readonly id: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
