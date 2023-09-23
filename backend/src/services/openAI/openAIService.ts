@@ -1,5 +1,6 @@
 import { Configuration, OpenAIApi } from "openai";
 import { AppError } from "../error/errorService";
+import { IIntakeItem } from "../../types/iTypes";
 
 require("dotenv").config();
 
@@ -9,7 +10,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-async function getTextFromOpenAI(prompt: string, model = "default"): Promise<string> {
+async function getText(prompt: string, model = "default"): Promise<string> {
   if (model === "gpt-4") {
     const completion = await openai.createChatCompletion({
       model: "gpt-4",
@@ -30,6 +31,26 @@ async function getTextFromOpenAI(prompt: string, model = "default"): Promise<str
   return text as string;
 }
 
+async function getCaloriesForIntakeItem(intakeItem: IIntakeItem): Promise<number> {
+  const { name, quantity, unit } = intakeItem;
+  const prompt = `
+  Calculate calories for ${quantity} ${unit} of ${name}.
+  NOTE: Return the number of calories as an integer.
+  `;
+
+  const completion = await openai.createChatCompletion({
+    model: "gpt-4",
+    messages: [{ role: "user", content: prompt }],
+  });
+  const { message } = completion.data.choices[0];
+  if (!message) throw new AppError("message is falsey", 500);
+  const text = message.content as string;
+  const calories = parseInt(text);
+  if (isNaN(calories)) throw new AppError("calories is NaN", 500);
+  return calories;
+}
+
 export default {
-  getTextFromOpenAI,
+  getText,
+  getCaloriesForIntakeItem,
 };

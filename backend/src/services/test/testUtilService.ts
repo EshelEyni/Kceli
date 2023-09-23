@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import { User, UserCredenitials } from "../../../../shared/types/user";
 import tokenService from "../token/tokenService";
 import { UserModel } from "../../models/user/userModel";
+import { MeasurementUnit, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
+import { DailyDataModel } from "../../models/day/dailyDataModel";
 
 type CreateTestUserOptions = {
   id?: string;
@@ -34,6 +36,12 @@ async function createTestUser({ id, isAdmin = false }: CreateTestUserOptions = {
 
 async function deleteTestUser(id: string) {
   await UserModel.findByIdAndDelete(id).setOptions({ active: false });
+}
+
+async function createTestDailyData(userId?: string) {
+  const dailyData = getMockDailyData();
+  if (userId) dailyData.userId = userId;
+  return (await DailyDataModel.create(dailyData)).toObject();
 }
 
 function getMongoId() {
@@ -87,13 +95,40 @@ function getMockedUser({
   };
 }
 
+function getMockDailyData() {
+  return {
+    userId: getMongoId(),
+    date: new Date(),
+    intakes: [getNewMockIntake()],
+  };
+}
+
+function getNewMockIntake(): NewIntake {
+  return {
+    tempId: "tempId",
+    name: "test",
+    items: [getMockIntakeItem()],
+  };
+}
+
+function getMockIntakeItem(): NewIntakeItem {
+  return {
+    tempId: "tempId",
+    name: "test",
+    unit: MeasurementUnit.UNIT,
+    quantity: 1,
+  };
+}
+
 export {
   getLoginTokenStrForTest,
   createManyTestUsers,
   deleteManyTestUsers,
   createTestUser,
   createValidUserCreds,
+  createTestDailyData,
   getMongoId,
   getMockedUser,
   deleteTestUser,
+  getMockDailyData,
 };

@@ -1,5 +1,6 @@
 import { Document } from "mongoose";
 import { Gender } from "../../../shared/types/system";
+import { MeasurementUnit } from "../../../shared/types/intake";
 
 export interface IUser extends Document {
   username: string;
@@ -33,4 +34,11 @@ export interface IUser extends Document {
 export interface IDailyData extends Document {
   date: Date;
   // dailyData: IDailyDataItem[];
+}
+
+export interface IIntakeItem extends Document {
+  name: string;
+  unit: MeasurementUnit;
+  quantity: number;
+  calories: number;
 }

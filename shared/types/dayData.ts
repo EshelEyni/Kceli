@@ -1,6 +1,11 @@
 import { Intake } from "./intake";
 
-export type DayData = {
+export interface BasicDayData {
   date: Date;
   intakes: Intake[];
-};
+}
+
+export interface DayData extends BasicDayData {
+  readonly userId: string;
+  readonly id: string;
+}

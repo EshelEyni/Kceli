@@ -48,7 +48,6 @@ const SignupPage = () => {
     handleSubmit,
     setError,
     trigger,
-
     formState: { errors, isDirty, touchedFields },
   } = useForm<IFormInput>();
 

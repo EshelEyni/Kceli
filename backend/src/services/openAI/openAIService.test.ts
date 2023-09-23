@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { MeasurementUnit } from "../../../../shared/types/intake";
 import openAIService from "./openAIService";
 import { Configuration, OpenAIApi } from "openai";
 
@@ -27,7 +28,7 @@ describe("Open AI Service", () => {
 
   const openai = new OpenAIApi(configuration);
 
-  describe("getTextFromOpenAI", () => {
+  describe("getText", () => {
     beforeEach(() => {
       jest.resetAllMocks();
     });
@@ -42,7 +43,7 @@ describe("Open AI Service", () => {
 
       openai.createChatCompletion = jest.fn().mockResolvedValue(response);
 
-      const result = await openAIService.getTextFromOpenAI(prompt, "gpt-4");
+      const result = await openAIService.getText(prompt, "gpt-4");
       expect(openai.createChatCompletion).toHaveBeenCalledWith({
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
@@ -60,7 +61,7 @@ describe("Open AI Service", () => {
 
       openai.createCompletion = jest.fn().mockResolvedValue(response);
 
-      const result = await openAIService.getTextFromOpenAI(prompt);
+      const result = await openAIService.getText(prompt);
       expect(openai.createCompletion).toHaveBeenCalledWith({
         model: "text-davinci-003",
         prompt,
@@ -79,7 +80,7 @@ describe("Open AI Service", () => {
 
       openai.createChatCompletion = jest.fn().mockResolvedValue(response);
 
-      await expect(openAIService.getTextFromOpenAI(prompt, "gpt-4")).rejects.toThrow(
+      await expect(openAIService.getText(prompt, "gpt-4")).rejects.toThrow(
         "message is falsey"
       );
     });
@@ -94,7 +95,75 @@ describe("Open AI Service", () => {
 
       openai.createCompletion = jest.fn().mockResolvedValue(response);
 
-      await expect(openAIService.getTextFromOpenAI(prompt)).rejects.toThrow("text is falsey");
+      await expect(openAIService.getText(prompt)).rejects.toThrow("text is falsey");
+    });
+  });
+
+  fdescribe("getCaloriesForIntakeItem", () => {
+    const intakeItem = {
+      tempId: "tempId",
+      name: "Sample intake item",
+      quantity: 1,
+      unit: MeasurementUnit.CUP,
+    };
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it("should return calories for intake item from OpenAI", async () => {
+      const response = {
+        data: {
+          choices: [{ message: { content: "100" } }],
+        },
+      };
+
+      openai.createChatCompletion = jest.fn().mockResolvedValue(response);
+
+      const result = await openAIService.getCaloriesForIntakeItem(intakeItem);
+
+      expect(openai.createChatCompletion).toHaveBeenCalledWith({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "user",
+            content: `
+  Calculate calories for ${intakeItem.quantity} ${intakeItem.unit} of ${intakeItem.name}.
+  NOTE: Return the number of calories as an integer.
+  `,
+          },
+        ],
+      });
+
+      expect(result).toEqual(100);
+    });
+
+    it("should throw an error if message is falsey", async () => {
+      const response = {
+        data: {
+          choices: [{ message: undefined }],
+        },
+      };
+
+      openai.createChatCompletion = jest.fn().mockResolvedValue(response);
+
+      await expect(openAIService.getCaloriesForIntakeItem(intakeItem)).rejects.toThrow(
+        "message is falsey"
+      );
+    });
+
+    it("should throw an error if calories is NaN", async () => {
+      const response = {
+        data: {
+          choices: [{ message: { content: "NaN" } }],
+        },
+      };
+
+      openai.createChatCompletion = jest.fn().mockResolvedValue(response);
+
+      await expect(openAIService.getCaloriesForIntakeItem(intakeItem)).rejects.toThrow(
+        "calories is NaN"
+      );
     });
   });
 });
