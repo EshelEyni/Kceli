@@ -18,6 +18,7 @@ type TodayDataContextType = {
   addIntake: UseMutateFunction<DayData, unknown, AddIntakeParams, unknown>;
   isLoadingIntake: boolean;
   remainingCalories: number;
+  estimatedKGChange: number;
   consumedCalories: number;
   targetCaloricIntakePerDay: number;
   backgroundColor: string;
@@ -41,6 +42,10 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, dailyData);
   const consumedCalories = calorieUtilService.getTotalCalories(dailyData);
   const targetCaloricIntakePerDay = loggedInUser?.targetCaloricIntakePerDay || 0;
+  const estimatedKGChange = calorieUtilService.calcEstimatedBodyFatStatusPerDay(
+    loggedInUser,
+    dailyData
+  );
   const backgroundColor = calorieUtilService.getBcgByCosumedCalories({
     consumedCalories,
     targetCalorie: targetCaloricIntakePerDay,
@@ -58,6 +63,7 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
     remainingCalories,
     consumedCalories,
     targetCaloricIntakePerDay,
+    estimatedKGChange,
     backgroundColor,
     openedElement,
     setOpenedElement,

@@ -29,7 +29,7 @@ const intakeItemSchema = new Schema(
   }
 );
 
-intakeItemSchema.pre("save", async function (next) {
+intakeItemSchema.pre("validate", async function (next) {
   try {
     const intakeItem = this.toObject() as IIntakeItem;
     if (intakeItem.calories) return next();

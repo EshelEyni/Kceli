@@ -12,6 +12,16 @@
   // padding: rem(15px);
   flex-grow: 1;
 
+  .today-details__title {
+    font-size: rem(25px);
+    text-transform: uppercase;
+    color: white;
+
+    strong {
+      font-size: rem(28px);
+    }
+  }
+
   @include for-desktop-layout {
     justify-content: flex-start;
     flex-grow: 0;

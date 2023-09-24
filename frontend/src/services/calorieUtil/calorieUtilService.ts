@@ -14,11 +14,11 @@ function calcEstimatedBodyFatStatusPerDay(
   dailyData: DayData | undefined
 ): number {
   if (!loggedInUser || !dailyData) return 0;
-  const caloricDifference = loggedInUser.totalDailyEnergyExpenditure - getTotalCalories(dailyData);
+  const caloricDifference = getTotalCalories(dailyData) - loggedInUser.totalDailyEnergyExpenditure;
   const ONE_KG_OF_BODY_FAT_CALORIES = 7700;
   const estimatedBodyFatChangePerDay = caloricDifference / ONE_KG_OF_BODY_FAT_CALORIES;
 
-  return estimatedBodyFatChangePerDay;
+  return Number(estimatedBodyFatChangePerDay.toFixed(2));
 }
 
 function getTotalCalories(entity: DayData | Intake | undefined): number {
@@ -53,7 +53,7 @@ function getBcgByCosumedCalories({
     { excessRate: 0, color: "#2d46ff" },
     { excessRate: 10, color: "#4682B4" },
     { excessRate: 20, color: "#FFFF99" },
-    { excessRate: 30, color: "#FFFF00" },
+    { excessRate: 30, color: "#ffea00" },
     { excessRate: 40, color: "#FF7F7F" },
     { excessRate: 50, color: "#FF0000" },
     { excessRate: 60, color: "#8B0000" },

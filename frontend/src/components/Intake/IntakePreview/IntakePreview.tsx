@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Intake } from "../../../../../shared/types/intake";
-import { ListItemTitle } from "../../App/ListItemTitle/ListItemTitle";
+import { ListItemTitle } from "../../Titles/ListItem/ListItemTitle";
 import "./IntakePreview.scss";
 
 type IntakePreviewProps = {
