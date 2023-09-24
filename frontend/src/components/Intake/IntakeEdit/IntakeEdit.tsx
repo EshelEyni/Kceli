@@ -5,11 +5,12 @@ import { List } from "../../App/List/List";
 import { IntakeItemEdit } from "../IntakeItemEdit/IntakeItemEdit";
 import { Button } from "../../App/Button/Button";
 import { useTodayData } from "../../../contexts/TodayDataContext";
-import "./IntakeEdit.scss";
 import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
+import "./IntakeEdit.scss";
 
 export const IntakeEdit: FC = () => {
-  const { dailyData, addIntake, isLoadingIntake, backgroundColor } = useTodayData();
+  const { dailyData, addIntake, isLoadingIntake, backgroundColor, setCurrIsValidIntake } =
+    useTodayData();
   const [intake, setIntake] = useState<NewIntake>(intakeUtilServiceTest.getDefaultIntake());
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const isEditShown = !isReviewOpen && !isLoadingIntake;
@@ -47,6 +48,8 @@ export const IntakeEdit: FC = () => {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!dailyData) return;
+    const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
+    if (!iValidIntake) return setCurrIsValidIntake(false);
     addIntake({ todayDataId: dailyData.id, intakes: [...dailyData.intakes, intake] });
     setIntake(intakeUtilServiceTest.getDefaultIntake());
   }

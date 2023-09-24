@@ -8,6 +8,7 @@ import { DayData } from "../../../shared/types/dayData";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { useAddIntake } from "../hooks/useAddIntake";
 import { Intake } from "../../../shared/types/intake";
+import { User } from "../../../shared/types/user";
 
 type TodayDataContextType = {
   dailyData: DayData | undefined;
@@ -27,6 +28,9 @@ type TodayDataContextType = {
   backgroundColor: string;
   openedElement: ToggledElement;
   setOpenedElement: (element: ToggledElement) => void;
+  isCurrValidIntake: boolean;
+  setCurrIsValidIntake: (isValid: boolean) => void;
+  recommendedWaterIntake: number;
 };
 
 export enum ToggledElement {
@@ -43,6 +47,7 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
   const { addIntake, isLoading: isLoadingIntake } = useAddIntake();
   const [openedElement, setOpenedElement] = useState<ToggledElement>(ToggledElement.IntakeEdit);
+  const [isCurrValidIntake, setCurrIsValidIntake] = useState(true);
   const recordedIntakes = dailyData?.intakes.filter(i => i.isRecorded) || [];
   const unrecordedIntakes = dailyData?.intakes.filter(i => !i.isRecorded) || [];
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, dailyData);
@@ -52,6 +57,8 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
     loggedInUser,
     dailyData
   );
+  const recommendedWaterIntake = _calcRecommendedWaterIntake(loggedInUser, dailyData);
+
   const backgroundColor = calorieUtilService.getBcgByCosumedCalories({
     consumedCalories,
     targetCalorie: targetCaloricIntakePerDay,
@@ -75,6 +82,9 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
     backgroundColor,
     openedElement,
     setOpenedElement,
+    isCurrValidIntake,
+    setCurrIsValidIntake,
+    recommendedWaterIntake,
   };
   return <TodayDataContext.Provider value={value}>{children}</TodayDataContext.Provider>;
 }
@@ -85,6 +95,33 @@ function useTodayData() {
     throw new Error("useTodayData must be used within a TodayDataProvider");
   }
   return context;
+}
+
+function _calcRecommendedWaterIntake(loggedInUser: User | null, dailyData: DayData | undefined) {
+  if (!loggedInUser || !dailyData) return 0;
+  const targetWaterConsumptionPerDay = Number((loggedInUser.weight * 33).toFixed(2));
+  const waterConsumption =
+    dailyData.intakes
+      .filter(i => i.isRecorded)
+      .reduce(
+        (acc, curr) =>
+          curr.items.reduce((acc, curr) => {
+            if (curr.name.toLocaleLowerCase() === "water") {
+              switch (curr.unit) {
+                case "ml":
+                  return acc + curr.quantity;
+                case "cup":
+                  return acc + curr.quantity * 250;
+                default:
+                  return acc;
+              }
+            }
+            return acc;
+          }, acc),
+        0
+      ) || 0;
+
+  return (targetWaterConsumptionPerDay - waterConsumption) / 1000;
 }
 
 export { TodayDataProvider, useTodayData };

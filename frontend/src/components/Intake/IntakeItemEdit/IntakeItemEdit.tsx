@@ -5,6 +5,7 @@ import "./IntakeItemEdit.scss";
 import { Button } from "../../App/Button/Button";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { ErrorMsg } from "../../Msg/ErrorMsg/ErrorMsg";
+import { useTodayData } from "../../../contexts/TodayDataContext";
 
 type IntakeItemEditProps = {
   intakeItem: NewIntakeItem;
@@ -13,6 +14,7 @@ type IntakeItemEditProps = {
 };
 
 export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handleChange }) => {
+  const { isCurrValidIntake } = useTodayData();
   const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
   const [isManual, setIsManual] = useState(false);
   const [inputFaded, setInputFaded] = useState("");
@@ -70,7 +72,17 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
 
   function handleToggleManual() {
     setIsManual(prev => !prev);
-    handleChange({ ...intakeItem, unit: MeasurementUnit.GRAM }, idx);
+    if (intakeItem.unit == MeasurementUnit.GRAM && intakeItem.quantity === 100) return;
+    handleChange({ ...intakeItem, unit: MeasurementUnit.GRAM, quantity: 100 }, idx);
+  }
+
+  function handleWaterButtonClick() {
+    const { name, unit, quantity } = intakeItem;
+    if (name === "water" && unit === MeasurementUnit.MILLILITER && quantity === 750) return;
+    handleChange(
+      { ...intakeItem, name: "water", unit: MeasurementUnit.MILLILITER, quantity: 750 },
+      idx
+    );
   }
 
   return (
@@ -87,9 +99,9 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
           placeholder="Enter food name"
         />
       </div>
-      {isInputNameEmpty && (
+      {(isInputNameEmpty || !isCurrValidIntake) && (
         <div onClick={() => setIsInputNameEmpty(false)}>
-          <ErrorMsg msg="Intake name cannot be empty" />
+          <ErrorMsg msg="intake name cannot be empty!" />
         </div>
       )}
 
@@ -110,11 +122,14 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
           </Button>
         </div>
 
-        <div className="unit-toggle" onClick={handleUnitInputClick}>
+        <Button onClickFn={handleUnitInputClick} className="intake-item-edit__btn">
           <span>{intakeItem.unit}</span>
-        </div>
+        </Button>
 
-        <Button onClickFn={handleToggleManual} className="intake-item-edit__toggle-manual-btn">
+        <Button onClickFn={handleWaterButtonClick} className="intake-item-edit__btn">
+          <span>water</span>
+        </Button>
+        <Button onClickFn={handleToggleManual} className="intake-item-edit__btn">
           <span>{isManual ? "Manual" : "Auto"}</span>
         </Button>
       </div>

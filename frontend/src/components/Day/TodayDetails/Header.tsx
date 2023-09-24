@@ -3,7 +3,8 @@ import { CaloriePie } from "../../Charts/CaloriePie/CaloriePie";
 import { useTodayData } from "../../../contexts/TodayDataContext";
 
 export const TodayDetailsHeader: FC = () => {
-  const { dailyData, remainingCalories, estimatedKGChange } = useTodayData();
+  const { dailyData, remainingCalories, estimatedKGChange, recommendedWaterIntake } =
+    useTodayData();
 
   if (!dailyData) return null;
   return (
@@ -27,6 +28,12 @@ export const TodayDetailsHeader: FC = () => {
         ) : (
           <p className="today-details__title">
             estimated to lose <strong>{Math.abs(estimatedKGChange)}</strong> kg
+          </p>
+        )}
+
+        {recommendedWaterIntake && (
+          <p className="today-details__title">
+            <strong>{recommendedWaterIntake}</strong> ml of water remaining
           </p>
         )}
       </div>

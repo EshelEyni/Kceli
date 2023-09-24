@@ -20,10 +20,21 @@
     gap: rem(10px);
   }
 
+  .error-msg {
+    font-style: normal;
+    font-weight: 600;
+    font-size: rem(20px);
+    text-transform: uppercase;
+    padding: rem(5px) rem(10px);
+    color: var(--color-warning);
+  }
+
   .intake-item-input {
     width: 100%;
     padding: rem(12px) rem(25px);
     border-radius: 25px;
+    font-size: rem(20px);
+    text-transform: capitalize;
 
     &.faded {
       filter: brightness(0.9);
@@ -63,8 +74,7 @@
       }
     }
 
-    .intake-item-edit__toggle-manual-btn,
-    .unit-toggle {
+    .intake-item-edit__btn {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -78,15 +88,9 @@
         font-size: rem(18px);
         position: relative;
         font-weight: 600;
+        color: var(--color-text-gray);
         text-transform: uppercase;
         top: 1px;
-      }
-    }
-
-    .intake-item-edit__toggle-manual-btn {
-      span {
-        color: var(--color-text-gray);
-        font-weight: 600;
       }
     }
   }
@@ -97,7 +101,7 @@
     align-items: center;
     gap: rem(15px);
 
-    .intake-item-input{
+    .intake-item-input {
       text-align: center;
       font-weight: 600;
       font-size: rem(20px);

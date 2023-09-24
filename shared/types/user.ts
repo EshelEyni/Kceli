@@ -23,6 +23,10 @@ export interface User {
   email: string;
   imgUrl: string;
   isAdmin: boolean;
+  weight: number;
+  height: number;
+  gender: Gender;
+  birthdate: Date;
   totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
   createdAt: string;
