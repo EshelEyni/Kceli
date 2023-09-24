@@ -24,13 +24,20 @@
 
   .intake-list {
     align-items: flex-start;
+    gap: rem(40px);
 
-    .intake-list-item-title {
-      margin-bottom: rem(10px);
-      font-style: normal;
+    .intake-preview-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      .intake-list-item-title {
+        margin-bottom: rem(10px);
+        align-self: center;
 
-      .list-item-title__text {
-        font-size: rem(20px);
+        .list-item-title__text {
+          font-size: rem(20px);
+        }
       }
     }
   }

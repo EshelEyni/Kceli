@@ -16,27 +16,28 @@ async function query(queryString: ParsedReqQuery): Promise<IUser[]> {
   return users;
 }
 
-async function getUsers(...userIds: string[]): Promise<User[]> {
+async function getUsers(...userIds: string[]): Promise<IUser[]> {
   const users = await UserModel.find({ _id: { $in: userIds } })
     .lean()
     .exec();
-  return users as unknown as User[];
+  return users;
 }
 
-async function getById(userId: string): Promise<User> {
+async function getById(userId: string): Promise<IUser> {
   const user = await UserModel.findById(userId).exec();
-  return user as unknown as User;
+  if (!user) throw new AppError(`User with id ${userId} not found`, 404);
+  return user;
 }
 
-async function getByUsername(username: string): Promise<User> {
+async function getByUsername(username: string): Promise<IUser> {
   const user = await UserModel.findOne({ username }).exec();
   if (!user) throw new AppError(`User with username ${username} not found`, 404);
-  return user as unknown as User;
+  return user;
 }
 
-async function add(user: User): Promise<User> {
+async function add(user: User): Promise<IUser> {
   const savedUser = await new UserModel(user).save();
-  return savedUser as unknown as User;
+  return savedUser;
 }
 
 async function update(id: string, user: User): Promise<User> {

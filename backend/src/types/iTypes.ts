@@ -16,6 +16,7 @@ export interface IUser extends Document {
   height: number;
   gender: Gender;
   birthdate: Date;
+  totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
   isAdmin: boolean;
   createdAt: Date;
@@ -49,4 +50,5 @@ export interface IIntakeItem extends Document {
   unit: MeasurementUnit;
   quantity: number;
   calories: number;
+  _caloriesPer100g?: number;
 }

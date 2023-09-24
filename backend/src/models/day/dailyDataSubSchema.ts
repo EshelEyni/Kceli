@@ -29,9 +29,10 @@ const intakeItemSchema = new Schema(
   }
 );
 
-intakeItemSchema.pre("validate", async function (next) {
+intakeItemSchema.pre("save", async function (next) {
   try {
     const intakeItem = this.toObject() as IIntakeItem;
+    if (intakeItem.calories) return next();
     const existingIntakeItem = await intakeService.getExistingIntakeItem(intakeItem);
 
     if (existingIntakeItem && existingIntakeItem.calories) {

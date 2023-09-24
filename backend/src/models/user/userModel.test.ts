@@ -335,7 +335,17 @@ describe("User Model", () => {
     });
   });
 
-  describe("2) Pre-save Hook - Calculate Target Caloric Intake Per Day", () => {
+  fdescribe("2) Pre-save Hook - Calculate Target Caloric Intake Per Day", () => {
+    it("should calculate total daily energy expenditure and saved it to user", async () => {
+      const userCreds = createValidUserCreds();
+      const user = new UserModel(userCreds);
+
+      await user.save();
+
+      expect(user.totalDailyEnergyExpenditure).toBeDefined();
+      expect(typeof user.totalDailyEnergyExpenditure === "number").toBe(true);
+    });
+
     it("should calculate target calorie intake and saved it to user", async () => {
       const userCreds = createValidUserCreds();
       const user = new UserModel(userCreds);

@@ -100,7 +100,9 @@ export const IntakeEdit: FC = () => {
             render={(item, i) => (
               <p className="intake-edit-review-list__item">
                 <span>{`${i + 1})`}</span>
-                {`${item.name} - ${item.quantity} ${item.unit}`}
+                <p>{`${item.name} - ${item.quantity} ${item.unit} ${
+                  item.calories ? `- Calories ${item.calories}` : ""
+                }`}</p>
               </p>
             )}
             className="intake-edit-review-list"

@@ -13,3 +13,16 @@ describe("calculateTargetCaloricIntakePerDay", () => {
     expect(Number.isInteger(result)).toBe(true);
   });
 });
+
+describe("calculateTotalDailyEnergyExpenditure", () => {
+  it("should return a rounded number", () => {
+    const userCaloricData: UserCaloricData = {
+      weight: 65,
+      height: 165,
+      age: 28,
+      gender: "female",
+    };
+    const result = calorieService.calculateTotalDailyEnergyExpenditure(userCaloricData);
+    expect(Number.isInteger(result)).toBe(true);
+  });
+});

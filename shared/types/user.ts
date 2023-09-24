@@ -23,6 +23,7 @@ export interface User {
   email: string;
   imgUrl: string;
   isAdmin: boolean;
+  totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
   createdAt: string;
 }

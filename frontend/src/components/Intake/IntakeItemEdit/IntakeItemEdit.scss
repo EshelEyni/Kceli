@@ -19,10 +19,15 @@
     align-items: center;
     gap: rem(10px);
   }
+
   .intake-item-input {
     width: 100%;
     padding: rem(12px) rem(25px);
     border-radius: 25px;
+
+    &.faded {
+      filter: brightness(0.9);
+    }
   }
 
   .intake-item-edit-inputs-container {
@@ -67,9 +72,10 @@
       height: rem(40px);
       background-color: white;
       border-radius: 10px;
+      cursor: pointer;
 
       span {
-        font-size: rem(25px);
+        font-size: rem(18px);
         position: relative;
         font-weight: 600;
         text-transform: uppercase;
@@ -81,7 +87,6 @@
       span {
         color: var(--color-text-gray);
         font-weight: 600;
-        font-size: rem(18px);
       }
     }
   }
@@ -91,5 +96,11 @@
     justify-content: center;
     align-items: center;
     gap: rem(15px);
+
+    .intake-item-input{
+      text-align: center;
+      font-weight: 600;
+      font-size: rem(20px);
+    }
   }
 }

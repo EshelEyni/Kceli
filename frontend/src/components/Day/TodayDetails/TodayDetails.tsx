@@ -36,9 +36,10 @@ export const TodayDetails: FC = () => {
           {openedElement === ToggledElement.IntakeEdit && <IntakeEdit />}
           {openedElement === ToggledElement.IntakeList && (
             <List
+              className="intake-list"
               items={dailyData.intakes}
               render={(item, i) => (
-                <>
+                <div className="intake-preview-container">
                   <ListItemTitle
                     idx={i}
                     title={`Intake ${
@@ -47,9 +48,8 @@ export const TodayDetails: FC = () => {
                     className="intake-list-item-title"
                   />
                   <IntakePreview intake={item} key={item.id} />
-                </>
+                </div>
               )}
-              className="intake-list"
             />
           )}
         </>

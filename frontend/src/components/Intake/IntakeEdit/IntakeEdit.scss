@@ -74,7 +74,11 @@
 
   .intake-edit-review-list {
     align-items: flex-start;
+
     .intake-edit-review-list__item {
+      display: flex;
+      align-items: center;
+      gap: rem(8px);
       font-size: rem(16px);
       color: white;
       font-weight: 600;

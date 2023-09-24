@@ -19,7 +19,7 @@ export const Button: FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={className}
+      className={"button " + (className || "")}
       onClick={onClickFn}
       disabled={isDisabled}
       data-testid={className}

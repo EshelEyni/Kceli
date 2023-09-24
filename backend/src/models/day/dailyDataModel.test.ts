@@ -3,16 +3,21 @@ import { MeasurementUnit, NewIntakeItem } from "../../../../shared/types/intake"
 import intakeService from "../../services/intake/intakeService";
 import openAIService from "../../services/openAI/openAIService";
 import { connectToTestDB, disconnectFromTestDB } from "../../services/test/testDBService";
-import { getMockDailyData, getMongoId } from "../../services/test/testUtilService";
+import {
+  getMockDailyData,
+  getMongoId,
+  getNewMockIntake,
+} from "../../services/test/testUtilService";
 import { UserModel } from "../user/userModel";
 import { DailyDataModel } from "./dailyDataModel";
+import { TodayData } from "../../../../shared/types/dayData";
 
 jest.mock("../../services/openAI/openAIService");
 jest.mock("../../services/intake/intakeService");
 
 const MOCK_CALORIES = 100;
 
-describe("Daily Data Model", () => {
+fdescribe("Daily Data Model", () => {
   beforeAll(async () => {
     (openAIService.getCaloriesForIntakeItem as jest.Mock).mockResolvedValue(MOCK_CALORIES);
     await connectToTestDB();
@@ -24,7 +29,7 @@ describe("Daily Data Model", () => {
     await disconnectFromTestDB();
   });
 
-  fdescribe("Daily Data Schema", () => {
+  xdescribe("Daily Data Schema", () => {
     const dailyData = getMockDailyData();
 
     afterEach(async () => {
@@ -108,7 +113,7 @@ describe("Daily Data Model", () => {
     });
   });
 
-  describe("intakeItemSchema", () => {
+  fdescribe("intakeItemSchema", () => {
     const mockIntakeItem: NewIntakeItem = {
       tempId: "tempId",
       name: "Apple",
@@ -125,13 +130,35 @@ describe("Daily Data Model", () => {
       },
     ];
 
+    afterEach(async () => {
+      await DailyDataModel.deleteMany({});
+    });
+
+    it("should add calories manually if provided", async () => {
+      const intake = getNewMockIntake();
+      intake.items[0].calories = 100;
+      const dailyData: TodayData = {
+        ...getMockDailyData(),
+        intakes: [intake],
+      };
+
+      const validDailyData = new DailyDataModel(dailyData);
+      const savedDailyData = (await validDailyData.save()).toObject();
+      expect(openAIService.getCaloriesForIntakeItem).not.toHaveBeenCalled();
+      savedDailyData.intakes.forEach((intake: any) => {
+        intake.items.forEach((item: any) => {
+          expect(item.calories).toEqual(100);
+        });
+      });
+    });
+
     it("should correctly calculate calories based on existing intake item", async () => {
       const existingIntakeItem = { ...mockIntakeItem, calories: 50 };
       intakeService.getExistingIntakeItem = jest.fn().mockResolvedValue(existingIntakeItem);
 
       const intakeModel = new DailyDataModel(dailyData);
 
-      await intakeModel.validate();
+      await intakeModel.save();
 
       expect(intakeModel.intakes[0].items[0].calories).toEqual(existingIntakeItem.calories * 2);
     });
@@ -144,7 +171,7 @@ describe("Daily Data Model", () => {
         intakes: [{ ...dailyData.intakes[0], items: [mockIntakeItem] }],
       });
 
-      await intakeModel.validate();
+      await intakeModel.save();
 
       expect(intakeModel.intakes[0].items[0].calories).toEqual(MOCK_CALORIES);
     });

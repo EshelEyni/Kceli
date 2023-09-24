@@ -15,25 +15,33 @@ type IntakeItemEditProps = {
 export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handleChange }) => {
   const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
   const [isManual, setIsManual] = useState(false);
-
-  function handleNameInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    e.preventDefault();
-    const { value: name } = e.target;
-    handleChange({ ...intakeItem, name }, idx);
-    setIsInputNameEmpty(!name.length);
-  }
-
-  function handleQuantityInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    e.preventDefault();
-    const { value } = e.target;
-    handleChange({ ...intakeItem, quantity: Number(value) }, idx);
-  }
+  const [inputFaded, setInputFaded] = useState("");
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     const { value, name } = e.target;
-    console.log(value, name);
-    // handleChange({ ...intakeItem, name: value }, idx);
+    switch (name) {
+      case "name":
+        handleChange({ ...intakeItem, name: value }, idx);
+        setIsInputNameEmpty(!value.length);
+        break;
+      case "quantity":
+        handleChange({ ...intakeItem, quantity: Number(value) }, idx);
+        break;
+      case "calories":
+        handleChange({ ...intakeItem, calories: Number(value) }, idx);
+        setInputFaded("caloriesPer100g");
+        break;
+      case "caloriesPer100g": {
+        const caloriesPer100g = Number(value);
+        const calories = caloriesPer100g * (intakeItem.quantity / 100);
+        handleChange({ ...intakeItem, caloriesPer100g: Number(value), calories }, idx);
+        setInputFaded("calories");
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   function decreaseQuantity() {
@@ -70,10 +78,10 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
       <div className="name-input-container">
         <input
           type="text"
-          id="name"
+          name="name"
           className="intake-item-input"
           value={intakeItem.name}
-          onChange={handleNameInputChange}
+          onChange={handleInputChange}
           spellCheck={true}
           placeholder="Enter food name"
         />
@@ -91,9 +99,10 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
           </Button>
           <input
             type="number"
+            name="quantity"
             className="intake-item-input quantity-input"
             value={intakeItem.quantity}
-            onChange={handleQuantityInputChange}
+            onChange={handleInputChange}
           />
           <Button onClickFn={increaseQuantity}>
             <AiFillPlusCircle />
@@ -105,7 +114,7 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
         </div>
 
         <Button onClickFn={handleToggleManual} className="intake-item-edit__toggle-manual-btn">
-          <span>{isManual ? "Auto" : "Manual"}</span>
+          <span>{isManual ? "Manual" : "Auto"}</span>
         </Button>
       </div>
 
@@ -113,17 +122,21 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
         <div className="intake-item-edit__manuall-calorie-edit">
           <input
             type="number"
-            className="intake-item-input quantity-input"
-            value={intakeItem.calories}
+            name="calories"
+            className={"intake-item-input" + (inputFaded === "calories" ? " faded" : "")}
+            value={intakeItem.calories || ""}
             placeholder="Calories"
             onChange={handleInputChange}
+            onClick={() => setInputFaded("")}
           />
           <input
             type="number"
-            className="intake-item-input quantity-input"
-            value={intakeItem.caloriesPer100g}
+            name="caloriesPer100g"
+            className={"intake-item-input" + (inputFaded === "caloriesPer100g" ? " faded" : "")}
+            value={intakeItem.caloriesPer100g || ""}
             placeholder="Calories per 100g"
             onChange={handleInputChange}
+            onClick={() => setInputFaded("")}
           />
         </div>
       )}

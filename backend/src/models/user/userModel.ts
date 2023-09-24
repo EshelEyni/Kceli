@@ -67,6 +67,7 @@ const userSchema: Schema<IUser> = new Schema(
       required: [true, "Please provide your gender"],
     },
     birthdate: { type: Date, required: [true, "Please provide your birthdate"] },
+    totalDailyEnergyExpenditure: { type: Number, default: 0 },
     targetCaloricIntakePerDay: { type: Number, default: 0 },
     isAdmin: { type: Boolean, default: false },
     active: { type: Boolean, default: true },
@@ -123,6 +124,12 @@ userSchema.pre("save", async function (next) {
     this.birthdate,
   ];
   const age = new Date().getFullYear() - birthdate.getFullYear();
+  this.totalDailyEnergyExpenditure = calorieService.calculateTotalDailyEnergyExpenditure({
+    weight,
+    height,
+    gender,
+    age,
+  });
 
   this.targetCaloricIntakePerDay = calorieService.calculateTargetCaloricIntakePerDay({
     weight,

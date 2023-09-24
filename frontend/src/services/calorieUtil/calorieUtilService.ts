@@ -9,6 +9,18 @@ function calcRemainingCalories(loggedInUser: User | null, dailyData: DayData | u
   return remainingCalories;
 }
 
+function calcEstimatedBodyFatStatusPerDay(
+  loggedInUser: User | null,
+  dailyData: DayData | undefined
+): number {
+  if (!loggedInUser || !dailyData) return 0;
+  const caloricDifference = loggedInUser.totalDailyEnergyExpenditure - getTotalCalories(dailyData);
+  const ONE_KG_OF_BODY_FAT_CALORIES = 7700;
+  const estimatedBodyFatChangePerDay = caloricDifference / ONE_KG_OF_BODY_FAT_CALORIES;
+
+  return estimatedBodyFatChangePerDay;
+}
+
 function getTotalCalories(entity: DayData | Intake | undefined): number {
   switch (true) {
     case !entity:
@@ -58,4 +70,9 @@ function getBcgByCosumedCalories({
   return bcg?.color || "#3030FF";
 }
 
-export default { calcRemainingCalories, getBcgByCosumedCalories, getTotalCalories };
+export default {
+  calcRemainingCalories,
+  getBcgByCosumedCalories,
+  getTotalCalories,
+  calcEstimatedBodyFatStatusPerDay,
+};
