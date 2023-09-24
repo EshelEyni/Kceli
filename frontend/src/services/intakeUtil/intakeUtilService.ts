@@ -3,15 +3,16 @@ import { createId } from "../util/utilService";
 
 const units: MeasurementUnit[] = Object.values(MeasurementUnit);
 
-function getDefaultBasicIntake(): NewIntake {
+function getDefaultIntake(): NewIntake {
   return {
     tempId: createId(),
-    items: [getDefaultBasicIntakeItem()],
+    items: [getDefaultIntakeItem()],
     name: "",
+    isRecorded: true,
   };
 }
 
-function getDefaultBasicIntakeItem(): NewIntakeItem {
+function getDefaultIntakeItem(): NewIntakeItem {
   return {
     tempId: createId(),
     unit: MeasurementUnit.UNIT,
@@ -59,8 +60,8 @@ function getQuantityStepPerUnit(unit: MeasurementUnit): number {
 }
 
 export default {
-  getDefaultBasicIntake,
-  getDefaultBasicIntakeItem,
+  getDefaultIntake,
+  getDefaultIntakeItem,
   getUnitDefaultQuantity,
   getQuantityStepPerUnit,
   units,

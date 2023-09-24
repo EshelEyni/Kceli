@@ -9,16 +9,62 @@
   align-items: center;
   width: 100%;
   gap: rem(15px);
-  // padding: rem(15px);
   flex-grow: 1;
 
-  .today-details__title {
-    font-size: rem(25px);
-    text-transform: uppercase;
-    color: white;
+  .today-details__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: rem(15px);
 
-    strong {
-      font-size: rem(28px);
+    .today-details__header__titles {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: rem(5px);
+
+      .today-details__title {
+        font-size: rem(25px);
+        text-transform: uppercase;
+        color: white;
+        strong {
+          font-size: rem(28px);
+        }
+      }
+    }
+  }
+
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: flex-start;
+    gap: rem(10px);
+
+    .filter__item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: rem(10px);
+      border-radius: 25px;
+      font-size: rem(16px);
+      transition: all 0.2s ease-in-out;
+
+      button {
+        font-weight: 600;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 1px solid white;
+        border-radius: 25px;
+        padding: rem(10px) rem(15px);
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          background-color: var(--color-background-light);
+        }
+      }
     }
   }
 
@@ -47,6 +93,34 @@
 
         .list-item-title__text {
           font-size: rem(20px);
+        }
+      }
+    }
+
+    &.unrecorded-intake-list {
+      .intake-preview-container {
+        .unrecorded-intake-list__btns-container {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: rem(10px);
+          margin-top: rem(10px);
+          margin-bottom: rem(10px);
+
+          button {
+            font-weight: 600;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid white;
+            border-radius: 25px;
+            padding: rem(10px) rem(15px);
+            transition: all 0.2s ease-in-out;
+
+            &:hover {
+              background-color: var(--color-background-light);
+            }
+          }
         }
       }
     }

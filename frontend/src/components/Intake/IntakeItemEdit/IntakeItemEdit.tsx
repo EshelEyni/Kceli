@@ -83,6 +83,7 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
           value={intakeItem.name}
           onChange={handleInputChange}
           spellCheck={true}
+          autoComplete="off"
           placeholder="Enter food name"
         />
       </div>

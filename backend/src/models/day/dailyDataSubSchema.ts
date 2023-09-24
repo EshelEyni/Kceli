@@ -1,10 +1,10 @@
-import { Schema } from "mongoose";
+import { Document, Schema } from "mongoose";
 import { MeasurementUnit } from "../../../../shared/types/intake";
 import openAIService from "../../services/openAI/openAIService";
 import intakeService from "../../services/intake/intakeService";
-import { IIntakeItem } from "../../types/iTypes";
+import { IIntake, IIntakeItem } from "../../types/iTypes";
 
-const intakeItemSchema = new Schema(
+const intakeItemSchema = new Schema<IIntakeItem>(
   {
     name: {
       type: String,
@@ -25,6 +25,20 @@ const intakeItemSchema = new Schema(
     },
   },
   {
+    toObject: {
+      virtuals: true,
+      transform: (_: Document, ret: Record<string, unknown>) => {
+        delete ret._id;
+        return ret;
+      },
+    },
+    toJSON: {
+      virtuals: true,
+      transform: (_: Document, ret: Record<string, unknown>) => {
+        delete ret._id;
+        return ret;
+      },
+    },
     timestamps: true,
   }
 );
@@ -49,7 +63,7 @@ intakeItemSchema.pre("validate", async function (next) {
   next();
 });
 
-const intakeSchema = new Schema(
+const intakeSchema = new Schema<IIntake>(
   {
     name: {
       type: String,
@@ -58,8 +72,26 @@ const intakeSchema = new Schema(
       type: [intakeItemSchema],
       required: [true, "Please provide intake items"],
     },
+    isRecorded: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
+    toObject: {
+      virtuals: true,
+      transform: (_: Document, ret: Record<string, unknown>) => {
+        delete ret._id;
+        return ret;
+      },
+    },
+    toJSON: {
+      virtuals: true,
+      transform: (_: Document, ret: Record<string, unknown>) => {
+        delete ret._id;
+        return ret;
+      },
+    },
     timestamps: true,
   }
 );

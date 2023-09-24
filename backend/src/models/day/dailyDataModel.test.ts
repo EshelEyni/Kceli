@@ -127,6 +127,7 @@ fdescribe("Daily Data Model", () => {
         tempId: "tempId",
         name: "test",
         items: [{ ...mockIntakeItem, quantity: 2 }],
+        isRecorded: true,
       },
     ];
 

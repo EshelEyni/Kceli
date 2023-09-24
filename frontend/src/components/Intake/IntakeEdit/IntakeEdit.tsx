@@ -6,16 +6,18 @@ import { IntakeItemEdit } from "../IntakeItemEdit/IntakeItemEdit";
 import { Button } from "../../App/Button/Button";
 import { useTodayData } from "../../../contexts/TodayDataContext";
 import "./IntakeEdit.scss";
+import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
 
 export const IntakeEdit: FC = () => {
-  const { dailyData, addIntake, backgroundColor } = useTodayData();
-  const [intake, setIntake] = useState<NewIntake>(intakeUtilServiceTest.getDefaultBasicIntake());
+  const { dailyData, addIntake, isLoadingIntake, backgroundColor } = useTodayData();
+  const [intake, setIntake] = useState<NewIntake>(intakeUtilServiceTest.getDefaultIntake());
   const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const isEditShown = !isReviewOpen && !isLoadingIntake;
 
   function handleAddButtonClick() {
     setIntake(prev => ({
       ...prev,
-      items: [...prev.items, intakeUtilServiceTest.getDefaultBasicIntakeItem()],
+      items: [...prev.items, intakeUtilServiceTest.getDefaultIntakeItem()],
     }));
   }
 
@@ -46,17 +48,19 @@ export const IntakeEdit: FC = () => {
     e.preventDefault();
     if (!dailyData) return;
     addIntake({ todayDataId: dailyData.id, intakes: [...dailyData.intakes, intake] });
+    setIntake(intakeUtilServiceTest.getDefaultIntake());
   }
 
   return (
     <form className="intake-edit" onSubmit={handleSubmit}>
-      {!isReviewOpen && (
+      {isEditShown && (
         <>
           <input
             type="text"
             id="intake-name"
             className="input-intake-name"
             onChange={handleNameInputChange}
+            autoComplete="off"
             placeholder="Name your intake!"
           />
           <div className="intake-edit__list-container">
@@ -92,6 +96,9 @@ export const IntakeEdit: FC = () => {
           </div>
         </>
       )}
+      {isLoadingIntake && (
+        <SpinnerLoader withContainer={true} containerSize={{ height: "100%", width: "100%" }} />
+      )}
       {isReviewOpen && (
         <>
           <h3 className="intake-edit-review-title">{intake.name}</h3>
@@ -110,6 +117,14 @@ export const IntakeEdit: FC = () => {
         </>
       )}
       <div className="intake-edit-btns-container" style={{ backgroundColor }}>
+        <Button
+          onClickFn={() => setIntake(prev => ({ ...prev, isRecorded: !prev.isRecorded }))}
+          className={
+            "intake-edit-btn btn-toggle-save-later" + (!intake.isRecorded ? " clicked" : "")
+          }
+        >
+          Save Later
+        </Button>
         <Button onClickFn={() => setIsReviewOpen(prev => !prev)} className="intake-edit-btn">
           {isReviewOpen ? "Edit" : "Review"}
         </Button>

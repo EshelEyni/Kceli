@@ -1,0 +1,35 @@
+import { FC } from "react";
+import { CaloriePie } from "../../Charts/CaloriePie/CaloriePie";
+import { useTodayData } from "../../../contexts/TodayDataContext";
+
+export const TodayDetailsHeader: FC = () => {
+  const { dailyData, remainingCalories, estimatedKGChange } = useTodayData();
+
+  if (!dailyData) return null;
+  return (
+    <header className="today-details__header">
+      <CaloriePie intakes={dailyData.intakes} remainingCalories={remainingCalories} />
+
+      <div className="today-details__header__titles">
+        {remainingCalories > 0 ? (
+          <p className="today-details__title">
+            <strong>{remainingCalories}</strong> calories remaining
+          </p>
+        ) : (
+          <p className="today-details__title">
+            <strong>{Math.abs(remainingCalories)}</strong> calories over your limit
+          </p>
+        )}
+        {estimatedKGChange > 0 ? (
+          <p className="today-details__title">
+            estimated to gain <strong>{estimatedKGChange}kg</strong>
+          </p>
+        ) : (
+          <p className="today-details__title">
+            estimated to lose <strong>{Math.abs(estimatedKGChange)}</strong> kg
+          </p>
+        )}
+      </div>
+    </header>
+  );
+};

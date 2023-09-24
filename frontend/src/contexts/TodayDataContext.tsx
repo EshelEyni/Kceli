@@ -7,6 +7,7 @@ import calorieUtilService from "../services/calorieUtil/calorieUtilService";
 import { DayData } from "../../../shared/types/dayData";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { useAddIntake } from "../hooks/useAddIntake";
+import { Intake } from "../../../shared/types/intake";
 
 type TodayDataContextType = {
   dailyData: DayData | undefined;
@@ -17,6 +18,8 @@ type TodayDataContextType = {
   isLoadingUpdate: boolean;
   addIntake: UseMutateFunction<DayData, unknown, AddIntakeParams, unknown>;
   isLoadingIntake: boolean;
+  recordedIntakes: Intake[];
+  unrecordedIntakes: Intake[];
   remainingCalories: number;
   estimatedKGChange: number;
   consumedCalories: number;
@@ -29,16 +32,19 @@ type TodayDataContextType = {
 export enum ToggledElement {
   IntakeEdit = "IntakeEdit",
   IntakeList = "IntakeList",
+  UnRecordedIntakeList = "UnRecordedIntakeList",
 }
 
 const TodayDataContext = createContext<TodayDataContextType | undefined>(undefined);
 
 function TodayDataProvider({ children }: { children: React.ReactNode }) {
+  const { loggedInUser } = useSelector((state: RootState) => state.auth);
   const { dailyData, isLoading, isSuccess, isError } = useGetTodayData();
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
   const { addIntake, isLoading: isLoadingIntake } = useAddIntake();
   const [openedElement, setOpenedElement] = useState<ToggledElement>(ToggledElement.IntakeEdit);
-  const { loggedInUser } = useSelector((state: RootState) => state.auth);
+  const recordedIntakes = dailyData?.intakes.filter(i => i.isRecorded) || [];
+  const unrecordedIntakes = dailyData?.intakes.filter(i => !i.isRecorded) || [];
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, dailyData);
   const consumedCalories = calorieUtilService.getTotalCalories(dailyData);
   const targetCaloricIntakePerDay = loggedInUser?.targetCaloricIntakePerDay || 0;
@@ -60,6 +66,8 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
     isLoadingUpdate,
     addIntake,
     isLoadingIntake,
+    recordedIntakes,
+    unrecordedIntakes,
     remainingCalories,
     consumedCalories,
     targetCaloricIntakePerDay,

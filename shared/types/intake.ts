@@ -30,6 +30,7 @@ export interface IntakeItem extends BasicIntakeItem {
 
 export interface BasicIntake {
   name: string;
+  isRecorded: boolean;
 }
 
 export interface NewIntake extends BasicIntake {

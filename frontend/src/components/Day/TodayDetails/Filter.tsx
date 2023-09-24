@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { ToggledElement, useTodayData } from "../../../contexts/TodayDataContext";
-import "./Filter.scss";
 import { Button } from "../../App/Button/Button";
 
 export const Filter: FC = () => {
@@ -14,6 +13,10 @@ export const Filter: FC = () => {
     {
       name: "intakes",
       value: ToggledElement.IntakeList,
+    },
+    {
+      name: "unrecorded",
+      value: ToggledElement.UnRecordedIntakeList,
     },
   ];
   return (
