@@ -8,8 +8,9 @@ import { useTodayData } from "../../../contexts/TodayDataContext";
 import "./IntakeEdit.scss";
 
 export const IntakeEdit: FC = () => {
-  const { dailyData, addIntake } = useTodayData();
+  const { dailyData, addIntake, backgroundColor } = useTodayData();
   const [intake, setIntake] = useState<NewIntake>(intakeUtilServiceTest.getDefaultBasicIntake());
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
 
   function handleAddButtonClick() {
     setIntake(prev => ({
@@ -49,41 +50,71 @@ export const IntakeEdit: FC = () => {
 
   return (
     <form className="intake-edit" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        id="intake-name"
-        className="input-intake-name"
-        onChange={handleNameInputChange}
-        placeholder="Name your intake!"
-      />
-      <List
-        items={intake.items}
-        render={(item: NewIntakeItem, i: number, arr: NewIntakeItem[]) => {
-          if (i === arr.length - 1)
-            return (
-              <div className="last-intake-edit-item-container" key={i}>
-                <IntakeItemEdit intakeItem={item} idx={i} handleChange={handleIntakeItemChange} />
-                <div className="last-intake-edit-item__btn-container">
-                  {arr.length > 1 && (
-                    <Button onClickFn={() => handleRemoveButtonClick(i)}>remove item</Button>
-                  )}
-                  <Button onClickFn={handleAddButtonClick}>add item</Button>
-                </div>
-              </div>
-            );
-          return (
-            <IntakeItemEdit
-              intakeItem={item}
-              idx={i}
-              key={i}
-              handleChange={handleIntakeItemChange}
+      {!isReviewOpen && (
+        <>
+          <input
+            type="text"
+            id="intake-name"
+            className="input-intake-name"
+            onChange={handleNameInputChange}
+            placeholder="Name your intake!"
+          />
+          <div className="intake-edit__list-container">
+            <List
+              items={intake.items}
+              render={(item: NewIntakeItem, i: number, arr: NewIntakeItem[]) => {
+                if (i === arr.length - 1)
+                  return (
+                    <div className="last-intake-edit-item-container" key={i}>
+                      <IntakeItemEdit
+                        intakeItem={item}
+                        idx={i}
+                        handleChange={handleIntakeItemChange}
+                      />
+                      <div className="last-intake-edit-item__btn-container">
+                        {arr.length > 1 && (
+                          <Button onClickFn={() => handleRemoveButtonClick(i)}>remove item</Button>
+                        )}
+                        <Button onClickFn={handleAddButtonClick}>add item</Button>
+                      </div>
+                    </div>
+                  );
+                return (
+                  <IntakeItemEdit
+                    intakeItem={item}
+                    idx={i}
+                    key={i}
+                    handleChange={handleIntakeItemChange}
+                  />
+                );
+              }}
             />
-          );
-        }}
-      />
-      <Button onClickFn={e => handleSubmit(e)} type="submit">
-        Add Intake
-      </Button>
+          </div>
+        </>
+      )}
+      {isReviewOpen && (
+        <>
+          <h3 className="intake-edit-review-title">{intake.name}</h3>
+          <List
+            items={intake.items}
+            render={(item, i) => (
+              <p className="intake-edit-review-list__item">
+                <span>{`${i + 1})`}</span>
+                {`${item.name} - ${item.quantity} ${item.unit}`}
+              </p>
+            )}
+            className="intake-edit-review-list"
+          />
+        </>
+      )}
+      <div className="intake-edit-btns-container" style={{ backgroundColor }}>
+        <Button onClickFn={() => setIsReviewOpen(prev => !prev)} className="intake-edit-btn">
+          {isReviewOpen ? "Edit" : "Review"}
+        </Button>
+        <Button onClickFn={e => handleSubmit(e)} className="intake-edit-btn" type="submit">
+          Add Intake
+        </Button>
+      </div>
     </form>
   );
 };

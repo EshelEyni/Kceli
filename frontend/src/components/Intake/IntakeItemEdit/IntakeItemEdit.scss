@@ -4,41 +4,37 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: rem(10px);
   width: 100%;
+  color: var(--color-text-gray);
 
   > * {
     width: 100%;
   }
 
-  .intake-item-label {
-    color: white;
-    font-size: rem(24px);
-    position: relative;
-    font-style: italic;
-    text-transform: uppercase;
-  }
-
-  .intake-item-input {
-    width: 100%;
-    height: rem(50px);
-    padding: rem(15px) rem(20px);
-    border-radius: 25px;
-    color: var(--color-text-gray);
-  }
-
-  .quantity-input-container {
+  .name-input-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: rem(10px);
+  }
+  .intake-item-input {
+    width: 100%;
+    padding: rem(12px) rem(25px);
+    border-radius: 25px;
+  }
+
+  .intake-item-edit-inputs-container {
+    display: flex;
     justify-content: space-between;
     align-items: center;
 
-    .quantity-input-actions-container {
+    .quantity-input-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: rem(25px);
-      width: 100%;
-      padding: rem(15px) rem(20px);
+      gap: rem(15px);
       border-radius: 25px;
       color: white;
       font-size: rem(16px);
@@ -48,41 +44,52 @@
 
       .quantity-input {
         text-align: center;
+        font-weight: 600;
         max-width: rem(100px);
+        color: var(--color-text-gray);
+        font-size: rem(20px);
+        height: rem(40px);
       }
 
       svg {
         color: white;
-        width: rem(45px);
-        height: rem(45px);
+        width: rem(40px);
+        height: rem(40px);
+      }
+    }
+
+    .intake-item-edit__toggle-manual-btn,
+    .unit-toggle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: rem(100px);
+      height: rem(40px);
+      background-color: white;
+      border-radius: 10px;
+
+      span {
+        font-size: rem(25px);
+        position: relative;
+        font-weight: 600;
+        text-transform: uppercase;
+        top: 1px;
+      }
+    }
+
+    .intake-item-edit__toggle-manual-btn {
+      span {
+        color: var(--color-text-gray);
+        font-weight: 600;
+        font-size: rem(18px);
       }
     }
   }
 
-  .unit-toggle {
+  .intake-item-edit__manuall-calorie-edit {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: rem(150px);
-    height: rem(50px);
-    background-color: white;
-    border-radius: 10px;
-
-    span {
-      color: var(--color-text);
-      font-size: rem(25px);
-      position: relative;
-      text-transform: uppercase;
-      top: 1px;
-    }
-  }
-
-  .name-input-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: rem(15px) rem(20px);
-    gap: rem(10px);
+    gap: rem(15px);
   }
 }

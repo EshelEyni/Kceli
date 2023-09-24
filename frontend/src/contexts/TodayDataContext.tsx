@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { useGetTodayData } from "../hooks/useGetTodayData";
 import { useUpdateTodayData } from "../hooks/useUpdateTodayData";
 import { useSelector } from "react-redux";
@@ -21,7 +21,14 @@ type TodayDataContextType = {
   consumedCalories: number;
   targetCaloricIntakePerDay: number;
   backgroundColor: string;
+  openedElement: ToggledElement;
+  setOpenedElement: (element: ToggledElement) => void;
 };
+
+export enum ToggledElement {
+  IntakeEdit = "IntakeEdit",
+  IntakeList = "IntakeList",
+}
 
 const TodayDataContext = createContext<TodayDataContextType | undefined>(undefined);
 
@@ -29,9 +36,10 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
   const { dailyData, isLoading, isSuccess, isError } = useGetTodayData();
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
   const { addIntake, isLoading: isLoadingIntake } = useAddIntake();
+  const [openedElement, setOpenedElement] = useState<ToggledElement>(ToggledElement.IntakeEdit);
   const { loggedInUser } = useSelector((state: RootState) => state.auth);
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, dailyData);
-  const consumedCalories = calorieUtilService.getCosumedCalories(dailyData);
+  const consumedCalories = calorieUtilService.getTotalCalories(dailyData);
   const targetCaloricIntakePerDay = loggedInUser?.targetCaloricIntakePerDay || 0;
   const backgroundColor = calorieUtilService.getBcgByCosumedCalories({
     consumedCalories,
@@ -51,6 +59,8 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
     consumedCalories,
     targetCaloricIntakePerDay,
     backgroundColor,
+    openedElement,
+    setOpenedElement,
   };
   return <TodayDataContext.Provider value={value}>{children}</TodayDataContext.Provider>;
 }

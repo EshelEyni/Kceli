@@ -7,5 +7,5 @@ type ListProps<T> = {
 };
 
 export const List = <T,>({ items, render, className }: ListProps<T>) => {
-  return <ul className={`list ${className}`}>{items.map(render)}</ul>;
+  return <ul className={`list ${className ? className : ""}`}>{items.map(render)}</ul>;
 };

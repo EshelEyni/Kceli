@@ -26,13 +26,13 @@ export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   return (
-    <PieChart width={300} height={300}>
+    <PieChart width={200} height={200}>
       <Pie
         dataKey="value"
         isAnimationActive={false}
         data={pieData}
-        cx={150}
-        cy={150}
+        cx={100}
+        cy={100}
         innerRadius={60}
         outerRadius={80}
       >

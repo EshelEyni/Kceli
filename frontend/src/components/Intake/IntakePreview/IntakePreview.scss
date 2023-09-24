@@ -1,0 +1,20 @@
+@import "../../../styles/main.scss";
+
+.intake-preview {
+  .intake-item-preview-container {
+    display: flex;
+    gap: rem(2px);
+    .intake-preview__item-list-title {
+      font-size: rem(16px);
+    }
+
+    .intake-item-preview {
+      .intake-item-preview__details {
+        font-size: rem(18px);
+        font-weight: 600;
+        color: white;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

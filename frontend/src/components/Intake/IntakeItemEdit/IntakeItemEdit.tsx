@@ -1,10 +1,9 @@
 import { FC, useState } from "react";
-import { NewIntakeItem } from "../../../../../shared/types/intake";
+import { MeasurementUnit, NewIntakeItem } from "../../../../../shared/types/intake";
 import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
 import "./IntakeItemEdit.scss";
-import { BsFillPlusCircleFill } from "react-icons/bs";
 import { Button } from "../../App/Button/Button";
-import { AiFillMinusCircle } from "react-icons/ai";
+import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { ErrorMsg } from "../../Msg/ErrorMsg/ErrorMsg";
 
 type IntakeItemEditProps = {
@@ -15,29 +14,26 @@ type IntakeItemEditProps = {
 
 export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handleChange }) => {
   const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
-  function handleQuantityInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    e.preventDefault();
-    const { value } = e.target;
-    handleChange({ ...intakeItem, quantity: Number(value) }, idx);
-  }
-
-  function handleUnitInputClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    e.preventDefault();
-    const currentUnitIdx = intakeUtilService.units.indexOf(intakeItem.unit);
-    const unit =
-      currentUnitIdx === intakeUtilService.units.length - 1
-        ? intakeUtilService.units[0]
-        : intakeUtilService.units[currentUnitIdx + 1];
-
-    const quantity = intakeUtilService.getUnitDefaultQuantity(unit);
-    handleChange({ ...intakeItem, unit, quantity }, idx);
-  }
+  const [isManual, setIsManual] = useState(false);
 
   function handleNameInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     const { value: name } = e.target;
     handleChange({ ...intakeItem, name }, idx);
     setIsInputNameEmpty(!name.length);
+  }
+
+  function handleQuantityInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const { value } = e.target;
+    handleChange({ ...intakeItem, quantity: Number(value) }, idx);
+  }
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const { value, name } = e.target;
+    console.log(value, name);
+    // handleChange({ ...intakeItem, name: value }, idx);
   }
 
   function decreaseQuantity() {
@@ -51,12 +47,27 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
     handleChange({ ...intakeItem, quantity: intakeItem.quantity + step }, idx);
   }
 
+  function handleUnitInputClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.preventDefault();
+    if (isManual) return;
+    const currentUnitIdx = intakeUtilService.units.indexOf(intakeItem.unit);
+    const unit =
+      currentUnitIdx === intakeUtilService.units.length - 1
+        ? intakeUtilService.units[0]
+        : intakeUtilService.units[currentUnitIdx + 1];
+
+    const quantity = intakeUtilService.getUnitDefaultQuantity(unit);
+    handleChange({ ...intakeItem, unit, quantity }, idx);
+  }
+
+  function handleToggleManual() {
+    setIsManual(prev => !prev);
+    handleChange({ ...intakeItem, unit: MeasurementUnit.GRAM }, idx);
+  }
+
   return (
     <section className="intake-item-edit">
       <div className="name-input-container">
-        <label htmlFor="name" className="intake-item-label">
-          name
-        </label>
         <input
           type="text"
           id="name"
@@ -73,30 +84,49 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
         </div>
       )}
 
-      <div className="quantity-input-container">
-        <label htmlFor="quantity" className="intake-item-label">
-          quantity
-        </label>
-        <div className="quantity-input-actions-container">
+      <div className="intake-item-edit-inputs-container">
+        <div className="quantity-input-container">
           <Button onClickFn={decreaseQuantity}>
             <AiFillMinusCircle />
           </Button>
           <input
             type="number"
-            id="quantity"
             className="intake-item-input quantity-input"
             value={intakeItem.quantity}
             onChange={handleQuantityInputChange}
           />
           <Button onClickFn={increaseQuantity}>
-            <BsFillPlusCircleFill />
+            <AiFillPlusCircle />
           </Button>
         </div>
+
+        <div className="unit-toggle" onClick={handleUnitInputClick}>
+          <span>{intakeItem.unit}</span>
+        </div>
+
+        <Button onClickFn={handleToggleManual} className="intake-item-edit__toggle-manual-btn">
+          <span>{isManual ? "Auto" : "Manual"}</span>
+        </Button>
       </div>
 
-      <div className="unit-toggle" onClick={handleUnitInputClick}>
-        <span>{intakeItem.unit}</span>
-      </div>
+      {isManual && (
+        <div className="intake-item-edit__manuall-calorie-edit">
+          <input
+            type="number"
+            className="intake-item-input quantity-input"
+            value={intakeItem.calories}
+            placeholder="Calories"
+            onChange={handleInputChange}
+          />
+          <input
+            type="number"
+            className="intake-item-input quantity-input"
+            value={intakeItem.caloriesPer100g}
+            placeholder="Calories per 100g"
+            onChange={handleInputChange}
+          />
+        </div>
+      )}
     </section>
   );
 };

@@ -19,6 +19,8 @@ export interface ExistingIntakeItemData extends BasicIntakeItem {
 
 export interface NewIntakeItem extends BasicIntakeItem {
   tempId: string;
+  calories?: number;
+  caloriesPer100g?: number;
 }
 
 export interface IntakeItem extends BasicIntakeItem {
@@ -35,11 +37,11 @@ export interface NewIntake extends BasicIntake {
   tempId: string;
 }
 
-export type Intake = {
+export interface Intake extends BasicIntake {
   id: string;
   items: IntakeItem[];
   createdAt: Date;
   updatedAt: Date;
-};
+}
 
 export type CombinedIntake = NewIntake | Intake;

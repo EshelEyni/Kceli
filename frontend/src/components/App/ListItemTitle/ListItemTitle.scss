@@ -1,0 +1,15 @@
+@import "../../../styles/main.scss";
+
+.list-item-title {
+  display: flex;
+  align-items: center;
+  gap: rem(8px);
+  font-size: rem(20px);
+  font-weight: 600;
+  color: white;
+  text-transform: capitalize;
+
+  .list-item-title__num {
+    letter-spacing: -2px;
+  }
+}

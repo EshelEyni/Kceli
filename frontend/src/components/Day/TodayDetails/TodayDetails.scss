@@ -8,7 +8,8 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: rem(25px);
+  gap: rem(15px);
+  // padding: rem(15px);
   flex-grow: 1;
 
   @include for-desktop-layout {
@@ -17,7 +18,20 @@
     width: rem(620px);
     height: 75vh;
     max-height: rem(1200px);
-    padding: rem(25px) rem(50px);
+    padding: rem(10px) rem(40px) rem(30px);
     border-radius: 50px;
+  }
+
+  .intake-list {
+    align-items: flex-start;
+
+    .intake-list-item-title {
+      margin-bottom: rem(10px);
+      font-style: normal;
+
+      .list-item-title__text {
+        font-size: rem(20px);
+      }
+    }
   }
 }
