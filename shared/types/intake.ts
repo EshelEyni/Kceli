@@ -41,3 +41,5 @@ export type Intake = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type CombinedIntake = NewIntake | Intake;

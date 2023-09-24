@@ -4,6 +4,7 @@ import intakeService from "../../services/intake/intakeService";
 import openAIService from "../../services/openAI/openAIService";
 import { connectToTestDB, disconnectFromTestDB } from "../../services/test/testDBService";
 import { getMockDailyData, getMongoId } from "../../services/test/testUtilService";
+import { UserModel } from "../user/userModel";
 import { DailyDataModel } from "./dailyDataModel";
 
 jest.mock("../../services/openAI/openAIService");
@@ -11,7 +12,7 @@ jest.mock("../../services/intake/intakeService");
 
 const MOCK_CALORIES = 100;
 
-describe("User Model", () => {
+describe("Daily Data Model", () => {
   beforeAll(async () => {
     (openAIService.getCaloriesForIntakeItem as jest.Mock).mockResolvedValue(MOCK_CALORIES);
     await connectToTestDB();
@@ -19,20 +20,21 @@ describe("User Model", () => {
 
   afterAll(async () => {
     await DailyDataModel.deleteMany({});
+    await UserModel.deleteMany({});
     await disconnectFromTestDB();
   });
 
-  describe("Daily Data Schema", () => {
+  fdescribe("Daily Data Schema", () => {
     const dailyData = getMockDailyData();
 
     afterEach(async () => {
       await DailyDataModel.deleteMany({});
     });
 
-    fit("should create a new daily data", async () => {
+    it("should create a new daily data", async () => {
       const validDailyData = new DailyDataModel(dailyData);
       const savedDailyData = (await validDailyData.save()).toObject();
-      expect(savedDailyData._id).toBeDefined();
+      expect(savedDailyData.id).toBeDefined();
       expect(savedDailyData.date).toEqual(dailyData.date);
 
       savedDailyData.intakes.forEach((intake: any, index: number) => {

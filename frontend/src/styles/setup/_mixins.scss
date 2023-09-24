@@ -1,34 +1,38 @@
 /* Media queries Breakpoint mixins */
 
+// 576px
 @mixin for-mobile-layout {
-  @media (max-width: $break-narrow) {
+  @media (max-width: $break-mobile) {
     @content;
   }
 }
 
-@mixin for-narrow-layout {
-  @media (min-width: $break-narrow) {
+// 768px
+@mixin for-tablet-layout {
+  @media (min-width: $break-tablet) {
     @content;
   }
 }
 
-@mixin for-normal-layout {
-  @media (min-width: $break-normal) {
+// 992px
+@mixin for-desktop-layout {
+  @media (min-width: $break-desktop) {
     @content;
   }
 }
 
-@mixin for-wide-layout {
-  @media (min-width: $break-wide) {
+// 1200px
+@mixin for-large-desktop-layout {
+  @media (min-width: $break-large-desktop) {
     @content;
   }
 }
 
-@mixin layoutGTC($max) {
-  grid-template-columns:
-    minmax($layoutPadding, 1fr)
-    minmax(auto, $max)
-    minmax($layoutPadding, 1fr);
+// 1400px
+@mixin for-extra-large-desktop-layout {
+  @media (min-width: $break-extra-large-desktop) {
+    @content;
+  }
 }
 
 /* Media  Mixins */
@@ -61,6 +65,8 @@
 }
 
 @mixin scrollbar-hidden {
+  -webkit-overflow-scrolling: touch;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -130,7 +136,7 @@
       }
     }
   }
-  
+
   &.modal-below {
     &:hover {
       &::after {

@@ -1,4 +1,5 @@
 import { FC } from "react";
+import "./RemainingCaloriesTitle.scss";
 
 type RemainingCaloriesTitleProps = {
   remainingCalories: number;
@@ -6,10 +7,10 @@ type RemainingCaloriesTitleProps = {
 
 export const RemainingCaloriesTitle: FC<RemainingCaloriesTitleProps> = ({ remainingCalories }) => {
   return (
-    <span>
+    <strong className="remaining-calorie-title">
       {remainingCalories > 0
         ? `${remainingCalories} calories remaining`
         : `${Math.abs(remainingCalories)} calories over your limit`}
-    </span>
+    </strong>
   );
 };

@@ -69,6 +69,26 @@ button {
 input {
   border: none;
   outline: none;
+
+  &::placeholder {
+    color: var(--color-text-gray);
+    font-size: rem(16px);
+    position: relative;
+    font-style: italic;
+    text-align: center;
+    top: 1px;
+  }
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .vertical {

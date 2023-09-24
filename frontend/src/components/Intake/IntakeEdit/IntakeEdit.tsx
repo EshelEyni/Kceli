@@ -3,10 +3,12 @@ import { NewIntake, NewIntakeItem } from "../../../../../shared/types/intake";
 import intakeUtilServiceTest from "../../../services/intakeUtil/intakeUtilService";
 import { List } from "../../App/List/List";
 import { IntakeItemEdit } from "../IntakeItemEdit/IntakeItemEdit";
-import { BsFillPlusCircleFill, BsFillXCircleFill } from "react-icons/bs";
 import { Button } from "../../App/Button/Button";
+import { useTodayData } from "../../../contexts/TodayDataContext";
+import "./IntakeEdit.scss";
 
 export const IntakeEdit: FC = () => {
+  const { dailyData, addIntake } = useTodayData();
   const [intake, setIntake] = useState<NewIntake>(intakeUtilServiceTest.getDefaultBasicIntake());
 
   function handleAddButtonClick() {
@@ -41,28 +43,32 @@ export const IntakeEdit: FC = () => {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(intake);
+    if (!dailyData) return;
+    addIntake({ todayDataId: dailyData.id, intakes: [...dailyData.intakes, intake] });
   }
 
   return (
     <form className="intake-edit" onSubmit={handleSubmit}>
-      <label htmlFor="intake-name">Name:</label>
-      <input type="text" id="intake-name" onChange={handleNameInputChange} />
+      <input
+        type="text"
+        id="intake-name"
+        className="input-intake-name"
+        onChange={handleNameInputChange}
+        placeholder="Name your intake!"
+      />
       <List
         items={intake.items}
         render={(item: NewIntakeItem, i: number, arr: NewIntakeItem[]) => {
           if (i === arr.length - 1)
             return (
-              <div className="last-intake-item" key={i}>
+              <div className="last-intake-edit-item-container" key={i}>
                 <IntakeItemEdit intakeItem={item} idx={i} handleChange={handleIntakeItemChange} />
-                <Button onClickFn={handleAddButtonClick}>
-                  <BsFillPlusCircleFill />
-                </Button>
-                {arr.length > 1 && (
-                  <Button onClickFn={() => handleRemoveButtonClick(i)}>
-                    <BsFillXCircleFill />
-                  </Button>
-                )}
+                <div className="last-intake-edit-item__btn-container">
+                  {arr.length > 1 && (
+                    <Button onClickFn={() => handleRemoveButtonClick(i)}>remove item</Button>
+                  )}
+                  <Button onClickFn={handleAddButtonClick}>add item</Button>
+                </div>
               </div>
             );
           return (

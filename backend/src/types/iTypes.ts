@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { Gender } from "../../../shared/types/system";
 import { MeasurementUnit } from "../../../shared/types/intake";
 
@@ -33,7 +33,15 @@ export interface IUser extends Document {
 
 export interface IDailyData extends Document {
   date: Date;
-  // dailyData: IDailyDataItem[];
+  userId: mongoose.Types.ObjectId;
+  intakes: IIntake[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IIntake extends Document {
+  name: string;
+  items: IIntakeItem[];
 }
 
 export interface IIntakeItem extends Document {

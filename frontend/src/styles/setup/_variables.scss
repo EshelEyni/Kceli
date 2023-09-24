@@ -28,10 +28,8 @@
 $layoutPadding: 20px;
 
 // LAYOUT BREAKPOINTS
-$break-narrow: 1200px;
-$break-normal: 1360px;
-$break-wide: 1920px;
-
-$padded-break-narrow: $break-narrow + $layoutPadding * 2;
-$padded-break-normal: $break-normal + $layoutPadding * 2;
-$padded-break-wide: $break-wide + $layoutPadding * 2;
+$break-mobile: 576px;
+$break-tablet: 768px;
+$break-desktop: 992px;
+$break-large-desktop: 1200px;
+$break-extra-large-desktop: 1400px;

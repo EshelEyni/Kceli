@@ -1,10 +1,11 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { NewIntakeItem } from "../../../../../shared/types/intake";
 import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
 import "./IntakeItemEdit.scss";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { Button } from "../../App/Button/Button";
 import { AiFillMinusCircle } from "react-icons/ai";
+import { ErrorMsg } from "../../Msg/ErrorMsg/ErrorMsg";
 
 type IntakeItemEditProps = {
   intakeItem: NewIntakeItem;
@@ -13,6 +14,7 @@ type IntakeItemEditProps = {
 };
 
 export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handleChange }) => {
+  const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
   function handleQuantityInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     const { value } = e.target;
@@ -35,6 +37,7 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
     e.preventDefault();
     const { value: name } = e.target;
     handleChange({ ...intakeItem, name }, idx);
+    setIsInputNameEmpty(!name.length);
   }
 
   function decreaseQuantity() {
@@ -50,24 +53,50 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
 
   return (
     <section className="intake-item-edit">
-      <Button onClickFn={decreaseQuantity}>
-        <AiFillMinusCircle />
-      </Button>
-      <label htmlFor="quantity">quantity</label>
-      <input
-        type="number"
-        id="quantity"
-        value={intakeItem.quantity}
-        onChange={handleQuantityInputChange}
-      />
-      <Button onClickFn={increaseQuantity}>
-        <BsFillPlusCircleFill />
-      </Button>
-      <div className="unit" onClick={handleUnitInputClick}>
-        {intakeItem.unit}
+      <div className="name-input-container">
+        <label htmlFor="name" className="intake-item-label">
+          name
+        </label>
+        <input
+          type="text"
+          id="name"
+          className="intake-item-input"
+          value={intakeItem.name}
+          onChange={handleNameInputChange}
+          spellCheck={true}
+          placeholder="Enter food name"
+        />
       </div>
-      <label htmlFor="name">Name</label>
-      <input type="text" id="name" value={intakeItem.name} onChange={handleNameInputChange} />
+      {isInputNameEmpty && (
+        <div onClick={() => setIsInputNameEmpty(false)}>
+          <ErrorMsg msg="Intake name cannot be empty" />
+        </div>
+      )}
+
+      <div className="quantity-input-container">
+        <label htmlFor="quantity" className="intake-item-label">
+          quantity
+        </label>
+        <div className="quantity-input-actions-container">
+          <Button onClickFn={decreaseQuantity}>
+            <AiFillMinusCircle />
+          </Button>
+          <input
+            type="number"
+            id="quantity"
+            className="intake-item-input quantity-input"
+            value={intakeItem.quantity}
+            onChange={handleQuantityInputChange}
+          />
+          <Button onClickFn={increaseQuantity}>
+            <BsFillPlusCircleFill />
+          </Button>
+        </div>
+      </div>
+
+      <div className="unit-toggle" onClick={handleUnitInputClick}>
+        <span>{intakeItem.unit}</span>
+      </div>
     </section>
   );
 };

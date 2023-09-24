@@ -12,6 +12,7 @@ import { requestLogger } from "../../middlewares/logger/loggerMiddleware";
 import { AppError, errorHandler } from "../../services/error/errorService";
 import setupAsyncLocalStorage from "../../middlewares/setupALS/setupALSMiddleware";
 import userRouter from "../../routers/user/userRouter";
+import dayRouter from "../../routers/day/dayRouter";
 import authRouter from "../../routers/auth/authRouter";
 import { requestLimiter } from "../../services/rateLimiterService";
 
@@ -61,6 +62,7 @@ if (!isProdEnv)
   });
 
 app.use("/api/user", userRouter);
+app.use("/api/day", dayRouter);
 app.use("/api/auth", authRouter);
 
 app.get("/**", (req: Request, res: Response) => {

@@ -1,7 +1,8 @@
-import { Schema, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 import { intakeSchema } from "./dailyDataSubSchema";
+import { IDailyData } from "../../types/iTypes";
 
-const dailyDataSchema = new Schema(
+const dailyDataSchema = new Schema<IDailyData>(
   {
     date: {
       type: Date,
@@ -20,7 +21,7 @@ const dailyDataSchema = new Schema(
   {
     toObject: {
       virtuals: true,
-      transform: (doc: Document, ret: Record<string, unknown>) => {
+      transform: (_: Document, ret: Record<string, unknown>) => {
         delete ret._id;
         return ret;
       },

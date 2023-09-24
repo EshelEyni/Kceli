@@ -1,0 +1,23 @@
+@import "../../../styles//setup/functions";
+@import "../../../styles//setup/variables";
+@import "../../../styles//setup/mixins";
+
+.today-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: rem(25px);
+  flex-grow: 1;
+
+  @include for-desktop-layout {
+    justify-content: flex-start;
+    flex-grow: 0;
+    width: rem(620px);
+    height: 75vh;
+    max-height: rem(1200px);
+    padding: rem(25px) rem(50px);
+    border-radius: 50px;
+  }
+}

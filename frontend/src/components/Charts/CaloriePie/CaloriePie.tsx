@@ -31,8 +31,8 @@ export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) 
         dataKey="value"
         isAnimationActive={false}
         data={pieData}
-        cx={120}
-        cy={200}
+        cx={150}
+        cy={150}
         innerRadius={60}
         outerRadius={80}
       >
