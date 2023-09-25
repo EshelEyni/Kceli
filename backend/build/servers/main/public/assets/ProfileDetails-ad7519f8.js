@@ -1,1 +1,0 @@
-import{o as e,h as a,j as s,O as l}from"./index-1ecd1dfb.js";const r=()=>(e(),a("main",{className:"profile-details",children:[s("h1",{children:"Profile Details Page"}),s(l,{})]}));export{r as default};

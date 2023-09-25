@@ -5,14 +5,13 @@
 html {
   font-family: var(--font-primary);
   height: 100%;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
 
   > * {
     margin: 0;
