@@ -13,7 +13,7 @@ describe("Logo", () => {
   it("renders the static logo when staticLogo is true", () => {
     render(
       <MemoryRouter>
-        <Logo staticLogo={true} size={{ height: 100, width: 100 }} />
+        <Logo size={{ height: 100, width: 100 }} />
       </MemoryRouter>
     );
     expect(screen.getByTestId("static-logo")).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe("Logo", () => {
   it("applies auto-animation class when autoAnimate is true", () => {
     render(
       <MemoryRouter>
-        <Logo autoAnimate={true} />
+        <Logo />
       </MemoryRouter>
     );
     expect(screen.getByTestId("logo").closest(".logo-container")).toHaveClass("auto-animation");

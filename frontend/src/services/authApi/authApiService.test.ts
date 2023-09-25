@@ -2,6 +2,7 @@ import { vi, describe, it, expect, Mock } from "vitest";
 import authService from "./authApiService";
 import httpService from "../http/httpService";
 import { handleServerResponseData } from "../util/utilService";
+import { UserCredenitials } from "../../../../shared/types/user";
 
 vi.mock("../http/httpService");
 vi.mock("../util/utilService");
@@ -36,13 +37,18 @@ describe("authService", () => {
   });
 
   it("calls signup with correct arguments", async () => {
-    const mockUser = {
+    const mockUser: UserCredenitials = {
       username: "test",
       fullname: "test",
       email: "test@email.com",
       password: "password",
       passwordConfirm: "password",
+      weight: 100,
+      height: 100,
+      birthdate: new Date("2000-01-01"),
+      gender: "male",
     };
+
     const mockResponse = { status: "success", data: mockUser };
 
     (httpService.post as Mock).mockResolvedValue(mockResponse);

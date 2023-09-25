@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+require("dotenv").config();
 import express from "express";
 import helmet from "helmet";
 import compression from "compression";
