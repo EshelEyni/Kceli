@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 import { MeasurementUnit, NewIntakeItem } from "../../../../../shared/types/intake";
 import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
 import "./IntakeItemEdit.scss";
@@ -6,6 +6,11 @@ import { Button } from "../../App/Button/Button";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { ErrorMsg } from "../../Msg/ErrorMsg/ErrorMsg";
 import { useTodayData } from "../../../contexts/TodayDataContext";
+import NSpell from "nspell";
+import { debounce } from "../../../services/util/utilService";
+import { AnyFunction } from "../../../../../shared/types/system";
+import { SpellingSuggestion } from "../../../types/app";
+import { SpellingSuggestionList } from "./SpellingSuggestionList";
 
 type IntakeItemEditProps = {
   intakeItem: NewIntakeItem;
@@ -18,6 +23,13 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
   const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
   const [isManual, setIsManual] = useState(false);
   const [inputFaded, setInputFaded] = useState("");
+  const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([
+    { original: "test", suggestions: ["test1", "test2"] },
+    { original: "test2", suggestions: ["test1", "test2"] },
+    { original: "test21", suggestions: ["test1", "test2"] },
+  ]);
+  const [spellchecker, setSpellchecker] = useState<NSpell | null>(null);
+  const debouncedSpellcheck = useRef<AnyFunction | null>(null);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -26,6 +38,8 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
       case "name":
         handleChange({ ...intakeItem, name: value }, idx);
         setIsInputNameEmpty(!value.length);
+        if (!debouncedSpellcheck.current) return;
+        debouncedSpellcheck.current(value);
         break;
       case "quantity":
         handleChange({ ...intakeItem, quantity: Number(value) }, idx);
@@ -85,20 +99,57 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
     );
   }
 
+  function handleSuggestionClick(original: string, suggestion: string) {
+    const name = intakeItem.name.replace(original, suggestion);
+    const filteredSuggestions = suggestions.filter(s => s.original !== original);
+    setSuggestions(filteredSuggestions);
+    handleChange({ ...intakeItem, name }, idx);
+  }
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/assets/dictionaries/en_US.aff").then(res => res.text()),
+      fetch("/assets/dictionaries/en_US.dic").then(res => res.text()),
+    ])
+      .then(([affData, dicData]) => {
+        const nspellInstance = new NSpell(affData, dicData);
+        setSpellchecker(nspellInstance);
+      })
+      .catch(error => {
+        console.error("Failed to load dictionaries:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    function spellcheck(text: string) {
+      if (!spellchecker) return;
+      const words = text.split(" ");
+      const suggestions = words.map(word => ({
+        original: word,
+        suggestions: spellchecker.suggest(word),
+      }));
+      setSuggestions(suggestions);
+    }
+
+    debouncedSpellcheck.current = debounce(spellcheck, 1000).debouncedFunc;
+  }, [spellchecker]);
+
   return (
     <section className="intake-item-edit">
-      <div className="name-input-container">
-        <input
-          type="text"
-          name="name"
-          className="intake-item-input"
-          value={intakeItem.name}
-          onChange={handleInputChange}
-          spellCheck={true}
-          autoComplete="off"
-          placeholder="Enter food name"
-        />
-      </div>
+      <input
+        type="text"
+        name="name"
+        className="intake-item-input"
+        value={intakeItem.name}
+        onChange={handleInputChange}
+        spellCheck={true}
+        autoComplete="off"
+        placeholder="Enter food name"
+      />
+      <SpellingSuggestionList
+        suggestions={suggestions}
+        handleSuggestionClick={handleSuggestionClick}
+      />
       {(isInputNameEmpty || !isCurrValidIntake) && (
         <div onClick={() => setIsInputNameEmpty(false)}>
           <ErrorMsg msg="intake name cannot be empty!" />

@@ -13,7 +13,7 @@ function calculateTargetCaloricIntakePerDay({
     gender,
   });
 
-  const targetCaloricIntake = TDEE - 500;
+  const targetCaloricIntake = TDEE - 550;
   return Math.round(targetCaloricIntake);
 }
 

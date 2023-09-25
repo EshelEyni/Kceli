@@ -12,14 +12,6 @@
     width: 100%;
   }
 
-  .name-input-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: rem(10px);
-  }
-
   .error-msg {
     font-style: normal;
     font-weight: 600;
@@ -73,26 +65,6 @@
         height: rem(40px);
       }
     }
-
-    .intake-item-edit__btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: rem(100px);
-      height: rem(40px);
-      background-color: white;
-      border-radius: 10px;
-      cursor: pointer;
-
-      span {
-        font-size: rem(18px);
-        position: relative;
-        font-weight: 600;
-        color: var(--color-text-gray);
-        text-transform: uppercase;
-        top: 1px;
-      }
-    }
   }
 
   .intake-item-edit__manuall-calorie-edit {
@@ -105,6 +77,43 @@
       text-align: center;
       font-weight: 600;
       font-size: rem(20px);
+    }
+  }
+
+  .intake-item-edit__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: rem(100px);
+    height: rem(40px);
+    background-color: white;
+    border-radius: 10px;
+    cursor: pointer;
+
+    span {
+      font-size: rem(18px);
+      position: relative;
+      font-weight: 600;
+      color: var(--color-text-gray);
+      text-transform: uppercase;
+      top: 1px;
+    }
+  }
+
+  .spelling-suggestion-list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(10px);
+
+    .spelling-suggestion-list__item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: rem(10px);
+
+      .intake-item-edit__btn {
+        width: fit-content;
+        padding: rem(5px) rem(10px);
+      }
     }
   }
 }

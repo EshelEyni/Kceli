@@ -24,3 +24,8 @@ export type GetBcgByCosumedCaloriesParams = {
   targetCalorie: number;
   consumedCalories: number;
 };
+
+export type SpellingSuggestion = {
+  original: string;
+  suggestions: string[];
+};

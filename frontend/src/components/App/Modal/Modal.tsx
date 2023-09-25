@@ -345,64 +345,7 @@ const Window: FC<WindowProps> = ({
   );
 };
 
-const PostPreviewUserModalContent: FC = () => {
-  const { post, onNavigateToProfile, onToggleFollow } = usePostPreview();
-  const user = post.createdBy as User;
-  const { loggedInUser } = useSelector((state: RootState) => state.auth);
-  const followingStats = [
-    {
-      title: "Followers",
-      count: user.followersCount,
-      link: `/profile/${user.username}/followers`,
-    },
-    {
-      title: "Following",
-      count: user.followingCount,
-      link: `/profile/${user.username}/following`,
-    },
-  ];
-
-  return (
-    <>
-      <div className="user-preview-modal-header">
-        <UserImg
-          imgUrl={user.imgUrl}
-          onNavigateToProfile={() => onNavigateToProfile(user.username)}
-        />
-        {loggedInUser?.id !== user.id && (
-          <BtnToggleFollow user={user} handleBtnClick={onToggleFollow} />
-        )}
-      </div>
-
-      <div className="user-preview-modal-user-info">
-        <div className="post-preview-modal-user-info-title-container">
-          <span>{user.fullname}</span>
-          {user.isVerified && (
-            <BlueCheckMark className="post-preview-modal-user-info-blue-check-mark" />
-          )}
-          {user.isAdmin && <Logo staticLogo={true} size={{ height: 18, width: 18 }} />}
-        </div>
-        <span className="post-preview-modal-user-info-username">@{user.username}</span>
-        <p className="post-preview-modal-user-info-bio">{user.bio}</p>
-      </div>
-
-      <div className="post-preview-modal-user-info-following-stats">
-        {followingStats.map((stat, idx) => (
-          <div className="post-preview-modal-user-info-following-stats-item" key={idx}>
-            <Link to={stat.link}>{`${formatNumToK(stat.count)} ${stat.title}`}</Link>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ backgroundColor: "yellow" }}>
-        {" TODO: followers_you_follow link, and following/followers link"}
-      </div>
-    </>
-  );
-};
-
 Modal.OpenBtn = OpenBtn;
 Modal.Window = Window;
 Modal.CloseBtn = CloseBtn;
 Modal.ModalHoverOpen = ModalHoverOpen;
-Modal.PostPreviewUserModalContent = PostPreviewUserModalContent;
