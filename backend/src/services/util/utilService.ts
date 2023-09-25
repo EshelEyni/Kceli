@@ -32,11 +32,10 @@ class APIFeatures<T> {
     const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach(el => delete queryObj[el]);
     const queryStr = JSON.stringify(queryObj).replace(
-      /\b(gte|gt|lte|lt|exists)\b/g,
+      /\b(gte|gt|gte|lte|lt|exists)\b/g,
       match => `$${match}`
     );
     this.query = this.query.find(JSON.parse(queryStr));
-
     return this;
   }
 

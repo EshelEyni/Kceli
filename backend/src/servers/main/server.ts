@@ -2,7 +2,10 @@ import { logger } from "../../services/logger/loggerService";
 
 process.on("uncaughtException", (err: Error) => {
   logger.error("Uncaught exception:", err.name, err.message);
-  process.exit(1);
+  // process.exit(1);
+  server.close(() => {
+    process.exit(1);
+  });
 });
 
 require("dotenv").config();

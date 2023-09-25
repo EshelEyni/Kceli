@@ -1,4 +1,4 @@
-@import "../../../styles//setup/functions";
+@import "../../../styles/main.scss";
 
 .intake-item-edit {
   display: flex;
@@ -89,6 +89,10 @@
     background-color: white;
     border-radius: 10px;
     cursor: pointer;
+
+    &.active {
+      filter: brightness(0.9);
+    }
 
     span {
       font-size: rem(18px);

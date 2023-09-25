@@ -27,6 +27,16 @@ const months = [
   { full: "December", short: "Dec" },
 ];
 
+const days = [
+  { full: "Sunday", short: "Sun" },
+  { full: "Monday", short: "Mon" },
+  { full: "Tuesday", short: "Tue" },
+  { full: "Wednesday", short: "Wed" },
+  { full: "Thursday", short: "Thu" },
+  { full: "Friday", short: "Fri" },
+  { full: "Saturday", short: "Sat" },
+];
+
 function isValidDate(dateStr: string) {
   const date = new Date(dateStr);
   return !isNaN(date.getTime());
@@ -195,6 +205,7 @@ export {
   getTimeZone,
   getDaysInMonth,
   months,
+  days,
   handleServerResponseData,
   copyToClipboard,
   formatDateToCleanString,

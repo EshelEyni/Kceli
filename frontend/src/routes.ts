@@ -4,6 +4,8 @@ const Homepage = lazy(() => import("./pages/Home/Home"));
 const LoginPage = lazy(() => import("./pages/Login/Login"));
 const ProfileDetails = lazy(() => import("./pages/ProfileDetails/ProfileDetails"));
 const SignupPage = lazy(() => import("./pages/Signup/Signup"));
+const SchedulePage = lazy(() => import("./pages/Schedule/Schedule"));
+const DayDetails = lazy(() => import("./pages/DayDetails/DayDetails"));
 
 export interface Route {
   path: string;
@@ -21,6 +23,16 @@ const routes: Route[] = [
   {
     path: "profile/:username?",
     component: ProfileDetails,
+    authRequired: true,
+  },
+  {
+    path: "schedule",
+    component: SchedulePage,
+    authRequired: true,
+  },
+  {
+    path: "day/:id",
+    component: DayDetails,
     authRequired: true,
   },
   {

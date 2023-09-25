@@ -23,11 +23,7 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
   const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
   const [isManual, setIsManual] = useState(false);
   const [inputFaded, setInputFaded] = useState("");
-  const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([
-    { original: "test", suggestions: ["test1", "test2"] },
-    { original: "test2", suggestions: ["test1", "test2"] },
-    { original: "test21", suggestions: ["test1", "test2"] },
-  ]);
+  const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([]);
   const [spellchecker, setSpellchecker] = useState<NSpell | null>(null);
   const debouncedSpellcheck = useRef<AnyFunction | null>(null);
 
@@ -177,7 +173,10 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
           <span>{intakeItem.unit}</span>
         </Button>
 
-        <Button onClickFn={handleWaterButtonClick} className="intake-item-edit__btn">
+        <Button
+          onClickFn={handleWaterButtonClick}
+          className={"intake-item-edit__btn" + (intakeItem.name === "water" ? " active" : "")}
+        >
           <span>water</span>
         </Button>
         <Button onClickFn={handleToggleManual} className="intake-item-edit__btn">

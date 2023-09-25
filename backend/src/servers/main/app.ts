@@ -34,7 +34,7 @@ app.use(ExpressMongoSanitize());
 app.use(requestSanitizer);
 app.use(
   hpp({
-    whitelist: [], // add whitelisted query params here
+    whitelist: ["date"], // add whitelisted query params here
   })
 );
 

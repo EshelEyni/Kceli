@@ -3,8 +3,10 @@ import { AddIntakeParams } from "../../types/app";
 import httpService from "../http/httpService";
 import { handleServerResponseData } from "../util/utilService";
 
-async function query() {
-  const respose = await httpService.get("day");
+async function query(queryObj: Record<string, string>) {
+  const queryString = new URLSearchParams(queryObj).toString();
+  const url = `day?${queryString || ""}`;
+  const respose = await httpService.get(url);
   return handleServerResponseData<DayData[]>(respose);
 }
 
@@ -24,7 +26,6 @@ async function update(dayData: DayData) {
 }
 
 async function addIntake({ todayDataId, intakes }: AddIntakeParams) {
-  console.log("addIntake", { todayDataId, intakes });
   const respose = await httpService.patch(`day/${todayDataId}`, { intakes });
   return handleServerResponseData<DayData>(respose);
 }

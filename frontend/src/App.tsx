@@ -1,5 +1,5 @@
 import { useEffect, Suspense, lazy } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { routes, nestedRoutes } from "./routes";
 import { Route as TypeOfRoute } from "./routes";
@@ -9,6 +9,8 @@ import { loginWithToken } from "./store/slices/authSlice";
 const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 import "./styles/main.scss";
 import { AppDispatch, RootState } from "./types/app";
+import { Header } from "./components/App/Header/Header";
+import { Nav } from "./components/App/Nav/Nav";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -43,6 +45,16 @@ function App() {
   return (
     <div id="app" className="app">
       <div className="app-content" id="app-content">
+        <Header className="app-header">
+          <Nav>
+            <NavLink to="/home" className={"app-nav-link"}>
+              home
+            </NavLink>
+            <NavLink to="/schedule" className={"app-nav-link"}>
+              schedule
+            </NavLink>
+          </Nav>
+        </Header>
         <Suspense fallback={<PageLoader isLogoLoader={isPageLoading} />}>
           <Routes>
             <Route index element={<Navigate replace to="/home" />} />

@@ -109,6 +109,7 @@ function getNewMockIntake(): NewIntake {
     tempId: "tempId",
     name: "test",
     items: [getMockIntakeItem()],
+    isRecorded: true,
   };
 }
 
