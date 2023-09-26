@@ -5,7 +5,7 @@ const units: MeasurementUnit[] = Object.values(MeasurementUnit);
 
 function getDefaultIntake(): NewIntake {
   return {
-    tempId: createId(),
+    id: createId(),
     items: [getDefaultIntakeItem()],
     name: "",
     isRecorded: true,
@@ -14,7 +14,7 @@ function getDefaultIntake(): NewIntake {
 
 function getDefaultIntakeItem(): NewIntakeItem {
   return {
-    tempId: createId(),
+    id: createId(),
     unit: MeasurementUnit.UNIT,
     quantity: 1,
     name: "",

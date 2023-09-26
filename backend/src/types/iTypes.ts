@@ -36,6 +36,8 @@ export interface IDailyData extends Document {
   date: Date;
   userId: mongoose.Types.ObjectId;
   intakes: IIntake[];
+  weight?: number;
+  waist?: number;
   createdAt: Date;
   updatedAt: Date;
 }

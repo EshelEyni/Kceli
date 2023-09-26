@@ -13,6 +13,12 @@ const dailyDataSchema = new Schema<IDailyData>(
       ref: "User",
       required: [true, "Please provide a user id"],
     },
+    weight: {
+      type: Number,
+    },
+    waist: {
+      type: Number,
+    },
     intakes: {
       type: [intakeSchema],
       default: [],

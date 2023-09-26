@@ -1,14 +1,14 @@
-import { createContext, useContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 import { useGetTodayData } from "../hooks/useGetTodayData";
 import { useUpdateTodayData } from "../hooks/useUpdateTodayData";
 import { useSelector } from "react-redux";
-import { AddIntakeParams, RootState } from "../types/app";
+import { RootState } from "../types/app";
 import calorieUtilService from "../services/calorieUtil/calorieUtilService";
 import { DayData } from "../../../shared/types/dayData";
 import { UseMutateFunction } from "@tanstack/react-query";
-import { useAddIntake } from "../hooks/useAddIntake";
-import { Intake } from "../../../shared/types/intake";
+import { Intake, NewIntake } from "../../../shared/types/intake";
 import { User } from "../../../shared/types/user";
+import intakeUtilServiceTest from "../services/intakeUtil/intakeUtilService";
 
 type TodayDataContextType = {
   dailyData: DayData | undefined;
@@ -17,8 +17,6 @@ type TodayDataContextType = {
   isError: boolean;
   updateDailyData: UseMutateFunction<DayData, unknown, DayData, unknown>;
   isLoadingUpdate: boolean;
-  addIntake: UseMutateFunction<DayData, unknown, AddIntakeParams, unknown>;
-  isLoadingIntake: boolean;
   recordedIntakes: Intake[];
   unrecordedIntakes: Intake[];
   remainingCalories: number;
@@ -31,12 +29,15 @@ type TodayDataContextType = {
   isCurrValidIntake: boolean;
   setCurrIsValidIntake: (isValid: boolean) => void;
   recommendedWaterIntake: number;
+  intake: NewIntake;
+  setIntake: Dispatch<SetStateAction<NewIntake>>;
 };
 
 export enum ToggledElement {
   IntakeEdit = "IntakeEdit",
   IntakeList = "IntakeList",
   UnRecordedIntakeList = "UnRecordedIntakeList",
+  WeightWaistInput = "WeightWaistInput",
 }
 
 const TodayDataContext = createContext<TodayDataContextType | undefined>(undefined);
@@ -45,11 +46,13 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
   const { loggedInUser } = useSelector((state: RootState) => state.auth);
   const { dailyData, isLoading, isSuccess, isError } = useGetTodayData();
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
-  const { addIntake, isLoading: isLoadingIntake } = useAddIntake();
-  const [openedElement, setOpenedElement] = useState<ToggledElement>(ToggledElement.IntakeEdit);
+  const [openedElement, setOpenedElement] = useState<ToggledElement>(
+    dailyData?.weight ? ToggledElement.IntakeEdit : ToggledElement.WeightWaistInput
+  );
+  const [intake, setIntake] = useState<NewIntake>(intakeUtilServiceTest.getDefaultIntake());
   const [isCurrValidIntake, setCurrIsValidIntake] = useState(true);
-  const recordedIntakes = dailyData?.intakes.filter(i => i.isRecorded) || [];
-  const unrecordedIntakes = dailyData?.intakes.filter(i => !i.isRecorded) || [];
+  const recordedIntakes = (dailyData?.intakes.filter(i => i.isRecorded) as Intake[]) || [];
+  const unrecordedIntakes = (dailyData?.intakes.filter(i => !i.isRecorded) as Intake[]) || [];
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, dailyData);
   const consumedCalories = calorieUtilService.getTotalCalories(dailyData);
   const targetCaloricIntakePerDay = loggedInUser?.targetCaloricIntakePerDay || 0;
@@ -71,8 +74,6 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
     isError,
     updateDailyData,
     isLoadingUpdate,
-    addIntake,
-    isLoadingIntake,
     recordedIntakes,
     unrecordedIntakes,
     remainingCalories,
@@ -85,6 +86,8 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
     isCurrValidIntake,
     setCurrIsValidIntake,
     recommendedWaterIntake,
+    intake,
+    setIntake,
   };
   return <TodayDataContext.Provider value={value}>{children}</TodayDataContext.Provider>;
 }

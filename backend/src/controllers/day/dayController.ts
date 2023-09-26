@@ -36,7 +36,7 @@ const getToday = asyncErrorCatcher(async (req: Request, res: Response) => {
   }
 });
 
-const updateDay = updateOne(DailyDataModel, ["intakes"]);
+const updateDay = updateOne(DailyDataModel, ["intakes", "weight", "waist"]);
 
 const removeDay = deleteOne(DailyDataModel);
 

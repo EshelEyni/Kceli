@@ -40,10 +40,13 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
       case "quantity":
         handleChange({ ...intakeItem, quantity: Number(value) }, idx);
         break;
-      case "calories":
-        handleChange({ ...intakeItem, calories: Number(value) }, idx);
+      case "calories": {
+        const item = { ...intakeItem, calories: Number(value) };
+        delete item.caloriesPer100g;
+        handleChange(item, idx);
         setInputFaded("caloriesPer100g");
         break;
+      }
       case "caloriesPer100g": {
         const caloriesPer100g = Number(value);
         const calories = caloriesPer100g * (intakeItem.quantity / 100);
@@ -69,7 +72,6 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
 
   function handleUnitInputClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.preventDefault();
-    if (isManual) return;
     const currentUnitIdx = intakeUtilService.units.indexOf(intakeItem.unit);
     const unit =
       currentUnitIdx === intakeUtilService.units.length - 1
@@ -81,9 +83,10 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
   }
 
   function handleToggleManual() {
+    const item = { ...intakeItem, unit: MeasurementUnit.GRAM, quantity: 100 };
+    if (isManual) delete item.calories, delete item.caloriesPer100g, setInputFaded("");
     setIsManual(prev => !prev);
-    if (intakeItem.unit == MeasurementUnit.GRAM && intakeItem.quantity === 100) return;
-    handleChange({ ...intakeItem, unit: MeasurementUnit.GRAM, quantity: 100 }, idx);
+    handleChange(item, idx);
   }
 
   function handleWaterButtonClick() {

@@ -1,5 +1,4 @@
 import { DayData } from "../../../../shared/types/dayData";
-import { AddIntakeParams } from "../../types/app";
 import httpService from "../http/httpService";
 import { handleServerResponseData } from "../util/utilService";
 
@@ -25,9 +24,4 @@ async function update(dayData: DayData) {
   return handleServerResponseData<DayData>(respose);
 }
 
-async function addIntake({ todayDataId, intakes }: AddIntakeParams) {
-  const respose = await httpService.patch(`day/${todayDataId}`, { intakes });
-  return handleServerResponseData<DayData>(respose);
-}
-
-export default { query, getById, getToday, update, addIntake };
+export default { query, getById, getToday, update };

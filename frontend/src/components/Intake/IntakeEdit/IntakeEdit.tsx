@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { NewIntake, NewIntakeItem } from "../../../../../shared/types/intake";
+import { NewIntakeItem } from "../../../../../shared/types/intake";
 import intakeUtilServiceTest from "../../../services/intakeUtil/intakeUtilService";
 import { List } from "../../App/List/List";
 import { IntakeItemEdit } from "../IntakeItemEdit/IntakeItemEdit";
@@ -9,11 +9,18 @@ import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
 import "./IntakeEdit.scss";
 
 export const IntakeEdit: FC = () => {
-  const { dailyData, addIntake, isLoadingIntake, backgroundColor, setCurrIsValidIntake } =
-    useTodayData();
-  const [intake, setIntake] = useState<NewIntake>(intakeUtilServiceTest.getDefaultIntake());
+  const {
+    dailyData,
+    isLoading,
+    intake,
+    updateDailyData,
+    setIntake,
+    backgroundColor,
+    setCurrIsValidIntake,
+  } = useTodayData();
+
   const [isReviewOpen, setIsReviewOpen] = useState(false);
-  const isEditShown = !isReviewOpen && !isLoadingIntake;
+  const isEditShown = !isReviewOpen && !isLoading;
 
   function handleAddButtonClick() {
     setIntake(prev => ({
@@ -50,7 +57,11 @@ export const IntakeEdit: FC = () => {
     if (!dailyData) return;
     const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
     if (!iValidIntake) return setCurrIsValidIntake(false);
-    addIntake({ todayDataId: dailyData.id, intakes: [...dailyData.intakes, intake] });
+    const isNewIntake = !dailyData.intakes.some(i => i.id === intake.id);
+    const updatedIntakes = isNewIntake
+      ? [...dailyData.intakes, intake]
+      : dailyData.intakes.map(currIntake => (currIntake.id === intake.id ? intake : currIntake));
+    updateDailyData({ ...dailyData, intakes: updatedIntakes });
     setIntake(intakeUtilServiceTest.getDefaultIntake());
   }
 
@@ -99,8 +110,8 @@ export const IntakeEdit: FC = () => {
           </div>
         </>
       )}
-      {isLoadingIntake && (
-        <SpinnerLoader withContainer={true} containerSize={{ height: "100%", width: "100%" }} />
+      {isLoading && (
+        <SpinnerLoader withContainer={true} containerSize={{ height: "75px", width: "100%" }} />
       )}
       {isReviewOpen && (
         <>

@@ -16,7 +16,7 @@ import { User } from "../../../shared/types/user";
 function assertNewPost(newPost: NewPost) {
   expect(newPost).toEqual(
     expect.objectContaining({
-      tempId: expect.any(String),
+      id: expect.any(String),
       audience: expect.any(String),
       repliersType: expect.any(String),
       imgs: expect.any(Array),

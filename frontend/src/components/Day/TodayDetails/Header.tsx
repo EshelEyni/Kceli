@@ -3,13 +3,12 @@ import { CaloriePie } from "../../Charts/CaloriePie/CaloriePie";
 import { useTodayData } from "../../../contexts/TodayDataContext";
 
 export const TodayDetailsHeader: FC = () => {
-  const { dailyData, remainingCalories, estimatedKGChange, recommendedWaterIntake } =
+  const { recordedIntakes, remainingCalories, estimatedKGChange, recommendedWaterIntake } =
     useTodayData();
 
-  if (!dailyData) return null;
   return (
     <header className="today-details__header">
-      <CaloriePie intakes={dailyData.intakes} remainingCalories={remainingCalories} />
+      <CaloriePie intakes={recordedIntakes} remainingCalories={remainingCalories} />
 
       <div className="today-details__header__titles">
         {remainingCalories > 0 ? (

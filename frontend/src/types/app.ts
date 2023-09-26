@@ -1,7 +1,6 @@
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { store } from "../store/store";
-import { CombinedIntake } from "../../../shared/types/intake";
 
 export type ReduxStore = typeof store;
 export type RootState = ReturnType<typeof store.getState>;
@@ -13,11 +12,6 @@ export type BtnCreatePostTitle = "Chirp" | "Chirp All" | "Schedule" | "Reply";
 export type CachedData<T> = {
   data: T;
   cachedAt: number;
-};
-
-export type AddIntakeParams = {
-  todayDataId: string;
-  intakes: CombinedIntake[];
 };
 
 export type GetBcgByCosumedCaloriesParams = {

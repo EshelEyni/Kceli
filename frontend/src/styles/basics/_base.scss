@@ -5,7 +5,7 @@
 html {
   font-family: var(--font-primary);
   height: 100%;
-  // overflow: hidden;
+  overflow: auto;
 }
 
 body {
@@ -48,6 +48,10 @@ p {
 
 ul {
   list-style: none;
+}
+
+ul,
+ol {
   margin: 0;
   padding: 0;
 }

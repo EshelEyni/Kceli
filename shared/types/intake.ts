@@ -8,6 +8,7 @@ export enum MeasurementUnit {
 }
 
 export interface BasicIntakeItem {
+  id: string;
   unit: MeasurementUnit;
   quantity: number;
   name: string;
@@ -18,28 +19,25 @@ export interface ExistingIntakeItemData extends BasicIntakeItem {
 }
 
 export interface NewIntakeItem extends BasicIntakeItem {
-  tempId: string;
   calories?: number;
   caloriesPer100g?: number;
 }
 
 export interface IntakeItem extends BasicIntakeItem {
-  id: string;
   calories: number;
 }
 
 export interface BasicIntake {
+  id: string;
   name: string;
   isRecorded: boolean;
 }
 
 export interface NewIntake extends BasicIntake {
   items: NewIntakeItem[];
-  tempId: string;
 }
 
 export interface Intake extends BasicIntake {
-  id: string;
   items: IntakeItem[];
   createdAt: Date;
   updatedAt: Date;

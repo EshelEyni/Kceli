@@ -1,16 +1,20 @@
 @import "../../../styles/main.scss";
 
 .intake-preview {
+  margin-left: rem(25px);
+  list-style: decimal;
+
   .intake-item-preview-container {
-    display: flex;
-    gap: rem(2px);
+    list-style: decimal;
+    color: white;
+
     .intake-preview__item-list-title {
       font-size: rem(16px);
     }
 
     .intake-item-preview {
       .intake-item-preview__details {
-        font-size: rem(18px);
+        font-size: rem(16px);
         font-weight: 600;
         color: white;
         text-transform: uppercase;

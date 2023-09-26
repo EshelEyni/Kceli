@@ -18,12 +18,18 @@ export const Filter: FC = () => {
       name: "unrecorded",
       value: ToggledElement.UnRecordedIntakeList,
     },
+    {
+      name: "weight",
+      value: ToggledElement.WeightWaistInput,
+    },
   ];
   return (
     <ul className="filter">
       {filterBy.map(filter => (
         <li className="filter__item" key={filter.value}>
-          <Button onClickFn={() => setOpenedElement(filter.value)}>{filter.name}</Button>
+          <Button className="today-details__btn" onClickFn={() => setOpenedElement(filter.value)}>
+            {filter.name}
+          </Button>
         </li>
       ))}
     </ul>

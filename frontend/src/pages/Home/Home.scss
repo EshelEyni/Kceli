@@ -3,10 +3,9 @@
 .home {
   display: flex;
   flex-direction: column;
-  // justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  // height: 100%;
+  min-height: calc(100vh - rem(75px));
+  height: 100%;
   width: 100%;
 
   @include for-desktop-layout {
