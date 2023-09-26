@@ -35,7 +35,7 @@ function getTotalCalories(entity: DayData | Intake | undefined): number {
 }
 
 function _getTotalCaloriesFromDailyData(dailyData: DayData): number {
-  return dailyData.intakes
+  return (dailyData.intakes as Intake[])
     .filter(i => i.isRecorded)
     .reduce((acc, curr) => curr.items.reduce((acc, curr) => acc + (curr.calories ?? 0), acc), 0);
 }

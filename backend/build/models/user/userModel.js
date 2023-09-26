@@ -126,7 +126,6 @@ userSchema.pre("save", function (next) {
 });
 userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        // Password is only modified when creating a new user or updating the password after a reset
         const [weight, height, gender, birthdate] = [
             this.weight,
             this.height,

@@ -45,7 +45,7 @@ const getToday = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(v
     }
 }));
 exports.getToday = getToday;
-const updateDay = (0, factoryService_1.updateOne)(dailyDataModel_1.DailyDataModel, ["intakes"]);
+const updateDay = (0, factoryService_1.updateOne)(dailyDataModel_1.DailyDataModel, ["intakes", "weight", "waist"]);
 exports.updateDay = updateDay;
 const removeDay = (0, factoryService_1.deleteOne)(dailyDataModel_1.DailyDataModel);
 exports.removeDay = removeDay;

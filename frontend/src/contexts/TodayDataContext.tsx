@@ -104,7 +104,7 @@ function _calcRecommendedWaterIntake(loggedInUser: User | null, dailyData: DayDa
   if (!loggedInUser || !dailyData) return 0;
   const targetWaterConsumptionPerDay = Number((loggedInUser.weight * 33).toFixed(2));
   const waterConsumption =
-    dailyData.intakes
+    (dailyData.intakes as Intake[])
       .filter(i => i.isRecorded)
       .reduce(
         (acc, curr) =>
