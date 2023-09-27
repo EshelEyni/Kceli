@@ -38,6 +38,8 @@ export interface IDailyData extends Document {
   intakes: IIntake[];
   weight?: number;
   waist?: number;
+  totalDailyEnergyExpenditure?: number;
+  targetCaloricIntake?: number;
   createdAt: Date;
   updatedAt: Date;
 }

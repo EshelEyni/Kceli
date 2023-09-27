@@ -1,18 +1,6 @@
 import { UserCaloricData } from "../../../../shared/types/system";
 
-function calculateTargetCaloricIntakePerDay({
-  weight,
-  height,
-  age,
-  gender,
-}: UserCaloricData): number {
-  const TDEE = calculateTotalDailyEnergyExpenditure({
-    weight,
-    height,
-    age,
-    gender,
-  });
-
+function calculateTargetCaloricIntakePerDay({ TDEE }: { TDEE: number }): number {
   const targetCaloricIntake = TDEE - 550;
   return Math.round(targetCaloricIntake);
 }

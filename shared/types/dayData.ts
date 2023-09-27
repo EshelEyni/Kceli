@@ -10,6 +10,8 @@ export interface DayData extends BasicDayData {
   intakes: CombinedIntake[];
   weight: number;
   waist: number;
+  totalDailyEnergyExpenditure: number;
+  targetCaloricIntake: number;
   createdAt: Date;
   updatedAt: Date;
 }

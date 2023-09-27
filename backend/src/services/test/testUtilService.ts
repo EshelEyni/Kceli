@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { User, UserCredenitials } from "../../../../shared/types/user";
 import tokenService from "../token/tokenService";
 import { UserModel } from "../../models/user/userModel";
-import { MeasurementUnit, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
+import { MeasurementUnit } from "../../../../shared/types/intake";
 import { DailyDataModel } from "../../models/day/dailyDataModel";
 import { getLoggedInUserIdFromReq } from "../ALSService";
 
@@ -40,8 +40,7 @@ async function deleteTestUser(id: string) {
 }
 
 async function createTestDailyData(userId?: string) {
-  const dailyData = getMockDailyData();
-  if (userId) dailyData.userId = userId;
+  const dailyData = getMockDailyData({ userId });
   return (await DailyDataModel.create(dailyData)).toObject();
 }
 
@@ -96,26 +95,26 @@ function getMockedUser({
   };
 }
 
-function getMockDailyData() {
+function getMockDailyData({ userId }: { userId?: string }): any {
   return {
-    userId: getMongoId(),
+    userId: userId || getMongoId(),
     date: new Date(),
     intakes: [getNewMockIntake()],
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 }
 
-function getNewMockIntake(): NewIntake {
+function getNewMockIntake(): any {
   return {
-    tempId: "tempId",
     name: "test",
     items: [getMockIntakeItem()],
     isRecorded: true,
   };
 }
 
-function getMockIntakeItem(): NewIntakeItem {
+function getMockIntakeItem(): any {
   return {
-    tempId: "tempId",
     name: "test",
     unit: MeasurementUnit.UNIT,
     quantity: 1,

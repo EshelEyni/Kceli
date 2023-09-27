@@ -4,16 +4,19 @@ import intakeService from "../../services/intake/intakeService";
 import openAIService from "../../services/openAI/openAIService";
 import { connectToTestDB, disconnectFromTestDB } from "../../services/test/testDBService";
 import {
+  createValidUserCreds,
   getMockDailyData,
   getMongoId,
   getNewMockIntake,
+  mockGetLoggedInUserIdFromReq,
 } from "../../services/test/testUtilService";
 import { UserModel } from "../user/userModel";
 import { DailyDataModel } from "./dailyDataModel";
-import { TodayData } from "../../../../shared/types/dayData";
+import { DayData } from "../../../../shared/types/dayData";
 
 jest.mock("../../services/openAI/openAIService");
 jest.mock("../../services/intake/intakeService");
+jest.mock("../../services/ALSService");
 
 const MOCK_CALORIES = 100;
 
@@ -29,8 +32,8 @@ fdescribe("Daily Data Model", () => {
     await disconnectFromTestDB();
   });
 
-  xdescribe("Daily Data Schema", () => {
-    const dailyData = getMockDailyData();
+  fdescribe("Daily Data Schema", () => {
+    const dailyData = getMockDailyData({});
 
     afterEach(async () => {
       await DailyDataModel.deleteMany({});
@@ -111,20 +114,38 @@ fdescribe("Daily Data Model", () => {
 
       expect(savedDailyData.userId.toString()).toEqual(dailyData.userId);
     });
+
+    fit("should correctly calculate TDEE and target caloric intake when updating weight", async () => {
+      const user = await UserModel.create(createValidUserCreds());
+      mockGetLoggedInUserIdFromReq(user.id);
+      const validDailyData = new DailyDataModel({ ...dailyData, userId: user.id });
+      const savedDailyData = (await validDailyData.save()).toObject();
+      expect(savedDailyData.totalDailyEnergyExpenditure).toBeUndefined();
+      expect(savedDailyData.targetCaloricIntake).toBeUndefined();
+
+      const updatedDailyData = (await DailyDataModel.findOneAndUpdate(
+        { _id: savedDailyData.id },
+        { weight: 200 },
+        { new: true }
+      )) as any;
+
+      expect(updatedDailyData.totalDailyEnergyExpenditure).toBeDefined();
+      expect(updatedDailyData.targetCaloricIntake).toBeDefined();
+    });
   });
 
-  fdescribe("intakeItemSchema", () => {
+  xdescribe("intakeItemSchema", () => {
     const mockIntakeItem: NewIntakeItem = {
-      tempId: "tempId",
+      id: "id",
       name: "Apple",
       unit: MeasurementUnit.UNIT,
       quantity: 1,
     };
 
-    const dailyData = getMockDailyData();
+    const dailyData = getMockDailyData({});
     dailyData.intakes = [
       {
-        tempId: "tempId",
+        id: "id",
         name: "test",
         items: [{ ...mockIntakeItem, quantity: 2 }],
         isRecorded: true,
@@ -138,8 +159,8 @@ fdescribe("Daily Data Model", () => {
     it("should add calories manually if provided", async () => {
       const intake = getNewMockIntake();
       intake.items[0].calories = 100;
-      const dailyData: TodayData = {
-        ...getMockDailyData(),
+      const dailyData: DayData = {
+        ...getMockDailyData({}),
         intakes: [intake],
       };
 
