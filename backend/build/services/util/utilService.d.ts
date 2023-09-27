@@ -31,4 +31,5 @@ interface IdEntity {
 declare function validateIds(...idEntities: IdEntity[]): void;
 declare function getUniqueStringIds(ids: ObjectId[]): string[];
 declare function shuffleArray<T>(array: T[]): T[];
-export { AnyObject, APIFeatures, sendEmail, filterObj, queryEntityExistsById, isValidMongoId, validateIds, getUniqueStringIds, shuffleArray, };
+declare function getIsraeliDate(): Date;
+export { AnyObject, APIFeatures, sendEmail, filterObj, queryEntityExistsById, isValidMongoId, validateIds, getUniqueStringIds, shuffleArray, getIsraeliDate, };

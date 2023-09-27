@@ -1,12 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function calculateTargetCaloricIntakePerDay({ weight, height, age, gender, }) {
-    const TDEE = calculateTotalDailyEnergyExpenditure({
-        weight,
-        height,
-        age,
-        gender,
-    });
+function calculateTargetCaloricIntakePerDay({ TDEE }) {
     const targetCaloricIntake = TDEE - 550;
     return Math.round(targetCaloricIntake);
 }

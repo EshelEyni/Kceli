@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shuffleArray = exports.getUniqueStringIds = exports.validateIds = exports.isValidMongoId = exports.queryEntityExistsById = exports.filterObj = exports.sendEmail = exports.APIFeatures = void 0;
+exports.getIsraeliDate = exports.shuffleArray = exports.getUniqueStringIds = exports.validateIds = exports.isValidMongoId = exports.queryEntityExistsById = exports.filterObj = exports.sendEmail = exports.APIFeatures = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 require("dotenv").config();
@@ -131,4 +131,14 @@ function shuffleArray(array) {
     return array;
 }
 exports.shuffleArray = shuffleArray;
+function getIsraeliDate() {
+    const now = new Date();
+    const localTime = now.getTime();
+    const localOffset = now.getTimezoneOffset() * 60000; // local offset in milliseconds
+    const utc = localTime + localOffset;
+    const israelOffset = 3 * 60 * 60000; // Israel's UTC offset in milliseconds
+    const israelTime = new Date(utc + israelOffset);
+    return israelTime;
+}
+exports.getIsraeliDate = getIsraeliDate;
 //# sourceMappingURL=utilService.js.map

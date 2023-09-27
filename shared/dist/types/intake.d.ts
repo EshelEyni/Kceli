@@ -26,13 +26,12 @@ export interface BasicIntake {
     id: string;
     name: string;
     isRecorded: boolean;
+    recordedAt: Date | null;
 }
 export interface NewIntake extends BasicIntake {
     items: NewIntakeItem[];
 }
 export interface Intake extends BasicIntake {
     items: IntakeItem[];
-    createdAt: Date;
-    updatedAt: Date;
 }
 export type CombinedIntake = NewIntake | Intake;

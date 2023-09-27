@@ -76,7 +76,6 @@ const intakeItemSchema = new mongoose_1.Schema(
         return ret;
       },
     },
-    timestamps: true,
   }
 );
 intakeItemSchema.pre("validate", function (next) {
@@ -112,6 +111,9 @@ const intakeSchema = new mongoose_1.Schema(
       type: Boolean,
       default: true,
     },
+    recordedAt: {
+      type: Date,
+    },
   },
   {
     toObject: {
@@ -128,7 +130,6 @@ const intakeSchema = new mongoose_1.Schema(
         return ret;
       },
     },
-    timestamps: true,
   }
 );
 exports.intakeSchema = intakeSchema;

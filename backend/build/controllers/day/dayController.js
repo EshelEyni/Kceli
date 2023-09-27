@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeDay = exports.updateDay = exports.getToday = exports.getDay = exports.getAllDays = void 0;
+exports.removeDay = exports.updateDay = exports.createDay = exports.getToday = exports.getDay = exports.getAllDays = void 0;
 const dailyDataModel_1 = require("../../models/day/dailyDataModel");
 const ALSService_1 = require("../../services/ALSService");
 const errorService_1 = require("../../services/error/errorService");
@@ -19,30 +19,24 @@ const getAllDays = (0, factoryService_1.getAll)(dailyDataModel_1.DailyDataModel)
 exports.getAllDays = getAllDays;
 const getDay = (0, factoryService_1.getOne)(dailyDataModel_1.DailyDataModel);
 exports.getDay = getDay;
+const createDay = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const loggedInUserId = (0, ALSService_1.getLoggedInUserIdFromReq)();
+    (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
+    const doc = yield dailyDataModel_1.DailyDataModel.create(Object.assign(Object.assign({}, req.body), { userId: loggedInUserId }));
+    res.status(201).json({
+        status: "success",
+        data: doc,
+    });
+}));
+exports.createDay = createDay;
 const getToday = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const loggedInUserId = (0, ALSService_1.getLoggedInUserIdFromReq)();
     (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
-    const currDate = new Date();
-    const doc = yield dailyDataModel_1.DailyDataModel.findOne({
-        userId: loggedInUserId,
-        date: {
-            $gte: currDate.setHours(0, 0, 0, 0),
-            $lt: currDate.setHours(23, 59, 59, 999),
-        },
+    const doc = yield dailyDataModel_1.DailyDataModel.findOne({ userId: loggedInUserId }).sort({ date: -1 }).limit(1);
+    res.send({
+        status: "success",
+        data: doc,
     });
-    if (!doc) {
-        const newDoc = yield dailyDataModel_1.DailyDataModel.create({ userId: loggedInUserId });
-        res.status(201).send({
-            status: "success",
-            data: newDoc,
-        });
-    }
-    else {
-        res.send({
-            status: "success",
-            data: doc,
-        });
-    }
 }));
 exports.getToday = getToday;
 const updateDay = (0, factoryService_1.updateOne)(dailyDataModel_1.DailyDataModel, ["intakes", "weight", "waist"]);

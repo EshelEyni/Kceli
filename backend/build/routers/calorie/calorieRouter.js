@@ -4,14 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const dayController_1 = require("../../controllers/day/dayController");
+const calorieController_1 = require("../../controllers/calorie/calorieController");
 const authGuardsMiddleware_1 = require("../../middlewares/authGuards/authGuardsMiddleware");
 const router = express_1.default.Router();
 router.use(authGuardsMiddleware_1.checkUserAuthentication);
-router.get("/", dayController_1.getAllDays);
-router.get("/:id([a-fA-F0-9]{24})", dayController_1.getDay);
-router.get("/today", dayController_1.getToday);
-router.post("/", dayController_1.createDay);
-router.patch("/:id", dayController_1.updateDay);
+router.post("/item", calorieController_1.getCaloriesForItem);
 exports.default = router;
-//# sourceMappingURL=dayRouter.js.map
+//# sourceMappingURL=calorieRouter.js.map

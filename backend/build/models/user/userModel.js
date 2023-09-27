@@ -133,18 +133,14 @@ userSchema.pre("save", function (next) {
             this.birthdate,
         ];
         const age = new Date().getFullYear() - birthdate.getFullYear();
-        this.totalDailyEnergyExpenditure = calorieService_1.default.calculateTotalDailyEnergyExpenditure({
+        const TDEE = calorieService_1.default.calculateTotalDailyEnergyExpenditure({
             weight,
             height,
             gender,
             age,
         });
-        this.targetCaloricIntakePerDay = calorieService_1.default.calculateTargetCaloricIntakePerDay({
-            weight,
-            height,
-            gender,
-            age,
-        });
+        this.totalDailyEnergyExpenditure = TDEE;
+        this.targetCaloricIntakePerDay = calorieService_1.default.calculateTargetCaloricIntakePerDay({ TDEE });
         next();
     });
 });

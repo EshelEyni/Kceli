@@ -34,6 +34,8 @@ export interface IDailyData extends Document {
     intakes: IIntake[];
     weight?: number;
     waist?: number;
+    totalDailyEnergyExpenditure?: number;
+    targetCaloricIntake?: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -41,8 +43,7 @@ export interface IIntake extends Document {
     name: string;
     items: IIntakeItem[];
     isRecorded: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    recordedAt?: Date;
 }
 export interface IIntakeItem extends Document {
     name: string;

@@ -1,7 +1,6 @@
 /// <reference types="jest" />
 import mongoose from "mongoose";
 import { User, UserCredenitials } from "../../../../shared/types/user";
-import { NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
 type CreateTestUserOptions = {
     id?: string;
     isAdmin?: boolean;
@@ -28,12 +27,10 @@ declare function getMockedUser({ id, }?: {
     active: boolean;
     toObject: jest.Mock<any, any, any>;
 };
-declare function getMockDailyData(): {
-    userId: string;
-    date: Date;
-    intakes: NewIntake[];
-};
-declare function getNewMockIntake(): NewIntake;
-declare function getMockIntakeItem(): NewIntakeItem;
+declare function getMockDailyData({ userId }: {
+    userId?: string;
+}): any;
+declare function getNewMockIntake(): any;
+declare function getMockIntakeItem(): any;
 declare function mockGetLoggedInUserIdFromReq(value?: string): string;
 export { getLoginTokenStrForTest, mockGetLoggedInUserIdFromReq, createManyTestUsers, deleteManyTestUsers, createTestUser, createValidUserCreds, createTestDailyData, getNewMockIntake, getMockIntakeItem, getMongoId, getMockedUser, deleteTestUser, getMockDailyData, };
