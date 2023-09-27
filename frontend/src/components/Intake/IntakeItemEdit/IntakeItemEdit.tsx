@@ -11,6 +11,8 @@ import { debounce } from "../../../services/util/utilService";
 import { AnyFunction } from "../../../../../shared/types/system";
 import { SpellingSuggestion } from "../../../types/app";
 import { SpellingSuggestionList } from "./SpellingSuggestionList";
+import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
+import calorieApiService from "../../../services/calorieApi/calorieApiService";
 
 type IntakeItemEditProps = {
   intakeItem: NewIntakeItem;
@@ -23,6 +25,9 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
   const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
   const [isManual, setIsManual] = useState(false);
   const [inputFaded, setInputFaded] = useState("");
+  const [calorieReqStatus, setCalorieReqStatus] = useState<
+    "idle" | "pending" | "resolved" | "error"
+  >("idle");
   const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([]);
   const [spellchecker, setSpellchecker] = useState<NSpell | null>(null);
   const debouncedSpellcheck = useRef<AnyFunction | null>(null);
@@ -89,6 +94,20 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
     handleChange(item, idx);
   }
 
+  async function handleCalcBtnClick() {
+    if (!intakeItem.name.length) return;
+    try {
+      setCalorieReqStatus("pending");
+      const calories = await calorieApiService.getCaloriesForItem(intakeItem);
+      setCalorieReqStatus("resolved");
+      handleChange({ ...intakeItem, calories }, idx);
+      setIsManual(true);
+    } catch (error) {
+      console.error(error);
+      setCalorieReqStatus("error");
+    }
+  }
+
   function handleWaterButtonClick() {
     const { name, unit, quantity } = intakeItem;
     if (name === "water" && unit === MeasurementUnit.MILLILITER && quantity === 750) return;
@@ -132,6 +151,11 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
 
     debouncedSpellcheck.current = debounce(spellcheck, 1000).debouncedFunc;
   }, [spellchecker]);
+
+  useEffect(() => {
+    if (calorieReqStatus !== "error") return;
+    setTimeout(() => setCalorieReqStatus("idle"), 3000);
+  }, [calorieReqStatus]);
 
   return (
     <section className="intake-item-edit">
@@ -185,6 +209,13 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
         <Button onClickFn={handleToggleManual} className="intake-item-edit__btn">
           <span>{isManual ? "Manual" : "Auto"}</span>
         </Button>
+        <Button onClickFn={handleCalcBtnClick} className="intake-item-edit__btn calc-calories-btn">
+          {calorieReqStatus === "pending" ? (
+            <SpinnerLoader withContainer={true} containerSize={{ width: "100%" }} />
+          ) : (
+            <span>calc</span>
+          )}
+        </Button>
       </div>
 
       {isManual && (
@@ -209,6 +240,8 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
           />
         </div>
       )}
+
+      {calorieReqStatus === "error" && <ErrorMsg msg="Failed to calculate calories!" />}
     </section>
   );
 };

@@ -9,6 +9,7 @@ function getDefaultIntake(): NewIntake {
     items: [getDefaultIntakeItem()],
     name: "",
     isRecorded: true,
+    recordedAt: new Date(),
   };
 }
 

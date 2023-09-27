@@ -6,7 +6,7 @@ import { Intake } from "../../../../shared/types/intake";
 function calcRemainingCalories(loggedInUser: User | null, dailyData: DayData | undefined): number {
   if (!loggedInUser || !dailyData) return 0;
   const targetCaloricIntakePerDay =
-    loggedInUser.targetCaloricIntakePerDay ?? dailyData.targetCaloricIntake;
+    dailyData.targetCaloricIntake || loggedInUser.targetCaloricIntakePerDay;
   const remainingCalories = targetCaloricIntakePerDay - getTotalCalories(dailyData);
   return remainingCalories;
 }
@@ -17,7 +17,7 @@ function calcEstimatedBodyFatStatusPerDay(
 ): number {
   if (!loggedInUser || !dailyData) return 0;
   const totalDailyEnergyExpenditure =
-    loggedInUser.totalDailyEnergyExpenditure ?? dailyData.totalDailyEnergyExpenditure;
+    dailyData.totalDailyEnergyExpenditure || loggedInUser.totalDailyEnergyExpenditure;
   const caloricDifference = getTotalCalories(dailyData) - totalDailyEnergyExpenditure;
   const ONE_KG_OF_BODY_FAT_CALORIES = 7700;
   const estimatedBodyFatChangePerDay = caloricDifference / ONE_KG_OF_BODY_FAT_CALORIES;

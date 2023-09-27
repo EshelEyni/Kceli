@@ -4,12 +4,13 @@ import { IDailyData } from "../../types/iTypes";
 import calorieService from "../../services/calorie/calorieService";
 import { UserModel } from "../user/userModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
+import { getIsraeliDate } from "../../services/util/utilService";
 
 const dailyDataSchema = new Schema<IDailyData>(
   {
     date: {
       type: Date,
-      default: Date.now,
+      default: getIsraeliDate(),
     },
     userId: {
       type: Schema.Types.ObjectId,

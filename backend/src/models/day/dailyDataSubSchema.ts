@@ -39,7 +39,6 @@ const intakeItemSchema = new Schema<IIntakeItem>(
         return ret;
       },
     },
-    timestamps: true,
   }
 );
 
@@ -76,6 +75,9 @@ const intakeSchema = new Schema<IIntake>(
       type: Boolean,
       default: true,
     },
+    recordedAt: {
+      type: Date,
+    },
   },
   {
     toObject: {
@@ -92,7 +94,6 @@ const intakeSchema = new Schema<IIntake>(
         return ret;
       },
     },
-    timestamps: true,
   }
 );
 

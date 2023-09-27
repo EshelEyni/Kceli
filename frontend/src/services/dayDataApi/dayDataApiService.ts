@@ -19,9 +19,14 @@ async function getToday() {
   return handleServerResponseData<DayData>(respose);
 }
 
+async function create(dayData: DayData | object) {
+  const respose = await httpService.post(`day`, dayData);
+  return handleServerResponseData<DayData>(respose);
+}
+
 async function update(dayData: DayData) {
   const respose = await httpService.patch(`day/${dayData.id}`, dayData);
   return handleServerResponseData<DayData>(respose);
 }
 
-export default { query, getById, getToday, update };
+export default { query, getById, getToday, create, update };

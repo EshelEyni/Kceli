@@ -139,6 +139,16 @@ function shuffleArray<T>(array: T[]): T[] {
   return array;
 }
 
+function getIsraeliDate(): Date {
+  const now = new Date();
+  const localTime = now.getTime();
+  const localOffset = now.getTimezoneOffset() * 60000; // local offset in milliseconds
+  const utc = localTime + localOffset;
+  const israelOffset = 3 * 60 * 60000; // Israel's UTC offset in milliseconds
+  const israelTime = new Date(utc + israelOffset);
+  return israelTime;
+}
+
 export {
   AnyObject,
   APIFeatures,
@@ -149,4 +159,5 @@ export {
   validateIds,
   getUniqueStringIds,
   shuffleArray,
+  getIsraeliDate,
 };

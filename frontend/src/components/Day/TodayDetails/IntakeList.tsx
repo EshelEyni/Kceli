@@ -7,6 +7,7 @@ import { IntakePreview } from "../../Intake/IntakePreview/IntakePreview";
 import { useUpdateTodayData } from "../../../hooks/useUpdateTodayData";
 import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
 import { Intake } from "../../../../../shared/types/intake";
+import { getCleanTime } from "../../../services/util/utilService";
 
 export const IntakeList: FC = () => {
   const {
@@ -25,7 +26,10 @@ export const IntakeList: FC = () => {
     if (!dailyData) return;
     const dataToUpdate = { ...dailyData };
     dataToUpdate.intakes = dailyData.intakes.map(intake => {
-      if (intake.id === intakeId) intake.isRecorded = true;
+      if (intake.id === intakeId) {
+        intake.isRecorded = true;
+        intake.recordedAt = new Date();
+      }
       return intake;
     });
     updateDailyData(dataToUpdate);
@@ -55,7 +59,9 @@ export const IntakeList: FC = () => {
         render={(item, i) => (
           <li className="intake-preview-container" key={item.id}>
             <h5 className="intake-list-item-title">
-              {`Intake ${i + 1}# ${item.name ? `- ${item.name}` : ""}`}
+              {`Intake ${i + 1}# ${item.name ? `- ${item.name}` : ""} ${
+                item.recordedAt ? `- ${getCleanTime(item.recordedAt as unknown as string)}` : ""
+              }`}
             </h5>
             <IntakePreview intake={item} />
 

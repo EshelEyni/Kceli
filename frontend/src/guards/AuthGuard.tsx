@@ -12,7 +12,7 @@ export const AuthGuard: FC<AuthGuardProps> = ({ component }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loggedInUser) navigate("/explore");
+    if (!loggedInUser) navigate("/login");
   }, [loggedInUser, navigate]);
 
   return <>{component}</>;

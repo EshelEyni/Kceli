@@ -48,8 +48,7 @@ export interface IIntake extends Document {
   name: string;
   items: IIntakeItem[];
   isRecorded: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  recordedAt?: Date;
 }
 
 export interface IIntakeItem extends Document {

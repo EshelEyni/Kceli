@@ -12,6 +12,7 @@ export const IntakeEdit: FC = () => {
   const {
     dailyData,
     isLoading,
+    isLoadingUpdate,
     intake,
     updateDailyData,
     setIntake,
@@ -20,7 +21,7 @@ export const IntakeEdit: FC = () => {
   } = useTodayData();
 
   const [isReviewOpen, setIsReviewOpen] = useState(false);
-  const isEditShown = !isReviewOpen && !isLoading;
+  const isEditShown = !isReviewOpen && !isLoading && !isLoadingUpdate;
 
   function handleAddButtonClick() {
     setIntake(prev => ({
@@ -34,6 +35,14 @@ export const IntakeEdit: FC = () => {
     setIntake(prev => ({
       ...prev,
       items: prev.items.filter((_, i) => i !== index),
+    }));
+  }
+
+  function handleSaveLaterButtonClick() {
+    setIntake(prev => ({
+      ...prev,
+      recordedAt: prev.recordedAt ? null : new Date(),
+      isRecorded: !prev.isRecorded,
     }));
   }
 
@@ -110,7 +119,7 @@ export const IntakeEdit: FC = () => {
           </div>
         </>
       )}
-      {isLoading && (
+      {(isLoading || isLoadingUpdate) && (
         <SpinnerLoader withContainer={true} containerSize={{ height: "75px", width: "100%" }} />
       )}
       {isReviewOpen && (
@@ -132,7 +141,7 @@ export const IntakeEdit: FC = () => {
       )}
       <div className="intake-edit-btns-container" style={{ backgroundColor }}>
         <Button
-          onClickFn={() => setIntake(prev => ({ ...prev, isRecorded: !prev.isRecorded }))}
+          onClickFn={handleSaveLaterButtonClick}
           className={
             "intake-edit-btn btn-toggle-save-later" + (!intake.isRecorded ? " clicked" : "")
           }

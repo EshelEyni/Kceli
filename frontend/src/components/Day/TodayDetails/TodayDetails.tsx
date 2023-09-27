@@ -21,12 +21,13 @@ export const TodayDetails: FC = () => {
   } = useTodayData();
 
   const showContent = isSuccess && dailyData && !isLoadingUpdate;
+  const isLoaderShown = isLoading || isLoadingUpdate;
   const isListShown =
     openedElement === ToggledElement.IntakeList ||
     openedElement === ToggledElement.UnRecordedIntakeList;
   return (
     <section className="today-details" style={{ backgroundColor }}>
-      {isLoading && <SpinnerLoader />}
+      {isLoaderShown && <SpinnerLoader />}
       {isError && <ErrorMsg />}
       {showContent && (
         <>

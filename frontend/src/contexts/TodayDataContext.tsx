@@ -47,7 +47,7 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
   const { dailyData, isLoading, isSuccess, isError } = useGetTodayData();
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
   const [openedElement, setOpenedElement] = useState<ToggledElement>(
-    dailyData?.weight ? ToggledElement.IntakeEdit : ToggledElement.WeightWaistInput
+    !dailyData?.weight ? ToggledElement.IntakeEdit : ToggledElement.WeightWaistInput
   );
   const [intake, setIntake] = useState<NewIntake>(intakeUtilServiceTest.getDefaultIntake());
   const [isCurrValidIntake, setCurrIsValidIntake] = useState(true);
@@ -102,7 +102,8 @@ function useTodayData() {
 
 function _calcRecommendedWaterIntake(loggedInUser: User | null, dailyData: DayData | undefined) {
   if (!loggedInUser || !dailyData) return 0;
-  const targetWaterConsumptionPerDay = Number((loggedInUser.weight * 33).toFixed(2));
+  const weight = dailyData.weight || loggedInUser.weight;
+  const targetWaterConsumptionPerDay = Number((weight * 33).toFixed(2));
   const waterConsumption =
     (dailyData.intakes as Intake[])
       .filter(i => i.isRecorded)

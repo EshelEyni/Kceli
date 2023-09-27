@@ -42,6 +42,19 @@ function isValidDate(dateStr: string) {
   return !isNaN(date.getTime());
 }
 
+function getCleanTime(dateStr: string): string {
+  if (!dateStr || !isValidDate(dateStr)) return "";
+  const date = new Date(dateStr);
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  const ampm = hours >= TWELVE_HOURS ? "PM" : "AM";
+  hours = hours % TWELVE_HOURS || TWELVE_HOURS;
+  const minutesStr = minutes < TEN_MINUTES ? `0${minutes}` : minutes;
+
+  return `${hours}:${minutesStr} ${ampm}`;
+}
+
 function formatDateToRelativeTime(dateStr: string): string {
   if (!dateStr || !isValidDate(dateStr)) return "";
   const [seconds, minutes, hours, days] = _calculateTimeDifference(dateStr);
@@ -198,6 +211,7 @@ function capitializeFirstLetter(str: string): string {
 }
 
 export {
+  getCleanTime,
   formatDateToRelativeTime,
   formatNumToK,
   createId,

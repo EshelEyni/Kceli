@@ -8,36 +8,31 @@ import { validateIds } from "../../services/util/utilService";
 const getAllDays = getAll(DailyDataModel);
 const getDay = getOne(DailyDataModel);
 
+const createDay = asyncErrorCatcher(async (req: Request, res: Response) => {
+  const loggedInUserId = getLoggedInUserIdFromReq();
+  validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
+
+  const doc = await DailyDataModel.create({ ...req.body, userId: loggedInUserId });
+  res.status(201).json({
+    status: "success",
+    data: doc,
+  });
+});
+
 const getToday = asyncErrorCatcher(async (req: Request, res: Response) => {
   const loggedInUserId = getLoggedInUserIdFromReq();
   validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
 
-  const currDate = new Date();
+  const doc = await DailyDataModel.findOne({ userId: loggedInUserId }).sort({ date: -1 }).limit(1);
 
-  const doc = await DailyDataModel.findOne({
-    userId: loggedInUserId,
-    date: {
-      $gte: currDate.setHours(0, 0, 0, 0),
-      $lt: currDate.setHours(23, 59, 59, 999),
-    },
+  res.send({
+    status: "success",
+    data: doc,
   });
-
-  if (!doc) {
-    const newDoc = await DailyDataModel.create({ userId: loggedInUserId });
-    res.status(201).send({
-      status: "success",
-      data: newDoc,
-    });
-  } else {
-    res.send({
-      status: "success",
-      data: doc,
-    });
-  }
 });
 
 const updateDay = updateOne(DailyDataModel, ["intakes", "weight", "waist"]);
 
 const removeDay = deleteOne(DailyDataModel);
 
-export { getAllDays, getDay, getToday, updateDay, removeDay };
+export { getAllDays, getDay, getToday, createDay, updateDay, removeDay };

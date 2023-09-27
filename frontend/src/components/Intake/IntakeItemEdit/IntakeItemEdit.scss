@@ -105,6 +105,13 @@
       text-transform: uppercase;
       top: 1px;
     }
+
+    &.calc-calories-btn {
+      .spinner-loader {
+        border: 2.5px var(--color-primary) solid;
+        border-top: 2.5px white solid;
+      }
+    }
   }
 
   .spelling-suggestion-list {

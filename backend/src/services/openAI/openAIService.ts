@@ -1,6 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
 import { AppError } from "../error/errorService";
 import { IIntakeItem } from "../../types/iTypes";
+import { IntakeItem } from "../../../../shared/types/intake";
 
 require("dotenv").config();
 
@@ -31,7 +32,7 @@ async function getText(prompt: string, model = "default"): Promise<string> {
   return text as string;
 }
 
-async function getCaloriesForIntakeItem(intakeItem: IIntakeItem): Promise<number> {
+async function getCaloriesForIntakeItem(intakeItem: IIntakeItem | IntakeItem): Promise<number> {
   const { name, quantity, unit } = intakeItem;
   const prompt = `
   Calculate calories for ${quantity} ${unit} of ${name}.
