@@ -13,7 +13,9 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
       {intake.items.map(item => (
         <li className="intake-item-preview-container" key={item.id}>
           <section className="intake-item-preview">
-            <p className="intake-item-preview__details">{`${item.name} - ${item.quantity} ${item.unit} - caolries: ${item.calories}`}</p>
+            <p className="intake-item-preview__details">{`${item.name} - ${item.quantity} ${
+              item.unit
+            } - caolries: ${Math.round(item.calories)}`}</p>
           </section>
         </li>
       ))}

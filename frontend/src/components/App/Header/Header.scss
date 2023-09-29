@@ -1,9 +1,9 @@
 @import "../../../styles/main.scss";
 
 .app-header {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
+  //   position: fixed;
+  //   top: 0;
+  //   left: 0;
   width: 100%;
   height: rem(75px);
 
@@ -21,15 +21,16 @@
     height: 100%;
     padding: 0 rem(10px);
     background-color: var(--color-primary);
-    
+
     .app-nav-link {
       color: white;
-      font-size: rem(25px);
-      font-weight: 500;
+      font-size: rem(18px);
       text-transform: uppercase;
       transition: all 0.3s ease-in-out;
-      &:hover {
-        color: var(--color-secondary);
+
+      &.active {
+        font-size: rem(20px);
+        font-weight: 600;
       }
     }
   }

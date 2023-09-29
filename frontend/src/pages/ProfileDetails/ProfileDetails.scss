@@ -1,19 +1,23 @@
-@import "../../styles/setup/functions";
-@import "../../styles/setup/mixins";
+@import "../../styles/main";
 
 .profile-details {
-  max-width: 650px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  gap: rem(20px);
+  padding: rem(15px) rem(20px);
 
-  .profile-details__user-avatar{
+  .profile-details__user-avatar {
     height: rem(85px);
     width: rem(85px);
     border-radius: 50%;
   }
 
-  .profile-details__user-posts{
+  .profile-details__user-posts {
     overflow: hidden;
 
     @include scrollbar-hidden;
-    }
+  }
 }

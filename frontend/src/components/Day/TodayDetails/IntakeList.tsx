@@ -4,7 +4,6 @@ import { Button } from "../../App/Button/Button";
 import { ToggledElement, useTodayData } from "../../../contexts/TodayDataContext";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { IntakePreview } from "../../Intake/IntakePreview/IntakePreview";
-import { useUpdateTodayData } from "../../../hooks/useUpdateTodayData";
 import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
 import { Intake } from "../../../../../shared/types/intake";
 import { getCleanTime } from "../../../services/util/utilService";
@@ -17,10 +16,22 @@ export const IntakeList: FC = () => {
     openedElement,
     setOpenedElement,
     setIntake,
+    updateDailyData,
+    isLoadingUpdate,
   } = useTodayData();
-  const { updateDailyData, isLoading } = useUpdateTodayData();
+
+  if (!dailyData) return null;
+
   const isRecordedIntakesShown = openedElement === ToggledElement.IntakeList;
   const intakes = isRecordedIntakesShown ? recordedIntakes : unrecordedIntakes;
+  const sortedIntakes = intakes.sort((a, b) => {
+    if (!a.recordedAt || !b.recordedAt) return 0;
+    return new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime();
+  });
+  const totalCalories = calorieUtilService.getTotalCaloriesFromDailyData({
+    dailyData,
+    isRecorded: isRecordedIntakesShown,
+  });
 
   function handleSaveBtnClick(intakeId: string) {
     if (!dailyData) return;
@@ -51,11 +62,17 @@ export const IntakeList: FC = () => {
 
   return (
     <>
-      {isLoading && <SpinnerLoader />}
+      {isLoadingUpdate && <SpinnerLoader />}
+      <header className="intake-list__header">
+        <h3 className="intake-list__title">
+          {isRecordedIntakesShown ? "Recorded" : "Unrecorded"} Intakes
+        </h3>
+        <h4 className="intake-list__total-calories">total calories: {totalCalories}</h4>
+      </header>
 
       <List
         className="intake-list"
-        items={intakes}
+        items={sortedIntakes}
         render={(item, i) => (
           <li className="intake-preview-container" key={item.id}>
             <h5 className="intake-list-item-title">

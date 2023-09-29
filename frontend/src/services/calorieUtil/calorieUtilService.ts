@@ -30,7 +30,7 @@ function getTotalCalories(entity: DayData | Intake | undefined): number {
     case !entity:
       return 0;
     case entity && "intakes" in entity:
-      return _getTotalCaloriesFromDailyData(entity as DayData);
+      return getTotalCaloriesFromDailyData({ dailyData: entity as DayData });
     case entity && "items" in entity:
       return _getTotalCaloriesFromIntake(entity as Intake);
     default:
@@ -38,10 +38,18 @@ function getTotalCalories(entity: DayData | Intake | undefined): number {
   }
 }
 
-function _getTotalCaloriesFromDailyData(dailyData: DayData): number {
-  return (dailyData.intakes as Intake[])
-    .filter(i => i.isRecorded)
-    .reduce((acc, curr) => curr.items.reduce((acc, curr) => acc + (curr.calories ?? 0), acc), 0);
+function getTotalCaloriesFromDailyData({
+  dailyData,
+  isRecorded = true,
+}: {
+  dailyData: DayData;
+  isRecorded?: boolean;
+}): number {
+  return Math.round(
+    (dailyData.intakes as Intake[])
+      .filter(i => i.isRecorded === isRecorded)
+      .reduce((acc, curr) => curr.items.reduce((acc, curr) => acc + (curr.calories ?? 0), acc), 0)
+  );
 }
 
 function _getTotalCaloriesFromIntake(intake: Intake): number {
@@ -78,4 +86,5 @@ export default {
   getBcgByCosumedCalories,
   getTotalCalories,
   calcEstimatedBodyFatStatusPerDay,
+  getTotalCaloriesFromDailyData,
 };

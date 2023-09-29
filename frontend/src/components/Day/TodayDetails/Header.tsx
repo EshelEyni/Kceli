@@ -13,11 +13,11 @@ export const TodayDetailsHeader: FC = () => {
       <div className="today-details__header__titles">
         {remainingCalories > 0 ? (
           <p className="today-details__title">
-            <strong>{remainingCalories}</strong> calories remaining
+            <strong>{Math.round(remainingCalories)}</strong> calories remaining
           </p>
         ) : (
           <p className="today-details__title">
-            <strong>{Math.abs(remainingCalories)}</strong> calories over your limit
+            <strong>{Math.abs(Math.round(remainingCalories))}</strong> calories over your limit
           </p>
         )}
         {estimatedKGChange > 0 ? (

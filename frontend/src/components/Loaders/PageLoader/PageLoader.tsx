@@ -13,7 +13,7 @@ export const PageLoader: FC<PageLoaderProps> = ({ isLogoLoader = false }) => {
       {isLogoLoader ? (
         <>
           <span className="progress-bar" data-testid="progress-bar" />
-          <Logo size={{ height: 400, width: 400 }} />
+          <Logo />
         </>
       ) : (
         <SpinnerLoader />

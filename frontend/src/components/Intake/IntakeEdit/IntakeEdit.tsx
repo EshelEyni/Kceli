@@ -66,6 +66,7 @@ export const IntakeEdit: FC = () => {
     if (!dailyData) return;
     const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
     if (!iValidIntake) return setCurrIsValidIntake(false);
+    intake.recordedAt = new Date();
     const isNewIntake = !dailyData.intakes.some(i => i.id === intake.id);
     const updatedIntakes = isNewIntake
       ? [...dailyData.intakes, intake]

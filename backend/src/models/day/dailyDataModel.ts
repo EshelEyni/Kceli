@@ -53,7 +53,36 @@ const dailyDataSchema = new Schema<IDailyData>(
   }
 );
 
-dailyDataSchema.index({ userId: 1, date: 1 }, { unique: true });
+dailyDataSchema.index({ userId: 1 });
+
+// // Pre-save middleware
+// dailyDataSchema.pre("save", async function (next) {
+//   // 'this' refers to the document being saved
+//   const currentDate = this.date;
+//   const { userId } = this;
+
+//   // Find the most recent record for this user
+//   const lastRecord = await this.constructor
+//     .findOne({
+//       userId: userId,
+//     })
+//     .sort({ date: -1 });
+
+//   if (lastRecord) {
+//     const lastDate = lastRecord.date;
+//     const timeDifference = currentDate.getTime() - lastDate.getTime();
+
+//     // Check if the time difference is less than 24 hours (in milliseconds)
+//     if (timeDifference < 24 * 60 * 60 * 1000) {
+//       // Throw an error or call next() with an error
+//       next(new Error("Date should be more than 24 hours from the last saved data for this user."));
+//       return;
+//     }
+//   }
+
+//   // If validation passes, proceed to save
+//   next();
+// });
 
 dailyDataSchema.pre("findOneAndUpdate", async function (next) {
   const update = this.getUpdate();

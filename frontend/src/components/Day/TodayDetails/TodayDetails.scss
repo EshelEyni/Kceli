@@ -111,9 +111,32 @@
     border-radius: 50px;
   }
 
+  .intake-list__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: rem(20px);
+
+    .intake-list__total-calories,
+    .intake-list__title {
+      font-size: rem(22px);
+      font-weight: 600;
+      text-transform: uppercase;
+      color: white;
+    }
+    
+    .intake-list__total-calories {
+      font-size: rem(16px);
+      align-self: flex-end;
+    }
+  }
+
   .intake-list {
     align-items: flex-start;
     gap: rem(20px);
+
     .intake-preview-container {
       display: flex;
       flex-direction: column;

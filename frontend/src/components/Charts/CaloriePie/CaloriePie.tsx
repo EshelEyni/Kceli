@@ -9,21 +9,30 @@ type CaloriePieProps = {
 
 export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) => {
   const pieData = [
-    {
-      name: "intakes",
-      value: intakes.reduce(
-        (acc, curr) => acc + curr.items.reduce((acc, curr) => acc + curr.calories, 0),
-        0
-      ),
-    },
+    ...intakes.map(i => ({
+      name: i.name || "unnamed",
+      value: i.items.reduce((acc, curr) => acc + curr.calories, 0),
+    })),
     {
       name: "remaining",
       value: remainingCalories,
     },
   ];
 
-  // Colors for each section of the pie chart
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#FF5733",
+    "#33FF57",
+    "#8333FF",
+    "#FF33A1",
+    "#33A4FF",
+    "#FF8333",
+    "#33FFA1",
+    "#A133FF",
+  ];
 
   return (
     <PieChart width={250} height={250}>

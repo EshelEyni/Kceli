@@ -10,11 +10,16 @@ import { LoginSignupMsg } from "../../components/Msg/LoginSignupMsg/LoginSignupM
 import { TodayDataProvider } from "../../contexts/TodayDataContext";
 import { useCreateDay } from "../../hooks/useCreateDay";
 import { Button } from "../../components/App/Button/Button";
+import { DAY_IN_MS } from "../../services/util/utilService";
+import { useGetTodayData } from "../../hooks/useGetTodayData";
 
 const Homepage = () => {
   const { loggedInUser } = useSelector((state: RootState) => state.auth);
+  const { dailyData } = useGetTodayData();
   const { createDay, isLoading: isLoadingCreateDay } = useCreateDay();
   const isTodayDetailsShown = loggedInUser && !isLoadingCreateDay;
+  const isCreateDayBtnShown =
+    dailyData && new Date().getTime() - new Date(dailyData.date).getTime() > DAY_IN_MS;
   usePageLoaded({ title: "Home / Kceli" });
 
   function handleCreateDay() {
@@ -33,9 +38,11 @@ const Homepage = () => {
         </TodayDataProvider>
       )}
       {isLoadingCreateDay && <SpinnerLoader />}
-      <Button className="home__btn" onClickFn={handleCreateDay}>
-        start a new day
-      </Button>
+      {isCreateDayBtnShown && (
+        <Button className="home__btn" onClickFn={handleCreateDay}>
+          start a new day
+        </Button>
+      )}
 
       <Suspense fallback={<SpinnerLoader />}>
         <Outlet />
