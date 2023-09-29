@@ -31,6 +31,11 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
   const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([]);
   const [spellchecker, setSpellchecker] = useState<NSpell | null>(null);
   const debouncedSpellcheck = useRef<AnyFunction | null>(null);
+  const isSuggestionListShown =
+    suggestions.length > 0 &&
+    suggestions[0].suggestions.length > 0 &&
+    !isInputNameEmpty &&
+    spellchecker;
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -39,6 +44,7 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
       case "name":
         handleChange({ ...intakeItem, name: value }, idx);
         setIsInputNameEmpty(!value.length);
+        if (!value.length) setSuggestions([]);
         if (!debouncedSpellcheck.current) return;
         debouncedSpellcheck.current(value);
         break;
@@ -124,6 +130,11 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
     handleChange({ ...intakeItem, name }, idx);
   }
 
+  function handleIgnoreSuggestionClick(original: string) {
+    const filteredSuggestions = suggestions.filter(s => s.original !== original);
+    setSuggestions(filteredSuggestions);
+  }
+
   useEffect(() => {
     Promise.all([
       fetch("/assets/dictionaries/en_US.aff").then(res => res.text()),
@@ -141,11 +152,14 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
   useEffect(() => {
     function spellcheck(text: string) {
       if (!spellchecker) return;
+      const filteredWordSet = new Set(["nes"]);
       const words = text.split(" ");
-      const suggestions = words.map(word => ({
-        original: word,
-        suggestions: spellchecker.suggest(word),
-      }));
+      const suggestions = words
+        .filter(word => !filteredWordSet.has(word))
+        .map(word => ({
+          original: word,
+          suggestions: spellchecker.suggest(word),
+        }));
       setSuggestions(suggestions);
     }
 
@@ -169,10 +183,13 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
         autoComplete="off"
         placeholder="Enter food name"
       />
-      <SpellingSuggestionList
-        suggestions={suggestions}
-        handleSuggestionClick={handleSuggestionClick}
-      />
+      {isSuggestionListShown && (
+        <SpellingSuggestionList
+          suggestions={suggestions}
+          handleSuggestionClick={handleSuggestionClick}
+          handleIgnoreSuggestionClick={handleIgnoreSuggestionClick}
+        />
+      )}
       {(isInputNameEmpty || !isCurrValidIntake) && (
         <div onClick={() => setIsInputNameEmpty(false)}>
           <ErrorMsg msg="intake name cannot be empty!" />

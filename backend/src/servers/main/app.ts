@@ -16,6 +16,7 @@ import userRouter from "../../routers/user/userRouter";
 import dayRouter from "../../routers/day/dayRouter";
 import authRouter from "../../routers/auth/authRouter";
 import calorieRouter from "../../routers/calorie/calorieRouter";
+import workoutRouter from "../../routers/workout/workoutRouter";
 import { requestLimiter } from "../../services/rateLimiterService";
 
 const isProdEnv = process.env.NODE_ENV === "production";
@@ -67,6 +68,7 @@ app.use("/api/user", userRouter);
 app.use("/api/day", dayRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/calorie", calorieRouter);
+app.use("/api/workout", workoutRouter);
 
 app.get("/**", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));

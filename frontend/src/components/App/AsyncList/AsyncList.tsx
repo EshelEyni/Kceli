@@ -4,7 +4,7 @@ import "./AsyncList.scss";
 import { Empty } from "../Empty/Empty";
 
 type AsyncListProps<T> = {
-  render: (item: T, idx: number, arr: T[]) => JSX.Element;
+  render: (item: T, idx?: number, arr?: T[]) => JSX.Element;
   items: T[];
   isLoading: boolean;
   isSuccess: boolean;

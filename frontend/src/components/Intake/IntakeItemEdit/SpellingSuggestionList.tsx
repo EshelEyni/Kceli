@@ -5,11 +5,13 @@ import { Button } from "../../App/Button/Button";
 type SpellingSuggestionListProps = {
   suggestions: SpellingSuggestion[];
   handleSuggestionClick: (original: string, suggestion: string) => void;
+  handleIgnoreSuggestionClick: (original: string) => void;
 };
 
 export const SpellingSuggestionList: FC<SpellingSuggestionListProps> = ({
   suggestions,
   handleSuggestionClick,
+  handleIgnoreSuggestionClick,
 }) => {
   return (
     <ul className="spelling-suggestion-list">
@@ -24,6 +26,12 @@ export const SpellingSuggestionList: FC<SpellingSuggestionListProps> = ({
               <span>{suggestion}</span>
             </Button>
           ))}
+          <Button
+            className="intake-item-edit__btn spelling-suggestion-list__btn"
+            onClickFn={() => handleIgnoreSuggestionClick(s.original)}
+          >
+            <span>ignore</span>
+          </Button>
         </li>
       ))}
     </ul>

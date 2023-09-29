@@ -2,6 +2,8 @@ import { User } from "../../../../shared/types/user";
 import httpService from "../http/httpService";
 import { handleServerResponseData } from "../util/utilService";
 
+const BASE_URL = "user";
+
 async function query(): Promise<User[]> {
   const respose = await httpService.get(`user`);
   return handleServerResponseData<User[]>(respose);
@@ -17,4 +19,9 @@ async function getByUsername(username: string): Promise<User> {
   return handleServerResponseData<User>(respose);
 }
 
-export default { query, getById, getByUsername };
+async function update(user: User): Promise<User> {
+  const respose = await httpService.patch(`${BASE_URL}/loggedInUser`, user);
+  return handleServerResponseData<User>(respose);
+}
+
+export default { query, getById, getByUsername, update };

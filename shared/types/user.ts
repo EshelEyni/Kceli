@@ -29,6 +29,7 @@ export interface User {
   birthdate: Date;
   totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
+  currentWeightLossGoal: number;
   createdAt: string;
 }
 

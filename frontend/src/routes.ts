@@ -6,6 +6,7 @@ const ProfileDetails = lazy(() => import("./pages/ProfileDetails/ProfileDetails"
 const SignupPage = lazy(() => import("./pages/Signup/Signup"));
 const SchedulePage = lazy(() => import("./pages/Schedule/Schedule"));
 const DayDetails = lazy(() => import("./pages/DayDetails/DayDetails"));
+const WorkoutPage = lazy(() => import("./pages/Workout/WorkoutPage"));
 
 export interface Route {
   path: string;
@@ -23,6 +24,11 @@ const routes: Route[] = [
   {
     path: "profile/:username?",
     component: ProfileDetails,
+    authRequired: true,
+  },
+  {
+    path: "workouts",
+    component: WorkoutPage,
     authRequired: true,
   },
   {

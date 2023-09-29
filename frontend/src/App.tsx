@@ -50,11 +50,14 @@ function App() {
             <NavLink to="/home" className={"app-nav-link"}>
               home
             </NavLink>
-            <NavLink to={`/profile/${loggedInUser?.username}`} className={"app-nav-link"}>
-              profile
+            <NavLink to={"workouts"} className={"app-nav-link"}>
+              workouts
             </NavLink>
             <NavLink to="/schedule" className={"app-nav-link"}>
               schedule
+            </NavLink>
+            <NavLink to={`/profile/${loggedInUser?.username}`} className={"app-nav-link"}>
+              profile
             </NavLink>
           </Nav>
         </Header>

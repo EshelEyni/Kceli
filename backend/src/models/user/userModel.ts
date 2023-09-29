@@ -69,6 +69,7 @@ const userSchema: Schema<IUser> = new Schema(
     birthdate: { type: Date, required: [true, "Please provide your birthdate"] },
     totalDailyEnergyExpenditure: { type: Number, default: 0 },
     targetCaloricIntakePerDay: { type: Number, default: 0 },
+    currentWeightLossGoal: { type: Number, default: 0 },
     isAdmin: { type: Boolean, default: false },
     active: { type: Boolean, default: true },
     loginAttempts: { type: Number, default: 0 },

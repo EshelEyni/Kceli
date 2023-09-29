@@ -18,6 +18,7 @@ export interface IUser extends Document {
   birthdate: Date;
   totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
+  currentWeightLossGoal: number;
   isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;

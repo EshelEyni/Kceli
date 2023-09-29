@@ -3,11 +3,16 @@ import "./ProfileDetails.scss";
 import { useGetUser } from "../../hooks/useGetUser";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
+import { useState } from "react";
+import { Button } from "../../components/App/Button/Button";
+import { useUpdateUser } from "../../hooks/useUpdateUser";
 
 const ProfileDetails = () => {
   const params = useParams();
   const { username } = params as { username: string };
   const { user, isLoading, isSuccess, isError } = useGetUser(username);
+  const [currWeightLossGoal, setCurrWeightLossGoal] = useState(0);
+  const { updateUser, isLoading: isLoadingUpdateUser } = useUpdateUser();
 
   function calculateRecommendedWeight(heightInMeters: number) {
     /**
@@ -32,6 +37,19 @@ const ProfileDetails = () => {
   if (isLoading) return <SpinnerLoader withContainer={true} containerSize={{ width: "100%" }} />;
   if (isError) return <ErrorMsg msg="Something went wrong" />;
   if (!isSuccess || !user) return null;
+
+  function handleWeightLossGoalInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+    setCurrWeightLossGoal(Number(value));
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!user || !currWeightLossGoal) return;
+    const userToUpdate = { ...user, currentWeightLossGoal: currWeightLossGoal };
+    updateUser(userToUpdate);
+  }
+
   const { minRecommendedWeight, maxRecommendedWeight } = calculateRecommendedWeight(
     user.height / 100
   );
@@ -48,6 +66,7 @@ const ProfileDetails = () => {
         <p>{user.weight}</p>
         <p>{user.height}</p>
         <p>{user.gender}</p>
+        <p>{user.currentWeightLossGoal}</p>
       </div>
 
       <div>
@@ -62,6 +81,21 @@ const ProfileDetails = () => {
         <h3>calories to lose</h3>
         <h4>{caloriesToLose.toLocaleString()} Kcal</h4>
       </div>
+
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="curr-goal">
+          <h3>current weight loss goal</h3>
+          <input
+            type="number"
+            name="curr-goal"
+            id="curr-goal"
+            value={currWeightLossGoal}
+            onChange={handleWeightLossGoalInputChange}
+          />
+        </label>
+        <Button type="submit">Save</Button>
+        {isLoadingUpdateUser && <SpinnerLoader />}
+      </form>
       <Outlet />
     </main>
   );
