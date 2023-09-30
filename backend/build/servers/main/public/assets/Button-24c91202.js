@@ -1,0 +1,1 @@
+import{j as e}from"./index-544b77a7.js";const u=({className:t,children:o,isDisabled:n=!1,onClickFn:s,type:a="button"})=>e("button",{className:"btn "+(t||""),onClick:s,disabled:n,"data-testid":t,type:a,children:o});export{u as B};

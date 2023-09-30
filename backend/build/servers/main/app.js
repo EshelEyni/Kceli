@@ -20,6 +20,7 @@ const userRouter_1 = __importDefault(require("../../routers/user/userRouter"));
 const dayRouter_1 = __importDefault(require("../../routers/day/dayRouter"));
 const authRouter_1 = __importDefault(require("../../routers/auth/authRouter"));
 const calorieRouter_1 = __importDefault(require("../../routers/calorie/calorieRouter"));
+const workoutRouter_1 = __importDefault(require("../../routers/workout/workoutRouter"));
 const rateLimiterService_1 = require("../../services/rateLimiterService");
 const isProdEnv = process.env.NODE_ENV === "production";
 const app = (0, express_1.default)();
@@ -60,6 +61,7 @@ app.use("/api/user", userRouter_1.default);
 app.use("/api/day", dayRouter_1.default);
 app.use("/api/auth", authRouter_1.default);
 app.use("/api/calorie", calorieRouter_1.default);
+app.use("/api/workout", workoutRouter_1.default);
 app.get("/**", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "public", "index.html"));
 });

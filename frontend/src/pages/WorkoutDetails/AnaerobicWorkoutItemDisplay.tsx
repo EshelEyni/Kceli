@@ -57,8 +57,9 @@ export const AnaerobicWorkoutItemDisplay: FC<AnaerobicWorkoutItemDisplayProps> =
               className="workout-item-display__set-display__list"
               render={(_, i) => {
                 const lastCompletedSetIndex = item.setCompletedStatus.findLastIndex(
-                  s => s === true
+                  (s: boolean) => s === true
                 );
+
                 const isStartBtnShown = lastCompletedSetIndex === i - 1;
 
                 return (

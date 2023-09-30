@@ -14,11 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DailyDataModel = void 0;
 const mongoose_1 = require("mongoose");
-const dailyDataSubSchema_1 = require("./dailyDataSubSchema");
+const intakeSchema_1 = require("./intakeSchema");
 const calorieService_1 = __importDefault(require("../../services/calorie/calorieService"));
 const userModel_1 = require("../user/userModel");
 const ALSService_1 = require("../../services/ALSService");
 const utilService_1 = require("../../services/util/utilService");
+const workoutModel_1 = require("../workout/workoutModel");
 const dailyDataSchema = new mongoose_1.Schema({
     date: {
         type: Date,
@@ -27,6 +28,7 @@ const dailyDataSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "User",
+        index: true,
         required: [true, "Please provide a user id"],
     },
     weight: {
@@ -42,7 +44,11 @@ const dailyDataSchema = new mongoose_1.Schema({
         type: Number,
     },
     intakes: {
-        type: [dailyDataSubSchema_1.intakeSchema],
+        type: [intakeSchema_1.intakeSchema],
+        default: [],
+    },
+    workouts: {
+        type: [workoutModel_1.workoutSchema],
         default: [],
     },
 }, {
@@ -62,7 +68,30 @@ const dailyDataSchema = new mongoose_1.Schema({
     },
     timestamps: true,
 });
-dailyDataSchema.index({ userId: 1, date: 1 }, { unique: true });
+// // Pre-save middleware
+// dailyDataSchema.pre("save", async function (next) {
+//   // 'this' refers to the document being saved
+//   const currentDate = this.date;
+//   const { userId } = this;
+//   // Find the most recent record for this user
+//   const lastRecord = await this.constructor
+//     .findOne({
+//       userId: userId,
+//     })
+//     .sort({ date: -1 });
+//   if (lastRecord) {
+//     const lastDate = lastRecord.date;
+//     const timeDifference = currentDate.getTime() - lastDate.getTime();
+//     // Check if the time difference is less than 24 hours (in milliseconds)
+//     if (timeDifference < 24 * 60 * 60 * 1000) {
+//       // Throw an error or call next() with an error
+//       next(new Error("Date should be more than 24 hours from the last saved data for this user."));
+//       return;
+//     }
+//   }
+//   // If validation passes, proceed to save
+//   next();
+// });
 dailyDataSchema.pre("findOneAndUpdate", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const update = this.getUpdate();

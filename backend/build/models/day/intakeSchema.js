@@ -134,4 +134,4 @@ const intakeSchema = new mongoose_1.Schema(
 );
 exports.intakeSchema = intakeSchema;
 // Path: src/models/day/dailyDataModel.ts
-//# sourceMappingURL=dailyDataSubSchema.js.map
+//# sourceMappingURL=intakeSchema.js.map

@@ -17,6 +17,7 @@ export interface IUser extends Document {
     birthdate: Date;
     totalDailyEnergyExpenditure: number;
     targetCaloricIntakePerDay: number;
+    currentWeightLossGoal: number;
     isAdmin: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -32,6 +33,7 @@ export interface IDailyData extends Document {
     date: Date;
     userId: mongoose.Types.ObjectId;
     intakes: IIntake[];
+    workouts: IWorkout[];
     weight?: number;
     waist?: number;
     totalDailyEnergyExpenditure?: number;
@@ -52,3 +54,35 @@ export interface IIntakeItem extends Document {
     calories: number;
     _caloriesPer100g?: number;
 }
+interface BasicIWokoutItem {
+    name: string;
+    isStarted: boolean;
+    isCompleted: boolean;
+}
+export interface IWorkoutItemAnaerobic extends Document, BasicIWokoutItem {
+    sets: number;
+    reps: number;
+    weight: number;
+    weightUnit: "kg" | "lbs";
+    restInSec: number;
+    setCompletedStatus: boolean[];
+}
+export interface IWorkoutItemAerobic extends Document, BasicIWokoutItem {
+    durationInMin: number;
+}
+export interface IWorkoutItemSuperset extends Document, BasicIWokoutItem {
+    sets: number;
+    reps: number;
+    weight: number;
+    weightUnit: "kg" | "lbs";
+    restInSec: number;
+    superset: IWorkoutItemAnaerobic[];
+}
+export interface IWorkout extends Document {
+    type: "aerobic" | "anaerobic";
+    userId: mongoose.Types.ObjectId;
+    split: "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
+    description: string;
+    items: Array<IWorkoutItemAnaerobic | IWorkoutItemAerobic | IWorkoutItemSuperset>;
+}
+export {};

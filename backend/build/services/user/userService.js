@@ -62,8 +62,11 @@ function update(id, user) {
             "fullname",
             "imgUrl",
             "email",
-            "isApprovedLocation",
-            "bio",
+            "height",
+            "weight",
+            "targetCaloricIntakePerDay",
+            "totalDailyEnergyExpenditure",
+            "currentWeightLossGoal",
         ];
         const filteredUser = (0, utilService_1.filterObj)(user, ...allowedFields);
         const updatedUser = yield userModel_1.UserModel.findByIdAndUpdate(id, filteredUser, {
