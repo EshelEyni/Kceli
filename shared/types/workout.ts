@@ -1,22 +1,29 @@
-export interface WorkoutAnaerobic {
+interface BasicWorkout {
   readonly id: string;
-  type: "anaerobic";
-  split: "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
-  items: CombinedAnaerobicWorkoutItem[];
+  description: string;
 }
 
-export interface WorkoutAerobic {
-  readonly id: string;
+export interface WorkoutAnaerobic extends BasicWorkout {
+  type: "anaerobic";
+  split: "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
+  items: CombinedWorkoutItem[];
+}
+
+export interface WorkoutAerobic extends BasicWorkout {
   type: "aerobic";
   items: WorkoutItemAerobic[];
 }
 
 export type Workout = WorkoutAnaerobic | WorkoutAerobic;
 
-export interface WorkoutItemAnaerobic {
+interface BasicWorkoutItem {
   readonly id: string;
-  workoutId: string;
   name: string;
+  isCompleted?: boolean;
+}
+
+export interface WorkoutItemAnaerobic extends BasicWorkoutItem {
+  type: "anaerobic";
   sets: number;
   reps: number;
   weight: number;
@@ -24,25 +31,17 @@ export interface WorkoutItemAnaerobic {
   restInSec: number;
 }
 
-export interface WorkoutItemAerobic {
-  readonly id: string;
-  workoutId: string;
-  name: string;
+export interface WorkoutItemAerobic extends BasicWorkoutItem {
+  type: "aerobic";
   durationInMin: number;
 }
 
-export interface WorkoutItemSuperset {
-  readonly id: string;
-  workoutId: string;
-  name: string;
-  sets: number;
-  reps: number;
-  weight: number;
-  weightUnit: "kg" | "lbs";
-  restInSec: number;
-  superset: WorkoutItemAnaerobic[];
+export interface WorkoutItemSuperset extends BasicWorkoutItem {
+  type: "superset";
+  items: WorkoutItemAnaerobic[];
 }
 
-export type CombinedAnaerobicWorkoutItem =
+export type CombinedWorkoutItem =
+  | WorkoutItemAerobic
   | WorkoutItemAnaerobic
   | WorkoutItemSuperset;

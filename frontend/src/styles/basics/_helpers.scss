@@ -53,3 +53,29 @@
   @include aspect-ratio(100, 150);
 }
 
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - rem(75px));
+  padding: rem(25px);
+}
+
+.btn {
+  padding: rem(15px) rem(20px);
+  border: 1px solid white;
+  border-radius: 25px;
+  color: white;
+  font-size: rem(14px);
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 1px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-background-light);
+  }
+}

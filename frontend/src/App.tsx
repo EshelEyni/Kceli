@@ -11,6 +11,11 @@ import "./styles/main.scss";
 import { AppDispatch, RootState } from "./types/app";
 import { Header } from "./components/App/Header/Header";
 import { Nav } from "./components/App/Nav/Nav";
+import { WorkoutEditProvider } from "./contexts/WorkoutEditContex";
+import { WorkoutsProvider } from "./contexts/WorkoutsContex";
+import { WorkoutProvider } from "./contexts/WorkoutContex";
+import { FaHome, FaRegCalendarAlt, FaUser } from "react-icons/fa";
+import { GiWeightLiftingUp } from "react-icons/gi";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -35,6 +40,40 @@ function App() {
   }
 
   function geRouteElement(route: TypeOfRoute) {
+    if (route.path === "workouts/edit/:id")
+      return (
+        <AuthGuard
+          component={
+            <WorkoutEditProvider>
+              <route.component />
+            </WorkoutEditProvider>
+          }
+        />
+      );
+
+    if (route.path === "workouts") {
+      return (
+        <AuthGuard
+          component={
+            <WorkoutsProvider>
+              <route.component />
+            </WorkoutsProvider>
+          }
+        />
+      );
+    }
+
+    if (route.path === "workouts/details/:id") {
+      return (
+        <AuthGuard
+          component={
+            <WorkoutProvider>
+              <route.component />
+            </WorkoutProvider>
+          }
+        />
+      );
+    }
     return route.authRequired ? <AuthGuard component={<route.component />} /> : <route.component />;
   }
 
@@ -48,16 +87,20 @@ function App() {
         <Header className="app-header">
           <Nav>
             <NavLink to="/home" className={"app-nav-link"}>
-              home
+              <FaHome className="app-nav-link__icon" />
+              <span>home</span>
             </NavLink>
             <NavLink to={"workouts"} className={"app-nav-link"}>
-              workouts
+              <GiWeightLiftingUp className="app-nav-link__icon" />
+              <span>workouts</span>
             </NavLink>
             <NavLink to="/schedule" className={"app-nav-link"}>
-              schedule
+              <FaRegCalendarAlt className="app-nav-link__icon" />
+              <span>schedule</span>
             </NavLink>
             <NavLink to={`/profile/${loggedInUser?.username}`} className={"app-nav-link"}>
-              profile
+              <FaUser className="app-nav-link__icon" />
+              <span>profile</span>
             </NavLink>
           </Nav>
         </Header>

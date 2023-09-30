@@ -34,6 +34,23 @@ const ProfileDetails = () => {
     };
   }
 
+  function calculateHowManyDaysToGetToMaxRecommendedWeight() {
+    if (!user) return;
+    const dailyRecommednedWeightLoss = 0.075;
+    const deficit = user?.weight - maxRecommendedWeight;
+    const daysToGetToMaxRecommendedWeight = Math.round(deficit / dailyRecommednedWeightLoss);
+    return daysToGetToMaxRecommendedWeight;
+  }
+
+  function calculateHowManyDaysToGetToCurrentWeightLossGoal() {
+    if (!user) return;
+    const dailyRecommednedWeightLoss = 0.075;
+    const daysToGetToCurrentWeightLossGoal = Math.round(
+      user.currentWeightLossGoal / dailyRecommednedWeightLoss
+    );
+    return daysToGetToCurrentWeightLossGoal;
+  }
+
   if (isLoading) return <SpinnerLoader withContainer={true} containerSize={{ width: "100%" }} />;
   if (isError) return <ErrorMsg msg="Something went wrong" />;
   if (!isSuccess || !user) return null;
@@ -57,6 +74,11 @@ const ProfileDetails = () => {
   const caloriesToLose = Math.round(
     (user.weight - maxRecommendedWeight) * CALORIES_PER_KG_BODY_FAT
   );
+
+  const howManyDaysToGetToMaxRecommendedWeight = calculateHowManyDaysToGetToMaxRecommendedWeight();
+  const howManyDaysToGetToCurrentWeightLossGoal =
+    calculateHowManyDaysToGetToCurrentWeightLossGoal();
+
   return (
     <main className="profile-details">
       <div style={{ alignSelf: "flex-start" }}>
@@ -81,7 +103,36 @@ const ProfileDetails = () => {
         <h3>calories to lose</h3>
         <h4>{caloriesToLose.toLocaleString()} Kcal</h4>
       </div>
+      <div>
+        <h3>calories to lose as days</h3>
+        <h4>{(caloriesToLose / 7700).toLocaleString()} </h4>
+        <h4>days you can maintain energy on body fat</h4>
+      </div>
 
+      {howManyDaysToGetToMaxRecommendedWeight && (
+        <div>
+          <h3>days to get to max recommended weight</h3>
+          <h4>{howManyDaysToGetToMaxRecommendedWeight}</h4>
+
+          <h3>weeks to get to max recommended weight</h3>
+          <h4>{Math.round(howManyDaysToGetToMaxRecommendedWeight / 7)}</h4>
+
+          <h3>months to get to max recommended weight</h3>
+          <h4>{Math.round(howManyDaysToGetToMaxRecommendedWeight / 30)}</h4>
+        </div>
+      )}
+      {howManyDaysToGetToCurrentWeightLossGoal && (
+        <div>
+          <h3>days to get to Current Weight Loss Goal</h3>
+          <h4>{howManyDaysToGetToCurrentWeightLossGoal}</h4>
+
+          <h3>weeks to get to Current Weight Loss Goal</h3>
+          <h4>{Math.round(howManyDaysToGetToCurrentWeightLossGoal / 7)}</h4>
+
+          <h3>months to get to Current Weight Loss Goal</h3>
+          <h4>{Math.round(howManyDaysToGetToCurrentWeightLossGoal / 30)}</h4>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <label htmlFor="curr-goal">
           <h3>current weight loss goal</h3>

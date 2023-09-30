@@ -1,0 +1,24 @@
+@import "../../styles//main";
+
+.workout-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: rem(25px);
+  gap: rem(25px);
+
+  .workout-page__btn {
+    background-color: var(--color-primary);
+  }
+
+  .workout-page__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(rem(175px), 1fr));
+    grid-auto-rows: minmax(rem(175px), 1fr);
+    justify-items: center;
+    gap: rem(10px);
+    width: 100%;
+  }
+}

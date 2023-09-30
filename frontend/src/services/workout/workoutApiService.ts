@@ -14,7 +14,7 @@ async function getById(workoutId: string): Promise<Workout> {
   return handleServerResponseData<Workout>(respose);
 }
 
-async function create(workout: Workout): Promise<Workout> {
+async function create(workout: Workout | object): Promise<Workout> {
   const respose = await httpService.post(`${BASE_URL}`, workout);
   return handleServerResponseData<Workout>(respose);
 }
@@ -25,8 +25,7 @@ async function update(workout: Workout): Promise<Workout> {
 }
 
 async function remove(workoutId: string): Promise<void> {
-  const respose = await httpService.delete(`${BASE_URL}/${workoutId}`);
-  return handleServerResponseData<void>(respose);
+  await httpService.delete(`${BASE_URL}/${workoutId}`);
 }
 
 export default { query, getById, create, update, remove };

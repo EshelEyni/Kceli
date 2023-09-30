@@ -87,21 +87,15 @@ export const IntakeList: FC = () => {
             )}`}</p>
 
             <div className="intake-list__btns-container">
-              <Button
-                className="today-details__btn"
-                onClickFn={() => handleDeleteBtnClick(item.id)}
-              >
+              <Button className="btn" onClickFn={() => handleDeleteBtnClick(item.id)}>
                 Delete
               </Button>
               {isRecordedIntakesShown ? (
-                <Button className="today-details__btn" onClickFn={() => handleEditBtnClick(item)}>
+                <Button className="btn" onClickFn={() => handleEditBtnClick(item)}>
                   Edit
                 </Button>
               ) : (
-                <Button
-                  className="today-details__btn"
-                  onClickFn={() => handleSaveBtnClick(item.id)}
-                >
+                <Button className="btn" onClickFn={() => handleSaveBtnClick(item.id)}>
                   Save
                 </Button>
               )}

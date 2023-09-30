@@ -27,10 +27,28 @@
       font-size: rem(18px);
       text-transform: uppercase;
       transition: all 0.3s ease-in-out;
+      span {
+        display: none;
+      }
 
       &.active {
         font-size: rem(20px);
         font-weight: 600;
+      }
+    }
+  }
+}
+
+@include for-desktop-layout {
+  .app-header {
+    .app-nav {
+      .app-nav-link {
+        .app-nav-link__icon {
+          display: none;
+        }
+        span {
+          display: inline-block;
+        }
       }
     }
   }

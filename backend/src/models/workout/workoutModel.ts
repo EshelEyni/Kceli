@@ -2,7 +2,6 @@ import mongoose, { Document, Schema } from "mongoose";
 
 const workoutItemAnaerobicSchema = new Schema(
   {
-    workoutId: String,
     name: String,
     sets: Number,
     reps: Number,
@@ -34,7 +33,6 @@ const workoutItemAnaerobicSchema = new Schema(
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const workoutItemAerobicSchema = new Schema(
   {
-    workoutId: String,
     name: String,
     durationInMin: Number,
   },
@@ -59,7 +57,6 @@ const workoutItemAerobicSchema = new Schema(
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const workoutItemSupersetSchema = new Schema(
   {
-    workoutId: String,
     name: String,
     sets: Number,
     reps: Number,
@@ -89,48 +86,33 @@ const workoutItemSupersetSchema = new Schema(
   }
 );
 
-const combinedAnaerobicWorkoutItemSchema = new Schema(
-  {
-    type: {
-      type: String,
-      enum: ["workoutItemAnaerobic", "workoutItemSuperset"],
-    },
-    data: Schema.Types.Mixed,
-  },
-  {
-    toObject: {
-      virtuals: true,
-      transform: (_: Document, ret: Record<string, unknown>) => {
-        delete ret._id;
-        return ret;
-      },
-    },
-    toJSON: {
-      virtuals: true,
-      transform: (_: Document, ret: Record<string, unknown>) => {
-        delete ret._id;
-        return ret;
-      },
-    },
-  }
-);
-
 const workoutSchema = new Schema(
   {
     type: {
       type: String,
       enum: ["aerobic", "anaerobic"],
-      required: [true, "Please provide a type"],
+      default: "anaerobic",
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "Please provide a userId"],
     },
-    splits: {
-      type: Number,
+    split: {
+      type: String,
       enum: ["FBW", "A", "B", "C", "D", "E", "F"],
+      default: "FBW",
     },
-    items: [combinedAnaerobicWorkoutItemSchema],
+    description: {
+      type: String,
+      trim: true,
+      default: "no description",
+    },
+    items: [
+      {
+        type: mongoose.Schema.Types.Mixed,
+        enum: [workoutItemAnaerobicSchema, workoutItemAerobicSchema, workoutItemSupersetSchema],
+      },
+    ],
   },
   {
     toObject: {

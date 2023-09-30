@@ -7,6 +7,8 @@ const SignupPage = lazy(() => import("./pages/Signup/Signup"));
 const SchedulePage = lazy(() => import("./pages/Schedule/Schedule"));
 const DayDetails = lazy(() => import("./pages/DayDetails/DayDetails"));
 const WorkoutPage = lazy(() => import("./pages/Workout/WorkoutPage"));
+const WorkoutEdit = lazy(() => import("./pages/WorkoutEdit/WorkoutEdit"));
+const WorkoutDetails = lazy(() => import("./pages/WorkoutDetails/WorkoutDetails"));
 
 export interface Route {
   path: string;
@@ -29,6 +31,16 @@ const routes: Route[] = [
   {
     path: "workouts",
     component: WorkoutPage,
+    authRequired: true,
+  },
+  {
+    path: "workouts/edit/:id",
+    component: WorkoutEdit,
+    authRequired: true,
+  },
+  {
+    path: "workouts/details/:id",
+    component: WorkoutDetails,
     authRequired: true,
   },
   {

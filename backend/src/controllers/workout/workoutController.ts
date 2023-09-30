@@ -25,7 +25,6 @@ const createWorkout = asyncErrorCatcher(async (req: Request, res: Response) => {
   validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
 
   const workout = req.body;
-
   const doc = await WorkoutModel.create({
     ...workout,
     userId: loggedInUserId,
@@ -37,7 +36,7 @@ const createWorkout = asyncErrorCatcher(async (req: Request, res: Response) => {
   });
 });
 
-const updateWorkout = updateOne(WorkoutModel, ["items"]);
+const updateWorkout = updateOne(WorkoutModel, ["description", "items"]);
 const deleteWorkout = deleteOne(WorkoutModel);
 
 export { getAllWorkouts, getWorkout, createWorkout, updateWorkout, deleteWorkout };

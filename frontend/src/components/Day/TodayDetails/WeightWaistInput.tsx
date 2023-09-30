@@ -47,7 +47,7 @@ export const WeightWaistInput: FC = () => {
             value={waist || ""}
             onChange={handleWaistInputChange}
           />
-          <Button className="today-details__btn" onClickFn={handleSubmit} type="submit">
+          <Button className="btn" onClickFn={handleSubmit} type="submit">
             update
           </Button>
         </form>

@@ -27,7 +27,7 @@ export const Filter: FC = () => {
     <ul className="filter">
       {filterBy.map(filter => (
         <li className="filter__item" key={filter.value}>
-          <Button className="today-details__btn" onClickFn={() => setOpenedElement(filter.value)}>
+          <Button className="btn" onClickFn={() => setOpenedElement(filter.value)}>
             {filter.name}
           </Button>
         </li>
