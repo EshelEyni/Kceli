@@ -2,7 +2,13 @@ import { FC, useEffect } from "react";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
 import { List } from "../../components/App/List/List";
-import { CombinedWorkoutItem, Workout, WorkoutItemAerobic } from "../../../../shared/types/workout";
+import {
+  CombinedWorkoutItem,
+  Split,
+  Workout,
+  WorkoutItemAerobic,
+  WorkoutType,
+} from "../../../../shared/types/workout";
 import { Empty } from "../../components/App/Empty/Empty";
 import { BtnGoBack } from "../../components/Buttons/BtnGoBack/BtnGoBack";
 import "./WorkoutEdit.scss";
@@ -12,9 +18,14 @@ import { AerobicWorkoutItemEdit } from "./AerobicWorkoutItemEdit";
 import { AnaerobicWorkoutItemEdit } from "./AnaerobicWorkoutItemEdit";
 import { SuperSetWorkoutItemEdit } from "./SuperSetWorkoutItemEdit";
 import { Controller, useForm } from "react-hook-form";
+import * as Select from "@radix-ui/react-select";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import workoutUtilService from "../../services/workout/workoutUtilService";
 
 interface WorkoutEditIFormInput {
   description: string;
+  type: WorkoutType;
+  split?: Split;
 }
 
 const WorkoutEdit: FC = () => {
@@ -31,11 +42,14 @@ const WorkoutEdit: FC = () => {
     duration,
   } = useWorkoutEdit();
 
-  const { control, handleSubmit, setValue } = useForm<WorkoutEditIFormInput>({
-    defaultValues: {
-      description: workout?.description || "",
-    },
-  });
+  const defaultValues: WorkoutEditIFormInput = {
+    description: workout?.description || "",
+    type: workout?.type || "anaerobic",
+  };
+  const isAnaeobic = workout && workout?.type === "anaerobic";
+  if (isAnaeobic) defaultValues.split = workout.split;
+
+  const { control, handleSubmit, setValue } = useForm<WorkoutEditIFormInput>({ defaultValues });
 
   const isItemsEmpty = workout?.items.length === 0;
   const isItemsListShown = !isItemsEmpty && !isLoadingUpdateWorkout;
@@ -71,6 +85,76 @@ const WorkoutEdit: FC = () => {
             render={({ field }) => <input {...field} />}
           />
         </div>
+
+        <div className="workout-edit-item__form--input-container">
+          <label>workout type:</label>
+          <Controller
+            name="type"
+            control={control}
+            render={({ field }) => (
+              <Select.Root onValueChange={value => field.onChange(value)}>
+                <Select.Trigger className="SelectTrigger">
+                  <Select.Value placeholder={workout.type} />
+                  <Select.Icon className="SelectIcon">
+                    <ChevronDownIcon />
+                  </Select.Icon>
+                </Select.Trigger>
+                <Select.Portal>
+                  <Select.Content className="SelectContent">
+                    <Select.Viewport className="SelectViewport">
+                      <Select.Group>
+                        <Select.Item value="anaerobic" className="SelectItem" {...field.ref}>
+                          <Select.ItemText>anaerobic</Select.ItemText>
+                        </Select.Item>
+                        <Select.Item value="aerobic" className="SelectItem" {...field.ref}>
+                          <Select.ItemText>aerobic</Select.ItemText>
+                        </Select.Item>
+                      </Select.Group>
+                    </Select.Viewport>
+                  </Select.Content>
+                </Select.Portal>
+              </Select.Root>
+            )}
+          />
+        </div>
+
+        {isAnaeobic && (
+          <div className="workout-edit-item__form--input-container">
+            <label>split:</label>
+            <Controller
+              name="split"
+              control={control}
+              render={({ field }) => (
+                <Select.Root onValueChange={value => field.onChange(value)}>
+                  <Select.Trigger className="SelectTrigger">
+                    <Select.Value placeholder={workout.split} />
+                    <Select.Icon className="SelectIcon">
+                      <ChevronDownIcon />
+                    </Select.Icon>
+                  </Select.Trigger>
+                  <Select.Portal>
+                    <Select.Content className="SelectContent">
+                      <Select.Viewport className="SelectViewport">
+                        <Select.Group>
+                          {workoutUtilService.SPLIT_TYPES.map(type => (
+                            <Select.Item
+                              value={type}
+                              className="SelectItem"
+                              {...field.ref}
+                              key={type}
+                            >
+                              <Select.ItemText>{type}</Select.ItemText>
+                            </Select.Item>
+                          ))}
+                        </Select.Group>
+                      </Select.Viewport>
+                    </Select.Content>
+                  </Select.Portal>
+                </Select.Root>
+              )}
+            />
+          </div>
+        )}
 
         <div className="workout-edit-item__form__input-container--btns">
           <Button type="submit" className="btn" isDisabled={isLoadingUpdateWorkout}>

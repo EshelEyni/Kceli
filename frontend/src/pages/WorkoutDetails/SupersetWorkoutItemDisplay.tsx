@@ -5,19 +5,21 @@ import workoutUtilService from "../../services/workout/workoutUtilService";
 import classNames from "classnames";
 import { Button } from "../../components/App/Button/Button";
 import { List } from "../../components/App/List/List";
-import { AnaerobicWorkoutItemDisplay } from "./AnaerobicWorkoutItemDisplay";
 
 type SupersetWorkoutItemDisplayProps = {
   item: WorkoutItemSuperset;
 };
 
 export const SupersetWorkoutItemDisplay: FC<SupersetWorkoutItemDisplayProps> = ({ item }) => {
-  const { isWorkoutStarted, onStartItem } = useWorkout();
+  const { isWorkoutStarted, onStartItem, onCompleteAnaerobicSet } = useWorkout();
   const duration = workoutUtilService.calcDurationForSupersetItem(item);
-  const isItemsListShown = item.isStarted && !item.isCompleted;
+
+  const isSetListShown = item.isStarted && !item.isCompleted;
+
   const infoItem = [
     { title: "name:", value: item.name },
     { title: "duration:", value: duration },
+    { title: "type:", value: item.type },
   ];
 
   return (
@@ -45,12 +47,47 @@ export const SupersetWorkoutItemDisplay: FC<SupersetWorkoutItemDisplayProps> = (
             </Button>
           )}
 
-          {isItemsListShown && (
+          {isSetListShown && (
             <List
-              items={item.items}
+              items={Array(item.sets).fill({})}
               isOrdered={true}
               className="workout-item-display__set-display__list"
-              render={item => <AnaerobicWorkoutItemDisplay item={item} key={item.id} />}
+              render={(_, i) => {
+                const lastCompletedSetIndex = item.setCompletedStatus.findLastIndex(
+                  (s: boolean) => s === true
+                );
+
+                const isStartBtnShown = lastCompletedSetIndex === i - 1;
+
+                return (
+                  <li className="workout-item-display__set-display supertest" key={i}>
+                    <div className="workout-item-display__set-display__info superset">
+                      <span>set {i + 1}</span>
+
+                      <List
+                        items={item.items}
+                        isOrdered={true}
+                        className="workout-item-display__superset-items-list"
+                        render={(item, i) => (
+                          <p
+                            key={i}
+                          >{`${item.name} - reps: ${item.reps} - weight: ${item.weight} ${item.weightUnit}`}</p>
+                        )}
+                      />
+                    </div>
+
+                    {isStartBtnShown && (
+                      <Button
+                        className="workout-item-display__btn"
+                        isDisabled={!isWorkoutStarted}
+                        // onClickFn={() => onCompleteAnaerobicSet({ item, setIdx: i })}
+                      >
+                        completed
+                      </Button>
+                    )}
+                  </li>
+                );
+              }}
             />
           )}
         </>

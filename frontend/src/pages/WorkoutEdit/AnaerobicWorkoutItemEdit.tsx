@@ -67,6 +67,16 @@ export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({
       ...workout,
       items: workout.items.map(i => {
         if (i.id === item.id) return { ...i, ...data } as WorkoutItemAnaerobic;
+        if (i.type === "superset" && i.id === parentItem?.id) {
+          const itemToUpdate: WorkoutItemSuperset = {
+            ...i,
+            items: i.items.map(i => {
+              if (i.id === item.id) return { ...i, ...data } as WorkoutItemAnaerobic;
+              return i;
+            }),
+          };
+          return itemToUpdate;
+        }
         return i;
       }),
     } as Workout;
@@ -157,6 +167,7 @@ export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({
         <Button className="btn" onClickFn={handleRemoveBtnClick}>
           delete
         </Button>
+
         <Button type="submit" isDisabled={isLoadingUpdateWorkout} className="btn">
           Update
         </Button>

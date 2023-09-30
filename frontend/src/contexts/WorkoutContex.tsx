@@ -127,12 +127,12 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
 
     workout.items = workout.items.map(i => {
       if (i.id === item.id) i[statusKey] = statusValue;
-      if (i.type === "superset") {
-        i.items = i.items.map(i => {
-          if (i.id === item.id) i[statusKey] = statusValue;
-          return i;
-        });
-      }
+      // if (i.type === "superset") {
+      //   i.items = i.items.map(i => {
+      //     if (i.id === item.id) i[statusKey] = statusValue;
+      //     return i;
+      //   });
+      // }
       return i;
     });
 
@@ -174,9 +174,7 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
         break;
       }
       case "superset": {
-        const { items } = item;
-        const [firstItem] = items;
-        const { restInSec } = firstItem;
+        const { restInSec } = item;
         const restInMin = restInSec / 60;
         setCurrTime(restInMin);
         break;

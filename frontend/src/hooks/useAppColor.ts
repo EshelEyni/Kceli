@@ -19,6 +19,5 @@ export function useAppColors() {
 
   useEffect(() => {
     document.documentElement.style.setProperty("--color-primary", backgroundColor);
-    console.log("useAppColors", backgroundColor);
   }, [backgroundColor]);
 }

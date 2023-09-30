@@ -1,3 +1,7 @@
+export type Split = "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
+export type WorkoutType = "anaerobic" | "aerobic";
+export type WeightUnit = "kg" | "lbs";
+
 interface BasicWorkout {
   readonly id: string;
   description: string;
@@ -5,7 +9,7 @@ interface BasicWorkout {
 
 export interface WorkoutAnaerobic extends BasicWorkout {
   type: "anaerobic";
-  split: "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
+  split: Split;
   items: CombinedWorkoutItem[];
 }
 
@@ -28,7 +32,7 @@ export interface WorkoutItemAnaerobic extends BasicWorkoutItem {
   sets: number;
   reps: number;
   weight: number;
-  weightUnit: "kg" | "lbs";
+  weightUnit: WeightUnit;
   restInSec: number;
   setCompletedStatus: boolean[];
 }
@@ -38,9 +42,20 @@ export interface WorkoutItemAerobic extends BasicWorkoutItem {
   durationInMin: number;
 }
 
+export type SupersetItem = {
+  id: string;
+  name: string;
+  reps: number;
+  weight: number;
+  weightUnit: WeightUnit;
+};
+
 export interface WorkoutItemSuperset extends BasicWorkoutItem {
   type: "superset";
-  items: WorkoutItemAnaerobic[];
+  items: SupersetItem[];
+  sets: number;
+  restInSec: number;
+  setCompletedStatus: boolean[];
 }
 
 export type CombinedWorkoutItem =

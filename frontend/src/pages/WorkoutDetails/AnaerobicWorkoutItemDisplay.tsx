@@ -17,10 +17,11 @@ export const AnaerobicWorkoutItemDisplay: FC<AnaerobicWorkoutItemDisplayProps> =
 
   const infoItem = [
     { title: "name:", value: item.name },
+    { title: "duration:", value: duration },
+    { title: "type:", value: item.type },
     { title: "sets:", value: item.sets },
     { title: "reps:", value: item.reps },
     { title: "weight:", value: `${item.weight} ${item.weightUnit}` },
-    { title: "duration:", value: duration },
   ];
 
   return (

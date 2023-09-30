@@ -1,11 +1,15 @@
 import {
   BasicWorkoutItem,
+  Split,
+  SupersetItem,
   Workout,
   WorkoutItemAerobic,
   WorkoutItemAnaerobic,
   WorkoutItemSuperset,
 } from "../../../../shared/types/workout";
 import { createId } from "../util/utilService";
+
+const SPLIT_TYPES: Split[] = ["FBW", "A", "B", "C", "D", "E", "F"];
 
 function getDefaultWorkout(): Workout {
   return {
@@ -60,22 +64,38 @@ function getDefaultWorkoutItemSuperset(): WorkoutItemSuperset {
   return {
     ...getBasicDefaultWorkoutItem(),
     type: "superset",
+    restInSec: 60,
+    sets: 3,
     items: [],
+    setCompletedStatus: [],
   };
 }
+
+function getDefaultSupersetItem(): SupersetItem {
+  return {
+    id: createId(),
+    name: "",
+    reps: 10,
+    weight: 0,
+    weightUnit: "kg",
+  };
+}
+
 function calcDurationForAnaerobicItem(item: WorkoutItemAnaerobic) {
-  const minuteMultiplySet = item.sets;
+  const setDuration = (Number(item.sets) * 45) / 60;
   const restBetweenSets = (item.restInSec * item.sets) / 60;
-  return minuteMultiplySet + restBetweenSets;
+  return setDuration + restBetweenSets;
 }
 
 function calcDurationForSupersetItem(item: WorkoutItemSuperset) {
-  return item.items.reduce((acc, item) => acc + calcDurationForAnaerobicItem(item), 0);
+  const setDuration = (Number(item.sets) * 45) / 60 + item.items.length;
+  const restBetweenSets = (item.restInSec * item.sets) / 60;
+  return setDuration + restBetweenSets;
+  // return item.items.reduce((acc, item) => acc + calcDurationForAnaerobicItem(item), 0);
 }
 
 function calcDuration({ workout, type = "all" }: { workout: Workout; type?: "all" | "remaining" }) {
   if (!workout) return 0;
-
   const duration = workout?.items
     .filter(item => {
       if (type === "all") return true;
@@ -99,10 +119,12 @@ function calcDuration({ workout, type = "all" }: { workout: Workout; type?: "all
 }
 
 export default {
+  SPLIT_TYPES,
   getDefaultWorkout,
   getDefaultAerobicWorkoutItem,
   getDefaultAnaerobicWorkoutItem,
   getDefaultWorkoutItemSuperset,
+  getDefaultSupersetItem,
   calcDuration,
   calcDurationForAnaerobicItem,
   calcDurationForSupersetItem,

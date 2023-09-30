@@ -11,19 +11,24 @@ type AerobicWorkoutItemDisplayProps = {
 export const AerobicWorkoutItemDisplay: FC<AerobicWorkoutItemDisplayProps> = ({ item }) => {
   const { isWorkoutStarted, onStartItem, onCompletedItem } = useWorkout();
   const isCompletedBtnShown = item.isStarted && !item.isCompleted;
+
+  const infoItem = [
+    { title: "name:", value: item.name },
+    { title: "duration:", value: item.durationInMin },
+    { title: "type:", value: item.type },
+  ];
+
   return (
     <section className="workout-item-display">
       <div
         className={classNames("workout-item-display__info", { "full-width": !isWorkoutStarted })}
       >
-        <div className="workout-item-display__info__item">
-          <h3>name:</h3>
-          <h4>{item.name}</h4>
-        </div>
-        <div className="workout-item-display__info__item">
-          <h3>duration:</h3>
-          <h4>{item.durationInMin}</h4>
-        </div>
+        {infoItem.map((item, index) => (
+          <div className="workout-item-display__info__item" key={index}>
+            <h3>{item.title}</h3>
+            <h4>{item.value}</h4>
+          </div>
+        ))}
       </div>
 
       {isWorkoutStarted && (
