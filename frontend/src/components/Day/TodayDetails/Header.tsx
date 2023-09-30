@@ -3,14 +3,25 @@ import { CaloriePie } from "../../Charts/CaloriePie/CaloriePie";
 import { useTodayData } from "../../../contexts/TodayDataContext";
 
 export const TodayDetailsHeader: FC = () => {
-  const { recordedIntakes, remainingCalories, estimatedKGChange, recommendedWaterIntake } =
-    useTodayData();
+  const {
+    recordedIntakes,
+    remainingCalories,
+    consumedCalories,
+    estimatedKGChange,
+    recommendedWaterIntake,
+  } = useTodayData();
 
   return (
     <header className="today-details__header">
       <CaloriePie intakes={recordedIntakes} remainingCalories={remainingCalories} />
 
       <div className="today-details__header__titles">
+        {consumedCalories > 0 && (
+          <p className="today-details__title">
+            <strong>{Math.round(consumedCalories)}</strong> calories consumed
+          </p>
+        )}
+        <hr />
         {remainingCalories > 0 ? (
           <p className="today-details__title">
             <strong>{Math.round(remainingCalories)}</strong> calories remaining
@@ -20,6 +31,7 @@ export const TodayDetailsHeader: FC = () => {
             <strong>{Math.abs(Math.round(remainingCalories))}</strong> calories over your limit
           </p>
         )}
+
         {estimatedKGChange > 0 ? (
           <p className="today-details__title">
             estimated to gain <strong>{estimatedKGChange}kg</strong>

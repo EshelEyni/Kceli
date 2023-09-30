@@ -19,6 +19,7 @@
     text-transform: uppercase;
     font-weight: 700;
     margin-top: rem(30px);
+    border: none;
   }
 
   @include for-desktop-layout {

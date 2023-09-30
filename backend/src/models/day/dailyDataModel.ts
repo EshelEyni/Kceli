@@ -5,6 +5,7 @@ import calorieService from "../../services/calorie/calorieService";
 import { UserModel } from "../user/userModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
 import { getIsraeliDate } from "../../services/util/utilService";
+import { workoutSchema } from "../workout/workoutModel";
 
 const dailyDataSchema = new Schema<IDailyData>(
   {
@@ -15,6 +16,7 @@ const dailyDataSchema = new Schema<IDailyData>(
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      index: true,
       required: [true, "Please provide a user id"],
     },
     weight: {
@@ -31,6 +33,10 @@ const dailyDataSchema = new Schema<IDailyData>(
     },
     intakes: {
       type: [intakeSchema],
+      default: [],
+    },
+    workouts: {
+      type: [workoutSchema],
       default: [],
     },
   },
@@ -52,8 +58,6 @@ const dailyDataSchema = new Schema<IDailyData>(
     timestamps: true,
   }
 );
-
-dailyDataSchema.index({ userId: 1 });
 
 // // Pre-save middleware
 // dailyDataSchema.pre("save", async function (next) {

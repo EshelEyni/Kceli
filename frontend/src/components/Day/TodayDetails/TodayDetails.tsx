@@ -8,17 +8,12 @@ import { Filter } from "./Filter";
 import { TodayDetailsHeader } from "./Header";
 import { IntakeList } from "./IntakeList";
 import { WeightWaistInput } from "./WeightWaistInput";
+import { List } from "../../App/List/List";
+import { WorkoutPreview } from "../../Workout/WorkoutPreview/WorkoutPreview";
 
 export const TodayDetails: FC = () => {
-  const {
-    dailyData,
-    isLoading,
-    isSuccess,
-    isError,
-    isLoadingUpdate,
-    backgroundColor,
-    openedElement,
-  } = useTodayData();
+  const { dailyData, isLoading, isSuccess, isError, isLoadingUpdate, openedElement } =
+    useTodayData();
 
   const showContent = isSuccess && dailyData && !isLoadingUpdate;
   const isLoaderShown = isLoading || isLoadingUpdate;
@@ -26,7 +21,7 @@ export const TodayDetails: FC = () => {
     openedElement === ToggledElement.IntakeList ||
     openedElement === ToggledElement.UnRecordedIntakeList;
   return (
-    <section className="today-details" style={{ backgroundColor }}>
+    <section className="today-details">
       {isLoaderShown && <SpinnerLoader />}
       {isError && <ErrorMsg />}
       {showContent && (
@@ -35,6 +30,12 @@ export const TodayDetails: FC = () => {
           <Filter />
           {openedElement === ToggledElement.WeightWaistInput && <WeightWaistInput />}
           {openedElement === ToggledElement.IntakeEdit && <IntakeEdit />}
+          {openedElement === ToggledElement.Workouts && (
+            <List
+              items={dailyData.workouts}
+              render={item => <WorkoutPreview workout={item} isTodayDetails={true} key={item.id} />}
+            />
+          )}
           {isListShown && <IntakeList />}
         </>
       )}

@@ -38,6 +38,7 @@ export enum ToggledElement {
   IntakeList = "IntakeList",
   UnRecordedIntakeList = "UnRecordedIntakeList",
   WeightWaistInput = "WeightWaistInput",
+  Workouts = "Workouts",
 }
 
 const TodayDataContext = createContext<TodayDataContextType | undefined>(undefined);
@@ -55,7 +56,8 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
   const unrecordedIntakes = (dailyData?.intakes.filter(i => !i.isRecorded) as Intake[]) || [];
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, dailyData);
   const consumedCalories = calorieUtilService.getTotalCalories(dailyData);
-  const targetCaloricIntakePerDay = loggedInUser?.targetCaloricIntakePerDay || 0;
+  const targetCaloricIntakePerDay =
+    dailyData?.targetCaloricIntake ?? loggedInUser?.targetCaloricIntakePerDay ?? 0;
   const estimatedKGChange = calorieUtilService.calcEstimatedBodyFatStatusPerDay(
     loggedInUser,
     dailyData
@@ -125,7 +127,7 @@ function _calcRecommendedWaterIntake(loggedInUser: User | null, dailyData: DayDa
         0
       ) || 0;
 
-  return (targetWaterConsumptionPerDay - waterConsumption) / 1000;
+  return Number(((targetWaterConsumptionPerDay - waterConsumption) / 1000).toFixed(2));
 }
 
 export { TodayDataProvider, useTodayData };

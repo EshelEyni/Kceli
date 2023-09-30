@@ -22,6 +22,10 @@ export const Filter: FC = () => {
       name: "weight",
       value: ToggledElement.WeightWaistInput,
     },
+    {
+      name: "workouts",
+      value: ToggledElement.Workouts,
+    },
   ];
   return (
     <ul className="filter">

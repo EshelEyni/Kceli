@@ -16,11 +16,13 @@ import { WorkoutsProvider } from "./contexts/WorkoutsContex";
 import { WorkoutProvider } from "./contexts/WorkoutContex";
 import { FaHome, FaRegCalendarAlt, FaUser } from "react-icons/fa";
 import { GiWeightLiftingUp } from "react-icons/gi";
+import { useAppColors } from "./hooks/useAppColor";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   const { loggedInUser } = useSelector((state: RootState) => state.auth);
   const { isPageLoading } = useSelector((state: RootState) => state.system);
+  useAppColors();
 
   function getRoutes() {
     return routes.map(route => (

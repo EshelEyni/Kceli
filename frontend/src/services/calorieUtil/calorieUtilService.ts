@@ -61,7 +61,7 @@ function getBcgByCosumedCalories({
   consumedCalories,
 }: GetBcgByCosumedCaloriesParams): string {
   const calorieColorPalette = [
-    { excessRate: 0, color: "#2d46ff" },
+    { excessRate: 0, color: "#005FB3" },
     { excessRate: 10, color: "#4682B4" },
     { excessRate: 20, color: "#FFFF99" },
     { excessRate: 30, color: "#ffea00" },
@@ -78,7 +78,7 @@ function getBcgByCosumedCalories({
   const exceededPercentage = consumedPercentage - 100;
   const bcg = calorieColorPalette.find(item => item.excessRate >= exceededPercentage);
 
-  return bcg?.color || "#3030FF";
+  return bcg?.color || "#171717";
 }
 
 export default {

@@ -9,7 +9,7 @@
   padding: rem(10px);
   border-radius: 5px;
   background-color: var(--color-primary);
-  gap: rem(10px);
+  gap: rem(45px);
   border: 1px solid var(--color-secondary-border);
 
   .workout-preview__info {
@@ -29,10 +29,12 @@
   .workout-preview__btns {
     align-self: flex-end;
     display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     gap: rem(10px);
 
     .btn {
-      padding: rem(10px) rem(18px);
+      padding: rem(8px) rem(12px);
     }
   }
 }

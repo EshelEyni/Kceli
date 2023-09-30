@@ -1,16 +1,19 @@
 import { FC } from "react";
 import { Workout } from "../../../../../shared/types/workout";
-import { useWorkouts } from "../../../contexts/WorkoutsContex";
 import { Button } from "../../App/Button/Button";
 import "./WorkoutPreview.scss";
 import workoutUtilService from "../../../services/workout/workoutUtilService";
+import { useNavigate } from "react-router-dom";
+import { useDeleteWorkout } from "../../../hooks/useDeleteWorkout";
 
 type WorkoutPreviewProps = {
   workout: Workout;
+  isTodayDetails?: boolean;
 };
 
-export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout }) => {
-  const { navigate, removeWorkout } = useWorkouts();
+export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isTodayDetails = false }) => {
+  const { removeWorkout } = useDeleteWorkout();
+  const navigate = useNavigate();
   const duration = workoutUtilService.calcDuration({ workout: workout as Workout });
 
   function handleBtnEditClick(workoutId: string) {
@@ -35,15 +38,22 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout }) => {
       </section>
 
       <div className="workout-preview__btns">
-        <Button
-          className="btn workout-page__btn"
-          onClickFn={() => handleBtnDeleteClick(workout.id)}
-        >
-          delete
-        </Button>
-        <Button className="btn workout-page__btn" onClickFn={() => handleBtnEditClick(workout.id)}>
-          edit
-        </Button>
+        {!isTodayDetails && (
+          <>
+            <Button
+              className="btn workout-page__btn"
+              onClickFn={() => handleBtnDeleteClick(workout.id)}
+            >
+              delete
+            </Button>
+            <Button
+              className="btn workout-page__btn"
+              onClickFn={() => handleBtnEditClick(workout.id)}
+            >
+              edit
+            </Button>
+          </>
+        )}
         <Button className="btn workout-page__btn" onClickFn={() => handleBtnOpenClick(workout.id)}>
           open
         </Button>

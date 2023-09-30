@@ -10,6 +10,7 @@
   flex-grow: 1;
   padding: rem(10px);
   overflow: scroll;
+  background-color: var(--color-primary);
   @include scrollbar-hidden;
 
   .today-details__header {
@@ -24,14 +25,19 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: rem(5px);
+      gap: rem(2px);
+
+      hr {
+        width: 100%;
+        margin: rem(3px) 0;
+      }
 
       .today-details__title {
-        font-size: rem(25px);
+        font-size: rem(20px);
         text-transform: uppercase;
         color: white;
         strong {
-          font-size: rem(28px);
+          font-size: rem(22px);
         }
       }
     }

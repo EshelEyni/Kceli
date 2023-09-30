@@ -1,6 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
+import {
+  IWorkout,
+  IWorkoutItemAerobic,
+  IWorkoutItemAnaerobic,
+  IWorkoutItemSuperset,
+} from "../../types/iTypes";
 
-const workoutItemAnaerobicSchema = new Schema(
+const workoutItemAnaerobicSchema = new Schema<IWorkoutItemAnaerobic>(
   {
     name: String,
     sets: Number,
@@ -9,6 +15,18 @@ const workoutItemAnaerobicSchema = new Schema(
     weightUnit: {
       type: String,
       enum: ["kg", "lbs"],
+    },
+    isStarted: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    setCompletedStatus: {
+      type: [Boolean],
+      default: [],
     },
     restInSec: Number,
   },
@@ -31,10 +49,18 @@ const workoutItemAnaerobicSchema = new Schema(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const workoutItemAerobicSchema = new Schema(
+const workoutItemAerobicSchema = new Schema<IWorkoutItemAerobic>(
   {
     name: String,
     durationInMin: Number,
+    isStarted: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toObject: {
@@ -55,7 +81,7 @@ const workoutItemAerobicSchema = new Schema(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const workoutItemSupersetSchema = new Schema(
+const workoutItemSupersetSchema = new Schema<IWorkoutItemSuperset>(
   {
     name: String,
     sets: Number,
@@ -66,6 +92,14 @@ const workoutItemSupersetSchema = new Schema(
       enum: ["kg", "lbs"],
     },
     restInSec: Number,
+    isStarted: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
     superset: [workoutItemAnaerobicSchema],
   },
   {
@@ -86,7 +120,7 @@ const workoutItemSupersetSchema = new Schema(
   }
 );
 
-const workoutSchema = new Schema(
+const workoutSchema = new Schema<IWorkout>(
   {
     type: {
       type: String,
@@ -134,4 +168,4 @@ const workoutSchema = new Schema(
 
 const WorkoutModel = mongoose.model("workouts", workoutSchema);
 
-export { WorkoutModel };
+export { workoutSchema, WorkoutModel };

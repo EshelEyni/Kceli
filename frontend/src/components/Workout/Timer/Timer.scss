@@ -2,18 +2,52 @@
 
 .timer {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  width: rem(150px);
-  height: rem(150px);
-  padding: rem(10px);
-  border-radius: 50%;
-  background-color: var(--color-primary);
-  border: 2px solid var(--color-secondary-border);
+  gap: rem(15px);
 
-  span {
-    font-size: rem(25px);
-    font-weight: 600;
-    color: var(--color-secondary);
+  .clock-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: rem(175px);
+    height: rem(175px);
+    padding: rem(10px);
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-secondary-border);
+
+    span {
+      font-size: rem(30px);
+      font-weight: 600;
+      color: var(--color-secondary);
+    }
+  }
+  .timer__controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: rem(10px);
+    padding: 0 rem(10px);
+    width: 100%;
+
+    .timer__controls__btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: rem(50px);
+      height: rem(50px);
+      border: 1px solid white;
+      border-radius: 50%;
+      color: white;
+      font-size: rem(14px);
+      font-weight: 600;
+      padding: 0;
+
+      svg {
+        width: rem(18px);
+        height: rem(18px);
+      }
+    }
   }
 }

@@ -16,10 +16,11 @@ export interface WorkoutAerobic extends BasicWorkout {
 
 export type Workout = WorkoutAnaerobic | WorkoutAerobic;
 
-interface BasicWorkoutItem {
+export interface BasicWorkoutItem {
   readonly id: string;
   name: string;
-  isCompleted?: boolean;
+  isStarted: boolean;
+  isCompleted: boolean;
 }
 
 export interface WorkoutItemAnaerobic extends BasicWorkoutItem {
@@ -29,6 +30,7 @@ export interface WorkoutItemAnaerobic extends BasicWorkoutItem {
   weight: number;
   weightUnit: "kg" | "lbs";
   restInSec: number;
+  setCompletedStatus: boolean[];
 }
 
 export interface WorkoutItemAerobic extends BasicWorkoutItem {

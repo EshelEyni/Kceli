@@ -11,12 +11,13 @@
   align-items: center;
   padding: 0 rem(10px);
   background-color: var(--color-primary);
+  border-bottom: 2px solid var(--color-secondary-border);
 
   .app-nav {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: rem(20px);
+    gap: rem(45px);
     width: 100%;
     height: 100%;
     padding: 0 rem(10px);
@@ -27,8 +28,16 @@
       font-size: rem(18px);
       text-transform: uppercase;
       transition: all 0.3s ease-in-out;
+
       span {
         display: none;
+      }
+
+      .app-nav-link__icon {
+        width: rem(28px);
+        height: rem(28px);
+        fill: white;
+        // margin-right: rem(5px);
       }
 
       &.active {

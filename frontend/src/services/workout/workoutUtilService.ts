@@ -1,4 +1,5 @@
 import {
+  BasicWorkoutItem,
   Workout,
   WorkoutItemAerobic,
   WorkoutItemAnaerobic,
@@ -16,9 +17,18 @@ function getDefaultWorkout(): Workout {
   };
 }
 
-function getDefaultWormupItem(): WorkoutItemAerobic {
+function getBasicDefaultWorkoutItem(): BasicWorkoutItem {
   return {
     id: createId(),
+    name: "",
+    isStarted: false,
+    isCompleted: false,
+  };
+}
+
+function getDefaultWormupItem(): WorkoutItemAerobic {
+  return {
+    ...getBasicDefaultWorkoutItem(),
     type: "aerobic",
     name: "wormup",
     durationInMin: 10,
@@ -27,42 +37,44 @@ function getDefaultWormupItem(): WorkoutItemAerobic {
 
 function getDefaultAerobicWorkoutItem(): WorkoutItemAerobic {
   return {
-    id: createId(),
+    ...getBasicDefaultWorkoutItem(),
     type: "aerobic",
-    name: "",
     durationInMin: 30,
   };
 }
 
 function getDefaultAnaerobicWorkoutItem(): WorkoutItemAnaerobic {
   return {
-    id: createId(),
+    ...getBasicDefaultWorkoutItem(),
     type: "anaerobic",
-    name: "",
     sets: 3,
     reps: 10,
     weight: 0,
     weightUnit: "kg",
     restInSec: 60,
+    setCompletedStatus: [],
   };
 }
 
 function getDefaultWorkoutItemSuperset(): WorkoutItemSuperset {
   return {
-    id: createId(),
+    ...getBasicDefaultWorkoutItem(),
     type: "superset",
-    name: "",
     items: [],
   };
+}
+function calcDurationForAnaerobicItem(item: WorkoutItemAnaerobic) {
+  const minuteMultiplySet = item.sets;
+  const restBetweenSets = (item.restInSec * item.sets) / 60;
+  return minuteMultiplySet + restBetweenSets;
+}
+
+function calcDurationForSupersetItem(item: WorkoutItemSuperset) {
+  return item.items.reduce((acc, item) => acc + calcDurationForAnaerobicItem(item), 0);
 }
 
 function calcDuration({ workout, type = "all" }: { workout: Workout; type?: "all" | "remaining" }) {
   if (!workout) return 0;
-  function calcDurationForAnaerobic(item: WorkoutItemAnaerobic) {
-    const minuteMultiplySet = item.sets;
-    const restBetweenSets = (item.restInSec * item.sets) / 60;
-    return minuteMultiplySet + restBetweenSets;
-  }
 
   const duration = workout?.items
     .filter(item => {
@@ -73,11 +85,11 @@ function calcDuration({ workout, type = "all" }: { workout: Workout; type?: "all
     .reduce((acc, item) => {
       switch (item.type) {
         case "anaerobic":
-          return acc + calcDurationForAnaerobic(item);
+          return acc + calcDurationForAnaerobicItem(item);
         case "aerobic":
           return acc + item.durationInMin;
         case "superset":
-          return acc + item.items.reduce((acc, item) => acc + calcDurationForAnaerobic(item), 0);
+          return acc + calcDurationForSupersetItem(item);
         default:
           return acc;
       }
@@ -92,4 +104,6 @@ export default {
   getDefaultAnaerobicWorkoutItem,
   getDefaultWorkoutItemSuperset,
   calcDuration,
+  calcDurationForAnaerobicItem,
+  calcDurationForSupersetItem,
 };

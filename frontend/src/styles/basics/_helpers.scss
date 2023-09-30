@@ -60,7 +60,11 @@
   position: relative;
   width: 100%;
   min-height: calc(100vh - rem(75px));
-  padding: rem(25px);
+  padding: rem(10px);
+
+  > * {
+    max-width: rem(1200px);
+  }
 }
 
 .btn {
