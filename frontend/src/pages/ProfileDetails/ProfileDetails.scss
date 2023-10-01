@@ -3,21 +3,34 @@
 .profile-details {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   overflow: auto;
   gap: rem(20px);
-  padding: rem(15px) rem(20px);
+  padding: rem(25px) rem(20px);
+  background-color: var(--color-primary);
 
-  .profile-details__user-avatar {
-    height: rem(85px);
-    width: rem(85px);
-    border-radius: 50%;
-  }
+  .profile-details__user-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: rem(15px);
+    width: 100%;
+    padding: rem(15px) rem(20px);
+    border-radius: rem(10px);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-background);
 
-  .profile-details__user-posts {
-    overflow: hidden;
+    .user-info__item-container {
+      h2 {
+        color: var(--color-text-gray);
+        font-size: rem(18px);
+        text-transform: capitalize;
+      }
 
-    @include scrollbar-hidden;
+      p {
+        color: var(--color-text);
+        font-size: rem(16px);
+        font-weight: 600;
+      }
+    }
   }
 }

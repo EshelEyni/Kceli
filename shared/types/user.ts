@@ -33,7 +33,8 @@ export interface User {
   createdAt: string;
 }
 
-export type FollowingResult = {
-  loggedInUser: User;
-  targetUser: User;
+export type UserDailyStatsResult = {
+  date: Date;
+  weight: number;
+  waist: number;
 };

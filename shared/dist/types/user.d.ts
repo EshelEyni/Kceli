@@ -29,7 +29,8 @@ export interface User {
     currentWeightLossGoal: number;
     createdAt: string;
 }
-export type FollowingResult = {
-    loggedInUser: User;
-    targetUser: User;
+export type UserDailyStatsResult = {
+    date: Date;
+    weight: number;
+    waist: number;
 };

@@ -10,7 +10,6 @@
   flex-grow: 1;
   padding: rem(10px);
   overflow: scroll;
-  background-color: var(--color-primary);
   @include scrollbar-hidden;
 
   .today-details__header {

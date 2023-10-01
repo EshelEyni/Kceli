@@ -45,7 +45,7 @@ function WorkoutsProvider({ children }: { children: React.ReactNode }) {
 function useWorkouts() {
   const context = useContext(WorkoutsContext);
   if (context === undefined) {
-    throw new Error("useWorkoutItemEdit must be used within a WorkoutsProvider");
+    throw new Error("useWorkouts must be used within a WorkoutsProvider");
   }
   return context;
 }

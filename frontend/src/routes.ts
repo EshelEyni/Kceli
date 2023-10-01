@@ -24,7 +24,7 @@ const routes: Route[] = [
     authRequired: false,
   },
   {
-    path: "profile/:username?",
+    path: "profile/:id",
     component: ProfileDetails,
     authRequired: true,
   },

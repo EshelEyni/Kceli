@@ -1,4 +1,4 @@
-import { User } from "../../../../shared/types/user";
+import { User, UserDailyStatsResult } from "../../../../shared/types/user";
 import httpService from "../http/httpService";
 import { handleServerResponseData } from "../util/utilService";
 
@@ -24,4 +24,9 @@ async function update(user: User): Promise<User> {
   return handleServerResponseData<User>(respose);
 }
 
-export default { query, getById, getByUsername, update };
+async function getUserDailyStats(): Promise<UserDailyStatsResult[]> {
+  const respose = await httpService.get(`user/dailyStats`);
+  return handleServerResponseData<UserDailyStatsResult[]>(respose);
+}
+
+export default { query, getById, getByUsername, update, getUserDailyStats };

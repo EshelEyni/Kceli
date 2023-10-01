@@ -1,18 +1,16 @@
-import { Outlet, useParams } from "react-router-dom";
-import "./ProfileDetails.scss";
-import { useGetUser } from "../../hooks/useGetUser";
+import { Outlet } from "react-router-dom";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
 import { useState } from "react";
 import { Button } from "../../components/App/Button/Button";
-import { useUpdateUser } from "../../hooks/useUpdateUser";
+import { WeightWaistChart } from "../../components/Charts/WeightWaistChart/WeightWaistChart";
+import { useProfile } from "../../contexts/ProfileContex";
+import "./ProfileDetails.scss";
+import { UserInfo } from "./UserInfo";
 
 const ProfileDetails = () => {
-  const params = useParams();
-  const { username } = params as { username: string };
-  const { user, isLoading, isSuccess, isError } = useGetUser(username);
+  const { user, isLoading, isSuccess, isError, updateUser, isLoadingUpdateUser } = useProfile();
   const [currWeightLossGoal, setCurrWeightLossGoal] = useState(0);
-  const { updateUser, isLoading: isLoadingUpdateUser } = useUpdateUser();
 
   function calculateRecommendedWeight(heightInMeters: number) {
     /**
@@ -80,17 +78,9 @@ const ProfileDetails = () => {
     calculateHowManyDaysToGetToCurrentWeightLossGoal();
 
   return (
-    <main className="profile-details">
-      <div style={{ alignSelf: "flex-start" }}>
-        <p>{user.fullname}</p>
-        <p>{user.username}</p>
-        <p>{new Date(user.birthdate).toLocaleDateString()}</p>
-        <p>{user.weight}</p>
-        <p>{user.height}</p>
-        <p>{user.gender}</p>
-        <p>{user.currentWeightLossGoal}</p>
-      </div>
-
+    <main className="page profile-details">
+      <UserInfo />
+      <WeightWaistChart />
       <div>
         <h5>recommended weight</h5>
         <div>

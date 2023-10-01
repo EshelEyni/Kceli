@@ -16,13 +16,14 @@ import { WorkoutsProvider } from "./contexts/WorkoutsContex";
 import { WorkoutProvider } from "./contexts/WorkoutContex";
 import { FaHome, FaRegCalendarAlt, FaUser } from "react-icons/fa";
 import { GiWeightLiftingUp } from "react-icons/gi";
-import { useAppColors } from "./hooks/useAppColor";
+import { ProfileProvider } from "./contexts/ProfileContex";
+// import { useAppColors } from "./hooks/useAppColor";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   const { loggedInUser } = useSelector((state: RootState) => state.auth);
   const { isPageLoading } = useSelector((state: RootState) => state.system);
-  useAppColors();
+  // useAppColors();
 
   function getRoutes() {
     return routes.map(route => (
@@ -76,6 +77,18 @@ function App() {
         />
       );
     }
+
+    if (route.path === "profile/:id") {
+      return (
+        <AuthGuard
+          component={
+            <ProfileProvider>
+              <route.component />
+            </ProfileProvider>
+          }
+        />
+      );
+    }
     return route.authRequired ? <AuthGuard component={<route.component />} /> : <route.component />;
   }
 
@@ -101,7 +114,7 @@ function App() {
               <FaRegCalendarAlt className="app-nav-link__icon" />
               <span>schedule</span>
             </NavLink>
-            <NavLink to={`/profile/${loggedInUser?.username}`} className={"app-nav-link"}>
+            <NavLink to={`/profile/${loggedInUser?.id}`} className={"app-nav-link"}>
               <FaUser className="app-nav-link__icon" />
               <span>profile</span>
             </NavLink>

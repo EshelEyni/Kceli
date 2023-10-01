@@ -12,8 +12,15 @@ import { List } from "../../App/List/List";
 import { WorkoutPreview } from "../../Workout/WorkoutPreview/WorkoutPreview";
 
 export const TodayDetails: FC = () => {
-  const { dailyData, isLoading, isSuccess, isError, isLoadingUpdate, openedElement } =
-    useTodayData();
+  const {
+    dailyData,
+    isLoading,
+    isSuccess,
+    isError,
+    isLoadingUpdate,
+    openedElement,
+    backgroundColor,
+  } = useTodayData();
 
   const showContent = isSuccess && dailyData && !isLoadingUpdate;
   const isLoaderShown = isLoading || isLoadingUpdate;
@@ -21,7 +28,7 @@ export const TodayDetails: FC = () => {
     openedElement === ToggledElement.IntakeList ||
     openedElement === ToggledElement.UnRecordedIntakeList;
   return (
-    <section className="today-details">
+    <section className="today-details" style={{ backgroundColor }}>
       {isLoaderShown && <SpinnerLoader />}
       {isError && <ErrorMsg />}
       {showContent && (

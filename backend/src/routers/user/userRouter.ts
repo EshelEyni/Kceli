@@ -8,6 +8,7 @@ import {
   addUser,
   updateLoggedInUser,
   removeLoggedInUser,
+  getUserDailyStats,
 } from "../../controllers/user/userController";
 import {
   checkUserAuthentication,
@@ -17,8 +18,9 @@ import {
 const router = express.Router();
 
 router.get("/", getUsers);
-router.get("/:id", getUserById);
+router.get("/:id([a-fA-F0-9]{24})", getUserById);
 router.get("/username/:username", getUserByUsername);
+router.get("/dailyStats", getUserDailyStats);
 
 router.use(checkUserAuthentication);
 router.patch("/loggedInUser", updateLoggedInUser);

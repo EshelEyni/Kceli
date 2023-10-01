@@ -9,6 +9,8 @@ import { getOne, createOne, updateOne, deleteOne } from "../../services/factory/
 import { UserModel } from "../../models/user/userModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
 import { ParsedReqQuery } from "../../types/app";
+import { validateIds } from "../../services/util/utilService";
+import { DailyDataModel } from "../../models/day/dailyDataModel";
 
 const getUsers = asyncErrorCatcher(async (req: Request, res: Response) => {
   const queryString = req.query;
@@ -71,6 +73,23 @@ const removeLoggedInUser = asyncErrorCatcher(async (req: Request, res: Response)
   });
 });
 
+const getUserDailyStats = asyncErrorCatcher(async (req: Request, res: Response) => {
+  const loggedInUserId = getLoggedInUserIdFromReq();
+  validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
+
+  const docs = await DailyDataModel.find(
+    { userId: loggedInUserId, weight: { $ne: null }, waist: { $ne: null } },
+    { date: 1, weight: 1, waist: 1 }
+  ).sort({
+    date: 1,
+  });
+
+  res.send({
+    status: "success",
+    data: docs,
+  });
+});
+
 export {
   getUsers,
   getUserById,
@@ -80,4 +99,5 @@ export {
   removeUser,
   updateLoggedInUser,
   removeLoggedInUser,
+  getUserDailyStats,
 };

@@ -10,7 +10,7 @@ type useUserResult = {
   isError: boolean;
 };
 
-export function useGetUser(username: string): useUserResult {
+export function useGetUser(userId: string): useUserResult {
   const {
     data: user,
     error,
@@ -18,10 +18,10 @@ export function useGetUser(username: string): useUserResult {
     isSuccess,
     isError,
   } = useQuery({
-    queryKey: [`user/${username}`],
+    queryKey: [`user/${userId}`],
     queryFn: async () => {
-      if (!username) throw new Error("Username is required");
-      return userApiService.getByUsername(username);
+      if (!userId) throw new Error("User Id is required");
+      return userApiService.getById(userId);
     },
   });
 

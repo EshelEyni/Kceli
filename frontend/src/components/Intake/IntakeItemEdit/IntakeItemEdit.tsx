@@ -94,7 +94,7 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
   }
 
   function handleToggleManual() {
-    const item = { ...intakeItem, unit: MeasurementUnit.GRAM, quantity: 100 };
+    const item = { ...intakeItem };
     if (isManual) delete item.calories, delete item.caloriesPer100g, setInputFaded("");
     setIsManual(prev => !prev);
     handleChange(item, idx);
