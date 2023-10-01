@@ -9,11 +9,12 @@ type AuthGuardProps = {
 
 export const AuthGuard: FC<AuthGuardProps> = ({ component }) => {
   const { loggedInUser } = useSelector((state: RootState) => state.auth);
+  const { isPageLoading } = useSelector((state: RootState) => state.system);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loggedInUser) navigate("/login");
-  }, [loggedInUser, navigate]);
+    if (!loggedInUser && !isPageLoading) navigate("/login");
+  }, [loggedInUser, isPageLoading, navigate]);
 
   return <>{component}</>;
 };

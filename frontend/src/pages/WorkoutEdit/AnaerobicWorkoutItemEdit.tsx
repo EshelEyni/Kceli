@@ -1,14 +1,11 @@
 import { FC, useEffect } from "react";
-import {
-  Workout,
-  WorkoutItemAnaerobic,
-  WorkoutItemSuperset,
-} from "../../../../shared/types/workout";
+import { Workout, WorkoutItemAnaerobic } from "../../../../shared/types/workout";
 import { useWorkoutEdit } from "../../contexts/WorkoutEditContex";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../components/App/Button/Button";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
+import workoutUtilService from "../../services/workout/workoutUtilService";
 
 interface AnaerobicWorkoutItemEditIFormInput {
   name: string;
@@ -21,17 +18,13 @@ interface AnaerobicWorkoutItemEditIFormInput {
 
 type AnaerobicWorkoutItemEditProps = {
   item: WorkoutItemAnaerobic;
-  parentItem?: WorkoutItemSuperset;
 };
 
-export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({
-  item,
-  parentItem,
-}) => {
+export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({ item }) => {
   const { control, handleSubmit, setValue } = useForm<AnaerobicWorkoutItemEditIFormInput>({
     defaultValues: {
       name: item.name,
-      sets: item.sets,
+      sets: item.sets.length,
       reps: item.reps,
       weight: item.weight,
       weightUnit: item.weightUnit,
@@ -39,50 +32,37 @@ export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({
     },
   });
 
-  const {
-    workout,
-    updateWorkout,
-    isLoadingUpdateWorkout,
-    removeWorkoutItem,
-    removeWorkoutItemFromSuperset,
-  } = useWorkoutEdit();
+  const { workout, updateWorkout, isLoadingUpdateWorkout, removeWorkoutItem } = useWorkoutEdit();
+
+  function handleRemoveBtnClick() {
+    removeWorkoutItem(item.id);
+  }
+
+  function onSubmit(data: AnaerobicWorkoutItemEditIFormInput) {
+    if (!workout || isLoadingUpdateWorkout) return;
+
+    const items = workout.items.map(i => {
+      if (i.id === item.id) {
+        const { sets: numOfSets, ...dataWithoutSets } = data;
+        const sets = Array(numOfSets).fill(workoutUtilService.getAnaerobicSet());
+        return { ...i, ...dataWithoutSets, sets } as WorkoutItemAnaerobic;
+      }
+      return i;
+    });
+
+    const workoutToUpdate = { ...workout, items } as Workout;
+
+    updateWorkout(workoutToUpdate);
+  }
 
   useEffect(() => {
     setValue("name", item.name);
-    setValue("sets", item.sets);
+    setValue("sets", item.sets.length);
     setValue("reps", item.reps);
     setValue("weight", item.weight);
     setValue("restInSec", item.restInSec);
     setValue("weightUnit", item.weightUnit);
   }, [item, setValue]);
-
-  function handleRemoveBtnClick() {
-    if (!parentItem) return removeWorkoutItem(item.id);
-    removeWorkoutItemFromSuperset(item.id, parentItem.id);
-  }
-
-  function onSubmit(data: AnaerobicWorkoutItemEditIFormInput) {
-    if (!workout || isLoadingUpdateWorkout) return;
-    const workoutToUpdate = {
-      ...workout,
-      items: workout.items.map(i => {
-        if (i.id === item.id) return { ...i, ...data } as WorkoutItemAnaerobic;
-        if (i.type === "superset" && i.id === parentItem?.id) {
-          const itemToUpdate: WorkoutItemSuperset = {
-            ...i,
-            items: i.items.map(i => {
-              if (i.id === item.id) return { ...i, ...data } as WorkoutItemAnaerobic;
-              return i;
-            }),
-          };
-          return itemToUpdate;
-        }
-        return i;
-      }),
-    } as Workout;
-
-    updateWorkout(workoutToUpdate);
-  }
 
   return (
     <form className="workout-edit-item__form" onSubmit={handleSubmit(onSubmit)}>
@@ -100,6 +80,7 @@ export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({
         <Controller
           name="sets"
           control={control}
+          rules={{ min: 1, max: 10 }}
           render={({ field }) => <input type="number" {...field} />}
         />
       </div>
@@ -109,6 +90,7 @@ export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({
         <Controller
           name="reps"
           control={control}
+          rules={{ min: 1, max: 10 }}
           render={({ field }) => <input type="number" {...field} />}
         />
       </div>
@@ -118,6 +100,7 @@ export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({
         <Controller
           name="weight"
           control={control}
+          rules={{ min: 1 }}
           render={({ field }) => <input type="number" {...field} />}
         />
       </div>

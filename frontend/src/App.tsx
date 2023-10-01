@@ -80,7 +80,8 @@ function App() {
   }
 
   useEffect(() => {
-    if (!loggedInUser) dispatch(loginWithToken());
+    if (loggedInUser) return;
+    dispatch(loginWithToken());
   }, [loggedInUser, dispatch]);
 
   return (

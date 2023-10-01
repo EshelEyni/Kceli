@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { useUpdateWorkout } from "../hooks/useUpdateWorkout";
-import { Workout, WorkoutItemSuperset } from "../../../shared/types/workout";
+import { Workout } from "../../../shared/types/workout";
 import { NavigateFunction, Params, useNavigate, useParams } from "react-router-dom";
 import { useGetWorkout } from "../hooks/useGetWorkout";
 import workoutUtilService from "../services/workout/workoutUtilService";
@@ -18,8 +18,8 @@ type WorkoutEditContextType = {
   addWorkoutItem: () => void;
   addSupersetWorkoutItem: () => void;
   addWorkoutItemToSuperset: (itemId: string) => void;
+  removeWorkoutItemFromSuperset: (itemId: string, supersetItemId: string) => void;
   removeWorkoutItem: (itemId: string) => void;
-  removeWorkoutItemFromSuperset: (itemId: string, parentItemId: string) => void;
   duration: number;
 };
 
@@ -75,37 +75,23 @@ function WorkoutEditProvider({ children }: { children: React.ReactNode }) {
 
   function addWorkoutItemToSuperset(itemId: string) {
     if (!workout) return;
-    const workoutToUpdate = {
-      ...workout,
-      items: workout.items.map(item => {
-        if (item.id === itemId) {
-          if (item.type !== "superset") return item;
-          const itemToUpdate: WorkoutItemSuperset = {
-            ...item,
-            items: [...item.items, workoutUtilService.getDefaultAnaerobicWorkoutItem()],
-          };
-          return itemToUpdate;
-        }
-        return item;
-      }),
-    } as Workout;
+    const defaultItem = workoutUtilService.getDefaultSupersetItem();
+    const items = workout.items.map(item => {
+      if (item.type !== "superset" || item.id !== itemId) return item;
+      return { ...item, items: [...item.items, defaultItem] };
+    });
 
+    const workoutToUpdate = { ...workout, items } as Workout;
     updateWorkout(workoutToUpdate);
   }
 
-  function removeWorkoutItemFromSuperset(itemId: string, parentItemId: string) {
+  function removeWorkoutItemFromSuperset(itemId: string, supersetItemId: string) {
     if (!workout) return;
-    const workoutToUpdate = {
-      ...workout,
-      items: workout.items.map(item => {
-        if (item.type !== "superset" || item.id !== parentItemId) return item;
-        const itemToUpdate: WorkoutItemSuperset = {
-          ...item,
-          items: item.items.filter(item => item.id !== itemId),
-        };
-        return itemToUpdate;
-      }),
-    } as Workout;
+    const items = workout.items.map(item => {
+      if (item.type !== "superset" || item.id !== itemId) return item;
+      return { ...item, items: item.items.filter(item => item.id !== supersetItemId) };
+    });
+    const workoutToUpdate = { ...workout, items } as Workout;
     updateWorkout(workoutToUpdate);
   }
 
@@ -121,8 +107,8 @@ function WorkoutEditProvider({ children }: { children: React.ReactNode }) {
     addWorkoutItem,
     addSupersetWorkoutItem,
     addWorkoutItemToSuperset,
-    removeWorkoutItem,
     removeWorkoutItemFromSuperset,
+    removeWorkoutItem,
     duration,
   };
   return <WorkoutEditContext.Provider value={value}>{children}</WorkoutEditContext.Provider>;

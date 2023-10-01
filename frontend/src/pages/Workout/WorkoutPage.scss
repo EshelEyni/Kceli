@@ -4,14 +4,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
   width: 100%;
   padding: rem(25px);
   gap: rem(25px);
-
-  .workout-page__btn {
-    background-color: var(--color-primary);
-  }
+  background-color: var(--color-primary);
 
   .workout-page__list {
     display: grid;

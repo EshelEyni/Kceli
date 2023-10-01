@@ -49,38 +49,41 @@ export const SupersetWorkoutItemDisplay: FC<SupersetWorkoutItemDisplayProps> = (
 
           {isSetListShown && (
             <List
-              items={Array(item.sets).fill({})}
+              items={item.sets}
               isOrdered={true}
               className="workout-item-display__set-display__list"
               render={(_, i) => {
-                const lastCompletedSetIndex = item.setCompletedStatus.findLastIndex(
-                  (s: boolean) => s === true
-                );
-
-                const isStartBtnShown = lastCompletedSetIndex === i - 1;
+                const firstUncompletedSetIndex = item.sets.findIndex(set => !set.isCompleted);
+                const isStartBtnShown = firstUncompletedSetIndex === i;
 
                 return (
                   <li className="workout-item-display__set-display supertest" key={i}>
                     <div className="workout-item-display__set-display__info superset">
-                      <span>set {i + 1}</span>
+                      <span className="set-num">set {i + 1}</span>
 
-                      <List
-                        items={item.items}
-                        isOrdered={true}
-                        className="workout-item-display__superset-items-list"
-                        render={(item, i) => (
-                          <p
-                            key={i}
-                          >{`${item.name} - reps: ${item.reps} - weight: ${item.weight} ${item.weightUnit}`}</p>
-                        )}
-                      />
+                      <div
+                        className="superset-grid"
+                        style={{ gridTemplateRows: `repeat(${item.items.length}, auto)` }}
+                      >
+                        {item.items.reduce((acc: JSX.Element[], item, idx) => {
+                          return acc.concat([
+                            <span key={`supsersetGridName${idx}`}>{item.name}</span>,
+                            <span key={`supsersetGridDash1${idx}`}>-</span>,
+                            <span key={`supsersetGridReps${idx}`}>reps: {item.reps}</span>,
+                            <span key={`supsersetGridDash2${idx}`}>-</span>,
+                            <span
+                              key={`supsersetGridWeight${idx}`}
+                            >{`weight: ${item.weight} ${item.weightUnit}`}</span>,
+                          ]);
+                        }, [])}
+                      </div>
                     </div>
 
                     {isStartBtnShown && (
                       <Button
                         className="workout-item-display__btn"
                         isDisabled={!isWorkoutStarted}
-                        // onClickFn={() => onCompleteAnaerobicSet({ item, setIdx: i })}
+                        onClickFn={() => onCompleteAnaerobicSet({ item, setIdx: i })}
                       >
                         completed
                       </Button>

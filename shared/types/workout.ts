@@ -27,19 +27,20 @@ export interface BasicWorkoutItem {
   isCompleted: boolean;
 }
 
+export interface WorkoutItemAerobic extends BasicWorkoutItem {
+  type: "aerobic";
+  durationInMin: number;
+}
+
+export type WorkoutSet = { isCompleted: boolean };
+
 export interface WorkoutItemAnaerobic extends BasicWorkoutItem {
   type: "anaerobic";
-  sets: number;
+  sets: WorkoutSet[];
   reps: number;
   weight: number;
   weightUnit: WeightUnit;
   restInSec: number;
-  setCompletedStatus: boolean[];
-}
-
-export interface WorkoutItemAerobic extends BasicWorkoutItem {
-  type: "aerobic";
-  durationInMin: number;
 }
 
 export type SupersetItem = {
@@ -53,9 +54,8 @@ export type SupersetItem = {
 export interface WorkoutItemSuperset extends BasicWorkoutItem {
   type: "superset";
   items: SupersetItem[];
-  sets: number;
+  sets: WorkoutSet[];
   restInSec: number;
-  setCompletedStatus: boolean[];
 }
 
 export type CombinedWorkoutItem =

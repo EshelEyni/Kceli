@@ -3,7 +3,8 @@ import { ToggledElement, useTodayData } from "../../../contexts/TodayDataContext
 import { Button } from "../../App/Button/Button";
 
 export const Filter: FC = () => {
-  const { setOpenedElement } = useTodayData();
+  const { dailyData, setOpenedElement } = useTodayData();
+  if (!dailyData) return null;
 
   const filterBy = [
     {
@@ -25,17 +26,22 @@ export const Filter: FC = () => {
     {
       name: "workouts",
       value: ToggledElement.Workouts,
+      isShown: dailyData?.workouts.length > 0,
     },
   ];
+
   return (
     <ul className="filter">
-      {filterBy.map(filter => (
-        <li className="filter__item" key={filter.value}>
-          <Button className="btn" onClickFn={() => setOpenedElement(filter.value)}>
-            {filter.name}
-          </Button>
-        </li>
-      ))}
+      {filterBy.map(filter => {
+        if (filter.isShown === false) return null;
+        return (
+          <li className="filter__item" key={filter.value}>
+            <Button className="btn" onClickFn={() => setOpenedElement(filter.value)}>
+              {filter.name}
+            </Button>
+          </li>
+        );
+      })}
     </ul>
   );
 };

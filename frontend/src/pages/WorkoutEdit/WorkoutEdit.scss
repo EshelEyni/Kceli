@@ -6,9 +6,16 @@
   gap: rem(10px);
   position: relative;
 
-  .btn--go-back {
-    align-self: flex-start;
-    margin-inline-start: rem(10px);
+  .workout-edit__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: rem(1000px);
+
+    .btn--go-back {
+      align-self: flex-start;
+    }
   }
 
   .workout-edit-page__duration-container {
@@ -148,6 +155,10 @@
         gap: rem(10px);
         align-items: flex-end;
         justify-content: flex-end;
+      }
+
+      .superset__btn-delete {
+        align-self: flex-end;
       }
     }
   }

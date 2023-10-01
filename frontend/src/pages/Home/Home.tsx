@@ -10,16 +10,16 @@ import { LoginSignupMsg } from "../../components/Msg/LoginSignupMsg/LoginSignupM
 import { TodayDataProvider } from "../../contexts/TodayDataContext";
 import { useCreateDay } from "../../hooks/useCreateDay";
 import { Button } from "../../components/App/Button/Button";
-import { DAY_IN_MS } from "../../services/util/utilService";
 import { useGetTodayData } from "../../hooks/useGetTodayData";
+import { DayData } from "../../../../shared/types/dayData";
 
 const Homepage = () => {
   const { loggedInUser } = useSelector((state: RootState) => state.auth);
   const { dailyData } = useGetTodayData();
   const { createDay, isLoading: isLoadingCreateDay } = useCreateDay();
   const isTodayDetailsShown = loggedInUser && !isLoadingCreateDay;
-  const isCreateDayBtnShown =
-    dailyData && new Date().getTime() - new Date(dailyData.date).getTime() > DAY_IN_MS;
+  const isCreateDayBtnShown = dailyData ? !_calcIsCurrDay(dailyData) : true;
+
   usePageLoaded({ title: "Home / Kceli" });
 
   function handleCreateDay() {
@@ -37,7 +37,9 @@ const Homepage = () => {
           <TodayDetails />
         </TodayDataProvider>
       )}
+
       {isLoadingCreateDay && <SpinnerLoader />}
+
       {isCreateDayBtnShown && (
         <Button className="home__btn" onClickFn={handleCreateDay}>
           start a new day
@@ -52,5 +54,11 @@ const Homepage = () => {
 };
 
 export default Homepage;
+
+function _calcIsCurrDay(dailyData: DayData) {
+  const today = new Date().toDateString();
+  const dailyDataDate = new Date(dailyData.date).toDateString();
+  return today === dailyDataDate;
+}
 
 // Path: src/pages/MainPages/Home/Home.tsx

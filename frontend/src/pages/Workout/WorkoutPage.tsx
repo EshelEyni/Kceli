@@ -24,7 +24,7 @@ const WorkoutPage: FC = () => {
   }
 
   return (
-    <main className="workout-page">
+    <main className="page workout-page">
       {isLoadingCreateWorkout && <SpinnerLoader />}
       {!isLoadingCreateWorkout && (
         <>

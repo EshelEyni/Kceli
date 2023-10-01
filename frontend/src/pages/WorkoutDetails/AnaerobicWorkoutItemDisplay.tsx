@@ -19,7 +19,7 @@ export const AnaerobicWorkoutItemDisplay: FC<AnaerobicWorkoutItemDisplayProps> =
     { title: "name:", value: item.name },
     { title: "duration:", value: duration },
     { title: "type:", value: item.type },
-    { title: "sets:", value: item.sets },
+    { title: "sets:", value: item.sets.length },
     { title: "reps:", value: item.reps },
     { title: "weight:", value: `${item.weight} ${item.weightUnit}` },
   ];
@@ -53,15 +53,12 @@ export const AnaerobicWorkoutItemDisplay: FC<AnaerobicWorkoutItemDisplayProps> =
 
           {isSetListShown && (
             <List
-              items={Array(item.sets).fill({})}
+              items={item.sets}
               isOrdered={true}
               className="workout-item-display__set-display__list"
               render={(_, i) => {
-                const lastCompletedSetIndex = item.setCompletedStatus.findLastIndex(
-                  (s: boolean) => s === true
-                );
-
-                const isStartBtnShown = lastCompletedSetIndex === i - 1;
+                const firstUncompletedSetIndex = item.sets.findIndex(set => !set.isCompleted);
+                const isStartBtnShown = firstUncompletedSetIndex === i;
 
                 return (
                   <li className="workout-item-display__set-display" key={i}>

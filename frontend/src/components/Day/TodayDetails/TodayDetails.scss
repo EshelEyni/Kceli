@@ -19,12 +19,27 @@
     justify-content: center;
     align-items: center;
     margin-bottom: rem(15px);
+    width: 100%;
+
+    .today-details__header__date-container{
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding: rem(10px) 0 0 0;
+
+      .today-details__header__date {
+        font-size: rem(18px);
+        font-weight: 600;
+        text-transform: uppercase;
+        color: white;
+      }
+    }
 
     .today-details__header__titles {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       gap: rem(2px);
 
       hr {

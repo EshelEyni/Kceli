@@ -9,7 +9,7 @@ type AerobicWorkoutItemDisplayProps = {
 };
 
 export const AerobicWorkoutItemDisplay: FC<AerobicWorkoutItemDisplayProps> = ({ item }) => {
-  const { isWorkoutStarted, onStartItem, onCompletedItem } = useWorkout();
+  const { isWorkoutStarted, onStartItem, onCompleteAeorbicItem } = useWorkout();
   const isCompletedBtnShown = item.isStarted && !item.isCompleted;
 
   const infoItem = [
@@ -47,7 +47,7 @@ export const AerobicWorkoutItemDisplay: FC<AerobicWorkoutItemDisplayProps> = ({ 
             <Button
               className="workout-item-display__btn"
               isDisabled={!isWorkoutStarted}
-              onClickFn={() => onCompletedItem(item)}
+              onClickFn={() => onCompleteAeorbicItem(item)}
             >
               complete
             </Button>

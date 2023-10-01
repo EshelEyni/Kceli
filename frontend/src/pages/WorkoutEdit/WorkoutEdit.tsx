@@ -21,6 +21,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import workoutUtilService from "../../services/workout/workoutUtilService";
+import { Header } from "../../components/App/Header/Header";
 
 interface WorkoutEditIFormInput {
   description: string;
@@ -58,6 +59,11 @@ const WorkoutEdit: FC = () => {
     navigate("/workouts");
   }
 
+  function handleOpenBtnClick() {
+    if (!workout) return;
+    navigate(`/workouts/details/${workout.id}`);
+  }
+
   function onSubmit(data: WorkoutEditIFormInput) {
     if (!workout || isLoadingUpdateWorkout) return;
     const workoutToUpdate = { ...workout, ...data } as Workout;
@@ -74,7 +80,12 @@ const WorkoutEdit: FC = () => {
 
   return (
     <main className="page workout-edit-page">
-      <BtnGoBack className="workout-edit__btn" handleClick={handleGoBackBtnClick} />
+      <Header className="workout-edit__header">
+        <BtnGoBack className="workout-edit__btn" handleClick={handleGoBackBtnClick} />
+        <Button className="btn workout-edit__btn" onClickFn={handleOpenBtnClick}>
+          open
+        </Button>
+      </Header>
 
       <form className="workout-edit-item__form" onSubmit={handleSubmit(onSubmit)}>
         <div className="workout-edit-item__form--input-container name-input">

@@ -1,5 +1,10 @@
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
-import { CombinedWorkoutItem, Workout, WorkoutItemAnaerobic } from "../../../shared/types/workout";
+import {
+  CombinedWorkoutItem,
+  Workout,
+  WorkoutItemAnaerobic,
+  WorkoutItemSuperset,
+} from "../../../shared/types/workout";
 import { NavigateFunction, Params, useNavigate, useParams } from "react-router-dom";
 import { useGetWorkout } from "../hooks/useGetWorkout";
 import workoutUtilService from "../services/workout/workoutUtilService";
@@ -7,7 +12,7 @@ import { useGetTodayData } from "../hooks/useGetTodayData";
 import { useUpdateTodayData } from "../hooks/useUpdateTodayData";
 
 export type onCompleteAnaerobicSetParams = {
-  item: WorkoutItemAnaerobic;
+  item: WorkoutItemAnaerobic | WorkoutItemSuperset;
   setIdx: number;
 };
 
@@ -27,7 +32,7 @@ type WorkoutContextType = {
   isWorkoutStarted: boolean;
   onStart: () => void;
   onStartItem: (item: CombinedWorkoutItem) => void;
-  onCompletedItem: (item: CombinedWorkoutItem) => void;
+  onCompleteAeorbicItem: (item: CombinedWorkoutItem) => void;
   unCompletedItems: CombinedWorkoutItem[];
   completedItems: CombinedWorkoutItem[];
   onCompleteAnaerobicSet: ({ item, setIdx }: onCompleteAnaerobicSetParams) => void;
@@ -36,6 +41,8 @@ type WorkoutContextType = {
 const WorkoutContext = createContext<WorkoutContextType | undefined>(undefined);
 
 function WorkoutProvider({ children }: { children: React.ReactNode }) {
+  const sound = new Audio("/assets/sounds/LetsGetReadyToRumble.mp3");
+  const navigate = useNavigate();
   const params = useParams();
   const { id } = params as { id: string };
   const { workout, isLoading, isSuccess, isError } = useGetWorkout(id);
@@ -43,29 +50,80 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
   const { updateDailyData } = useUpdateTodayData();
 
   const firstUncopmletedItem = _getFirstUncopmletedItem();
+  const [currTime, setCurrTime] = useState(
+    _getClockTimeForItem(firstUncopmletedItem as CombinedWorkoutItem)
+  );
+  const [isRunning, setIsRunning] = useState(false);
+  const [isWorkoutStarted, setIsWorkoutStarted] = useState(
+    workout?.items.some(item => item.isStarted) || false
+  );
+
   const duration = workoutUtilService.calcDuration({ workout: workout as Workout });
   const remainingDuration = workoutUtilService.calcDuration({
     workout: workout as Workout,
     type: "remaining",
   });
-  const navigate = useNavigate();
-  const [currTime, setCurrTime] = useState(
-    _getItemDuration(firstUncopmletedItem as CombinedWorkoutItem)
-  );
-  const [isRunning, setIsRunning] = useState(false);
-  const sound = new Audio("/assets/sounds/LetsGetReadyToRumble.mp3");
-  const [isWorkoutStarted, setIsWorkoutStarted] = useState(
-    workout?.items.some(item => item.isCompleted) || false
-  );
 
-  const { unCompletedItems, completedItems } = getDailyDataItems();
+  const { unCompletedItems, completedItems } = _getDailyDataItems();
 
-  function _getFirstUncopmletedItem(): CombinedWorkoutItem | undefined {
-    if (!workout) return undefined;
-    return workout.items.find(item => !item.isCompleted);
+  function onStart() {
+    if (!dailyData || !workout) return;
+    setIsWorkoutStarted(true);
+    _updateWorkoutInDailyData();
+    const isDev = process.env.NODE_ENV === "development";
+    if (isDev) return;
+    sound.play();
   }
 
-  function getDailyDataItems() {
+  function onStartItem(item: CombinedWorkoutItem) {
+    if (!dailyData || !workout) return;
+    _updateWorkoutItemStatus(item, "isStarted", true);
+    _updateWorkoutInDailyData();
+    if (item.type !== "aerobic") return;
+    _onSetStartTimer(item);
+  }
+
+  function onCompleteAeorbicItem(item: CombinedWorkoutItem) {
+    if (!dailyData || !workout) return;
+    _updateWorkoutItemStatus(item, "isCompleted", true);
+    _updateWorkoutInDailyData();
+    _onSetCompleteTimer();
+  }
+
+  function onCompleteAnaerobicSet({ item, setIdx }: onCompleteAnaerobicSetParams) {
+    if (!dailyData || !workout) return;
+
+    const updatedWorkout = { ...workout };
+
+    const updatedItem = updatedWorkout.items.find(i => i.id === item.id) as WorkoutItemAnaerobic;
+    if (!updatedItem) return;
+
+    updatedItem.sets[setIdx] = { ...updatedItem.sets[setIdx], isCompleted: true };
+    updatedItem.isCompleted = updatedItem.sets.every(set => set.isCompleted);
+
+    dailyData.workouts = dailyData.workouts.map(w => {
+      if (w.id === updatedWorkout.id) w = updatedWorkout;
+      return w;
+    });
+
+    updateDailyData(dailyData);
+  }
+
+  function _onSetStartTimer(item: CombinedWorkoutItem) {
+    const time = _getClockTimeForItem(item);
+    setCurrTime(time);
+    setIsRunning(true);
+  }
+
+  function _onSetCompleteTimer() {
+    const item = _getFirstUncopmletedItem();
+    if (!item) return;
+    const time = _getClockTimeForItem(item);
+    setCurrTime(time);
+    setIsRunning(false);
+  }
+
+  function _getDailyDataItems() {
     const defaultVal = { unCompletedItems: [], completedItems: [] };
     if (!dailyData || !workout) return defaultVal;
     const currWorkOut = dailyData.workouts.find(w => w.id === workout.id);
@@ -77,12 +135,14 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     return { unCompletedItems, completedItems };
   }
 
-  function updateWorkoutInDailyData() {
+  function _getFirstUncopmletedItem(): CombinedWorkoutItem | undefined {
+    if (!workout) return undefined;
+    return workout.items.find(item => !item.isCompleted);
+  }
+
+  function _updateWorkoutInDailyData() {
     if (!dailyData || !workout) return;
-    const dailyDataToUpdate = {
-      ...dailyData,
-      // workouts: [...dailyData.workouts, workout as Workout],
-    };
+    const dailyDataToUpdate = { ...dailyData };
     const isWorkoutExist = dailyDataToUpdate.workouts.some(w => w.id === workout.id);
     dailyDataToUpdate.workouts = isWorkoutExist
       ? dailyDataToUpdate.workouts.map(w => {
@@ -94,28 +154,10 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     updateDailyData(dailyDataToUpdate);
   }
 
-  function onStart() {
-    if (!dailyData || !workout) return;
-    setIsWorkoutStarted(true);
-    updateWorkoutInDailyData();
-    const isDev = process.env.NODE_ENV === "development";
-    if (isDev) return;
-    sound.play();
-  }
-
-  // TODO: move to workoutUtilService
-  function _getItemDuration(item: CombinedWorkoutItem | undefined): number {
+  function _getClockTimeForItem(item: CombinedWorkoutItem | undefined): number {
     if (!item) return 0;
-    switch (item.type) {
-      case "aerobic":
-        return item.durationInMin;
-      case "anaerobic":
-        return workoutUtilService.calcDurationForAnaerobicItem(item);
-      case "superset":
-        return workoutUtilService.calcDurationForSupersetItem(item);
-      default:
-        return 0;
-    }
+    if (item.type === "aerobic") return item.durationInMin;
+    return item.restInSec / 60;
   }
 
   function _updateWorkoutItemStatus(
@@ -127,111 +169,15 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
 
     workout.items = workout.items.map(i => {
       if (i.id === item.id) i[statusKey] = statusValue;
-      // if (i.type === "superset") {
-      //   i.items = i.items.map(i => {
-      //     if (i.id === item.id) i[statusKey] = statusValue;
-      //     return i;
-      //   });
-      // }
       return i;
     });
 
     const updatedWorkout = { ...workout };
 
     dailyData.workouts = dailyData.workouts.map(w => {
-      if (w.id === updatedWorkout.id) w = updatedWorkout;
+      if (w.id === updatedWorkout.id) return updatedWorkout;
       return w;
     });
-  }
-
-  function onStartItem(item: CombinedWorkoutItem) {
-    if (!dailyData || !workout) return;
-    setIsWorkoutStarted(true);
-    _updateWorkoutItemStatus(item, "isStarted", true);
-    updateWorkoutInDailyData();
-    if (item.type !== "aerobic") return;
-    _onSetStartTimer(item);
-  }
-
-  function onCompletedItem(item: CombinedWorkoutItem) {
-    if (!dailyData || !workout) return;
-    _updateWorkoutItemStatus(item, "isCompleted", true);
-    updateWorkoutInDailyData();
-    _onSetCompleteTimer();
-  }
-
-  function _onSetStartTimer(item: CombinedWorkoutItem) {
-    switch (item.type) {
-      case "aerobic": {
-        const time = _getItemDuration(item);
-        setCurrTime(time);
-        break;
-      }
-      case "anaerobic": {
-        const { restInSec } = item;
-        const restInMin = restInSec / 60;
-        setCurrTime(restInMin);
-        break;
-      }
-      case "superset": {
-        const { restInSec } = item;
-        const restInMin = restInSec / 60;
-        setCurrTime(restInMin);
-        break;
-      }
-      default:
-        break;
-    }
-
-    setIsRunning(true);
-  }
-
-  function _onSetCompleteTimer() {
-    const item = _getFirstUncopmletedItem();
-    if (!item) return;
-
-    switch (item.type) {
-      case "aerobic": {
-        const time = _getItemDuration(item);
-        setCurrTime(time);
-        break;
-      }
-      case "anaerobic": {
-        const { restInSec } = item;
-        const restInMin = restInSec / 60;
-        setCurrTime(restInMin);
-        break;
-      }
-      case "superset":
-        break;
-      default:
-        break;
-    }
-
-    setIsRunning(false);
-  }
-
-  function onCompleteAnaerobicSet({ item, setIdx }: onCompleteAnaerobicSetParams) {
-    if (!dailyData || !workout) return;
-    const updatedWorkout = { ...workout };
-
-    const updatedItem =
-      (updatedWorkout.items.find(i => i.id === item.id) as WorkoutItemAnaerobic) ??
-      (updatedWorkout.items
-        .filter(i => i.type === "superset")
-        .find(i => i.id === item.id) as WorkoutItemAnaerobic);
-
-    if (!updatedItem) return;
-    updatedItem.setCompletedStatus[setIdx] = true;
-    const { setCompletedStatus, sets } = updatedItem;
-    if (setCompletedStatus.length === sets && setCompletedStatus.every(s => s === true))
-      updatedItem.isCompleted = true;
-    dailyData.workouts = dailyData.workouts.map(w => {
-      if (w.id === updatedWorkout.id) w = updatedWorkout;
-      return w;
-    });
-
-    updateDailyData(dailyData);
   }
 
   const value = {
@@ -252,7 +198,7 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     onStartItem,
     unCompletedItems,
     completedItems,
-    onCompletedItem,
+    onCompleteAeorbicItem,
     onCompleteAnaerobicSet,
   };
 
