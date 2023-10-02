@@ -3,6 +3,8 @@ import { DayData } from "../../../../shared/types/dayData";
 import { User } from "../../../../shared/types/user";
 import { Intake } from "../../../../shared/types/intake";
 
+export const CALORIES_PER_KG_BODY_FAT = 7700;
+
 function calcRemainingCalories(loggedInUser: User | null, dailyData: DayData | undefined): number {
   if (!loggedInUser || !dailyData) return 0;
   const targetCaloricIntakePerDay =

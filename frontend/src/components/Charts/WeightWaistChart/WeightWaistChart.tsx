@@ -30,7 +30,7 @@ export const WeightWaistChart: FC = () => {
   }));
 
   return (
-    <div style={{ width: "100%", maxWidth: 1000, height: 300 }}>
+    <div style={{ width: "100%", maxWidth: 1200, height: 300 }}>
       <ResponsiveContainer>
         <LineChart
           data={formattedData}

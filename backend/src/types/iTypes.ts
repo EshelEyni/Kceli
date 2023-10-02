@@ -1,6 +1,7 @@
 import mongoose, { Document } from "mongoose";
 import { Gender } from "../../../shared/types/system";
 import { MeasurementUnit } from "../../../shared/types/intake";
+import { WeightLossGoal } from "../../../shared/types/user";
 
 export interface IUser extends Document {
   username: string;
@@ -18,7 +19,7 @@ export interface IUser extends Document {
   birthdate: Date;
   totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
-  currentWeightLossGoal: number;
+  weightLossGoal: WeightLossGoal;
   isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;

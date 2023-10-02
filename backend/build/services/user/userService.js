@@ -66,7 +66,7 @@ function update(id, user) {
             "weight",
             "targetCaloricIntakePerDay",
             "totalDailyEnergyExpenditure",
-            "currentWeightLossGoal",
+            "weightLossGoal",
         ];
         const filteredUser = (0, utilService_1.filterObj)(user, ...allowedFields);
         const updatedUser = yield userModel_1.UserModel.findByIdAndUpdate(id, filteredUser, {

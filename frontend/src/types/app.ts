@@ -21,3 +21,20 @@ export type SpellingSuggestion = {
   original: string;
   suggestions: string[];
 };
+
+export type RecommendedWeight = {
+  min: number;
+  max: number;
+  avg: number;
+};
+
+export type CaloriesToLose = {
+  calories: string;
+  dailyIntakes: string;
+};
+
+export type TimeToWeightGoal = {
+  days: number;
+  weeks: number;
+  months: number;
+};

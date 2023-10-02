@@ -26,11 +26,15 @@ export interface User {
     birthdate: Date;
     totalDailyEnergyExpenditure: number;
     targetCaloricIntakePerDay: number;
-    currentWeightLossGoal: number;
+    weightLossGoal: WeightLossGoal;
     createdAt: string;
 }
 export type UserDailyStatsResult = {
     date: Date;
     weight: number;
     waist: number;
+};
+export type WeightLossGoal = {
+    currentWeight: number;
+    weightGoal: number;
 };
