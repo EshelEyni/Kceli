@@ -4,17 +4,16 @@ import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoa
 import { usePageLoaded } from "../../hooks/usePageLoaded";
 import "./Home.scss";
 import { TodayDetails } from "../../components/Day/TodayDetails/TodayDetails";
-import { useSelector } from "react-redux";
-import { RootState } from "../../types/app";
 import { LoginSignupMsg } from "../../components/Msg/LoginSignupMsg/LoginSignupMsg";
 import { TodayDataProvider } from "../../contexts/TodayDataContext";
 import { useCreateDay } from "../../hooks/useCreateDay";
 import { Button } from "../../components/App/Button/Button";
 import { useGetTodayData } from "../../hooks/useGetTodayData";
 import { DayData } from "../../../../shared/types/dayData";
+import { useAuth } from "../../hooks/useAuth";
 
 const Homepage = () => {
-  const { loggedInUser } = useSelector((state: RootState) => state.auth);
+  const { loggedInUser } = useAuth();
   const { dailyData } = useGetTodayData();
   const { createDay, isLoading: isLoadingCreateDay } = useCreateDay();
   const isTodayDetailsShown = loggedInUser && !isLoadingCreateDay;

@@ -9,6 +9,8 @@ import { RecommendedWeightDisplay } from "./RecommendedWeightDisplay";
 import { CaloriesToLoseDisplay } from "./CaloriesToLoseDisplay";
 import { GoalCalender } from "./GoalCalender";
 import { UserEdit } from "./UserEdit";
+import { GoalIndicator } from "../../components/GoalIndicator/GoalIndicator";
+import { WeightToLose } from "./WeightToLose";
 
 const ProfileDetails = () => {
   const {
@@ -30,11 +32,13 @@ const ProfileDetails = () => {
       {isEditing ? <UserEdit /> : <UserInfo />}
       <WeightWaistChart />
 
+      <GoalIndicator />
       {timeToCurrentWeightLossGoal && (
         <GoalCalender title="time to current weight loss goal" time={timeToCurrentWeightLossGoal} />
       )}
 
       <RecommendedWeightDisplay />
+      <WeightToLose />
       <CaloriesToLoseDisplay />
 
       {timeToMaxRecommendedWeight && (

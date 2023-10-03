@@ -1,4 +1,6 @@
 .signup-page {
+  background-color: var(--color-primary);
+
   form {
     display: flex;
     flex-direction: column;
@@ -15,10 +17,5 @@
     fieldset {
       border-color: rebeccapurple;
     }
-  }
-
-  input {
-    // background-color: black;
-    // color: white;
   }
 }

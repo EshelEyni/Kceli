@@ -48,7 +48,6 @@ export interface IDailyData extends Document {
 }
 
 export interface IIntake extends Document {
-  name: string;
   items: IIntakeItem[];
   isRecorded: boolean;
   recordedAt?: Date;

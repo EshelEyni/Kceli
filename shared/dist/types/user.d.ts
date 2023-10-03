@@ -35,6 +35,6 @@ export type UserDailyStatsResult = {
     waist: number;
 };
 export type WeightLossGoal = {
-    currentWeight: number;
+    startingWeight: number;
     weightGoal: number;
 };

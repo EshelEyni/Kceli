@@ -1,15 +1,15 @@
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FC, useEffect } from "react";
-import { RootState } from "../types/app";
+import { useAuth } from "../hooks/useAuth";
+import { useSystem } from "../hooks/useSystem";
 
 type AuthGuardProps = {
   component: React.ReactNode;
 };
 
 export const AuthGuard: FC<AuthGuardProps> = ({ component }) => {
-  const { loggedInUser } = useSelector((state: RootState) => state.auth);
-  const { isPageLoading } = useSelector((state: RootState) => state.system);
+  const { loggedInUser } = useAuth();
+  const { isPageLoading } = useSystem();
   const navigate = useNavigate();
 
   useEffect(() => {

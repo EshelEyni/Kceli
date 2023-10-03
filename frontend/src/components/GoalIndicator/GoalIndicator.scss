@@ -1,0 +1,40 @@
+@import "../../styles/main.scss";
+
+.goal-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: rem(15px);
+
+  &__title {
+    color: var(--color-secondary);
+    text-transform: capitalize;
+  }
+
+  &__text {
+    width: 100%;
+    gap: rem(10px);
+    color: var(--color-text);
+    font-size: rem(25px);
+
+    span {
+      font-size: rem(35px);
+    }
+  }
+
+  .goal-indicator-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(200px);
+    height: rem(200px);
+    border-radius: 50%;
+    background-color: var(--color-primary);
+
+    .goal-indicator__icon {
+      font-size: rem(100px);
+      color: var(--color-success);
+    }
+  }
+}

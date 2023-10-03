@@ -1,4 +1,9 @@
-import { LazyExoticComponent, lazy, FC } from "react";
+import { lazy } from "react";
+import { ProfileProvider } from "./contexts/ProfileContex";
+import { WorkoutProvider } from "./contexts/WorkoutContex";
+import { WorkoutsProvider } from "./contexts/WorkoutsContex";
+import { WorkoutEditProvider } from "./contexts/WorkoutEditContex";
+import { Route } from "./types/app";
 
 const Homepage = lazy(() => import("./pages/Home/Home"));
 const LoginPage = lazy(() => import("./pages/Login/Login"));
@@ -10,13 +15,6 @@ const WorkoutPage = lazy(() => import("./pages/Workout/WorkoutPage"));
 const WorkoutEdit = lazy(() => import("./pages/WorkoutEdit/WorkoutEdit"));
 const WorkoutDetails = lazy(() => import("./pages/WorkoutDetails/WorkoutDetails"));
 
-export interface Route {
-  path: string;
-  component: LazyExoticComponent<FC>;
-  authRequired: boolean;
-  homePageOnly?: boolean;
-}
-
 const routes: Route[] = [
   {
     path: "home",
@@ -27,21 +25,25 @@ const routes: Route[] = [
     path: "profile/:id",
     component: ProfileDetails,
     authRequired: true,
+    provider: ProfileProvider,
   },
   {
     path: "workouts",
     component: WorkoutPage,
     authRequired: true,
+    provider: WorkoutsProvider,
   },
   {
     path: "workouts/edit/:id",
     component: WorkoutEdit,
     authRequired: true,
+    provider: WorkoutEditProvider,
   },
   {
     path: "workouts/details/:id",
     component: WorkoutDetails,
     authRequired: true,
+    provider: WorkoutProvider,
   },
   {
     path: "schedule",

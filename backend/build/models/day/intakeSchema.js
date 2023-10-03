@@ -100,9 +100,6 @@ intakeItemSchema.pre("validate", function (next) {
 });
 const intakeSchema = new mongoose_1.Schema(
   {
-    name: {
-      type: String,
-    },
     items: {
       type: [intakeItemSchema],
       required: [true, "Please provide intake items"],

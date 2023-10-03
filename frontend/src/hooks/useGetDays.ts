@@ -17,6 +17,8 @@ type useDaysParams = {
 };
 
 export function useGetDays({ startDate, endDate }: useDaysParams): useDaysResult {
+  const queryKey = ["days", startDate.toISOString(), endDate.toISOString()];
+
   const {
     data: days,
     error,
@@ -24,7 +26,7 @@ export function useGetDays({ startDate, endDate }: useDaysParams): useDaysResult
     isSuccess,
     isError,
   } = useQuery({
-    queryKey: ["days"],
+    queryKey: [queryKey],
     queryFn: () => {
       const queryObj = {
         "date[gte]": startDate.toISOString(),

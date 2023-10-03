@@ -5,6 +5,6 @@ type NavProps = {
   className?: string;
 };
 
-export const Nav: FC<NavProps> = ({ children, className = "app-nav" }) => {
+export const Nav: FC<NavProps> = ({ children, className }) => {
   return <nav className={className}>{children}</nav>;
 };

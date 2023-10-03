@@ -27,6 +27,7 @@ export const TodayDetails: FC = () => {
   const isListShown =
     openedElement === ToggledElement.IntakeList ||
     openedElement === ToggledElement.UnRecordedIntakeList;
+
   return (
     <section className="today-details" style={{ backgroundColor }}>
       {isLoaderShown && <SpinnerLoader />}

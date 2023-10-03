@@ -46,14 +46,6 @@ export const IntakeEdit: FC = () => {
     }));
   }
 
-  function handleNameInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value: name } = e.target;
-    setIntake(prev => ({
-      ...prev,
-      name,
-    }));
-  }
-
   function handleIntakeItemChange(intakeItem: NewIntakeItem, idx: number) {
     setIntake(prev => ({
       ...prev,
@@ -79,14 +71,6 @@ export const IntakeEdit: FC = () => {
     <form className="intake-edit" onSubmit={handleSubmit}>
       {isEditShown && (
         <>
-          <input
-            type="text"
-            id="intake-name"
-            className="input-intake-name"
-            onChange={handleNameInputChange}
-            autoComplete="off"
-            placeholder="Name your intake!"
-          />
           <div className="intake-edit__list-container">
             <List
               items={intake.items}
@@ -125,7 +109,6 @@ export const IntakeEdit: FC = () => {
       )}
       {isReviewOpen && (
         <>
-          <h3 className="intake-edit-review-title">{intake.name}</h3>
           <List
             items={intake.items}
             render={(item, i) => (

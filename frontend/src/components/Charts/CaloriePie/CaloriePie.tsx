@@ -10,7 +10,11 @@ type CaloriePieProps = {
 export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) => {
   const pieData = [
     ...intakes.map(i => ({
-      name: i.name || "unnamed",
+      name: i.items.reduce((acc, curr, i, arr) => {
+        if (i === 0) return acc + `${curr.name}, `;
+        if (i === arr.length - 1) return acc + `and ${curr.name}`;
+        return acc + ` ${curr.name}, `;
+      }, ""),
       value: i.items.reduce((acc, curr) => acc + curr.calories, 0),
     })),
     {

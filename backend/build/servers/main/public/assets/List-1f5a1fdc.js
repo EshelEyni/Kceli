@@ -1,0 +1,1 @@
+import{j as s}from"./index-fefb2b13.js";const n=({items:i,render:r,className:t,isOrdered:l=!1})=>l?s("ol",{className:`list ${t||""}`,children:i.map(r)}):s("ul",{className:`list ${t||""}`,children:i.map(r)});export{n as L};

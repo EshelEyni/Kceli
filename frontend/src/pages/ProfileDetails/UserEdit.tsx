@@ -98,12 +98,12 @@ export const UserEdit: FC = () => {
       </div>
 
       <div className="user-edit__item-container">
-        <label htmlFor="weightGoal">goal weight - current:</label>
+        <label htmlFor="startingWeight">goal weight - current:</label>
         <Controller
-          name="weightLossGoal.currentWeight"
+          name="weightLossGoal.startingWeight"
           control={control}
-          defaultValue={user.weightLossGoal?.currentWeight}
-          render={({ field }) => <input id="weightGoal" type="number" {...field} />}
+          defaultValue={user.weightLossGoal?.startingWeight}
+          render={({ field }) => <input id="startingWeight" type="number" {...field} />}
         />
       </div>
 

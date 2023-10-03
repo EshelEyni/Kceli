@@ -1,96 +1,26 @@
 import { useEffect, Suspense, lazy } from "react";
-import { Routes, Route, Navigate, NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { routes, nestedRoutes } from "./routes";
-import { Route as TypeOfRoute } from "./routes";
+import { Route as TypeOfRoute } from "./types/app";
 import { PageLoader } from "./components/Loaders/PageLoader/PageLoader";
 import { AuthGuard } from "./guards/AuthGuard";
 import { loginWithToken } from "./store/slices/authSlice";
 const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 import "./styles/main.scss";
-import { AppDispatch, RootState } from "./types/app";
-import { Header } from "./components/App/Header/Header";
-import { Nav } from "./components/App/Nav/Nav";
-import { WorkoutEditProvider } from "./contexts/WorkoutEditContex";
-import { WorkoutsProvider } from "./contexts/WorkoutsContex";
-import { WorkoutProvider } from "./contexts/WorkoutContex";
-import { FaHome, FaRegCalendarAlt, FaUser } from "react-icons/fa";
-import { GiWeightLiftingUp } from "react-icons/gi";
-import { ProfileProvider } from "./contexts/ProfileContex";
+import { AppDispatch } from "./types/app";
+import { useAuth } from "./hooks/useAuth";
+import { useSystem } from "./hooks/useSystem";
+import { AppHeader } from "./components/App/AppHeader/AppHeader";
 // import { useAppColors } from "./hooks/useAppColor";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
-  const { loggedInUser } = useSelector((state: RootState) => state.auth);
-  const { isPageLoading } = useSelector((state: RootState) => state.system);
+  const { loggedInUser } = useAuth();
+  const { isPageLoading } = useSystem();
   // useAppColors();
 
-  function getRoutes() {
-    return routes.map(route => (
-      <Route key={route.path} path={route.path} element={geRouteElement(route)}>
-        {getNestedRoutes(route)}
-      </Route>
-    ));
-  }
-
-  function getNestedRoutes(route: TypeOfRoute) {
-    const getRoute = (route: TypeOfRoute) => (
-      <Route key={route.path} path={route.path} element={geRouteElement(route)} />
-    );
-    const isHomePage = route.path === "home";
-    if (isHomePage) return nestedRoutes.map(route => getRoute(route));
-    return nestedRoutes.filter(route => !route.homePageOnly).map(route => getRoute(route));
-  }
-
-  function geRouteElement(route: TypeOfRoute) {
-    if (route.path === "workouts/edit/:id")
-      return (
-        <AuthGuard
-          component={
-            <WorkoutEditProvider>
-              <route.component />
-            </WorkoutEditProvider>
-          }
-        />
-      );
-
-    if (route.path === "workouts") {
-      return (
-        <AuthGuard
-          component={
-            <WorkoutsProvider>
-              <route.component />
-            </WorkoutsProvider>
-          }
-        />
-      );
-    }
-
-    if (route.path === "workouts/details/:id") {
-      return (
-        <AuthGuard
-          component={
-            <WorkoutProvider>
-              <route.component />
-            </WorkoutProvider>
-          }
-        />
-      );
-    }
-
-    if (route.path === "profile/:id") {
-      return (
-        <AuthGuard
-          component={
-            <ProfileProvider>
-              <route.component />
-            </ProfileProvider>
-          }
-        />
-      );
-    }
-    return route.authRequired ? <AuthGuard component={<route.component />} /> : <route.component />;
-  }
+  const routeElements = _getRouteElements();
 
   useEffect(() => {
     if (loggedInUser) return;
@@ -100,36 +30,46 @@ function App() {
   return (
     <div id="app" className="app">
       <div className="app-content" id="app-content">
-        <Header className="app-header">
-          <Nav>
-            <NavLink to="/home" className={"app-nav-link"}>
-              <FaHome className="app-nav-link__icon" />
-              <span>home</span>
-            </NavLink>
-            <NavLink to={"workouts"} className={"app-nav-link"}>
-              <GiWeightLiftingUp className="app-nav-link__icon" />
-              <span>workouts</span>
-            </NavLink>
-            <NavLink to="/schedule" className={"app-nav-link"}>
-              <FaRegCalendarAlt className="app-nav-link__icon" />
-              <span>schedule</span>
-            </NavLink>
-            <NavLink to={`/profile/${loggedInUser?.id}`} className={"app-nav-link"}>
-              <FaUser className="app-nav-link__icon" />
-              <span>profile</span>
-            </NavLink>
-          </Nav>
-        </Header>
+        <AppHeader />
         <Suspense fallback={<PageLoader isLogoLoader={isPageLoading} />}>
           <Routes>
             <Route index element={<Navigate replace to="/home" />} />
-            {getRoutes()}
+            {routeElements}
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
       </div>
     </div>
   );
+}
+
+function _getRouteElements() {
+  return routes.map(route => (
+    <Route key={route.path} path={route.path} element={_getRouteElement(route)}>
+      {_getNestedRoutes(route)}
+    </Route>
+  ));
+}
+
+function _getNestedRoutes(route: TypeOfRoute) {
+  const getRoute = (route: TypeOfRoute) => (
+    <Route key={route.path} path={route.path} element={_getRouteElement(route)} />
+  );
+  const isHomePage = route.path === "home";
+  if (isHomePage) return nestedRoutes.map(route => getRoute(route));
+  return nestedRoutes.filter(route => !route.homePageOnly).map(route => getRoute(route));
+}
+
+function _getRouteElement(route: TypeOfRoute) {
+  const component = route.provider ? (
+    <route.provider>
+      <route.component />
+    </route.provider>
+  ) : (
+    <route.component />
+  );
+
+  return route.authRequired ? <AuthGuard component={component} /> : <route.component />;
 }
 
 export default App;

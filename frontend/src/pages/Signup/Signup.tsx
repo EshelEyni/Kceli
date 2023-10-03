@@ -6,6 +6,7 @@ import { AppDispatch } from "../../types/app";
 import { SubmitHandler, useForm } from "react-hook-form";
 import reactHookFormService from "../../services/reactHookForm/reactHookFormService";
 import { Gender } from "../../../../shared/types/system";
+import { Button } from "../../components/App/Button/Button";
 const {
   lettersAndNumberPattern,
   lettersAndNumberPatternWithSpace,
@@ -157,7 +158,7 @@ const SignupPage = () => {
   };
 
   return (
-    <section className="signup-page">
+    <section className="page signup-page">
       <form onSubmit={handleSubmit(onSignup)}>
         <h1>Signup</h1>
 
@@ -197,7 +198,10 @@ const SignupPage = () => {
           </div>
         ))}
 
-        <button type="submit">Signup</button>
+        <Button type="submit" isDisabled={isDirty && Object.keys(errors).length > 0}>
+          Signup
+        </Button>
+        {/* <button type="submit">Signup</button> */}
       </form>
     </section>
   );

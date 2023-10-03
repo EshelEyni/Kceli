@@ -7,7 +7,6 @@ function getDefaultIntake(): NewIntake {
   return {
     id: createId(),
     items: [getDefaultIntakeItem()],
-    name: "",
     isRecorded: true,
     recordedAt: null,
   };

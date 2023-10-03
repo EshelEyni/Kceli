@@ -4,10 +4,12 @@ import { useDispatch } from "react-redux";
 import { login } from "../../store/slices/authSlice";
 import "./Login.scss";
 import { AppDispatch } from "../../types/app";
+import { Button } from "../../components/App/Button/Button";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
+  const [error, setError] = useState<string>("");
 
   const [user, setUser] = useState({
     username: "eshel2",
@@ -22,13 +24,18 @@ const LoginPage = () => {
   };
 
   const onLogin = async () => {
-    const { username, password } = user;
-    await dispatch(login(username, password));
-    navigate("/home");
+    try {
+      const { username, password } = user;
+      await dispatch(login(username, password));
+      navigate("/home");
+    } catch (err) {
+      setError((err as any).stack);
+    }
   };
 
   return (
     <section className="login-page">
+      {error && <div className="login-page__error-msg">{error}</div>}
       <div>
         <h1>login</h1>
         <div>username</div>
@@ -49,7 +56,7 @@ const LoginPage = () => {
         />
       </div>
 
-      <button onClick={onLogin}>login</button>
+      <Button onClickFn={onLogin}>login</Button>
     </section>
   );
 };

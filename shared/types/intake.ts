@@ -29,7 +29,6 @@ export interface IntakeItem extends BasicIntakeItem {
 
 export interface BasicIntake {
   id: string;
-  name: string;
   isRecorded: boolean;
   recordedAt: Date | null;
 }

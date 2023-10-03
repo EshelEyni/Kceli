@@ -1,14 +1,13 @@
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 import { useGetTodayData } from "../hooks/useGetTodayData";
 import { useUpdateTodayData } from "../hooks/useUpdateTodayData";
-import { useSelector } from "react-redux";
-import { RootState } from "../types/app";
 import calorieUtilService from "../services/calorieUtil/calorieUtilService";
 import { DayData } from "../../../shared/types/dayData";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { Intake, NewIntake } from "../../../shared/types/intake";
 import { User } from "../../../shared/types/user";
 import intakeUtilServiceTest from "../services/intakeUtil/intakeUtilService";
+import { useAuth } from "../hooks/useAuth";
 
 type TodayDataContextType = {
   dailyData: DayData | undefined;
@@ -31,6 +30,8 @@ type TodayDataContextType = {
   recommendedWaterIntake: number;
   intake: NewIntake;
   setIntake: Dispatch<SetStateAction<NewIntake>>;
+  calConsumedPct: number;
+  calRemainingPct: number;
 };
 
 export enum ToggledElement {
@@ -44,7 +45,7 @@ export enum ToggledElement {
 const TodayDataContext = createContext<TodayDataContextType | undefined>(undefined);
 
 function TodayDataProvider({ children }: { children: React.ReactNode }) {
-  const { loggedInUser } = useSelector((state: RootState) => state.auth);
+  const { loggedInUser } = useAuth();
   const { dailyData, isLoading, isSuccess, isError } = useGetTodayData();
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
   const [openedElement, setOpenedElement] = useState<ToggledElement>(
@@ -56,12 +57,18 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
   const unrecordedIntakes = (dailyData?.intakes.filter(i => !i.isRecorded) as Intake[]) || [];
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, dailyData);
   const consumedCalories = calorieUtilService.getTotalCalories(dailyData);
+
   const targetCaloricIntakePerDay =
     dailyData?.targetCaloricIntake ?? loggedInUser?.targetCaloricIntakePerDay ?? 0;
   const estimatedKGChange = calorieUtilService.calcEstimatedBodyFatStatusPerDay(
     loggedInUser,
     dailyData
   );
+
+  const calConsumedPct = Math.round((consumedCalories / targetCaloricIntakePerDay) * 100);
+
+  const calRemainingPct = Math.round((remainingCalories / targetCaloricIntakePerDay) * 100);
+
   const recommendedWaterIntake = _calcRecommendedWaterIntake(loggedInUser, dailyData);
 
   const backgroundColor = calorieUtilService.getBcgByCosumedCalories({
@@ -90,6 +97,8 @@ function TodayDataProvider({ children }: { children: React.ReactNode }) {
     recommendedWaterIntake,
     intake,
     setIntake,
+    calConsumedPct,
+    calRemainingPct,
   };
   return <TodayDataContext.Provider value={value}>{children}</TodayDataContext.Provider>;
 }

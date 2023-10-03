@@ -76,7 +76,7 @@ export const IntakeList: FC = () => {
         render={(item, i) => (
           <li className="intake-preview-container" key={item.id}>
             <h5 className="intake-list-item-title">
-              {`Intake ${i + 1}# ${item.name ? `- ${item.name}` : ""} ${
+              {`Intake ${i + 1}#  ${
                 item.recordedAt ? `- ${getCleanTime(item.recordedAt as unknown as string)}` : ""
               }`}
             </h5>

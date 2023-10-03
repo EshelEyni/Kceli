@@ -71,11 +71,11 @@ const userSchema: Schema<IUser> = new Schema(
     targetCaloricIntakePerDay: { type: Number, default: 0 },
     weightLossGoal: {
       type: {
-        currentWeight: { type: Number },
+        startingWeight: { type: Number },
         weightGoal: { type: Number },
       },
       default: {
-        currentWeight: 0,
+        startingWeight: 0,
         weightGoal: 0,
       },
     },

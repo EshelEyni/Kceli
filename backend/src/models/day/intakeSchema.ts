@@ -64,9 +64,6 @@ intakeItemSchema.pre("validate", async function (next) {
 
 const intakeSchema = new Schema<IIntake>(
   {
-    name: {
-      type: String,
-    },
     items: {
       type: [intakeItemSchema],
       required: [true, "Please provide intake items"],

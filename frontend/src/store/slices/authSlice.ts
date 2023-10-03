@@ -19,13 +19,10 @@ const authSlice = createSlice({
     setLoggedInUser(state, action: PayloadAction<User | null>) {
       state.loggedInUser = action.payload;
     },
-    logout(state) {
-      state.loggedInUser = null;
-    },
   },
 });
 
-export const { setLoggedInUser, logout } = authSlice.actions;
+export const { setLoggedInUser } = authSlice.actions;
 
 export default authSlice.reducer;
 
@@ -51,9 +48,9 @@ export function loginWithToken(): AppThunk {
   };
 }
 
-export function userLogout(): AppThunk {
+export function logout(): AppThunk {
   return async dispatch => {
     await authApiService.logout();
-    dispatch(logout());
+    dispatch(setLoggedInUser(null));
   };
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, beforeEach, it, expect, vi, Mock } from "vitest";
-import { setLoggedInUser, logout, signup, login, loginWithToken, userLogout } from "./authSlice";
+import { setLoggedInUser, signup, login, loginWithToken, logout } from "./authSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import systemReducer from "./systemSlice";
@@ -92,11 +92,11 @@ describe("Thunks", () => {
     });
   });
 
-  describe("userLogout", () => {
+  describe("logout", () => {
     it("should logout a user", async () => {
       (authApiService.logout as Mock).mockResolvedValue(null);
 
-      await store.dispatch(userLogout());
+      await store.dispatch(logout());
       const state = store.getState().auth;
       expect(state.loggedInUser).toBe(null);
     });

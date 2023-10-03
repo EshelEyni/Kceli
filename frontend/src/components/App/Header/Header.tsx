@@ -6,6 +6,6 @@ type HeaderProps = {
   className?: string;
 };
 
-export const Header: FC<HeaderProps> = ({ children, className = "app-header" }) => {
+export const Header: FC<HeaderProps> = ({ children, className }) => {
   return <header className={className}>{children}</header>;
 };

@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useGetTodayData } from "./useGetTodayData";
 import calorieUtilService from "../services/calorieUtil/calorieUtilService";
-import { useSelector } from "react-redux";
-import { RootState } from "../types/app";
+import { useAuth } from "./useAuth";
 
 export function useAppColors() {
-  const { loggedInUser } = useSelector((state: RootState) => state.auth);
+  const { loggedInUser } = useAuth();
   const { dailyData } = useGetTodayData();
 
   const consumedCalories = calorieUtilService.getTotalCalories(dailyData);

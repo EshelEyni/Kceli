@@ -19,6 +19,7 @@ type ProfileContextType = {
   recommendedWeight: RecommendedWeight | null;
   currWeight: number | null;
   caloriesToLose: CaloriesToLose | null;
+  weightToLose: number | null;
   timeToMaxRecommendedWeight: TimeToWeightGoal | null;
   timeToCurrentWeightLossGoal: TimeToWeightGoal | null;
   isEditing: boolean;
@@ -38,9 +39,18 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
   const recommendedWeight = user ? userUtilService.calcRecommendedWeight(user?.height) : null;
   const currWeight = userDailyStats?.at(-1)?.weight || user?.weight || null;
   const caloriesToLose = _calcCaloriesToLose();
+  const weightToLose = _calcWeightToLose();
   const DAILY_RECOMMENDED_WEIGHT_LOSS = 0.075;
   const timeToMaxRecommendedWeight = _calcTimeToMaxRecommendedWeight();
   const timeToCurrentWeightLossGoal = _calcTimeToCurrentWeightLossGoal();
+
+  function _calcWeightToLose(): number | null {
+    const weight = user?.weight;
+    const maxRecommendedWeight = recommendedWeight?.max;
+    if (!weight || !maxRecommendedWeight) return null;
+
+    return Math.round(weight - maxRecommendedWeight);
+  }
 
   function _calcCaloriesToLose(): CaloriesToLose | null {
     const weight = user?.weight;
@@ -85,6 +95,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
     recommendedWeight,
     currWeight,
     caloriesToLose,
+    weightToLose,
     timeToMaxRecommendedWeight,
     timeToCurrentWeightLossGoal,
     isEditing,

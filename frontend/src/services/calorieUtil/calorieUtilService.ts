@@ -9,7 +9,9 @@ function calcRemainingCalories(loggedInUser: User | null, dailyData: DayData | u
   if (!loggedInUser || !dailyData) return 0;
   const targetCaloricIntakePerDay =
     dailyData.targetCaloricIntake || loggedInUser.targetCaloricIntakePerDay;
-  const remainingCalories = targetCaloricIntakePerDay - getTotalCalories(dailyData);
+  const remainingCalories = Math.abs(
+    Math.round(targetCaloricIntakePerDay - getTotalCalories(dailyData))
+  );
   return remainingCalories;
 }
 
@@ -65,7 +67,7 @@ function getBcgByCosumedCalories({
   const calorieColorPalette = [
     { excessRate: 0, color: "#005FB3" },
     { excessRate: 10, color: "#4682B4" },
-    { excessRate: 20, color: "#FFFF99" },
+    { excessRate: 20, color: "#feef63" },
     { excessRate: 30, color: "#ffea00" },
     { excessRate: 40, color: "#FF7F7F" },
     { excessRate: 50, color: "#FF0000" },
