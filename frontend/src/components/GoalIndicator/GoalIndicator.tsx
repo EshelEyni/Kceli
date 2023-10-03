@@ -16,6 +16,7 @@ export const GoalIndicator: FC = () => {
   if (!loggedInUser || !userDailyStats) return null;
 
   const percentage = _calcPercentage({ loggedInUser, userDailyStats });
+  // if (percentage < 0) return null;
   const background = _generateGradient(percentage);
 
   return (
@@ -34,11 +35,11 @@ export const GoalIndicator: FC = () => {
 function _calcPercentage({ loggedInUser, userDailyStats }: CalcPercentageParams) {
   const { weightLossGoal, weight } = loggedInUser;
   const { startingWeight, weightGoal } = weightLossGoal;
-  const goalWeight = startingWeight - weightGoal;
-  const currentWeight = userDailyStats.at(-1)?.weight || weight;
-
-  const weightDiff = currentWeight - goalWeight;
-  return Math.round((weightDiff / (startingWeight - goalWeight)) * 100);
+  const lastDailyUpdatedWeight = userDailyStats.findLast(stat => stat?.weight)?.weight;
+  const currentWeight = lastDailyUpdatedWeight || weight;
+  const weightDiff = startingWeight - currentWeight;
+  const res = Math.round((weightDiff / weightGoal) * 100);
+  return res;
 }
 
 function _generateGradient(percentage: number) {
