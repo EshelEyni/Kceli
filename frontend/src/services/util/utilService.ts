@@ -216,6 +216,21 @@ function capitializeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+const CHART_COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#FF5733",
+  "#33FF57",
+  "#8333FF",
+  "#FF33A1",
+  "#33A4FF",
+  "#FF8333",
+  "#33FFA1",
+  "#A133FF",
+];
+
 export {
   getCleanTime,
   formatDateToRelativeTime,
@@ -238,4 +253,5 @@ export {
   HOUR_IN_MS,
   MINUTE_IN_MS,
   capitializeFirstLetter,
+  CHART_COLORS,
 };

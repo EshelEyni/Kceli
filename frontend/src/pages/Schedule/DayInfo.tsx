@@ -1,6 +1,8 @@
 import { FC } from "react";
-import { CalenderDay } from "../../../types/app";
-import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
+import { CalenderDay } from "../../types/app";
+import calorieUtilService from "../../services/calorieUtil/calorieUtilService";
+import { CalorieBar } from "../../components/Charts/CalorieBarChart/CalorieBarChart";
+import { Intake } from "../../../../shared/types/intake";
 
 type DayInfoProps = {
   day: CalenderDay;
@@ -37,6 +39,7 @@ export const DayInfo: FC<DayInfoProps> = ({ day }) => {
           ))}
         </ul>
       </div>
+      <CalorieBar intakes={data.intakes as Intake[]} />
     </section>
   );
 };

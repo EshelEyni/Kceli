@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { Intake } from "../../../../../shared/types/intake";
+import { CHART_COLORS } from "../../../services/util/utilService";
 
 type CaloriePieProps = {
   intakes: Intake[];
@@ -11,6 +12,7 @@ export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) 
   const pieData = [
     ...intakes.map(i => ({
       name: i.items.reduce((acc, curr, i, arr) => {
+        if (arr.length === 1) return curr.name;
         if (i === 0) return acc + `${curr.name}, `;
         if (i === arr.length - 1) return acc + `and ${curr.name}`;
         return acc + ` ${curr.name}, `;
@@ -23,20 +25,7 @@ export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) 
     },
   ];
 
-  const COLORS = [
-    "#0088FE",
-    "#00C49F",
-    "#FFBB28",
-    "#FF8042",
-    "#FF5733",
-    "#33FF57",
-    "#8333FF",
-    "#FF33A1",
-    "#33A4FF",
-    "#FF8333",
-    "#33FFA1",
-    "#A133FF",
-  ];
+  if (remainingCalories <= 0) pieData.pop();
 
   return (
     <PieChart width={250} height={250}>
@@ -50,7 +39,8 @@ export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) 
         outerRadius={110}
       >
         {pieData.map((entry, index) => {
-          const fill = entry.name === "remaining" ? "#a7a7a7" : COLORS[index % COLORS.length];
+          const fill =
+            entry.name === "remaining" ? "#a7a7a7" : CHART_COLORS[index % CHART_COLORS.length];
           return <Cell key={`cell-${index}`} fill={fill} />;
         })}
       </Pie>

@@ -9,9 +9,8 @@ function calcRemainingCalories(loggedInUser: User | null, dailyData: DayData | u
   if (!loggedInUser || !dailyData) return 0;
   const targetCaloricIntakePerDay =
     dailyData.targetCaloricIntake || loggedInUser.targetCaloricIntakePerDay;
-  const remainingCalories = Math.abs(
-    Math.round(targetCaloricIntakePerDay - getTotalCalories(dailyData))
-  );
+  const remainingCalories = Math.round(targetCaloricIntakePerDay - getTotalCalories(dailyData));
+
   return remainingCalories;
 }
 

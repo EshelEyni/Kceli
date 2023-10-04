@@ -35,7 +35,7 @@ export const TodayDetailsHeader: FC = () => {
 
       <div className="today-details__header__titles">
         <p className="today-details__header__titles__title">
-          <strong>{remainingCalories} </strong>
+          <strong>{Math.abs(remainingCalories)} </strong>
           calories {calConsumedTitle}
         </p>
 
