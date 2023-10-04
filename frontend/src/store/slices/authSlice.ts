@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User, UserCredenitials } from "../../../../shared/types/user";
+import { UserCredenitials } from "../../../../shared/types/user";
 import authApiService from "../../services/authApi/authApiService";
 import { setIsPageLoading } from "./systemSlice";
-import { AppThunk } from "../../types/app";
+import { AppThunk, UserOrNull } from "../../types/app";
 
 interface AuthState {
-  loggedInUser: User | null;
+  loggedInUser: UserOrNull;
 }
 
 const initialState: AuthState = {
@@ -16,7 +16,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setLoggedInUser(state, action: PayloadAction<User | null>) {
+    setLoggedInUser(state, action: PayloadAction<UserOrNull>) {
       state.loggedInUser = action.payload;
     },
   },

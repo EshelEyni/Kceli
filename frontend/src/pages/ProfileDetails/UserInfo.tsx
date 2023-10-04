@@ -3,8 +3,8 @@ import { useProfile } from "../../contexts/ProfileContex";
 import { Button } from "../../components/App/Button/Button";
 
 export const UserInfo: FC = () => {
-  const { user, setIsEditing } = useProfile();
-  if (!user) return null;
+  const { user, userDailyStats, setIsEditing } = useProfile();
+  if (!user || !userDailyStats) return null;
 
   const {
     username,
@@ -61,6 +61,11 @@ export const UserInfo: FC = () => {
       <div className="user-info__item-container">
         <h2>Current Weight Loss Goal:</h2>
         <p>{`${weightLossGoal.weightGoal} kg`}</p>
+      </div>
+
+      <div className="user-info__item-container">
+        <h2>days in process:</h2>
+        <p>{userDailyStats.length}</p>
       </div>
 
       <Button className="user-info__edit-btn" onClickFn={handleBtnEditClick}>

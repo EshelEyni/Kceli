@@ -9,6 +9,12 @@ async function query(queryObj: Record<string, string>) {
   return handleServerResponseData<DayData[]>(respose);
 }
 
+async function getCalenderData(month: number, year: number) {
+  const url = `day/calenderData?month=${month}&year=${year}`;
+  const respose = await httpService.get(url);
+  return handleServerResponseData<DayData[]>(respose);
+}
+
 async function getById(dayId: string) {
   const respose = await httpService.get(`day/${dayId}`);
   return handleServerResponseData<DayData>(respose);
@@ -29,4 +35,4 @@ async function update(dayData: DayData) {
   return handleServerResponseData<DayData>(respose);
 }
 
-export default { query, getById, getToday, create, update };
+export default { query, getCalenderData, getById, getToday, create, update };

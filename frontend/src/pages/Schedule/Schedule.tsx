@@ -4,7 +4,7 @@ import "./Schedule.scss";
 
 const SchedulePage: FC = () => {
   return (
-    <main className="schedule-page">
+    <main className="page schedule-page">
       <ScheduleGrid />
     </main>
   );

@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetUser } from "../hooks/useGetUser";
-import { User } from "../../../shared/types/user";
+import { User, UserDailyStatsResult } from "../../../shared/types/user";
 import { useUpdateUser } from "../hooks/useUpdateUser";
 import { UseMutateFunction } from "@tanstack/react-query";
 import userUtilService from "../services/user/userUtilService";
@@ -15,6 +15,7 @@ type ProfileContextType = {
   isSuccess: boolean;
   isError: boolean;
   updateUser: UseMutateFunction<User, unknown, User, unknown>;
+  userDailyStats: UserDailyStatsResult[] | undefined;
   isLoadingUpdateUser: boolean;
   recommendedWeight: RecommendedWeight | null;
   currWeight: number | null;
@@ -87,6 +88,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
 
   const value = {
     user,
+    userDailyStats,
     isLoading,
     isSuccess,
     isError,

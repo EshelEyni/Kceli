@@ -38,6 +38,7 @@ function _calcPercentage({ loggedInUser, userDailyStats }: CalcPercentageParams)
   const lastDailyUpdatedWeight = userDailyStats.findLast(stat => stat?.weight)?.weight;
   const currentWeight = lastDailyUpdatedWeight || weight;
   const weightDiff = startingWeight - currentWeight;
+  if (weightDiff < 0) return 0;
   const res = Math.round((weightDiff / weightGoal) * 100);
   return res;
 }

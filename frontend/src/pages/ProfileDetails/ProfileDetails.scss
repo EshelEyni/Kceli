@@ -12,6 +12,7 @@
   .profile-details__user-info {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(6, 1fr);
     align-items: center;
     gap: rem(15px);
     width: 100%;
@@ -36,6 +37,7 @@
 
     .user-info__edit-btn {
       grid-column: 2 / 3;
+      grid-row: 6 / 7;
       background-color: var(--color-primary);
       align-self: flex-end;
       justify-self: flex-end;

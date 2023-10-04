@@ -151,6 +151,12 @@ function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
 }
 
+function isSameDay(d1: Date, d2: Date): boolean {
+  const dateStr1 = d1.toISOString().split("T")[0];
+  const dateStr2 = d2.toISOString().split("T")[0];
+  return dateStr1 === dateStr2;
+}
+
 function handleServerResponseData<T>(response: JsendResponse<T>): T {
   if (!response.data) throw new Error("Unexpected response status");
 
@@ -218,6 +224,7 @@ export {
   debounce,
   getTimeZone,
   getDaysInMonth,
+  isSameDay,
   months,
   days,
   handleServerResponseData,

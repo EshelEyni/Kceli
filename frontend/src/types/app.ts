@@ -2,6 +2,8 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { store } from "../store/store";
 import { FC, LazyExoticComponent, ReactElement, ReactNode } from "react";
+import { User } from "../../../shared/types/user";
+import { DayData } from "../../../shared/types/dayData";
 
 export type ReduxStore = typeof store;
 export type RootState = ReturnType<typeof store.getState>;
@@ -53,3 +55,14 @@ export interface Route {
   homePageOnly?: boolean;
   provider?: RouteProvider;
 }
+
+export type UserOrNull = User | null;
+
+export type CalenderDay = {
+  id: string | null;
+  data: DayData | null;
+  backgroundColor: string;
+  date: Date;
+  day: number;
+  consumedCalories: number;
+};

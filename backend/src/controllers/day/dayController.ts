@@ -4,8 +4,35 @@ import { getLoggedInUserIdFromReq } from "../../services/ALSService";
 import { asyncErrorCatcher } from "../../services/error/errorService";
 import { deleteOne, getAll, getOne, updateOne } from "../../services/factory/factoryService";
 import { validateIds } from "../../services/util/utilService";
+import { addWeeks, endOfMonth, startOfMonth, subWeeks } from "date-fns";
 
 const getAllDays = getAll(DailyDataModel);
+
+const getCalenderData = asyncErrorCatcher(async (req: Request, res: Response) => {
+  const loggedInUserId = getLoggedInUserIdFromReq();
+  validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
+  const { month, year } = req.query;
+  if (!month || !year) throw new Error("Please provide month and year");
+
+  const startCurrentMonth = startOfMonth(new Date(Number(year), Number(month) - 1));
+  const endCurrentMonth = endOfMonth(new Date(Number(year), Number(month) - 1));
+  const startPrevWeek = subWeeks(startCurrentMonth, 1);
+  const endNextWeek = addWeeks(endCurrentMonth, 1);
+
+  const docs = await DailyDataModel.find({
+    userId: loggedInUserId,
+    date: {
+      $gte: startPrevWeek,
+      $lt: endNextWeek,
+    },
+  }).sort({ date: -1 });
+
+  res.send({
+    status: "success",
+    data: docs,
+  });
+});
+
 const getDay = getOne(DailyDataModel);
 
 const createDay = asyncErrorCatcher(async (req: Request, res: Response) => {
@@ -35,4 +62,4 @@ const updateDay = updateOne(DailyDataModel, ["intakes", "weight", "waist", "work
 
 const removeDay = deleteOne(DailyDataModel);
 
-export { getAllDays, getDay, getToday, createDay, updateDay, removeDay };
+export { getAllDays, getCalenderData, getDay, getToday, createDay, updateDay, removeDay };

@@ -17,12 +17,12 @@ import {
 
 const router = express.Router();
 
+router.use(checkUserAuthentication);
 router.get("/", getUsers);
 router.get("/:id([a-fA-F0-9]{24})", getUserById);
 router.get("/username/:username", getUserByUsername);
 router.get("/dailyStats", getUserDailyStats);
 
-router.use(checkUserAuthentication);
 router.patch("/loggedInUser", updateLoggedInUser);
 router.delete("/loggedInUser", removeLoggedInUser);
 
