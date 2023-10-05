@@ -201,6 +201,10 @@ describe("auth Controller", () => {
       passwordConfirm: "testPassword",
       email: "test@example.com",
       fullname: "Test User",
+      weight: 100,
+      height: 100,
+      gender: "female",
+      birthdate: new Date(),
     };
 
     beforeEach(() => {

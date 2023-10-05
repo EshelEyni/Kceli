@@ -4,9 +4,10 @@ import mongoose from "mongoose";
 import { User, UserCredenitials } from "../../../../shared/types/user";
 import tokenService from "../token/tokenService";
 import { UserModel } from "../../models/user/userModel";
-import { MeasurementUnit } from "../../../../shared/types/intake";
+import { MeasurementUnit, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
 import { DailyDataModel } from "../../models/day/dailyDataModel";
 import { getLoggedInUserIdFromReq } from "../ALSService";
+import { Workout, WorkoutItemAerobic } from "../../../../shared/types/workout";
 
 type CreateTestUserOptions = {
   id?: string;
@@ -105,19 +106,41 @@ function getMockDailyData({ userId }: { userId?: string }): any {
   };
 }
 
-function getNewMockIntake(): any {
+function getNewMockIntake(): NewIntake {
   return {
-    name: "test",
-    items: [getMockIntakeItem()],
+    id: getMongoId(),
+    items: [getMockNewIntakeItem()],
     isRecorded: true,
+    recordedAt: null,
   };
 }
 
-function getMockIntakeItem(): any {
+function getMockNewIntakeItem(): NewIntakeItem {
   return {
+    id: getMongoId(),
     name: "test",
     unit: MeasurementUnit.UNIT,
     quantity: 1,
+  };
+}
+
+function getMockWorkout(): Workout {
+  return {
+    id: getMongoId(),
+    description: "test",
+    type: "aerobic",
+    items: [getMockWorkoutItem()],
+  };
+}
+
+function getMockWorkoutItem(): WorkoutItemAerobic {
+  return {
+    id: getMongoId(),
+    name: "test",
+    isStarted: false,
+    isCompleted: false,
+    type: "aerobic",
+    durationInMin: 1,
   };
 }
 
@@ -136,7 +159,9 @@ export {
   createValidUserCreds,
   createTestDailyData,
   getNewMockIntake,
-  getMockIntakeItem,
+  getMockNewIntakeItem,
+  getMockWorkout,
+  getMockWorkoutItem,
   getMongoId,
   getMockedUser,
   deleteTestUser,

@@ -11,7 +11,7 @@ const getAllWorkouts = asyncErrorCatcher(async (req: Request, res: Response) => 
 
   const docs = await WorkoutModel.find({ userId: loggedInUserId });
 
-  res.status(200).json({
+  res.send({
     status: "success",
     results: docs.length,
     data: docs,
@@ -30,7 +30,7 @@ const createWorkout = asyncErrorCatcher(async (req: Request, res: Response) => {
     userId: loggedInUserId,
   });
 
-  res.status(201).json({
+  res.status(201).send({
     status: "success",
     data: doc,
   });

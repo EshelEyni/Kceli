@@ -5,23 +5,19 @@ import {
   AppError,
   validatePatchRequestBody,
 } from "../../services/error/errorService";
-import { getOne, createOne, updateOne, deleteOne } from "../../services/factory/factoryService";
+import {
+  getOne,
+  createOne,
+  updateOne,
+  deleteOne,
+  getAll,
+} from "../../services/factory/factoryService";
 import { UserModel } from "../../models/user/userModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
-import { ParsedReqQuery } from "../../types/app";
 import { validateIds } from "../../services/util/utilService";
 import { DailyDataModel } from "../../models/day/dailyDataModel";
 
-const getUsers = asyncErrorCatcher(async (req: Request, res: Response) => {
-  const queryString = req.query;
-  const users = await userService.query(queryString as ParsedReqQuery);
-  res.send({
-    status: "success",
-    requestedAt: new Date().toISOString(),
-    results: users.length,
-    data: users,
-  });
-});
+const getUsers = getAll(UserModel);
 
 const getUserById = getOne(UserModel);
 const addUser = createOne(UserModel);

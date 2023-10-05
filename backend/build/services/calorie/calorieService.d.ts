@@ -1,10 +1,10 @@
 import { UserCaloricData } from "../../../../shared/types/system";
-declare function calculateTargetCaloricIntakePerDay({ TDEE }: {
+declare function calcTargetCaloricIntakePerDay({ TDEE }: {
     TDEE: number;
 }): number;
-declare function calculateTotalDailyEnergyExpenditure({ weight, height, age, gender, }: UserCaloricData): number;
+declare function calcTotalDailyEnergyExpenditure({ weight, height, age, gender, }: UserCaloricData): number;
 declare const _default: {
-    calculateTargetCaloricIntakePerDay: typeof calculateTargetCaloricIntakePerDay;
-    calculateTotalDailyEnergyExpenditure: typeof calculateTotalDailyEnergyExpenditure;
+    calcTargetCaloricIntakePerDay: typeof calcTargetCaloricIntakePerDay;
+    calcTotalDailyEnergyExpenditure: typeof calcTotalDailyEnergyExpenditure;
 };
 export default _default;

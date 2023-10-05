@@ -31,6 +31,6 @@ declare function getMockDailyData({ userId }: {
     userId?: string;
 }): any;
 declare function getNewMockIntake(): any;
-declare function getMockIntakeItem(): any;
+declare function getMockNewIntakeItem(): any;
 declare function mockGetLoggedInUserIdFromReq(value?: string): string;
-export { getLoginTokenStrForTest, mockGetLoggedInUserIdFromReq, createManyTestUsers, deleteManyTestUsers, createTestUser, createValidUserCreds, createTestDailyData, getNewMockIntake, getMockIntakeItem, getMongoId, getMockedUser, deleteTestUser, getMockDailyData, };
+export { getLoginTokenStrForTest, mockGetLoggedInUserIdFromReq, createManyTestUsers, deleteManyTestUsers, createTestUser, createValidUserCreds, createTestDailyData, getNewMockIntake, getMockNewIntakeItem, getMongoId, getMockedUser, deleteTestUser, getMockDailyData, };

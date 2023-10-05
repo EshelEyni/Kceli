@@ -101,13 +101,13 @@ dailyDataSchema.pre("findOneAndUpdate", async function (next) {
   const { height, gender, birthdate } = user;
   const { weight } = update;
   const age = new Date().getFullYear() - birthdate.getFullYear();
-  const TDEE = calorieService.calculateTotalDailyEnergyExpenditure({
+  const TDEE = calorieService.calcTotalDailyEnergyExpenditure({
     weight,
     height,
     age,
     gender,
   });
-  const targetCaloricIntake = calorieService.calculateTargetCaloricIntakePerDay({ TDEE });
+  const targetCaloricIntake = calorieService.calcTargetCaloricIntakePerDay({ TDEE });
   this.setOptions({ runValidators: true });
   this.updateOne({ totalDailyEnergyExpenditure: TDEE, targetCaloricIntake });
   next();

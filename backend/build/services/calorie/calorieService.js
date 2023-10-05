@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function calculateTargetCaloricIntakePerDay({ TDEE }) {
+function calcTargetCaloricIntakePerDay({ TDEE }) {
     const targetCaloricIntake = TDEE - 550;
     return Math.round(targetCaloricIntake);
 }
-function calculateTotalDailyEnergyExpenditure({ weight, height, age, gender, }) {
+function calcTotalDailyEnergyExpenditure({ weight, height, age, gender, }) {
     // BMR (Basal Metabolic Rate) is the number of calories your body needs to function at rest.
     // This includes basic functions like breathing, circulating blood, and regulating body temperature.
     let BMR;
@@ -18,5 +18,5 @@ function calculateTotalDailyEnergyExpenditure({ weight, height, age, gender, }) 
     const TDEE = BMR * 1.2;
     return Math.round(TDEE);
 }
-exports.default = { calculateTargetCaloricIntakePerDay, calculateTotalDailyEnergyExpenditure };
+exports.default = { calcTargetCaloricIntakePerDay, calcTotalDailyEnergyExpenditure };
 //# sourceMappingURL=calorieService.js.map

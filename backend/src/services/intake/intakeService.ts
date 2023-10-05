@@ -1,4 +1,4 @@
-import { ExistingIntakeItemData } from "../../../../shared/types/intake";
+import { ExistingIntakeItemData, IntakeItem } from "../../../../shared/types/intake";
 import { DailyDataModel } from "../../models/day/dailyDataModel";
 import { IIntakeItem } from "../../types/iTypes";
 
@@ -24,7 +24,9 @@ async function getAllIntakeItems() {
   return intakeItems;
 }
 
-async function getExistingIntakeItem(newIntakeItem: IIntakeItem): Promise<ExistingIntakeItemData> {
+async function getExistingIntakeItem(
+  intakeItemToCheck: IIntakeItem | IntakeItem
+): Promise<ExistingIntakeItemData> {
   const intakeItems = await DailyDataModel.aggregate([
     {
       $unwind: "$intakes",
@@ -34,8 +36,8 @@ async function getExistingIntakeItem(newIntakeItem: IIntakeItem): Promise<Existi
     },
     {
       $match: {
-        "intakes.items.name": newIntakeItem.name,
-        "intakes.items.unit": newIntakeItem.unit,
+        "intakes.items.name": intakeItemToCheck.name,
+        "intakes.items.unit": intakeItemToCheck.unit,
       },
     },
     {

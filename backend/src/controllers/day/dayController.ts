@@ -40,7 +40,7 @@ const createDay = asyncErrorCatcher(async (req: Request, res: Response) => {
   validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
 
   const doc = await DailyDataModel.create({ ...req.body, userId: loggedInUserId });
-  res.status(201).json({
+  res.status(201).send({
     status: "success",
     data: doc,
   });

@@ -1,16 +1,13 @@
+import { ExistingIntakeItemData, NewIntakeItem } from "../../../../shared/types/intake";
 import { UserCaloricData } from "../../../../shared/types/system";
+import { IIntakeItem } from "../../types/iTypes";
 
-function calculateTargetCaloricIntakePerDay({ TDEE }: { TDEE: number }): number {
+function calcTargetCaloricIntakePerDay({ TDEE }: { TDEE: number }): number {
   const targetCaloricIntake = TDEE - 550;
   return Math.round(targetCaloricIntake);
 }
 
-function calculateTotalDailyEnergyExpenditure({
-  weight,
-  height,
-  age,
-  gender,
-}: UserCaloricData): number {
+function calcTotalDailyEnergyExpenditure({ weight, height, age, gender }: UserCaloricData): number {
   // BMR (Basal Metabolic Rate) is the number of calories your body needs to function at rest.
   // This includes basic functions like breathing, circulating blood, and regulating body temperature.
   let BMR: number;
@@ -25,4 +22,18 @@ function calculateTotalDailyEnergyExpenditure({
   return Math.round(TDEE);
 }
 
-export default { calculateTargetCaloricIntakePerDay, calculateTotalDailyEnergyExpenditure };
+function calcCaloriesFromExistingItem({
+  existingItemData,
+  intakeItem,
+}: {
+  existingItemData: ExistingIntakeItemData;
+  intakeItem: IIntakeItem | NewIntakeItem;
+}) {
+  return existingItemData.calories * (intakeItem.quantity / existingItemData.quantity);
+}
+
+export default {
+  calcTargetCaloricIntakePerDay,
+  calcTotalDailyEnergyExpenditure,
+  calcCaloriesFromExistingItem,
+};

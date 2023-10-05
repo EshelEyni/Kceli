@@ -2,12 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError, asyncErrorCatcher } from "../../services/error/errorService";
 import userService from "../../services/user/userService";
-import {
-  getUserByUsername,
-  getUsers,
-  removeLoggedInUser,
-  updateLoggedInUser,
-} from "./userController";
+import { getUserByUsername, removeLoggedInUser, updateLoggedInUser } from "./userController";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
 
 jest.mock("../../services/user/userService");
@@ -31,81 +26,6 @@ const nextMock = jest.fn() as jest.MockedFunction<NextFunction>;
 describe("User Controller", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
-
-  function getMockedUser(id: number) {
-    return {
-      _id: id.toString(),
-      username: "test1",
-      email: "email@email.com",
-      fullname: "fullname1",
-      imgUrl: "imgUrl1",
-      isApprovedLocation: true,
-      active: true,
-    };
-  }
-
-  describe("getUsers", () => {
-    beforeEach(() => {
-      req = { query: {} };
-      res = { status: jest.fn().mockReturnThis(), send: jest.fn() };
-    });
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it("should return a list of users", async () => {
-      // Arrange
-      const mockUsers = Array(3)
-        .fill(null)
-        .map((_, i) => getMockedUser(i + 1));
-
-      (userService.query as jest.Mock).mockResolvedValue(mockUsers);
-      req.query = { limit: "10", page: "1" };
-
-      // Act
-      const sut = getUsers as any;
-      await sut(req as Request, res as Response, nextMock);
-
-      // Assert
-      expect(res.send).toHaveBeenCalledWith({
-        status: "success",
-        requestedAt: expect.any(String),
-        results: mockUsers.length,
-        data: mockUsers,
-      });
-    });
-
-    it("should handle errors and pass them to next", async () => {
-      const mockError = new Error("Test error");
-      (userService.query as jest.Mock).mockImplementationOnce(() => {
-        throw mockError;
-      });
-      const sut = getUsers as any;
-      await sut(req as Request, res as Response, nextMock);
-      expect(nextMock).toHaveBeenCalledWith(mockError);
-      expect(res.send).not.toHaveBeenCalled();
-    });
-
-    it("should pass query parameters to userService", async () => {
-      req.query = { name: "John", age: "25" };
-      const sut = getUsers as any;
-      await sut(req as Request, res as Response, nextMock);
-      expect(userService.query).toHaveBeenCalledWith(req.query);
-    });
-
-    it("should handle empty result set", async () => {
-      (userService.query as jest.Mock).mockResolvedValue([]);
-      const sut = getUsers as any;
-      await sut(req as Request, res as Response, nextMock);
-      expect(res.send).toHaveBeenCalledWith({
-        status: "success",
-        requestedAt: expect.any(String),
-        results: 0,
-        data: [],
-      });
-    });
-  });
 
   describe("getUserByUsername", () => {
     beforeEach(() => {
