@@ -26,7 +26,7 @@ export const DayEditHeader: FC = () => {
   const calConsumedTitle = remainingCalories > 0 ? "remaining" : "over your limit";
 
   return (
-    <header className="day-edit__header">
+    <header className="day-edit__header" data-testid="day-edit-header">
       <div className="day-edit__header__date-container">
         <h2 className="day-edit__header__date">{dateToRender}</h2>
       </div>

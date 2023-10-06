@@ -9,7 +9,7 @@ import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
 import { useAuth } from "../../../hooks/useAuth";
 import waterConsumptionService from "../../../services/waterConsumption/waterConsumptionService";
 
-type DayEditContextType = {
+export type DayEditContextType = {
   dailyData: DayData | undefined;
   isLoading: boolean;
   isSuccess: boolean;

@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { it, describe, expect, afterEach, vi, Mock } from "vitest";
+import { it, describe, expect, afterEach, vi } from "vitest";
 import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { useAuth } from "../../hooks/useAuth";
-import { useGetTodayData } from "../../hooks/useGetTodayData";
 import { useCreateDay } from "../../hooks/useCreateDay";
 import Homepage from "./Home";
+import {
+  mockUseAuth,
+  mockUseCreateDay,
+  mockUseGetTodayData,
+} from "../../../test/service/mockService";
 
 vi.mock("./DayEdit/DayEdit", () => ({
   DayEdit: () => <div data-testid="day-edit" />,
@@ -15,7 +18,7 @@ vi.mock("../../components/Msg/LoginSignupMsg/LoginSignupMsg", () => ({
   LoginSignupMsg: () => <div data-testid="login-signup-msg" />,
 }));
 
-vi.mock("../../contexts/DayEdit", () => ({
+vi.mock("./DayEdit/DayEditContext", () => ({
   DayEditProvider: ({ children }: any) => <div>{children}</div>,
 }));
 
@@ -46,7 +49,7 @@ describe("Home Page", () => {
   });
 
   it("should render LoginSignupMsg if user is not logged in", () => {
-    _mockUseAuth(null);
+    mockUseAuth(null);
 
     render(<Homepage />);
 
@@ -54,16 +57,16 @@ describe("Home Page", () => {
   });
 
   it("should render DayEdit if user is logged in and isLoadingCreateDay is false", () => {
-    _mockUseAuth({
+    mockUseAuth({
       loggedInUser: {},
     });
 
-    _mockUseCreateDay({
+    mockUseCreateDay({
       createDay: vi.fn(),
       isLoading: false,
     });
 
-    _mockUseGetTodayData([{}]);
+    mockUseGetTodayData({});
 
     render(<Homepage />);
 
@@ -72,11 +75,11 @@ describe("Home Page", () => {
   });
 
   it("should render SpinnerLoader if isLoadingCreateDay is true", () => {
-    _mockUseAuth({
+    mockUseAuth({
       loggedInUser: {},
     });
 
-    _mockUseCreateDay({
+    mockUseCreateDay({
       createDay: vi.fn(),
       isLoading: true,
     });
@@ -90,9 +93,9 @@ describe("Home Page", () => {
   it("should render 'start a new day' button and modal when isCreateDayBtnShown is true", () => {
     const currDay = new Date();
     const prevDay = new Date(currDay.setDate(currDay.getDate() - 1));
-    _mockUseAuth({ loggedInUser: {} });
-    _mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
-    _mockUseGetTodayData({ date: prevDay });
+    mockUseAuth({ loggedInUser: {} });
+    mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
+    mockUseGetTodayData({ dailyData: { date: prevDay } });
 
     render(<Homepage />);
 
@@ -102,9 +105,9 @@ describe("Home Page", () => {
 
   it("should not render 'start a new day' button and modal when loggedInUser is null", () => {
     const currDay = new Date();
-    _mockUseAuth({ loggedInUser: null });
-    _mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
-    _mockUseGetTodayData({ date: currDay.toDateString() });
+    mockUseAuth({ loggedInUser: null });
+    mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
+    mockUseGetTodayData({ dailyData: { date: currDay.toDateString() } });
 
     render(<Homepage />);
 
@@ -112,9 +115,9 @@ describe("Home Page", () => {
   });
 
   it("should not render 'start a new day' button and modal when dayilData is null", () => {
-    _mockUseAuth({ loggedInUser: {} });
-    _mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
-    _mockUseGetTodayData(null);
+    mockUseAuth({ loggedInUser: {} });
+    mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
+    mockUseGetTodayData({ dailyData: null });
 
     render(<Homepage />);
 
@@ -124,9 +127,9 @@ describe("Home Page", () => {
   it("should not render 'start a new day' button and modal when day date is today", () => {
     const currDay = new Date();
 
-    _mockUseAuth({ loggedInUser: {} });
-    _mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
-    _mockUseGetTodayData({ date: currDay.toDateString() });
+    mockUseAuth({ loggedInUser: {} });
+    mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
+    mockUseGetTodayData({ dailyData: { date: currDay.toDateString() } });
 
     render(<Homepage />);
 
@@ -136,9 +139,9 @@ describe("Home Page", () => {
   it("should open modal when 'start a new day' button is clicked", () => {
     const currDay = new Date();
     const prevDay = new Date(currDay.setDate(currDay.getDate() - 1));
-    _mockUseAuth({ loggedInUser: {} });
-    _mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
-    _mockUseGetTodayData({ date: prevDay });
+    mockUseAuth({ loggedInUser: {} });
+    mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
+    mockUseGetTodayData({ dailyData: { date: prevDay } });
 
     render(
       <div id="app">
@@ -155,9 +158,9 @@ describe("Home Page", () => {
   it("should close modal when 'cancel' button is clicked", () => {
     const currDay = new Date();
     const prevDay = new Date(currDay.setDate(currDay.getDate() - 1));
-    _mockUseAuth({ loggedInUser: {} });
-    _mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
-    _mockUseGetTodayData({ date: prevDay });
+    mockUseAuth({ loggedInUser: {} });
+    mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
+    mockUseGetTodayData({ dailyData: { date: prevDay } });
 
     render(
       <div id="app">
@@ -179,9 +182,9 @@ describe("Home Page", () => {
   it("should close modal and call createDay when 'start a new day' button is clicked", () => {
     const currDay = new Date();
     const prevDay = new Date(currDay.setDate(currDay.getDate() - 1));
-    _mockUseAuth({ loggedInUser: {} });
-    _mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
-    _mockUseGetTodayData({ date: prevDay });
+    mockUseAuth({ loggedInUser: {} });
+    mockUseCreateDay({ createDay: vi.fn(), isLoading: false });
+    mockUseGetTodayData({ dailyData: { date: prevDay } });
 
     render(
       <div id="app">
@@ -201,19 +204,3 @@ describe("Home Page", () => {
     expect(useCreateDay).toHaveBeenCalled();
   });
 });
-
-function _mockUseAuth(value: any) {
-  (useAuth as Mock).mockReturnValue({
-    loggedInUser: value,
-  });
-}
-
-function _mockUseGetTodayData(value: any) {
-  (useGetTodayData as Mock).mockReturnValue({
-    dailyData: value,
-  });
-}
-
-function _mockUseCreateDay(value: { createDay: () => any; isLoading: boolean }) {
-  (useCreateDay as Mock).mockReturnValue(value);
-}

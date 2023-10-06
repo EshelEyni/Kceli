@@ -29,7 +29,7 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isTodayDetail
   }
 
   return (
-    <article className="workout-preview">
+    <article className="workout-preview" data-testid="workout-preview">
       <section className="workout-preview__info">
         <h3>description: {workout.description}</h3>
         <h3>duration (in min): {duration}</h3>

@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { DayEditProvider, ToggledElement, useDayEdit } from "./DayEditContext";
-import { useAuth } from "../../../hooks/useAuth";
-import { useGetTodayData } from "../../../hooks/useGetTodayData";
-import { useUpdateTodayData } from "../../../hooks/useUpdateTodayData";
 import testService from "../../../../test/service/testService";
 import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
+import {
+  mockUseAuth,
+  mockUseGetTodayData,
+  mockUseUpdateTodayData,
+} from "../../../../test/service/mockService";
 
 vi.mock("../../../hooks/useGetTodayData");
 vi.mock("../../../hooks/useAuth");
@@ -15,9 +17,9 @@ vi.mock("../../../hooks/useUpdateTodayData");
 
 describe("DayEditContext", () => {
   beforeEach(() => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({});
-    _mockUseUpdateTodayData({});
+    mockUseAuth({});
+    mockUseGetTodayData({});
+    mockUseUpdateTodayData({});
   });
 
   afterEach(() => {
@@ -26,8 +28,8 @@ describe("DayEditContext", () => {
   });
 
   it("provides correct dailyData value", () => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({
+    mockUseAuth({});
+    mockUseGetTodayData({
       dailyData: {
         id: "1",
         date: "2021-01-01",
@@ -53,8 +55,8 @@ describe("DayEditContext", () => {
   });
 
   it("provides correct isLoading value", () => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({
+    mockUseAuth({});
+    mockUseGetTodayData({
       isLoading: false,
     });
     const TestComponent = () => {
@@ -70,7 +72,7 @@ describe("DayEditContext", () => {
 
     expect(screen.getByText("Not Loading")).toBeInTheDocument();
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       isLoading: true,
     });
 
@@ -84,8 +86,8 @@ describe("DayEditContext", () => {
   });
 
   it("provides correct isSuccess value", () => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({
+    mockUseAuth({});
+    mockUseGetTodayData({
       isSuccess: false,
     });
     const TestComponent = () => {
@@ -101,7 +103,7 @@ describe("DayEditContext", () => {
 
     expect(screen.getByText("Not Success")).toBeInTheDocument();
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       isSuccess: true,
     });
 
@@ -115,8 +117,8 @@ describe("DayEditContext", () => {
   });
 
   it("provides correct isError value", () => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({
+    mockUseAuth({});
+    mockUseGetTodayData({
       isError: false,
     });
     const TestComponent = () => {
@@ -132,7 +134,7 @@ describe("DayEditContext", () => {
 
     expect(screen.getByText("Not Error")).toBeInTheDocument();
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       isError: true,
     });
 
@@ -148,9 +150,9 @@ describe("DayEditContext", () => {
   it("calls updateDailyData correctly", () => {
     const mockUpdateFunction = vi.fn();
 
-    _mockUseAuth({});
-    _mockUseGetTodayData({ isSuccess: true });
-    _mockUseUpdateTodayData({ updateDailyData: mockUpdateFunction });
+    mockUseAuth({});
+    mockUseGetTodayData({ isSuccess: true });
+    mockUseUpdateTodayData({ updateDailyData: mockUpdateFunction });
 
     const TestComponent = () => {
       const { updateDailyData } = useDayEdit();
@@ -173,8 +175,8 @@ describe("DayEditContext", () => {
   });
 
   it("updates openedElement to WeightWaistInput when dailyData.weight is falsey", () => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({
+    mockUseAuth({});
+    mockUseGetTodayData({
       dailyData: null,
       isSuccess: false,
     });
@@ -192,7 +194,7 @@ describe("DayEditContext", () => {
 
     expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeEdit);
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), weight: undefined },
       isSuccess: true,
     });
@@ -209,8 +211,8 @@ describe("DayEditContext", () => {
   });
 
   it("should keep openedElement to IntakeEdit when dailyData.weight is truthy", () => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({
+    mockUseAuth({});
+    mockUseGetTodayData({
       dailyData: null,
       isSuccess: false,
     });
@@ -228,7 +230,7 @@ describe("DayEditContext", () => {
 
     expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeEdit);
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), weight: 80 },
       isSuccess: true,
     });
@@ -243,8 +245,8 @@ describe("DayEditContext", () => {
   });
 
   it("should change openedElement to IntakeList when clicked on IntakeListBtn", () => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({
+    mockUseAuth({});
+    mockUseGetTodayData({
       dailyData: null,
       isSuccess: false,
     });
@@ -284,8 +286,8 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper intake value", () => {
-    _mockUseAuth({});
-    _mockUseGetTodayData({
+    mockUseAuth({});
+    mockUseGetTodayData({
       dailyData: null,
       isSuccess: false,
     });
@@ -332,9 +334,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper recordedIntakes value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: {
         ...testService.createTestDailyData(),
         intakes: [
@@ -361,9 +363,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper unrecordedIntakes value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: {
         ...testService.createTestDailyData(),
         intakes: [
@@ -390,7 +392,7 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper consumedCalories value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
     const intakes = [
       testService.createTestIntake(),
@@ -398,7 +400,7 @@ describe("DayEditContext", () => {
       { ...testService.createTestIntake(), isRecorded: true },
     ];
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), intakes },
       isSuccess: true,
     });
@@ -419,7 +421,7 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper remainingCalories value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
     const intakes = [
       testService.createTestIntake(),
@@ -427,7 +429,7 @@ describe("DayEditContext", () => {
       { ...testService.createTestIntake(), isRecorded: true },
     ];
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), intakes },
       isSuccess: true,
     });
@@ -448,9 +450,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper targetCaloricIntakePerDay value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), targetCaloricIntake: 2000 },
       isSuccess: true,
     });
@@ -470,9 +472,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide targetCaloricIntakePerDay from daily data if it exists", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), targetCaloricIntake: 2000 },
       isSuccess: true,
     });
@@ -492,11 +494,11 @@ describe("DayEditContext", () => {
   });
 
   it("should provide targetCaloricIntakePerDay from user if it doesn't exists in daily data", () => {
-    _mockUseAuth({
+    mockUseAuth({
       targetCaloricIntakePerDay: 2000,
     });
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: null,
       isSuccess: false,
     });
@@ -516,9 +518,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide 0 as targetCaloricIntakePerDay if it doesn't exists in daily data and user", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: null,
       isSuccess: false,
     });
@@ -538,9 +540,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper estimatedKGChange value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), weight: 80 },
       isSuccess: true,
     });
@@ -561,9 +563,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide calConsumedPct value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), targetCaloricIntake: 2000 },
       isSuccess: true,
     });
@@ -584,9 +586,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide calRemainingPct value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), targetCaloricIntake: 2000 },
       isSuccess: true,
     });
@@ -607,9 +609,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper recommendedWaterIntake value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), weight: 80 },
       isSuccess: true,
     });
@@ -630,9 +632,9 @@ describe("DayEditContext", () => {
   });
 
   it("should provide proper backgroundColor value", () => {
-    _mockUseAuth({});
+    mockUseAuth({});
 
-    _mockUseGetTodayData({
+    mockUseGetTodayData({
       dailyData: { ...testService.createTestDailyData(), weight: 80 },
       isSuccess: true,
     });
@@ -653,34 +655,3 @@ describe("DayEditContext", () => {
     expect(screen.getByTestId("background-color-test")).toHaveTextContent(regexOfHexColor);
   });
 });
-
-function _mockUseAuth(loggedInUser: any) {
-  (useAuth as Mock).mockReturnValue({ loggedInUser });
-}
-
-function _mockUseUpdateTodayData({
-  updateDailyData,
-  isLoading,
-}: {
-  updateDailyData?: any;
-  isLoading?: boolean;
-}) {
-  (useUpdateTodayData as Mock).mockReturnValue({
-    updateDailyData,
-    isLoading,
-  });
-}
-
-function _mockUseGetTodayData({
-  dailyData,
-  isLoading,
-  isSuccess,
-  isError,
-}: {
-  dailyData?: any;
-  isLoading?: boolean;
-  isSuccess?: boolean;
-  isError?: boolean;
-}) {
-  (useGetTodayData as Mock).mockReturnValue({ dailyData, isLoading, isSuccess, isError });
-}

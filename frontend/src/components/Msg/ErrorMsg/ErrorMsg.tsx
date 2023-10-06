@@ -6,5 +6,9 @@ type ErrorProps = {
 };
 
 export const ErrorMsg: FC<ErrorProps> = ({ msg = "Something went wrong" }) => {
-  return <p className="error-msg">{msg}</p>;
+  return (
+    <p className="error-msg" data-testid="error-msg">
+      {msg}
+    </p>
+  );
 };

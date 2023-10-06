@@ -68,7 +68,7 @@ export const IntakeEdit: FC = () => {
   }
 
   return (
-    <form className="intake-edit" onSubmit={handleSubmit}>
+    <form className="intake-edit" onSubmit={handleSubmit} data-testid="intake-edit">
       {isEditShown && (
         <>
           <div className="intake-edit__list-container">

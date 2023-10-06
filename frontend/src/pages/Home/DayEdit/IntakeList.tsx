@@ -63,7 +63,7 @@ export const IntakeList: FC = () => {
   return (
     <>
       {isLoadingUpdate && <SpinnerLoader />}
-      <header className="intake-list__header">
+      <header className="intake-list__header" data-testid="intake-list-header">
         <h3 className="intake-list__title">
           {isRecordedIntakesShown ? "Recorded" : "Unrecorded"} Intakes
         </h3>

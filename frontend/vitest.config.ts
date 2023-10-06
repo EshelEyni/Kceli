@@ -15,7 +15,7 @@ export default defineConfig({
       exclude: ["packages/template/*"],
     },
     root,
-    include: ["DayEditContext.test.tsx"],
+    include: ["DayEdit.test.tsx"],
     exclude: [...configDefaults.exclude, "packages/template/*"],
     outputFile: "test-results.html",
     cache: {

@@ -30,7 +30,7 @@ export const WeightWaistInput: FC = () => {
     <>
       {isLoading && <SpinnerLoader withContainer={true} containerSize={{ height: "75px" }} />}
       {isFormShown && (
-        <form className="weight-waist-form">
+        <form className="weight-waist-form" data-testid="weight-waist-form">
           <input
             type="number"
             name="weight"
@@ -53,7 +53,7 @@ export const WeightWaistInput: FC = () => {
         </form>
       )}
       {!isFormShown && (
-        <div className="weight-waist-details">
+        <div className="weight-waist-details" data-testid="weight-waist-details">
           <p className="weight-waist-details__title">weight:</p>
           <p className="weight-waist-details__text">{dailyData.weight} kg</p>
           <p className="weight-waist-details__title">waist:</p>
