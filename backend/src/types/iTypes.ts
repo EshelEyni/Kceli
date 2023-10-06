@@ -2,6 +2,7 @@ import mongoose, { Document } from "mongoose";
 import { Gender } from "../../../shared/types/system";
 import { MeasurementUnit } from "../../../shared/types/intake";
 import { WeightLossGoal } from "../../../shared/types/user";
+import { CombinedWorkoutItem } from "../../../shared/types/workout";
 
 export interface IUser extends Document {
   username: string;
@@ -61,38 +62,10 @@ export interface IIntakeItem extends Document {
   _caloriesPer100g?: number;
 }
 
-interface BasicIWokoutItem {
-  name: string;
-  isStarted: boolean;
-  isCompleted: boolean;
-}
-
-export interface IWorkoutItemAnaerobic extends Document, BasicIWokoutItem {
-  sets: number;
-  reps: number;
-  weight: number;
-  weightUnit: "kg" | "lbs";
-  restInSec: number;
-  setCompletedStatus: boolean[];
-}
-
-export interface IWorkoutItemAerobic extends Document, BasicIWokoutItem {
-  durationInMin: number;
-}
-
-export interface IWorkoutItemSuperset extends Document, BasicIWokoutItem {
-  sets: number;
-  reps: number;
-  weight: number;
-  weightUnit: "kg" | "lbs";
-  restInSec: number;
-  superset: IWorkoutItemAnaerobic[];
-}
-
 export interface IWorkout extends Document {
   type: "aerobic" | "anaerobic";
   userId: mongoose.Types.ObjectId;
   split: "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
   description: string;
-  items: Array<IWorkoutItemAnaerobic | IWorkoutItemAerobic | IWorkoutItemSuperset>;
+  items: Array<CombinedWorkoutItem>;
 }

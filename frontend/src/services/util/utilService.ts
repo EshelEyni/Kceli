@@ -152,8 +152,9 @@ function getDaysInMonth(year: number, month: number) {
 }
 
 function isSameDay(d1: Date, d2: Date): boolean {
-  const dateStr1 = d1.toISOString().split("T")[0];
-  const dateStr2 = d2.toISOString().split("T")[0];
+  const dateStr1 = d1.toDateString();
+  const dateStr2 = d2.toDateString();
+
   return dateStr1 === dateStr2;
 }
 

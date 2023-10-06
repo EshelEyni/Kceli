@@ -46,20 +46,19 @@ intakeItemSchema.pre("validate", async function (next) {
   try {
     const intakeItem = this.toObject() as IIntakeItem;
     if (intakeItem.calories) return next();
-    const existingIntakeItem = await intakeService.getExistingIntakeItem(intakeItem);
+    const existingItemData = await intakeService.getExistingIntakeItem(intakeItem);
 
-    if (existingIntakeItem && existingIntakeItem.calories) {
-      this.calories =
-        existingIntakeItem.calories * (intakeItem.quantity / existingIntakeItem.quantity);
+    if (existingItemData && existingItemData.calories) {
+      this.calories = existingItemData.calories * (intakeItem.quantity / existingItemData.quantity);
     } else {
-      const calories = await openAIService.getCaloriesForIntakeItem(intakeItem);
-      this.calories = calories;
+      this.calories = await openAIService.getCaloriesForIntakeItem(intakeItem);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
+  } finally {
+    next();
   }
-  next();
 });
 
 const intakeSchema = new Schema<IIntake>(

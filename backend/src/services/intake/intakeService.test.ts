@@ -26,7 +26,7 @@ describe("Intake Service", () => {
   describe("Get All Intake Items", () => {
     it("should retrieve all intake items and have correct properties", async () => {
       // Arrange: Create some test data if not already created
-      const dailyData = getMockDailyData();
+      const dailyData = getMockDailyData({});
       await DailyDataModel.create(dailyData);
 
       // Act: Call the function to test
@@ -45,7 +45,7 @@ describe("Intake Service", () => {
 
   describe("Get Existing Intake Item", () => {
     it("should be true", async () => {
-      const dailyData = getMockDailyData();
+      const dailyData = getMockDailyData({});
       dailyData.intakes[0].items.push({
         name: "Apple",
         unit: MeasurementUnit.GRAM,

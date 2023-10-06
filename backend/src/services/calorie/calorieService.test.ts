@@ -3,13 +3,7 @@ import calorieService from "./calorieService";
 
 describe("calcTargetCaloricIntakePerDay", () => {
   it("should return a rounded number", () => {
-    const userCaloricData: UserCaloricData = {
-      weight: 65,
-      height: 165,
-      age: 28,
-      gender: "female",
-    };
-    const result = calorieService.calcTargetCaloricIntakePerDay(userCaloricData);
+    const result = calorieService.calcTargetCaloricIntakePerDay({ TDEE: 2650 });
     expect(Number.isInteger(result)).toBe(true);
   });
 });

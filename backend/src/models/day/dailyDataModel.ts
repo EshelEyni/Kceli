@@ -4,14 +4,13 @@ import { IDailyData } from "../../types/iTypes";
 import calorieService from "../../services/calorie/calorieService";
 import { UserModel } from "../user/userModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
-import { getIsraeliDate } from "../../services/util/utilService";
 import { workoutSchema } from "../workout/workoutModel";
 
 const dailyDataSchema = new Schema<IDailyData>(
   {
     date: {
       type: Date,
-      default: getIsraeliDate(),
+      default: new Date(),
     },
     userId: {
       type: Schema.Types.ObjectId,
@@ -59,34 +58,24 @@ const dailyDataSchema = new Schema<IDailyData>(
   }
 );
 
-// // Pre-save middleware
-// dailyDataSchema.pre("save", async function (next) {
-//   // 'this' refers to the document being saved
-//   const currentDate = this.date;
-//   const { userId } = this;
+dailyDataSchema.pre("save", async function (next) {
+  const { userId } = this;
 
-//   // Find the most recent record for this user
-//   const lastRecord = await this.constructor
-//     .findOne({
-//       userId: userId,
-//     })
-//     .sort({ date: -1 });
+  if (!userId) return next();
 
-//   if (lastRecord) {
-//     const lastDate = lastRecord.date;
-//     const timeDifference = currentDate.getTime() - lastDate.getTime();
+  const latestEntry = await DailyDataModel.findOne({ userId: userId }).sort({ date: -1 });
 
-//     // Check if the time difference is less than 24 hours (in milliseconds)
-//     if (timeDifference < 24 * 60 * 60 * 1000) {
-//       // Throw an error or call next() with an error
-//       next(new Error("Date should be more than 24 hours from the last saved data for this user."));
-//       return;
-//     }
-//   }
+  if (!latestEntry) return next();
 
-//   // If validation passes, proceed to save
-//   next();
-// });
+  const lastSavedDate = latestEntry.date;
+  if (this.date.toDateString() !== lastSavedDate.toDateString()) return next();
+
+  const nextDay = new Date(lastSavedDate);
+  nextDay.setDate(nextDay.getDate() + 1);
+
+  this.date = nextDay;
+  next();
+});
 
 dailyDataSchema.pre("findOneAndUpdate", async function (next) {
   const update = this.getUpdate();

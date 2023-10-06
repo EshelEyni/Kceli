@@ -15,7 +15,6 @@ const SchedulePage: FC = () => {
   const [currDate, setCurrDate] = useState<Date>(new Date());
   const [currDay, setCurrDay] = useState<CalenderDay | null>(null);
   const { days, isLoading, isSuccess, isError } = useGetCalenderData(currDate);
-
   const gridRef = useRef<HTMLUListElement>(null);
   const startX = useRef(0);
 

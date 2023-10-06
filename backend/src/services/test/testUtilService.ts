@@ -127,6 +127,7 @@ function getMockNewIntakeItem(): NewIntakeItem {
 function getMockWorkout(): Workout {
   return {
     id: getMongoId(),
+    userId: getMongoId(),
     description: "test",
     type: "aerobic",
     items: [getMockWorkoutItem()],
