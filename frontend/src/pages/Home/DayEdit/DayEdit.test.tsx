@@ -111,4 +111,17 @@ describe("Day Edit", () => {
 
     expect(screen.getByTestId("intake-list-header")).toBeInTheDocument();
   });
+
+  it("should render nutrition query when openedElement is Query", async () => {
+    mockUseDayEdit({
+      isSuccess: true,
+      dailyData: testService.createTestDailyData(),
+      isLoadingUpdate: false,
+      openedElement: "Query",
+    });
+
+    render(<DayEdit />);
+
+    expect(screen.getByTestId("nutrition-query")).toBeInTheDocument();
+  });
 });

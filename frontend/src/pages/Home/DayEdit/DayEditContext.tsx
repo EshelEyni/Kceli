@@ -38,6 +38,7 @@ export enum ToggledElement {
   UnRecordedIntakeList = "UnRecordedIntakeList",
   WeightWaistInput = "WeightWaistInput",
   Workouts = "Workouts",
+  Query = "Query",
 }
 
 const DayEditContext = createContext<DayEditContextType | undefined>(undefined);

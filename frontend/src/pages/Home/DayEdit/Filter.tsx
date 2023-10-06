@@ -28,6 +28,10 @@ export const Filter: FC = () => {
       value: ToggledElement.Workouts,
       isShown: dailyData?.workouts.length > 0,
     },
+    {
+      name: "query",
+      value: ToggledElement.Query,
+    },
   ];
 
   return (

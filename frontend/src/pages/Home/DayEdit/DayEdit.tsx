@@ -10,6 +10,7 @@ import { IntakeList } from "./IntakeList";
 import { WeightWaistInput } from "./WeightWaistInput";
 import { List } from "../../../components/App/List/List";
 import { WorkoutPreview } from "../../../components/Workout/WorkoutPreview/WorkoutPreview";
+import { NutritionQuery } from "./NutritionQuery";
 
 export const DayEdit: FC = () => {
   const {
@@ -45,6 +46,7 @@ export const DayEdit: FC = () => {
             />
           )}
           {isListShown && <IntakeList />}
+          {openedElement === ToggledElement.Query && <NutritionQuery />}
         </>
       )}
     </section>

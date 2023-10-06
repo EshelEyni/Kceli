@@ -11,25 +11,14 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-async function getText(prompt: string, model = "default"): Promise<string> {
-  if (model === "gpt-4") {
-    const completion = await openai.createChatCompletion({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
-    });
-    const { message } = completion.data.choices[0];
-    if (!message) throw new AppError("message is falsey", 500);
-    return message.content as string;
-  }
-
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt,
-    max_tokens: 4000,
+async function getText(prompt: string): Promise<string> {
+  const completion = await openai.createChatCompletion({
+    model: "gpt-4",
+    messages: [{ role: "user", content: prompt }],
   });
-  const { text } = completion.data.choices[0];
-  if (!text) throw new AppError("text is falsey", 500);
-  return text as string;
+  const { message } = completion.data.choices[0];
+  if (!message) throw new AppError("message is falsey", 500);
+  return message.content as string;
 }
 
 async function getCaloriesForIntakeItem(intakeItem: IIntakeItem | IntakeItem): Promise<number> {

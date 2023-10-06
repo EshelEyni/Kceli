@@ -499,3 +499,19 @@
     }
   }
 }
+
+.nutrition-query {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: rem(10px);
+  
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: rem(10px);
+  }
+}
