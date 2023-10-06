@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useWorkout } from "../../contexts/WorkoutContex";
+import { useWorkout } from "../../contexts/WorkoutContext";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
 import "./WorkoutDetails.scss";

@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 import "./Timer.scss";
-import { useWorkout } from "../../../contexts/WorkoutContex";
+import { useWorkout } from "../../../contexts/WorkoutContext";
 import { Button } from "../../App/Button/Button";
 import { FaPause, FaPlay } from "react-icons/fa";
 

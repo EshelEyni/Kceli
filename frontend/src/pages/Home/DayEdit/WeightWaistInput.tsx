@@ -1,10 +1,10 @@
 import { FC, useState } from "react";
-import { useTodayData } from "../../../contexts/TodayDataContext";
-import { Button } from "../../App/Button/Button";
-import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
+import { useDayEdit } from "./DayEditContext";
+import { Button } from "../../../components/App/Button/Button";
+import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 
 export const WeightWaistInput: FC = () => {
-  const { dailyData, isLoading, updateDailyData } = useTodayData();
+  const { dailyData, isLoading, updateDailyData } = useDayEdit();
   const [weight, setWeight] = useState<number>();
   const [waist, setWaist] = useState<number>();
 

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { WorkoutItemAerobic } from "../../../../shared/types/workout";
-import { useWorkout } from "../../contexts/WorkoutContex";
+import { useWorkout } from "../../contexts/WorkoutContext";
 import { Button } from "../../components/App/Button/Button";
 import classNames from "classnames";
 

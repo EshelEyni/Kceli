@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useProfile } from "../../contexts/ProfileContex";
+import { useProfile } from "../../contexts/ProfileContext";
 import { Controller, useForm } from "react-hook-form";
 import { WeightLossGoal } from "../../../../shared/types/user";
 import userUtilService from "../../services/user/userUtilService";

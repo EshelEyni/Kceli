@@ -57,6 +57,11 @@
       }
 
       &.active {
+        .app-nav-link__icon {
+          color: var(--color-info);
+          fill: var(--color-info);
+        }
+
         font-size: rem(20px);
         font-weight: 600;
       }

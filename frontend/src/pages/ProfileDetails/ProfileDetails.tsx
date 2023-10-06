@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
 import { WeightWaistChart } from "../../components/Charts/WeightWaistChart/WeightWaistChart";
-import { useProfile } from "../../contexts/ProfileContex";
+import { useProfile } from "../../contexts/ProfileContext";
 import "./ProfileDetails.scss";
 import { UserInfo } from "./UserInfo";
 import { RecommendedWeightDisplay } from "./RecommendedWeightDisplay";

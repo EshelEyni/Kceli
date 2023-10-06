@@ -15,19 +15,19 @@ export const AppHeader: FC = () => {
     <Header className="app-header">
       <GoalIndicator />
       <Nav className="app-nav">
-        <NavLink to="/home" className={"app-nav-link"}>
+        <NavLink to="/home" className="app-nav-link">
           <FaHome className="app-nav-link__icon" />
           <span>home</span>
         </NavLink>
-        <NavLink to={"workouts"} className={"app-nav-link"}>
+        <NavLink to={"workouts"} className="app-nav-link">
           <GiWeightLiftingUp className="app-nav-link__icon" />
           <span>workouts</span>
         </NavLink>
-        <NavLink to="/schedule" className={"app-nav-link"}>
+        <NavLink to="/schedule" className="app-nav-link">
           <FaRegCalendarAlt className="app-nav-link__icon" />
           <span>schedule</span>
         </NavLink>
-        <NavLink to={`/profile/${loggedInUser?.id}`} className={"app-nav-link"}>
+        <NavLink to={`/profile/${loggedInUser?.id}`} className="app-nav-link">
           <FaUser className="app-nav-link__icon" />
           <span>profile</span>
         </NavLink>

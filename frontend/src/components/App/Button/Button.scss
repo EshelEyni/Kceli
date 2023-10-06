@@ -1,5 +1,14 @@
 @import "../../../styles/setup/functions";
 
-// .button {
-//   cursor: pointer;
-// }
+.btn {
+  padding: rem(15px) rem(20px);
+  border: 1px solid white;
+  border-radius: 25px;
+  color: white;
+  font-size: rem(14px);
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 1px;
+  transition: all 0.2s ease-in-out;
+}

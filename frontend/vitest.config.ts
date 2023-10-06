@@ -4,7 +4,7 @@ import svgr from "vite-plugin-svgr";
 
 import { configDefaults, defineConfig } from "vitest/config";
 
-const root = "src/components/Poll/PollEdit";
+const root = "src/pages/home/DayEdit";
 
 export default defineConfig({
   plugins: [svgr()],
@@ -15,6 +15,7 @@ export default defineConfig({
       exclude: ["packages/template/*"],
     },
     root,
+    include: ["DayEditContext.test.tsx"],
     exclude: [...configDefaults.exclude, "packages/template/*"],
     outputFile: "test-results.html",
     cache: {

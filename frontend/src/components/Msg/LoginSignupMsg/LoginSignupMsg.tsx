@@ -18,7 +18,7 @@ export const LoginSignupMsg = () => {
   ];
 
   return (
-    <div className="login-signup-msg">
+    <div className="login-signup-msg" data-testid="login-signup-msg">
       <div className="login-signup-msg-text-container">
         <h1>Start Your Journey Now!</h1>
       </div>

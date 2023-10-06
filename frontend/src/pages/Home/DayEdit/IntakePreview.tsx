@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Intake } from "../../../../../shared/types/intake";
-import "./IntakePreview.scss";
 
 type IntakePreviewProps = {
   intake: Intake;

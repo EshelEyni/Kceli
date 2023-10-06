@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { List } from "../../App/List/List";
-import { Button } from "../../App/Button/Button";
-import { ToggledElement, useTodayData } from "../../../contexts/TodayDataContext";
+import { List } from "../../../components/App/List/List";
+import { Button } from "../../../components/App/Button/Button";
+import { ToggledElement, useDayEdit } from "./DayEditContext";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
-import { IntakePreview } from "../../Intake/IntakePreview/IntakePreview";
-import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
+import { IntakePreview } from "./IntakePreview";
+import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { Intake } from "../../../../../shared/types/intake";
 import { getCleanTime } from "../../../services/util/utilService";
 
@@ -18,7 +18,7 @@ export const IntakeList: FC = () => {
     setIntake,
     updateDailyData,
     isLoadingUpdate,
-  } = useTodayData();
+  } = useDayEdit();
 
   if (!dailyData) return null;
 

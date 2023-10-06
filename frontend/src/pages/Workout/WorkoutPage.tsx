@@ -6,7 +6,7 @@ import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoa
 import "./WorkoutPage.scss";
 import workoutUtilService from "../../services/workout/workoutUtilService";
 import { WorkoutPreview } from "../../components/Workout/WorkoutPreview/WorkoutPreview";
-import { useWorkouts } from "../../contexts/WorkoutsContex";
+import { useWorkouts } from "../../contexts/WorkoutsContext";
 
 const WorkoutPage: FC = () => {
   const {

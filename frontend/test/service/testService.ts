@@ -1,38 +1,84 @@
 import { User } from "../../../shared/types/user";
+import { DayData } from "../../../shared/types/dayData";
 import { act } from "@testing-library/react";
+import { CombinedIntake, IntakeItem, MeasurementUnit } from "../../../shared/types/intake";
+import { Workout, WorkoutItemAerobic } from "../../../shared/types/workout";
 
 function createTestUser(): User {
   return {
-    id: "userId1",
-    username: "username1",
-    fullname: "fullname1",
-    email: "email1",
-    imgUrl: "profilePicUrl1",
+    id: "test",
+    username: "test",
+    fullname: "test",
+    email: "test@email.com",
+    imgUrl: "test",
     isAdmin: false,
-    createdAt: "2021-01-01T00:00:00.000Z",
-    weight: 120,
-    height: 180,
-    gender: "male",
-    birthdate: new Date("1990-01-01"),
-    totalDailyEnergyExpenditure: 2000,
-    targetCaloricIntakePerDay: 1500,
+    weight: 100,
+    height: 100,
+    birthdate: new Date(),
+    totalDailyEnergyExpenditure: 100,
+    targetCaloricIntakePerDay: 100,
+    weightLossGoal: {
+      startingWeight: 100,
+      weightGoal: 100,
+    },
+    gender: "female",
+    createdAt: "test",
   };
 }
 
-function createTestLoggedInUserActionState() {
+function createTestDailyData(): DayData {
   return {
-    isLiked: false,
-    isReposted: false,
-    isViewed: false,
-    isDetailedViewed: false,
-    isProfileViewed: false,
-    isHashTagClicked: false,
-    isLinkClicked: false,
-    isBookmarked: false,
-    isPostLinkCopied: false,
-    isPostShared: false,
-    isPostSendInMessage: false,
-    isPostBookmarked: false,
+    id: "test",
+    userId: "test",
+    date: new Date(),
+    intakes: [createTestIntake()],
+    workouts: [createTestWorkout()],
+    weight: 100,
+    waist: 100,
+    totalDailyEnergyExpenditure: 100,
+    targetCaloricIntake: 100,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+}
+
+function createTestIntake(): CombinedIntake {
+  return {
+    id: "test",
+    isRecorded: false,
+    recordedAt: new Date(),
+    items: [createTestIntakeItem()],
+  };
+}
+
+function createTestIntakeItem(): IntakeItem {
+  return {
+    id: "test",
+    name: "test",
+    unit: MeasurementUnit.GRAM,
+    quantity: 100,
+    calories: 100,
+  };
+}
+
+function createTestWorkout(): Workout {
+  return {
+    id: "test",
+    userId: "test",
+    description: "test",
+    type: "aerobic",
+    items: [createTestAerobicWorkoutItem()],
+  };
+}
+
+function createTestAerobicWorkoutItem(): WorkoutItemAerobic {
+  return {
+    id: "test",
+    name: "test",
+    isStarted: false,
+    isCompleted: false,
+    type: "aerobic",
+    durationInMin: 100,
   };
 }
 
@@ -44,6 +90,10 @@ async function waitForTick() {
 
 export default {
   createTestUser,
-  createTestLoggedInUserActionState,
+  createTestDailyData,
+  createTestIntake,
+  createTestIntakeItem,
+  createTestWorkout,
+  createTestAerobicWorkoutItem,
   waitForTick,
 };

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { WorkoutItemSuperset } from "../../../../shared/types/workout";
-import { useWorkout } from "../../contexts/WorkoutContex";
+import { useWorkout } from "../../contexts/WorkoutContext";
 import workoutUtilService from "../../services/workout/workoutUtilService";
 import classNames from "classnames";
 import { Button } from "../../components/App/Button/Button";

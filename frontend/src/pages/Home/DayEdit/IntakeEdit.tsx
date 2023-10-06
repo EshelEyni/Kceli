@@ -1,12 +1,11 @@
 import { FC, useState } from "react";
 import { NewIntakeItem } from "../../../../../shared/types/intake";
 import intakeUtilServiceTest from "../../../services/intakeUtil/intakeUtilService";
-import { List } from "../../App/List/List";
-import { IntakeItemEdit } from "../IntakeItemEdit/IntakeItemEdit";
-import { Button } from "../../App/Button/Button";
-import { useTodayData } from "../../../contexts/TodayDataContext";
-import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
-import "./IntakeEdit.scss";
+import { List } from "../../../components/App/List/List";
+import { IntakeItemEdit } from "./IntakeItemEdit";
+import { Button } from "../../../components/App/Button/Button";
+import { useDayEdit } from "./DayEditContext";
+import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 
 export const IntakeEdit: FC = () => {
   const {
@@ -17,8 +16,8 @@ export const IntakeEdit: FC = () => {
     updateDailyData,
     setIntake,
     backgroundColor,
-    setCurrIsValidIntake,
-  } = useTodayData();
+    // setCurrIsValidIntake,
+  } = useDayEdit();
 
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const isEditShown = !isReviewOpen && !isLoading && !isLoadingUpdate;
@@ -57,7 +56,8 @@ export const IntakeEdit: FC = () => {
     e.preventDefault();
     if (!dailyData) return;
     const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
-    if (!iValidIntake) return setCurrIsValidIntake(false);
+    if (!iValidIntake) return;
+    // TODO: Add Toast notification
     intake.recordedAt = new Date();
     const isNewIntake = !dailyData.intakes.some(i => i.id === intake.id);
     const updatedIntakes = isNewIntake
@@ -136,7 +136,7 @@ export const IntakeEdit: FC = () => {
           {isReviewOpen ? "Edit" : "Review"}
         </Button>
         <Button onClickFn={e => handleSubmit(e)} className="intake-edit-btn" type="submit">
-          Add Intake
+          Save
         </Button>
       </div>
     </form>

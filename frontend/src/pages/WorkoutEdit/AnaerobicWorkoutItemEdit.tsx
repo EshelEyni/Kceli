@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { Workout, WorkoutItemAnaerobic } from "../../../../shared/types/workout";
-import { useWorkoutEdit } from "../../contexts/WorkoutEditContex";
+import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../components/App/Button/Button";
 import * as Select from "@radix-ui/react-select";

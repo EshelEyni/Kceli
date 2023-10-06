@@ -13,7 +13,7 @@ import { Empty } from "../../components/App/Empty/Empty";
 import { BtnGoBack } from "../../components/Buttons/BtnGoBack/BtnGoBack";
 import "./WorkoutEdit.scss";
 import { Button } from "../../components/App/Button/Button";
-import { useWorkoutEdit } from "../../contexts/WorkoutEditContex";
+import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
 import { AerobicWorkoutItemEdit } from "./AerobicWorkoutItemEdit";
 import { AnaerobicWorkoutItemEdit } from "./AnaerobicWorkoutItemEdit";
 import { SuperSetWorkoutItemEdit } from "./SuperSetWorkoutItemEdit";

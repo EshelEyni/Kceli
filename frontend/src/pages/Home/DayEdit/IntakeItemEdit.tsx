@@ -1,17 +1,16 @@
 import { FC, useState, useEffect, useRef } from "react";
 import { MeasurementUnit, NewIntakeItem } from "../../../../../shared/types/intake";
 import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
-import "./IntakeItemEdit.scss";
-import { Button } from "../../App/Button/Button";
+import { Button } from "../../../components/App/Button/Button";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
-import { ErrorMsg } from "../../Msg/ErrorMsg/ErrorMsg";
-import { useTodayData } from "../../../contexts/TodayDataContext";
+import { ErrorMsg } from "../../../components/Msg/ErrorMsg/ErrorMsg";
+// import { useDayEdit } from "./DayEditContext";
 import NSpell from "nspell";
 import { debounce } from "../../../services/util/utilService";
 import { AnyFunction } from "../../../../../shared/types/system";
 import { SpellingSuggestion } from "../../../types/app";
 import { SpellingSuggestionList } from "./SpellingSuggestionList";
-import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
+import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import calorieApiService from "../../../services/calorieApi/calorieApiService";
 
 type IntakeItemEditProps = {
@@ -21,7 +20,7 @@ type IntakeItemEditProps = {
 };
 
 export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handleChange }) => {
-  const { isCurrValidIntake } = useTodayData();
+  // const { isCurrValidIntake } = useDayEdit();
   const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
   const [isManual, setIsManual] = useState(false);
   const [inputFaded, setInputFaded] = useState("");
@@ -190,11 +189,11 @@ export const IntakeItemEdit: FC<IntakeItemEditProps> = ({ intakeItem, idx, handl
           handleIgnoreSuggestionClick={handleIgnoreSuggestionClick}
         />
       )}
-      {(isInputNameEmpty || !isCurrValidIntake) && (
+      {/* {(isInputNameEmpty || !isCurrValidIntake) && (
         <div onClick={() => setIsInputNameEmpty(false)}>
           <ErrorMsg msg="intake name cannot be empty!" />
         </div>
-      )}
+      )} */}
 
       <div className="intake-item-edit-inputs-container">
         <div className="quantity-input-container">

@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { ToggledElement, useTodayData } from "../../../contexts/TodayDataContext";
-import { Button } from "../../App/Button/Button";
+import { ToggledElement, useDayEdit } from "./DayEditContext";
+import { Button } from "../../../components/App/Button/Button";
 
 export const Filter: FC = () => {
-  const { dailyData, setOpenedElement } = useTodayData();
+  const { dailyData, setOpenedElement } = useDayEdit();
   if (!dailyData) return null;
 
   const filterBy = [

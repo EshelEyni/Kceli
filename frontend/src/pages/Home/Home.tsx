@@ -1,29 +1,25 @@
-import { Suspense } from "react";
-import { Outlet } from "react-router-dom";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { usePageLoaded } from "../../hooks/usePageLoaded";
-import "./Home.scss";
-import { TodayDetails } from "../../components/Day/TodayDetails/TodayDetails";
+import { DayEdit } from "./DayEdit/DayEdit";
 import { LoginSignupMsg } from "../../components/Msg/LoginSignupMsg/LoginSignupMsg";
-import { TodayDataProvider } from "../../contexts/TodayDataContext";
+import { DayEditProvider } from "./DayEdit/DayEditContext";
 import { useCreateDay } from "../../hooks/useCreateDay";
-import { Button } from "../../components/App/Button/Button";
 import { useGetTodayData } from "../../hooks/useGetTodayData";
 import { DayData } from "../../../../shared/types/dayData";
 import { useAuth } from "../../hooks/useAuth";
+import { Modal } from "../../components/Modal/Modal";
+import "./Home.scss";
 
 const Homepage = () => {
   const { loggedInUser } = useAuth();
   const { dailyData } = useGetTodayData();
   const { createDay, isLoading: isLoadingCreateDay } = useCreateDay();
   const isTodayDetailsShown = loggedInUser && !isLoadingCreateDay;
-  const isCreateDayBtnShown = dailyData ? !_calcIsCurrDay(dailyData) : true;
+  const isCreateDayBtnShown = loggedInUser && dailyData && !_calcIsCurrDay(dailyData);
 
   usePageLoaded({ title: "Home / Kceli" });
 
   function handleCreateDay() {
-    const confirm = window.confirm("Are you sure you want to start a new day?");
-    if (!confirm) return;
     createDay({});
   }
 
@@ -32,22 +28,38 @@ const Homepage = () => {
       {!loggedInUser && <LoginSignupMsg />}
 
       {isTodayDetailsShown && (
-        <TodayDataProvider>
-          <TodayDetails />
-        </TodayDataProvider>
+        <DayEditProvider>
+          <DayEdit />
+        </DayEditProvider>
       )}
 
       {isLoadingCreateDay && <SpinnerLoader />}
 
       {isCreateDayBtnShown && (
-        <Button className="home__btn" onClickFn={handleCreateDay}>
-          start a new day
-        </Button>
-      )}
+        <Modal>
+          <Modal.OpenBtn modalName="create-day">
+            <button className="home__btn" data-testid="create-day-open-modal-btn">
+              start a new day
+            </button>
+          </Modal.OpenBtn>
 
-      <Suspense fallback={<SpinnerLoader />}>
-        <Outlet />
-      </Suspense>
+          <Modal.Window name="create-day" className="create-day-modal">
+            <h2 className="create-day-modal__title">
+              Are you sure you want to start a new day? <br />
+            </h2>
+
+            <Modal.CloseBtn onClickFn={handleCreateDay}>
+              <button className="btn create-day-modal__btn" data-testid="create-day-modal-btn">
+                start a new day
+              </button>
+            </Modal.CloseBtn>
+
+            <Modal.CloseBtn>
+              <button className="btn create-day-modal__btn">cancel</button>
+            </Modal.CloseBtn>
+          </Modal.Window>
+        </Modal>
+      )}
     </main>
   );
 };

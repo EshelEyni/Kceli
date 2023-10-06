@@ -1,17 +1,17 @@
 import { FC } from "react";
-import { IntakeEdit } from "../../Intake/IntakeEdit/IntakeEdit";
-import { SpinnerLoader } from "../../Loaders/SpinnerLoader/SpinnerLoader";
-import { ErrorMsg } from "../../Msg/ErrorMsg/ErrorMsg";
-import { ToggledElement, useTodayData } from "../../../contexts/TodayDataContext";
-import "./TodayDetails.scss";
+import { IntakeEdit } from "./IntakeEdit";
+import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
+import { ErrorMsg } from "../../../components/Msg/ErrorMsg/ErrorMsg";
+import { ToggledElement, useDayEdit } from "./DayEditContext";
+import "./DayEdit.scss";
 import { Filter } from "./Filter";
-import { TodayDetailsHeader } from "./Header";
+import { DayEditHeader } from "./Header";
 import { IntakeList } from "./IntakeList";
 import { WeightWaistInput } from "./WeightWaistInput";
-import { List } from "../../App/List/List";
-import { WorkoutPreview } from "../../Workout/WorkoutPreview/WorkoutPreview";
+import { List } from "../../../components/App/List/List";
+import { WorkoutPreview } from "../../../components/Workout/WorkoutPreview/WorkoutPreview";
 
-export const TodayDetails: FC = () => {
+export const DayEdit: FC = () => {
   const {
     dailyData,
     isLoading,
@@ -20,7 +20,7 @@ export const TodayDetails: FC = () => {
     isLoadingUpdate,
     openedElement,
     backgroundColor,
-  } = useTodayData();
+  } = useDayEdit();
 
   const showContent = isSuccess && dailyData && !isLoadingUpdate;
   const isLoaderShown = isLoading || isLoadingUpdate;
@@ -29,12 +29,12 @@ export const TodayDetails: FC = () => {
     openedElement === ToggledElement.UnRecordedIntakeList;
 
   return (
-    <section className="today-details" style={{ backgroundColor }}>
+    <section className="day-edit" style={{ backgroundColor }} data-testid="day-edit">
       {isLoaderShown && <SpinnerLoader />}
       {isError && <ErrorMsg />}
       {showContent && (
         <>
-          <TodayDetailsHeader />
+          <DayEditHeader />
           <Filter />
           {openedElement === ToggledElement.WeightWaistInput && <WeightWaistInput />}
           {openedElement === ToggledElement.IntakeEdit && <IntakeEdit />}

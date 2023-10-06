@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { SpellingSuggestion } from "../../../types/app";
-import { Button } from "../../App/Button/Button";
+import { Button } from "../../../components/App/Button/Button";
 
 type SpellingSuggestionListProps = {
   suggestions: SpellingSuggestion[];

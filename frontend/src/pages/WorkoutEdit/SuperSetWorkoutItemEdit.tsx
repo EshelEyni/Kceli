@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { SupersetItem, Workout, WorkoutItemSuperset } from "../../../../shared/types/workout";
-import { useWorkoutEdit } from "../../contexts/WorkoutEditContex";
+import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../components/App/Button/Button";
 // import { AnaerobicWorkoutItemEdit } from "./AnaerobicWorkoutItemEdit";
