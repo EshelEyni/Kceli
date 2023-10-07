@@ -1,8 +1,16 @@
 export type Split = "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
 export type WorkoutType = "anaerobic" | "aerobic";
-export type WeightUnit = "kg" | "lbs";
+export declare enum WeightUnit {
+    KG = "kg",
+    LB = "lb",
+    BodyWeight = "body-weight",
+    TRX = "trx",
+    Band = "band"
+}
+export type WorkOutItemTypes = "aerobic" | "anaerobic" | "superset";
 interface BasicWorkout {
     readonly id: string;
+    userId: string;
     description: string;
 }
 export interface WorkoutAnaerobic extends BasicWorkout {

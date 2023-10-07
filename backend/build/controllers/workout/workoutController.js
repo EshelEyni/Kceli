@@ -19,7 +19,7 @@ const getAllWorkouts = (0, errorService_1.asyncErrorCatcher)((req, res) => __awa
     const loggedInUserId = (0, ALSService_1.getLoggedInUserIdFromReq)();
     (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
     const docs = yield workoutModel_1.WorkoutModel.find({ userId: loggedInUserId });
-    res.status(200).json({
+    res.send({
         status: "success",
         results: docs.length,
         data: docs,
@@ -33,7 +33,7 @@ const createWorkout = (0, errorService_1.asyncErrorCatcher)((req, res) => __awai
     (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
     const workout = req.body;
     const doc = yield workoutModel_1.WorkoutModel.create(Object.assign(Object.assign({}, workout), { userId: loggedInUserId }));
-    res.status(201).json({
+    res.status(201).send({
         status: "success",
         data: doc,
     });

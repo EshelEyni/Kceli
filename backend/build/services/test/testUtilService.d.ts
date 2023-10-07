@@ -1,6 +1,8 @@
 /// <reference types="jest" />
 import mongoose from "mongoose";
 import { User, UserCredenitials } from "../../../../shared/types/user";
+import { NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
+import { Workout, WorkoutItemAerobic } from "../../../../shared/types/workout";
 type CreateTestUserOptions = {
     id?: string;
     isAdmin?: boolean;
@@ -30,7 +32,9 @@ declare function getMockedUser({ id, }?: {
 declare function getMockDailyData({ userId }: {
     userId?: string;
 }): any;
-declare function getNewMockIntake(): any;
-declare function getMockNewIntakeItem(): any;
+declare function getNewMockIntake(): NewIntake;
+declare function getMockNewIntakeItem(): NewIntakeItem;
+declare function getMockWorkout(): Workout;
+declare function getMockWorkoutItem(): WorkoutItemAerobic;
 declare function mockGetLoggedInUserIdFromReq(value?: string): string;
-export { getLoginTokenStrForTest, mockGetLoggedInUserIdFromReq, createManyTestUsers, deleteManyTestUsers, createTestUser, createValidUserCreds, createTestDailyData, getNewMockIntake, getMockNewIntakeItem, getMongoId, getMockedUser, deleteTestUser, getMockDailyData, };
+export { getLoginTokenStrForTest, mockGetLoggedInUserIdFromReq, createManyTestUsers, deleteManyTestUsers, createTestUser, createValidUserCreds, createTestDailyData, getNewMockIntake, getMockNewIntakeItem, getMockWorkout, getMockWorkoutItem, getMongoId, getMockedUser, deleteTestUser, getMockDailyData, };

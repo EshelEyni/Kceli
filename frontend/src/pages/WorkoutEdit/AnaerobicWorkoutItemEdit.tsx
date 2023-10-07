@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { Workout, WorkoutItemAnaerobic } from "../../../../shared/types/workout";
+import { WeightUnit, Workout, WorkoutItemAnaerobic } from "../../../../shared/types/workout";
 import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../components/App/Button/Button";
@@ -12,7 +12,7 @@ interface AnaerobicWorkoutItemEditIFormInput {
   sets: number;
   reps: number;
   weight: number;
-  weightUnit: "kg" | "lbs";
+  weightUnit: WeightUnit;
   restInSec: number;
 }
 

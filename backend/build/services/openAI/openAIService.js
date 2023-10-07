@@ -17,27 +17,16 @@ const configuration = new openai_1.Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new openai_1.OpenAIApi(configuration);
-function getText(prompt, model = "default") {
+function getText(prompt) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (model === "gpt-4") {
-            const completion = yield openai.createChatCompletion({
-                model: "gpt-4",
-                messages: [{ role: "user", content: prompt }],
-            });
-            const { message } = completion.data.choices[0];
-            if (!message)
-                throw new errorService_1.AppError("message is falsey", 500);
-            return message.content;
-        }
-        const completion = yield openai.createCompletion({
-            model: "text-davinci-003",
-            prompt,
-            max_tokens: 4000,
+        const completion = yield openai.createChatCompletion({
+            model: "gpt-4",
+            messages: [{ role: "user", content: prompt }],
         });
-        const { text } = completion.data.choices[0];
-        if (!text)
-            throw new errorService_1.AppError("text is falsey", 500);
-        return text;
+        const { message } = completion.data.choices[0];
+        if (!message)
+            throw new errorService_1.AppError("message is falsey", 500);
+        return message.content;
     });
 }
 function getCaloriesForIntakeItem(intakeItem) {

@@ -20,16 +20,7 @@ const userModel_1 = require("../../models/user/userModel");
 const ALSService_1 = require("../../services/ALSService");
 const utilService_1 = require("../../services/util/utilService");
 const dailyDataModel_1 = require("../../models/day/dailyDataModel");
-const getUsers = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const queryString = req.query;
-    const users = yield userService_1.default.query(queryString);
-    res.send({
-        status: "success",
-        requestedAt: new Date().toISOString(),
-        results: users.length,
-        data: users,
-    });
-}));
+const getUsers = (0, factoryService_1.getAll)(userModel_1.UserModel);
 exports.getUsers = getUsers;
 const getUserById = (0, factoryService_1.getOne)(userModel_1.UserModel);
 exports.getUserById = getUserById;

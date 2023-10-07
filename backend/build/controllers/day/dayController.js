@@ -47,7 +47,7 @@ const createDay = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(
     const loggedInUserId = (0, ALSService_1.getLoggedInUserIdFromReq)();
     (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
     const doc = yield dailyDataModel_1.DailyDataModel.create(Object.assign(Object.assign({}, req.body), { userId: loggedInUserId }));
-    res.status(201).json({
+    res.status(201).send({
         status: "success",
         data: doc,
     });

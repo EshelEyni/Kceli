@@ -7,6 +7,7 @@ import {
   WorkoutItemAerobic,
   WorkoutItemAnaerobic,
   WorkoutItemSuperset,
+  WeightUnit,
 } from "../../../../shared/types/workout";
 import { createId } from "../util/utilService";
 
@@ -15,6 +16,7 @@ const SPLIT_TYPES: Split[] = ["FBW", "A", "B", "C", "D", "E", "F"];
 function getDefaultWorkout(): Workout {
   return {
     id: createId(),
+    userId: "",
     description: "no description",
     type: "anaerobic",
     split: "FBW",
@@ -59,7 +61,7 @@ function getDefaultAnaerobicWorkoutItem(): WorkoutItemAnaerobic {
     sets: Array.from({ length: 3 }, () => getAnaerobicSet()),
     reps: 10,
     weight: 10,
-    weightUnit: "kg",
+    weightUnit: WeightUnit.KG,
     restInSec: 60,
   };
 }
@@ -80,7 +82,7 @@ function getDefaultSupersetItem(): SupersetItem {
     name: "",
     reps: 10,
     weight: 10,
-    weightUnit: "kg",
+    weightUnit: WeightUnit.KG,
   };
 }
 

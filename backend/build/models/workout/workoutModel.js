@@ -25,14 +25,44 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WorkoutModel = exports.workoutSchema = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const workoutItemAnaerobicSchema = new mongoose_1.Schema({
-    name: String,
-    sets: Number,
-    reps: Number,
-    weight: Number,
-    weightUnit: {
+const workout_1 = require("../../../../shared/types/workout");
+function validateAerobicFields(value) {
+    if (value !== "aerobic")
+        return true;
+    if (!this.durationInMin)
+        throw new Error("Duration is required for aerobic type");
+    return true;
+}
+function validateAnaerobicFields(value) {
+    if (value !== "anaerobic")
+        return true;
+    if (!this.sets)
+        throw new Error("Sets are required for anaerobic type");
+    if (!this.reps)
+        throw new Error("Reps are required for anaerobic type");
+    if (!this.weight)
+        throw new Error("Weight is required for anaerobic type");
+    if (!this.weightUnit)
+        throw new Error("WeightUnit is required for anaerobic type");
+    if (!this.restInSec)
+        throw new Error("RestInSec is required for anaerobic type");
+    return true;
+}
+function validateSupersetFields(value) {
+    if (value !== "superset")
+        return true;
+    if (!this.sets)
+        throw new Error("Sets are required for superset type");
+    if (!this.restInSec)
+        throw new Error("RestInSec is required for superset type");
+    if (!this.items)
+        throw new Error("Items are required for superset type");
+    return true;
+}
+const workoutItemSchema = new mongoose_1.Schema({
+    name: {
         type: String,
-        enum: ["kg", "lbs"],
+        required: [true, "Please provide a name for the workout item"],
     },
     isStarted: {
         type: Boolean,
@@ -42,75 +72,71 @@ const workoutItemAnaerobicSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
-    setCompletedStatus: {
-        type: [Boolean],
-        default: [],
-    },
-    restInSec: Number,
-}, {
-    toObject: {
-        virtuals: true,
-        transform: (_, ret) => {
-            delete ret._id;
-            return ret;
+    type: {
+        type: String,
+        enum: {
+            values: ["aerobic", "anaerobic", "superset"],
+            message: "type must be either aerobic, anaerobic or superset",
         },
+        default: "anaerobic",
+        validate: [
+            { validator: validateAerobicFields },
+            { validator: validateAnaerobicFields },
+            { validator: validateSupersetFields },
+        ],
     },
-    toJSON: {
-        virtuals: true,
-        transform: (_, ret) => {
-            delete ret._id;
-            return ret;
-        },
-    },
-});
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const workoutItemAerobicSchema = new mongoose_1.Schema({
-    name: String,
     durationInMin: Number,
-    isStarted: {
-        type: Boolean,
-        default: false,
+    sets: {
+        type: [{ isCompleted: { type: Boolean } }],
+        default: undefined,
     },
-    isCompleted: {
-        type: Boolean,
-        default: false,
+    reps: {
+        type: Number,
+        default: undefined,
     },
-}, {
-    toObject: {
-        virtuals: true,
-        transform: (_, ret) => {
-            delete ret._id;
-            return ret;
-        },
+    weight: {
+        type: Number,
+        default: undefined,
     },
-    toJSON: {
-        virtuals: true,
-        transform: (_, ret) => {
-            delete ret._id;
-            return ret;
-        },
-    },
-});
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const workoutItemSupersetSchema = new mongoose_1.Schema({
-    name: String,
-    sets: Number,
-    reps: Number,
-    weight: Number,
     weightUnit: {
         type: String,
-        enum: ["kg", "lbs"],
+        enum: {
+            values: Object.values(workout_1.WeightUnit),
+            message: "weightUnit must be either kg or lbs",
+        },
+        default: undefined,
     },
-    restInSec: Number,
-    isStarted: {
-        type: Boolean,
-        default: false,
+    restInSec: {
+        type: Number,
+        default: undefined,
     },
-    isCompleted: {
-        type: Boolean,
-        default: false,
+    items: {
+        type: [
+            {
+                name: {
+                    type: String,
+                    required: [true, "Please provide a name for the superset item"],
+                },
+                reps: {
+                    type: Number,
+                    required: [true, "Please provide a reps for the superset item"],
+                },
+                weight: {
+                    type: Number,
+                    required: [true, "Please provide a weight for the superset item"],
+                },
+                weightUnit: {
+                    type: String,
+                    enum: {
+                        values: Object.values(workout_1.WeightUnit),
+                        message: "weightUnit must be either kg or lbs",
+                    },
+                    required: [true, "Please provide a weightUnit for the superset item"],
+                },
+            },
+        ],
+        default: undefined,
     },
-    superset: [workoutItemAnaerobicSchema],
 }, {
     toObject: {
         virtuals: true,
@@ -128,18 +154,24 @@ const workoutItemSupersetSchema = new mongoose_1.Schema({
     },
 });
 const workoutSchema = new mongoose_1.Schema({
-    type: {
-        type: String,
-        enum: ["aerobic", "anaerobic"],
-        default: "anaerobic",
-    },
     userId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         required: [true, "Please provide a userId"],
     },
+    type: {
+        type: String,
+        enum: {
+            values: ["aerobic", "anaerobic"],
+            message: "type must be either aerobic or anaerobic",
+        },
+        default: "anaerobic",
+    },
     split: {
         type: String,
-        enum: ["FBW", "A", "B", "C", "D", "E", "F"],
+        enum: {
+            values: ["FBW", "A", "B", "C", "D", "E", "F"],
+            message: "split must be either FBW, A, B, C, D, E or F",
+        },
         default: "FBW",
     },
     description: {
@@ -147,12 +179,7 @@ const workoutSchema = new mongoose_1.Schema({
         trim: true,
         default: "no description",
     },
-    items: [
-        {
-            type: mongoose_1.default.Schema.Types.Mixed,
-            enum: [workoutItemAnaerobicSchema, workoutItemAerobicSchema, workoutItemSupersetSchema],
-        },
-    ],
+    items: [workoutItemSchema],
 }, {
     toObject: {
         virtuals: true,

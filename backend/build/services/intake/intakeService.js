@@ -32,7 +32,7 @@ function getAllIntakeItems() {
         return intakeItems;
     });
 }
-function getExistingIntakeItem(newIntakeItem) {
+function getExistingIntakeItem(intakeItemToCheck) {
     return __awaiter(this, void 0, void 0, function* () {
         const intakeItems = yield dailyDataModel_1.DailyDataModel.aggregate([
             {
@@ -43,8 +43,8 @@ function getExistingIntakeItem(newIntakeItem) {
             },
             {
                 $match: {
-                    "intakes.items.name": newIntakeItem.name,
-                    "intakes.items.unit": newIntakeItem.unit,
+                    "intakes.items.name": intakeItemToCheck.name,
+                    "intakes.items.unit": intakeItemToCheck.unit,
                 },
             },
             {

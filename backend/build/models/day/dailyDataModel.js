@@ -18,12 +18,11 @@ const intakeSchema_1 = require("./intakeSchema");
 const calorieService_1 = __importDefault(require("../../services/calorie/calorieService"));
 const userModel_1 = require("../user/userModel");
 const ALSService_1 = require("../../services/ALSService");
-const utilService_1 = require("../../services/util/utilService");
 const workoutModel_1 = require("../workout/workoutModel");
 const dailyDataSchema = new mongoose_1.Schema({
     date: {
         type: Date,
-        default: (0, utilService_1.getIsraeliDate)(),
+        default: new Date(),
     },
     userId: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -68,30 +67,23 @@ const dailyDataSchema = new mongoose_1.Schema({
     },
     timestamps: true,
 });
-// // Pre-save middleware
-// dailyDataSchema.pre("save", async function (next) {
-//   // 'this' refers to the document being saved
-//   const currentDate = this.date;
-//   const { userId } = this;
-//   // Find the most recent record for this user
-//   const lastRecord = await this.constructor
-//     .findOne({
-//       userId: userId,
-//     })
-//     .sort({ date: -1 });
-//   if (lastRecord) {
-//     const lastDate = lastRecord.date;
-//     const timeDifference = currentDate.getTime() - lastDate.getTime();
-//     // Check if the time difference is less than 24 hours (in milliseconds)
-//     if (timeDifference < 24 * 60 * 60 * 1000) {
-//       // Throw an error or call next() with an error
-//       next(new Error("Date should be more than 24 hours from the last saved data for this user."));
-//       return;
-//     }
-//   }
-//   // If validation passes, proceed to save
-//   next();
-// });
+dailyDataSchema.pre("save", function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { userId } = this;
+        if (!userId)
+            return next();
+        const latestEntry = yield DailyDataModel.findOne({ userId: userId }).sort({ date: -1 });
+        if (!latestEntry)
+            return next();
+        const lastSavedDate = latestEntry.date;
+        if (this.date.toDateString() !== lastSavedDate.toDateString())
+            return next();
+        const nextDay = new Date(lastSavedDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        this.date = nextDay;
+        next();
+    });
+});
 dailyDataSchema.pre("findOneAndUpdate", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const update = this.getUpdate();

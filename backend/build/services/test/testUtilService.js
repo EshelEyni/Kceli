@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMockDailyData = exports.deleteTestUser = exports.getMockedUser = exports.getMongoId = exports.getMockNewIntakeItem = exports.getNewMockIntake = exports.createTestDailyData = exports.createValidUserCreds = exports.createTestUser = exports.deleteManyTestUsers = exports.createManyTestUsers = exports.mockGetLoggedInUserIdFromReq = exports.getLoginTokenStrForTest = void 0;
+exports.getMockDailyData = exports.deleteTestUser = exports.getMockedUser = exports.getMongoId = exports.getMockWorkoutItem = exports.getMockWorkout = exports.getMockNewIntakeItem = exports.getNewMockIntake = exports.createTestDailyData = exports.createValidUserCreds = exports.createTestUser = exports.deleteManyTestUsers = exports.createManyTestUsers = exports.mockGetLoggedInUserIdFromReq = exports.getLoginTokenStrForTest = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 require("dotenv").config();
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -120,20 +120,43 @@ function getMockDailyData({ userId }) {
 exports.getMockDailyData = getMockDailyData;
 function getNewMockIntake() {
     return {
-        name: "test",
+        id: getMongoId(),
         items: [getMockNewIntakeItem()],
         isRecorded: true,
+        recordedAt: null,
     };
 }
 exports.getNewMockIntake = getNewMockIntake;
 function getMockNewIntakeItem() {
     return {
+        id: getMongoId(),
         name: "test",
         unit: intake_1.MeasurementUnit.UNIT,
         quantity: 1,
     };
 }
 exports.getMockNewIntakeItem = getMockNewIntakeItem;
+function getMockWorkout() {
+    return {
+        id: getMongoId(),
+        userId: getMongoId(),
+        description: "test",
+        type: "aerobic",
+        items: [getMockWorkoutItem()],
+    };
+}
+exports.getMockWorkout = getMockWorkout;
+function getMockWorkoutItem() {
+    return {
+        id: getMongoId(),
+        name: "test",
+        isStarted: false,
+        isCompleted: false,
+        type: "aerobic",
+        durationInMin: 1,
+    };
+}
+exports.getMockWorkoutItem = getMockWorkoutItem;
 function mockGetLoggedInUserIdFromReq(value) {
     const userId = value !== undefined ? value : getMongoId();
     ALSService_1.getLoggedInUserIdFromReq.mockReturnValue(userId);

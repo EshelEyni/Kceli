@@ -13,11 +13,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCaloriesForItem = void 0;
-const openAIService_1 = __importDefault(require("../../services/openAI/openAIService"));
 const errorService_1 = require("../../services/error/errorService");
+const openAIService_1 = __importDefault(require("../../services/openAI/openAIService"));
+const intakeService_1 = __importDefault(require("../../services/intake/intakeService"));
+const calorieService_1 = __importDefault(require("../../services/calorie/calorieService"));
 const getCaloriesForItem = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const intake = req.body;
-    const calories = yield openAIService_1.default.getCaloriesForIntakeItem(intake);
+    const intakeItem = req.body;
+    const existingItemData = yield intakeService_1.default.getExistingIntakeItem(intakeItem);
+    let calories;
+    if (existingItemData && existingItemData.calories) {
+        calories = calorieService_1.default.calcCaloriesFromExistingItem({ existingItemData, intakeItem });
+    }
+    else {
+        calories = yield openAIService_1.default.getCaloriesForIntakeItem(intakeItem);
+    }
     res.send({
         status: "success",
         data: calories,

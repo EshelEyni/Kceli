@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../../components/App/Button/Button";
 import nutritionApiService from "../../../services/nutritionApi/nutritionApiService";
-import axios from "axios";
 
 type NutritionQueryIFormInput = {
   chatGPTQuery: string;
@@ -23,6 +22,7 @@ export const NutritionQuery: FC = () => {
     USDAAPIResponse: "",
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { control, handleSubmit, setValue } = useForm<NutritionQueryIFormInput>({
     defaultValues: {
       chatGPTQuery: "",
