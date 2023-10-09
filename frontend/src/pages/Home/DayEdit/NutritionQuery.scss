@@ -1,0 +1,135 @@
+@import "../../../styles/main.scss";
+
+.day-edit {
+  .nutrition-query {
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
+    gap: rem(10px);
+    width: 100%;
+
+    &__desc {
+      display: flex;
+      flex-direction: column;
+      gap: rem(10px);
+      font-size: rem(18px);
+      color: var(--color-secondary);
+
+      ul {
+        li {
+          color: inherit;
+          margin-left: rem(20px);
+          list-style: outside;
+        }
+      }
+    }
+
+    &__form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: rem(5px);
+
+      label {
+        align-self: flex-start;
+        display: flex;
+        align-items: center;
+        gap: rem(5px);
+        font-size: rem(20px);
+        color: var(--color-secondary);
+      }
+
+      textarea {
+        width: 100%;
+        padding: rem(10px);
+        font-size: rem(16px);
+        padding: rem(12px) rem(25px);
+        border-radius: 5px;
+        font-size: rem(20px);
+        transition: all 0.2s ease-in-out;
+      }
+
+      input {
+        width: 100%;
+        padding: rem(12px) rem(25px);
+        border-radius: 5px;
+        font-size: rem(20px);
+        transition: all 0.2s ease-in-out;
+      }
+
+      .btn {
+        margin-top: rem(15px);
+      }
+    }
+
+    .nutrition-query__results {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: rem(10px);
+      width: 100%;
+
+      &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: rem(5px);
+        width: 100%;
+        padding: rem(10px);
+        border-radius: 5px;
+        background-color: var(--color-secondary);
+        color: var(--color-text-gray);
+        font-size: rem(20px);
+        transition: all 0.2s ease-in-out;
+        position: relative;
+
+        
+
+        h1 {
+          color: var(--color-text);
+          align-self: flex-start;
+        }
+
+        &__list {
+          align-self: flex-start;
+          color: var(--color-text-gray);
+          display: flex;
+          flex-direction: column;
+          gap: rem(10px);
+          width: 100%;
+
+          li {
+            color: inherit;
+
+            strong {
+              display: flex;
+              font-size: rem(20px);
+              text-transform: uppercase;
+              margin-bottom: rem(2px);
+            }
+
+            div {
+              display: flex;
+              align-items: flex-end;
+              gap: rem(5px);
+
+              span:nth-child(1) {
+                font-size: rem(18px);
+                text-transform: capitalize;
+                color: var(--color-text-gray);
+              }
+
+              span:nth-child(2) {
+                font-size: rem(16px);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

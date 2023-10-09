@@ -1,7 +1,12 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../../components/App/Button/Button";
-import nutritionApiService from "../../../services/nutritionApi/nutritionApiService";
+import nutritionApiService from "../../../services/nutrition/nutritionApiService";
+import { RiGovernmentFill, RiOpenaiFill } from "react-icons/ri";
+import "./NutritionQuery.scss";
+import { GiNinjaHead } from "react-icons/gi";
+import { useDayEdit } from "./DayEditContext";
+import { NutritionQueryResponseHandler } from "./NutritionQueryResponseHandler";
 
 type NutritionQueryIFormInput = {
   chatGPTQuery: string;
@@ -9,18 +14,15 @@ type NutritionQueryIFormInput = {
   USDAAPIQuery: string;
 };
 
-type QueryResponse = {
-  chatGPTResponse?: string;
-  ninjaAPIResponse?: string;
-  USDAAPIResponse?: string;
-};
-
 export const NutritionQuery: FC = () => {
-  const [result, setResult] = useState<QueryResponse>({
-    chatGPTResponse: "",
-    ninjaAPIResponse: "",
-    USDAAPIResponse: "",
-  });
+  const {
+    chatGPTQuery,
+    setChatGPTQuery,
+    ninjaAPIQuery,
+    setNinjaAPIQuery,
+    USDAAPIQuery,
+    setUSDAAPIQuery,
+  } = useDayEdit();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { control, handleSubmit, setValue } = useForm<NutritionQueryIFormInput>({
@@ -33,54 +35,114 @@ export const NutritionQuery: FC = () => {
 
   async function onSubmit(data: NutritionQueryIFormInput) {
     if (data.chatGPTQuery) {
-      const chatGPTResponse = await nutritionApiService.queryChatGPT(data.chatGPTQuery);
-      setResult({ chatGPTResponse });
+      try {
+        setChatGPTQuery({ ...chatGPTQuery, status: "loading" });
+        const response = await nutritionApiService.queryChatGPT(data.chatGPTQuery);
+        setChatGPTQuery({ ...chatGPTQuery, status: "success", response });
+      } catch (e) {
+        setChatGPTQuery({
+          ...chatGPTQuery,
+          status: "error",
+          error: e instanceof Error ? e.message : "An unknown error occurred.",
+        });
+      }
     }
 
     if (data.ninjaAPIQuery) {
-      const ninjaAPIResponse = await nutritionApiService.queryNinja(data.ninjaAPIQuery);
-      setResult({ ninjaAPIResponse });
+      try {
+        setNinjaAPIQuery({ ...ninjaAPIQuery, status: "loading" });
+        const ninjaAPIResponse = await nutritionApiService.queryNinja(data.ninjaAPIQuery);
+        setNinjaAPIQuery({ ...ninjaAPIQuery, status: "success", response: ninjaAPIResponse });
+      } catch (e) {
+        setNinjaAPIQuery({
+          ...ninjaAPIQuery,
+          status: "error",
+          error: e instanceof Error ? e.message : "An unknown error occurred.",
+        });
+      }
     }
 
     if (data.USDAAPIQuery) {
-      const USDAAPIResponse = await nutritionApiService.queryUSDA(data.USDAAPIQuery);
-      setResult({ USDAAPIResponse });
+      try {
+        setUSDAAPIQuery({ ...USDAAPIQuery, status: "loading" });
+        const USDAAPIResponse = await nutritionApiService.queryUSDA(data.USDAAPIQuery);
+        setUSDAAPIQuery({ ...USDAAPIQuery, status: "success", response: USDAAPIResponse });
+      } catch (e) {
+        setUSDAAPIQuery({
+          ...USDAAPIQuery,
+          status: "error",
+          error: e instanceof Error ? e.message : "An unknown error occurred.",
+        });
+      }
     }
   }
 
   return (
     <section className="nutrition-query" data-testid="nutrition-query">
+      <section className="nutrition-query__desc">
+        <p>{`This tab let's you query the APIs used by the app.`}</p>
+        <ul>
+          <li>The first one is a chatbot that generates a response based on the input</li>
+          <li>The second one is a food database.</li>
+          <li>The third one is a nutrition database.</li>
+        </ul>
+      </section>
+
       <form className="nutrition-query__form" autoComplete="off">
+        <label htmlFor="chatGPTQuery">
+          <span>Chat GPT</span>
+          <RiOpenaiFill />
+        </label>
         <Controller
           name="chatGPTQuery"
           control={control}
-          render={({ field }) => <textarea {...field} />}
+          render={({ field }) => <textarea id="chatGPTQuery" {...field} />}
         />
 
+        <label htmlFor="ninjaAPIQuery">
+          <span>Ninja API</span>
+          <GiNinjaHead />
+        </label>
         <Controller
           name="ninjaAPIQuery"
           control={control}
-          render={({ field }) => <input {...field} />}
+          render={({ field }) => <input id="ninjaAPIQuery" {...field} />}
         />
 
+        <label htmlFor="USDAAPIQuery">
+          <span>USDA API</span>
+          <RiGovernmentFill />
+        </label>
         <Controller
           name="USDAAPIQuery"
           control={control}
-          render={({ field }) => <input {...field} />}
+          render={({ field }) => <input id="USDAAPIQuery" {...field} />}
         />
 
-        <Button onClickFn={handleSubmit(onSubmit)}>Submit</Button>
+        <Button onClickFn={handleSubmit(onSubmit)}>query</Button>
       </form>
 
-      <div className="nutrition-query__result">
-        <h1>ChatGPT Response:</h1>
-        <span>{result.chatGPTResponse}</span>
+      <div className="nutrition-query__results">
+        {chatGPTQuery.status !== "idle" && (
+          <div className="nutrition-query__results__item">
+            <h1>Chat GPT Response:</h1>
+            <NutritionQueryResponseHandler queryState={chatGPTQuery} />
+          </div>
+        )}
 
-        <h1>Ninja API Response:</h1>
-        <pre>{JSON.stringify(result.ninjaAPIResponse)}</pre>
+        {ninjaAPIQuery.status !== "idle" && (
+          <div className="nutrition-query__results__item">
+            <h1>Ninja API Response:</h1>
+            <NutritionQueryResponseHandler queryState={ninjaAPIQuery} />
+          </div>
+        )}
 
-        <h1>USDA API Response:</h1>
-        <pre>{JSON.stringify(result.USDAAPIResponse)}</pre>
+        {USDAAPIQuery.status !== "idle" && (
+          <div className="nutrition-query__results__item">
+            <h1>USDA API Response:</h1>
+            <NutritionQueryResponseHandler queryState={USDAAPIQuery} />
+          </div>
+        )}
       </div>
     </section>
   );

@@ -30,7 +30,11 @@ export const DayEdit: FC = () => {
     openedElement === ToggledElement.UnRecordedIntakeList;
 
   return (
-    <section className="day-edit" style={{ backgroundColor }} data-testid="day-edit">
+    <section
+      className="day-edit"
+      style={{ backgroundColor, border: `5px solid ${backgroundColor}` }}
+      data-testid="day-edit"
+    >
       {isLoaderShown && <SpinnerLoader />}
       {isError && <ErrorMsg />}
       {showContent && (

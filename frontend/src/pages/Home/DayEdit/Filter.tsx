@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { ToggledElement, useDayEdit } from "./DayEditContext";
 import { Button } from "../../../components/App/Button/Button";
+import "./Filter.scss";
 
 export const Filter: FC = () => {
   const { dailyData, setOpenedElement } = useDayEdit();
@@ -35,7 +36,7 @@ export const Filter: FC = () => {
   ];
 
   return (
-    <ul className="filter">
+    <ul className="day-edit__filter">
       {filterBy.map(filter => {
         if (filter.isShown === false) return null;
         return (

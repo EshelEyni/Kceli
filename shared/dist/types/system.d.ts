@@ -29,3 +29,23 @@ export type UserCaloricData = {
     age: number;
     gender: Gender;
 };
+export type FormattedNinjaAPIResDataItem = {
+    name: string;
+    calories: string;
+    "serving size"?: string;
+    fat?: string;
+    "fat saturated"?: string;
+    protein?: string;
+    sodium?: string;
+    potassium?: string;
+    cholesterol?: string;
+    carbohydrates?: string;
+    fiber?: string;
+    sugar?: string;
+};
+export type FormattedNinjaAPIResData = FormattedNinjaAPIResDataItem[];
+export type FormattedUSDAFoodObject = {
+    description: string;
+    servingSize?: string;
+    [key: string]: string | undefined;
+};

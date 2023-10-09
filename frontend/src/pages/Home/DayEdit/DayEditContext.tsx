@@ -8,6 +8,8 @@ import { Intake, NewIntake } from "../../../../../shared/types/intake";
 import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
 import { useAuth } from "../../../hooks/useAuth";
 import waterConsumptionService from "../../../services/waterConsumption/waterConsumptionService";
+import nutritionUtilService from "../../../services/nutrition/nutritionUtilService";
+import { NutritionQueryState } from "../../../types/app";
 
 export type DayEditContextType = {
   dailyData: DayData | undefined;
@@ -30,6 +32,12 @@ export type DayEditContextType = {
   setIntake: Dispatch<SetStateAction<NewIntake>>;
   calConsumedPct: number;
   calRemainingPct: number;
+  chatGPTQuery: NutritionQueryState;
+  setChatGPTQuery: Dispatch<SetStateAction<NutritionQueryState>>;
+  ninjaAPIQuery: NutritionQueryState;
+  setNinjaAPIQuery: Dispatch<SetStateAction<NutritionQueryState>>;
+  USDAAPIQuery: NutritionQueryState;
+  setUSDAAPIQuery: Dispatch<SetStateAction<NutritionQueryState>>;
 };
 
 export enum ToggledElement {
@@ -50,7 +58,15 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
 
   const [openedElement, setOpenedElement] = useState<ToggledElement>(ToggledElement.IntakeEdit);
   const [intake, setIntake] = useState<NewIntake>(intakeUtilService.getDefaultIntake());
-
+  const [chatGPTQuery, setChatGPTQuery] = useState<NutritionQueryState>(
+    nutritionUtilService.getDefaultNutritionQuery("chatGPT")
+  );
+  const [ninjaAPIQuery, setNinjaAPIQuery] = useState<NutritionQueryState>(
+    nutritionUtilService.getDefaultNutritionQuery("ninjaAPI")
+  );
+  const [USDAAPIQuery, setUSDAAPIQuery] = useState<NutritionQueryState>(
+    nutritionUtilService.getDefaultNutritionQuery("usdaAPI")
+  );
   const recordedIntakes = (dailyData?.intakes.filter(i => i.isRecorded) as Intake[]) || [];
   const unrecordedIntakes = (dailyData?.intakes.filter(i => !i.isRecorded) as Intake[]) || [];
 
@@ -105,6 +121,12 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     setIntake,
     calConsumedPct,
     calRemainingPct,
+    chatGPTQuery,
+    setChatGPTQuery,
+    ninjaAPIQuery,
+    setNinjaAPIQuery,
+    USDAAPIQuery,
+    setUSDAAPIQuery,
   };
 
   return <DayEditContext.Provider value={value}>{children}</DayEditContext.Provider>;

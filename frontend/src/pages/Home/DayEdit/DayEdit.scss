@@ -82,23 +82,6 @@
     }
   }
 
-  .filter {
-    display: flex;
-    flex-wrap: wrap;
-    align-self: flex-start;
-    gap: rem(10px);
-
-    .filter__item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: rem(10px);
-      border-radius: 25px;
-      font-size: rem(16px);
-      transition: all 0.2s ease-in-out;
-    }
-  }
-
   .weight-waist-form {
     display: flex;
     flex-direction: column;
@@ -497,21 +480,5 @@
         text-transform: uppercase;
       }
     }
-  }
-}
-
-.nutrition-query {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: rem(10px);
-  
-  &__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: rem(10px);
   }
 }
