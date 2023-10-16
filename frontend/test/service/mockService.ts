@@ -9,7 +9,7 @@ import testService from "./testService";
 import { useDeleteWorkout } from "../../src/hooks/useDeleteWorkout";
 import { useNavigate } from "react-router-dom";
 
-type MockUseDayEdit = {
+export type MockUseDayEdit = {
   dailyData?: any;
   isLoading?: boolean;
   isSuccess?: boolean;

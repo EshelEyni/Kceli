@@ -10,6 +10,8 @@ import {
   mockUseGetTodayData,
   mockUseUpdateTodayData,
 } from "../../../../test/service/mockService";
+import nutritionUtilService from "../../../services/nutrition/nutritionUtilService";
+import { FormattedNinjaAPIResData } from "../../../../../shared/types/system";
 
 vi.mock("../../../hooks/useGetTodayData");
 vi.mock("../../../hooks/useAuth");
@@ -331,6 +333,190 @@ describe("DayEditContext", () => {
     );
 
     expect(screen.getByTestId("intake-test")).toHaveTextContent("test");
+  });
+
+  it("should provide proper chatGPTQuery value", () => {
+    mockUseAuth({});
+    mockUseGetTodayData({
+      dailyData: null,
+      isSuccess: false,
+    });
+
+    const TestComponent = () => {
+      const { chatGPTQuery, setChatGPTQuery } = useDayEdit();
+
+      function handleSetBtnClick() {
+        setChatGPTQuery({
+          ...nutritionUtilService.getDefaultNutritionQuery("chatGPT"),
+          response: "test",
+        });
+      }
+
+      return (
+        <>
+          <div data-testid="chat-gpt-query-test">{chatGPTQuery.response as string}</div>
+          <div data-testid="chat-gpt-query-test-error">{chatGPTQuery.error}</div>
+          <div data-testid="chat-gpt-query-test-status">{chatGPTQuery.status}</div>
+          <button onClick={handleSetBtnClick} data-testid="chat-gpt-query-btn">
+            Set
+          </button>
+        </>
+      );
+    };
+
+    const { rerender } = render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.getByTestId("chat-gpt-query-test")).toHaveTextContent("");
+    expect(screen.getByTestId("chat-gpt-query-test-error")).toHaveTextContent("");
+    expect(screen.getByTestId("chat-gpt-query-test-status")).toHaveTextContent("idle");
+
+    fireEvent.click(screen.getByTestId("chat-gpt-query-btn"));
+
+    rerender(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.getByTestId("chat-gpt-query-test")).toHaveTextContent("test");
+  });
+
+  it("should provide proper ninjaAPIQuery value", () => {
+    mockUseAuth({});
+    mockUseGetTodayData({
+      dailyData: null,
+      isSuccess: false,
+    });
+
+    const TestComponent = () => {
+      const { ninjaAPIQuery, setNinjaAPIQuery } = useDayEdit();
+
+      function handleSetBtnClick() {
+        setNinjaAPIQuery({
+          ...nutritionUtilService.getDefaultNutritionQuery("ninjaAPI"),
+          response: [
+            {
+              name: "test",
+              description: "test",
+              calories: "100",
+              carbs: "10",
+              fat: "10",
+              protein: "10",
+            },
+          ],
+        });
+      }
+
+      return (
+        <>
+          {ninjaAPIQuery.response && (
+            <div>
+              {(ninjaAPIQuery.response as FormattedNinjaAPIResData).map(item => (
+                <div key={item.name} data-testid="ninja-api-query-test">
+                  {item.name}
+                </div>
+              ))}
+            </div>
+          )}
+          <div data-testid="ninja-api-query-test-error">{ninjaAPIQuery.error}</div>
+          <div data-testid="ninja-api-query-test-status">{ninjaAPIQuery.status}</div>
+          <button onClick={handleSetBtnClick} data-testid="ninja-api-query-btn">
+            Set
+          </button>
+        </>
+      );
+    };
+
+    const { rerender } = render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.queryAllByTestId("ninja-api-query-test")).toHaveLength(0);
+    expect(screen.getByTestId("ninja-api-query-test-error")).toHaveTextContent("");
+    expect(screen.getByTestId("ninja-api-query-test-status")).toHaveTextContent("idle");
+
+    fireEvent.click(screen.getByTestId("ninja-api-query-btn"));
+
+    rerender(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.queryAllByTestId("ninja-api-query-test")).toHaveLength(1);
+  });
+
+  it("should provide proper USDAAPIQuery value", () => {
+    mockUseAuth({});
+    mockUseGetTodayData({
+      dailyData: null,
+      isSuccess: false,
+    });
+
+    const TestComponent = () => {
+      const { USDAAPIQuery, setUSDAAPIQuery } = useDayEdit();
+
+      function handleSetBtnClick() {
+        setUSDAAPIQuery({
+          ...nutritionUtilService.getDefaultNutritionQuery("usdaAPI"),
+          response: [
+            {
+              name: "test",
+              description: "test",
+              calories: "100",
+              carbs: "10",
+              fat: "10",
+              protein: "10",
+            },
+          ],
+        });
+      }
+
+      return (
+        <>
+          {USDAAPIQuery.response && (
+            <div>
+              {(USDAAPIQuery.response as FormattedNinjaAPIResData).map(item => (
+                <div key={item.name} data-testid="usda-api-query-test">
+                  {item.name}
+                </div>
+              ))}
+            </div>
+          )}
+          <div data-testid="usda-api-query-test-error">{USDAAPIQuery.error}</div>
+          <div data-testid="usda-api-query-test-status">{USDAAPIQuery.status}</div>
+          <button onClick={handleSetBtnClick} data-testid="usda-api-query-btn">
+            Set
+          </button>
+        </>
+      );
+    };
+
+    const { rerender } = render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.queryAllByTestId("usda-api-query-test")).toHaveLength(0);
+    expect(screen.getByTestId("usda-api-query-test-error")).toHaveTextContent("");
+    expect(screen.getByTestId("usda-api-query-test-status")).toHaveTextContent("idle");
+
+    fireEvent.click(screen.getByTestId("usda-api-query-btn"));
+
+    rerender(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.queryAllByTestId("usda-api-query-test")).toHaveLength(1);
   });
 
   it("should provide proper recordedIntakes value", () => {

@@ -20,7 +20,8 @@ const Homepage = () => {
   usePageLoaded({ title: "Home / Kceli" });
 
   function handleCreateDay() {
-    createDay({});
+    const newDateStr = new Date().toDateString();
+    createDay({ date: newDateStr });
   }
 
   return (

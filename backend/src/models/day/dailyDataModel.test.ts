@@ -118,57 +118,6 @@ describe("Daily Data Model", () => {
       await DailyDataModel.deleteMany({});
     });
 
-    it("should set the date to next day if the date is equal to the last saved entry", async () => {
-      const user = await UserModel.create(createValidUserCreds());
-      const validDailyData1 = new DailyDataModel({
-        ...dailyData,
-        userId: user.id,
-        date: new Date(),
-      });
-      await validDailyData1.save();
-
-      // Create second entry for the user without explicitly setting the date
-      const validDailyData2 = new DailyDataModel({ ...dailyData, userId: user.id });
-      const savedDailyData2 = (await validDailyData2.save()).toObject();
-
-      // Check that the date in the new entry is one day after the last saved entry
-      const expectedNextDay = new Date();
-      expectedNextDay.setDate(expectedNextDay.getDate() + 1);
-      expect(new Date(savedDailyData2.date).toDateString()).toEqual(expectedNextDay.toDateString());
-    });
-
-    it("should not set the date to next day if there is no last entry", async () => {
-      const user = await UserModel.create(createValidUserCreds());
-      const validDailyData = new DailyDataModel({ ...dailyData, userId: user.id });
-      const savedDailyData = (await validDailyData.save()).toObject();
-
-      expect(new Date(savedDailyData.date).toDateString()).toEqual(new Date().toDateString());
-    });
-
-    it("should not set the date to next day if the date is not equal to the last saved entry", async () => {
-      const user = await UserModel.create(createValidUserCreds());
-      const validDailyData1 = new DailyDataModel({
-        ...dailyData,
-        userId: user.id,
-        date: new Date(),
-      });
-      await validDailyData1.save();
-
-      const nextDay = new Date();
-      nextDay.setDate(nextDay.getDate() + 1);
-
-      // Create second entry for the user without explicitly setting the date
-      const validDailyData2 = new DailyDataModel({
-        ...dailyData,
-        userId: user.id,
-        date: nextDay,
-      });
-      const savedDailyData2 = (await validDailyData2.save()).toObject();
-
-      // Check that the date in the new entry is one day after the last saved entry
-      expect(new Date(savedDailyData2.date).toDateString()).toEqual(nextDay.toDateString());
-    });
-
     it("should correctly calculate TDEE and target caloric intake when updating weight", async () => {
       const user = await UserModel.create(createValidUserCreds());
       mockGetLoggedInUserIdFromReq(user.id);

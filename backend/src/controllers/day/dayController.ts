@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { DailyDataModel } from "../../models/day/dailyDataModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
-import { asyncErrorCatcher } from "../../services/error/errorService";
+import { AppError, asyncErrorCatcher } from "../../services/error/errorService";
 import { deleteOne, getAll, getOne, updateOne } from "../../services/factory/factoryService";
 import { validateIds } from "../../services/util/utilService";
 import { addWeeks, endOfMonth, startOfMonth, subWeeks } from "date-fns";
@@ -38,8 +38,15 @@ const getDay = getOne(DailyDataModel);
 const createDay = asyncErrorCatcher(async (req: Request, res: Response) => {
   const loggedInUserId = getLoggedInUserIdFromReq();
   validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
+  const { date } = req.body;
+  if (!date) throw new AppError("Please provide date", 400);
 
-  const doc = await DailyDataModel.create({ ...req.body, userId: loggedInUserId });
+  const doc = await DailyDataModel.create({
+    ...req.body,
+    date: new Date(date),
+    userId: loggedInUserId,
+  });
+
   res.status(201).send({
     status: "success",
     data: doc,

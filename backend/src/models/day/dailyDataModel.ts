@@ -58,25 +58,6 @@ const dailyDataSchema = new Schema<IDailyData>(
   }
 );
 
-dailyDataSchema.pre("save", async function (next) {
-  const { userId } = this;
-
-  if (!userId) return next();
-
-  const latestEntry = await DailyDataModel.findOne({ userId: userId }).sort({ date: -1 });
-
-  if (!latestEntry) return next();
-
-  const lastSavedDate = latestEntry.date;
-  if (this.date.toDateString() !== lastSavedDate.toDateString()) return next();
-
-  const nextDay = new Date(lastSavedDate);
-  nextDay.setDate(nextDay.getDate() + 1);
-
-  this.date = nextDay;
-  next();
-});
-
 dailyDataSchema.pre("findOneAndUpdate", async function (next) {
   const update = this.getUpdate();
   const isWeightUpdated = update && "weight" in update;
