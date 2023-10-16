@@ -4,7 +4,7 @@ import { useUpdateTodayData } from "../../src/hooks/useUpdateTodayData";
 import { useGetTodayData } from "../../src/hooks/useGetTodayData";
 import { Mock, vi } from "vitest";
 import { useCreateDay } from "../../src/hooks/useCreateDay";
-import { useDayEdit } from "../../src/pages/Home/DayEdit/DayEditContext";
+import { ToggledElement, useDayEdit } from "../../src/pages/Home/DayEdit/DayEditContext";
 import testService from "./testService";
 import { useDeleteWorkout } from "../../src/hooks/useDeleteWorkout";
 import { useNavigate } from "react-router-dom";
@@ -81,15 +81,15 @@ function mockUseDayEdit({
   consumedCalories = 0,
   targetCaloricIntakePerDay = 0,
   backgroundColor = "white",
-  openedElement = "",
+  openedElement = ToggledElement.IntakeEdit,
   setOpenedElement = vi.fn(),
   recommendedWaterIntake = 0,
   intake = testService.createTestIntake(),
   setIntake = vi.fn(),
   calConsumedPct = 0,
   calRemainingPct = 0,
-}: MockUseDayEdit) {
-  (useDayEdit as Mock).mockReturnValue({
+}: MockUseDayEdit): MockUseDayEdit {
+  const state = {
     dailyData,
     isLoading,
     isSuccess,
@@ -110,7 +110,11 @@ function mockUseDayEdit({
     setIntake,
     calConsumedPct,
     calRemainingPct,
-  });
+  };
+
+  (useDayEdit as Mock).mockReturnValue(state);
+
+  return state;
 }
 
 function mockUseDeleteWorkout({

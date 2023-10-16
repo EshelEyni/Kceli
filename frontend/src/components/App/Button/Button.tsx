@@ -8,6 +8,7 @@ type ButtonProps = {
   isDisabled?: boolean;
   onClickFn?: AnyFunction;
   type?: "button" | "submit" | "reset";
+  dataTestId?: string;
 };
 
 export const Button: FC<ButtonProps> = ({
@@ -16,13 +17,14 @@ export const Button: FC<ButtonProps> = ({
   isDisabled = false,
   onClickFn,
   type = "button",
+  dataTestId = "btn",
 }) => {
   return (
     <button
       className={"btn " + (className || "")}
       onClick={onClickFn}
       disabled={isDisabled}
-      data-testid={className}
+      data-testid={dataTestId}
       type={type}
     >
       {children}

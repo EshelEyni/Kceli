@@ -3,7 +3,7 @@ import { ToggledElement, useDayEdit } from "./DayEditContext";
 import { Button } from "../../../components/App/Button/Button";
 import "./Filter.scss";
 
-export const Filter: FC = () => {
+export const DayEditFilter: FC = () => {
   const { dailyData, setOpenedElement } = useDayEdit();
   if (!dailyData) return null;
 
@@ -36,13 +36,13 @@ export const Filter: FC = () => {
   ];
 
   return (
-    <ul className="day-edit__filter">
-      {filterBy.map(filter => {
-        if (filter.isShown === false) return null;
+    <ul className="day-edit__filter" data-testid="day-edit-filter">
+      {filterBy.map(item => {
+        if (item.isShown === false) return null;
         return (
-          <li className="filter__item" key={filter.value}>
-            <Button className="btn" onClickFn={() => setOpenedElement(filter.value)}>
-              {filter.name}
+          <li className="filter__item" key={item.value}>
+            <Button className="btn" onClickFn={() => setOpenedElement(item.value)}>
+              {item.name}
             </Button>
           </li>
         );

@@ -4,7 +4,7 @@ import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/Spinner
 import { ErrorMsg } from "../../../components/Msg/ErrorMsg/ErrorMsg";
 import { ToggledElement, useDayEdit } from "./DayEditContext";
 import "./DayEdit.scss";
-import { Filter } from "./Filter";
+import { DayEditFilter } from "./Filter";
 import { DayEditHeader } from "./Header";
 import { IntakeList } from "./IntakeList";
 import { WeightWaistInput } from "./WeightWaistInput";
@@ -40,7 +40,7 @@ export const DayEdit: FC = () => {
       {showContent && (
         <>
           <DayEditHeader />
-          <Filter />
+          <DayEditFilter />
           {openedElement === ToggledElement.WeightWaistInput && <WeightWaistInput />}
           {openedElement === ToggledElement.IntakeEdit && <IntakeEdit />}
           {openedElement === ToggledElement.Workouts && (
