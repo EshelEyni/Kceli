@@ -45,7 +45,7 @@ const intakeItemSchema = new Schema<IIntakeItem>(
 intakeItemSchema.pre("validate", async function (next) {
   try {
     const intakeItem = this.toObject() as IIntakeItem;
-    if (intakeItem.calories) return next();
+    if (intakeItem.calories || intakeItem.name.toLowerCase() === "water") return next();
     const existingItemData = await intakeService.getExistingIntakeItem(intakeItem);
 
     if (existingItemData && existingItemData.calories) {

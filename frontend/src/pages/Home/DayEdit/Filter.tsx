@@ -21,6 +21,10 @@ export const DayEditFilter: FC = () => {
       value: ToggledElement.UnRecordedIntakeList,
     },
     {
+      name: "water",
+      value: ToggledElement.Water,
+    },
+    {
       name: "weight",
       value: ToggledElement.WeightWaistInput,
     },

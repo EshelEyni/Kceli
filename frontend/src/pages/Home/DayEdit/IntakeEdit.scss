@@ -9,12 +9,10 @@
   position: relative;
   flex-grow: 1;
 
-  .intake-edit-item__btns-container {
-    width: 100%;
-    justify-content: flex-end;
+  .intake-edit-item-list {
     display: flex;
+    flex-direction: column;
     gap: rem(10px);
-    margin-top: rem(20px);
   }
 
   .intake-edit-review-title {
@@ -39,6 +37,14 @@
       letter-spacing: 1px;
       transition: all 0.2s ease-in-out;
     }
+  }
+
+  .intake-edit-item__btns-container {
+    width: 100%;
+    justify-content: flex-end;
+    display: flex;
+    gap: rem(10px);
+    margin-top: rem(20px);
   }
 
   .intake-edit-btns-container {

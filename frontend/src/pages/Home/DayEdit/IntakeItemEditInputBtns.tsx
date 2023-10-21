@@ -13,10 +13,9 @@ export const IntakeItemEditInputBtns: FC = () => {
     handleInputChange,
     decreaseQuantity,
     increaseQuantity,
-    handleUnitInputClick,
+    handleUnitBtnClick,
     handleToggleManual,
     handleCalcBtnClick,
-    handleWaterButtonClick,
   } = useIntakeItemEdit();
 
   return (
@@ -37,16 +36,10 @@ export const IntakeItemEditInputBtns: FC = () => {
         </Button>
       </div>
 
-      <Button onClickFn={handleUnitInputClick} className="intake-item-edit__btn">
+      <Button onClickFn={handleUnitBtnClick} className="intake-item-edit__btn">
         <span>{intakeItem.unit}</span>
       </Button>
 
-      <Button
-        onClickFn={handleWaterButtonClick}
-        className={"intake-item-edit__btn" + (intakeItem.name === "water" ? " active" : "")}
-      >
-        <span>water</span>
-      </Button>
       <Button onClickFn={handleToggleManual} className="intake-item-edit__btn">
         <span>{isManual ? "Manual" : "Auto"}</span>
       </Button>

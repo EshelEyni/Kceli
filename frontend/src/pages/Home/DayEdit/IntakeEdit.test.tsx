@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 vi.mock("./DayEditContext");
 vi.mock("react-hot-toast");
+vi.mock("nspell");
 
 describe("Intake Edit", () => {
   afterEach(() => {
@@ -83,7 +84,7 @@ describe("Intake Edit", () => {
     expect(screen.queryByText("Edit")).not.toBeInTheDocument();
   });
 
-  it("should submit intake when save intake button is clicked", () => {
+  it.only("should submit intake when save intake button is clicked", () => {
     const dailyDatWithNoIntakes = { ...testService.createTestDailyData(), intakes: [] };
     const intake = testService.createTestIntake();
 

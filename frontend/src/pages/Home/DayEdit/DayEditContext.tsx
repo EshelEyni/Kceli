@@ -49,6 +49,7 @@ export enum ToggledElement {
   WeightWaistInput = "WeightWaistInput",
   Workouts = "Workouts",
   Query = "Query",
+  Water = "Water",
 }
 
 const DayEditContext = createContext<DayEditContextType | undefined>(undefined);

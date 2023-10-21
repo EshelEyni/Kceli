@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useRef, useEffect } from "react";
 import NSpell from "nspell";
 import { SpellingSuggestion } from "../../../types/app";
 import { useDayEdit } from "./DayEditContext";
-import { MeasurementUnit, NewIntakeItem } from "../../../../../shared/types/intake";
+import { NewIntakeItem } from "../../../../../shared/types/intake";
 import { AnyFunction } from "../../../../../shared/types/system";
 import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
 import calorieApiService from "../../../services/calorieApi/calorieApiService";
@@ -23,10 +23,9 @@ export type IntakeItemEditContextType = {
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   decreaseQuantity: () => void;
   increaseQuantity: () => void;
-  handleUnitInputClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  handleUnitBtnClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   handleToggleManual: () => void;
   handleCalcBtnClick: () => void;
-  handleWaterButtonClick: () => void;
   handleSuggestionClick: (original: string, suggestion: string) => void;
   handleIgnoreSuggestionClick: (original: string) => void;
   handleAddButtonClick: () => void;
@@ -44,18 +43,17 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
   const { intake, setIntake, currIntakeItemId, setCurrIntakeItemId } = useDayEdit();
   const isOneItem = intake.items.length === 1;
   const isCurrIntakeItem = intakeItem.id === currIntakeItemId;
-  const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
   const [isManual, setIsManual] = useState(false);
   const [inputFaded, setInputFaded] = useState("");
   const [isLoadingCal, setIsLoadingCal] = useState(false);
   const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([]);
-  const [spellchecker, setSpellchecker] = useState<NSpell | null>(null);
+  const [spellChecker, setSpellChecker] = useState<NSpell | null>(null);
   const debouncedSpellcheck = useRef<AnyFunction | null>(null);
   const isSuggestionListShown =
     suggestions.length > 0 &&
     suggestions[0].suggestions.length > 0 &&
-    !isInputNameEmpty &&
-    !!spellchecker;
+    !!intakeItem.name.length &&
+    !!spellChecker;
 
   function handleNameInputClick(itemId: string) {
     if (itemId === currIntakeItemId) return;
@@ -65,10 +63,10 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     const { value, name } = e.target;
+
     switch (name) {
       case "name":
         handleChange({ ...intakeItem, name: value });
-        setIsInputNameEmpty(!value.length);
         if (!value.length) setSuggestions([]);
         if (!debouncedSpellcheck.current) return;
         debouncedSpellcheck.current(value);
@@ -113,8 +111,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
     handleChange({ ...intakeItem, quantity: intakeItem.quantity + step });
   }
 
-  function handleUnitInputClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    e.preventDefault();
+  function handleUnitBtnClick() {
     const currentUnitIdx = intakeUtilService.units.indexOf(intakeItem.unit);
     const unit =
       currentUnitIdx === intakeUtilService.units.length - 1
@@ -147,12 +144,6 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
     }
   }
 
-  function handleWaterButtonClick() {
-    const { name, unit, quantity } = intakeItem;
-    if (name === "water" && unit === MeasurementUnit.MILLILITER && quantity === 750) return;
-    handleChange({ ...intakeItem, name: "water", unit: MeasurementUnit.MILLILITER, quantity: 750 });
-  }
-
   function handleSuggestionClick(original: string, suggestion: string) {
     const name = intakeItem.name.replace(original, suggestion);
     const filteredSuggestions = suggestions.filter(s => s.original !== original);
@@ -183,45 +174,40 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
   }
 
   useEffect(() => {
+    if (process.env.NODE_ENV === "test") return setSpellChecker(new NSpell("", ""));
     Promise.all([
       fetch("/assets/dictionaries/en_US.aff").then(res => res.text()),
       fetch("/assets/dictionaries/en_US.dic").then(res => res.text()),
     ])
       .then(([affData, dicData]) => {
         const nspellInstance = new NSpell(affData, dicData);
-        setSpellchecker(nspellInstance);
+        setSpellChecker(nspellInstance);
       })
       .catch(error => {
-        // TODO: remove this when tests are fixed
-        const isTestEnv = process.env.NODE_ENV === "test";
-        if (isTestEnv) return;
         console.error("Failed to load dictionaries:", error);
       });
   }, []);
 
   useEffect(() => {
-    function spellcheck(text: string) {
-      if (!spellchecker) return;
+    function spellCheck(text: string) {
+      if (!spellChecker) return;
       const filteredWordSet = new Set(["nes", "ness"]);
       const words = text.split(" ");
-      const suggestions = words
-        .filter(word => !filteredWordSet.has(word))
-        .map(word => ({
-          original: word,
-          suggestions: spellchecker.suggest(word),
-        }));
+      const filteredWords = words.filter(word => !filteredWordSet.has(word));
+      const suggestions = filteredWords.map(word => ({
+        original: word,
+        suggestions: spellChecker.suggest(word),
+      }));
       setSuggestions(suggestions);
     }
 
-    debouncedSpellcheck.current = debounce(spellcheck, 1000).debouncedFunc;
-  }, [spellchecker]);
+    debouncedSpellcheck.current = debounce(spellCheck, 1000).debouncedFunc;
+  }, [spellChecker]);
 
   const value = {
     intakeItem,
     isOneItem,
     isCurrIntakeItem,
-    isInputNameEmpty,
-    setIsInputNameEmpty,
     isManual,
     inputFaded,
     setInputFaded,
@@ -232,10 +218,9 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
     handleInputChange,
     decreaseQuantity,
     increaseQuantity,
-    handleUnitInputClick,
+    handleUnitBtnClick,
     handleToggleManual,
     handleCalcBtnClick,
-    handleWaterButtonClick,
     handleSuggestionClick,
     handleIgnoreSuggestionClick,
     handleAddButtonClick,

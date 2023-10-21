@@ -124,4 +124,17 @@ describe("Day Edit", () => {
 
     expect(screen.getByTestId("nutrition-query")).toBeInTheDocument();
   });
+
+  it("should render water edit when openedElement is Water", async () => {
+    mockUseDayEdit({
+      isSuccess: true,
+      dailyData: testService.createTestDailyData(),
+      isLoadingUpdate: false,
+      openedElement: "Water",
+    });
+
+    render(<DayEdit />);
+
+    expect(screen.getByTestId("water-edit")).toBeInTheDocument();
+  });
 });

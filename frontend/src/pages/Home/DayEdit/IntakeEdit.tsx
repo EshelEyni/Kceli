@@ -67,6 +67,7 @@ export const IntakeEdit: FC = () => {
               </IntakeItemEditProvider>
             );
           }}
+          className="intake-edit-item-list"
           dataTestId="intake-edit-item-list"
         />
       )}

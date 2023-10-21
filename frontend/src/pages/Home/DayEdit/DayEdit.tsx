@@ -11,6 +11,7 @@ import { WeightWaistInput } from "./WeightWaistInput";
 import { List } from "../../../components/App/List/List";
 import { WorkoutPreview } from "../../../components/Workout/WorkoutPreview/WorkoutPreview";
 import { NutritionQuery } from "./NutritionQuery";
+import { WaterEdit } from "./WaterEdit";
 
 export const DayEdit: FC = () => {
   const {
@@ -51,6 +52,7 @@ export const DayEdit: FC = () => {
           )}
           {isListShown && <IntakeList />}
           {openedElement === ToggledElement.Query && <NutritionQuery />}
+          {openedElement === ToggledElement.Water && <WaterEdit />}
         </>
       )}
     </section>

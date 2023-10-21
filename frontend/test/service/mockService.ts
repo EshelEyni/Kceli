@@ -30,6 +30,8 @@ export type MockUseDayEdit = {
   setIntake?: any;
   calConsumedPct?: any;
   calRemainingPct?: any;
+  currIntakeItemId?: any;
+  setCurrIntakeItemId?: any;
 };
 
 function mockUseAuth(loggedInUser: any) {
@@ -88,6 +90,8 @@ function mockUseDayEdit({
   setIntake = vi.fn(),
   calConsumedPct = 0,
   calRemainingPct = 0,
+  currIntakeItemId = "",
+  setCurrIntakeItemId = vi.fn(),
 }: MockUseDayEdit): MockUseDayEdit {
   const state = {
     dailyData,
@@ -110,6 +114,8 @@ function mockUseDayEdit({
     setIntake,
     calConsumedPct,
     calRemainingPct,
+    currIntakeItemId: currIntakeItemId || intake.items[0].id,
+    setCurrIntakeItemId,
   };
 
   (useDayEdit as Mock).mockReturnValue(state);
