@@ -18,6 +18,7 @@ export type IntakeItemEditContextType = {
   setInputFaded: React.Dispatch<React.SetStateAction<string>>;
   isLoadingCal: boolean;
   suggestions: SpellingSuggestion[];
+  setSuggestions: React.Dispatch<React.SetStateAction<SpellingSuggestion[]>>;
   isSuggestionListShown: boolean;
   handleNameInputClick: (currIntakeItemId: string) => void;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -193,7 +194,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
       if (!spellChecker) return;
       const filteredWordSet = new Set(["nes", "ness"]);
       const words = text.split(" ");
-      const filteredWords = words.filter(word => !filteredWordSet.has(word));
+      const filteredWords = words.filter(word => !filteredWordSet.has(word) && word.length > 3);
       const suggestions = filteredWords.map(word => ({
         original: word,
         suggestions: spellChecker.suggest(word),
@@ -213,6 +214,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
     setInputFaded,
     isLoadingCal,
     suggestions,
+    setSuggestions, // for testing purposes
     isSuggestionListShown,
     handleNameInputClick,
     handleInputChange,

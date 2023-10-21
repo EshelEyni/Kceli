@@ -1,5 +1,5 @@
 import { it, describe, expect, afterEach, vi, Mock } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { mockUseDayEdit } from "../../../../test/service/mockService";
 import { IntakeItemEditProvider, useIntakeItemEdit } from "./IntakeItemEditContext";
@@ -7,9 +7,15 @@ import { SpellingSuggestion } from "../../../types/app";
 import { useDayEdit } from "./DayEditContext";
 import NSpell from "nspell";
 import { MeasurementUnit } from "../../../../../shared/types/intake";
+import calorieApiService from "../../../services/calorieApi/calorieApiService";
+import { toast } from "react-hot-toast";
+import { assertNewIntakeItem } from "../../../../test/service/testAssertionService";
+import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
 
 vi.mock("./DayEditContext");
 vi.mock("nspell");
+vi.mock("react-hot-toast");
+vi.mock("../../../services/calorieApi/calorieApiService");
 
 describe("IntakeItemEditContext", () => {
   afterEach(() => {
@@ -565,5 +571,293 @@ describe("IntakeItemEditContext", () => {
     expect(res2.items[0].calories).toBeUndefined();
     expect(res2.items[0].unit).toBe(MeasurementUnit.GRAM);
     expect(res2.items[0].quantity).toBe(100);
+  });
+
+  it("should provide proper handleCalcBtnClick", async () => {
+    const { intake, setIntake } = mockUseDayEdit({});
+    const item = intake.items[0];
+
+    (calorieApiService.getCaloriesForItem as Mock).mockResolvedValueOnce(100);
+
+    const TestComponent = () => {
+      const { handleCalcBtnClick, isLoadingCal, isManual } = useIntakeItemEdit();
+      return (
+        <>
+          <div data-testid="isLoadingCal">{isLoadingCal.toString()}</div>
+          <div data-testid="isManual">{isManual.toString()}</div>
+          <div onClick={handleCalcBtnClick}>handleCalcBtnClick</div>;
+        </>
+      );
+    };
+
+    const { rerender } = render(
+      <IntakeItemEditProvider intakeItem={item}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+    expect(screen.getByTestId("isLoadingCal")).toHaveTextContent("false");
+    expect(screen.getByTestId("isManual")).toHaveTextContent("false");
+    fireEvent.click(screen.getByText("handleCalcBtnClick"));
+    expect(screen.getByTestId("isLoadingCal")).toHaveTextContent("true");
+
+    await waitFor(() => {
+      const setIntakeArg = setIntake.mock.calls[0][0];
+      expect(typeof setIntakeArg).toBe("function");
+      const res = setIntakeArg(intake);
+      expect(res.items[0].calories).toBe(100);
+      expect(screen.getByTestId("isLoadingCal")).toHaveTextContent("false");
+      expect(screen.getByTestId("isManual")).toHaveTextContent("true");
+    });
+
+    item.name = "";
+
+    rerender(
+      <IntakeItemEditProvider intakeItem={item}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+
+    fireEvent.click(screen.getByText("handleCalcBtnClick"));
+    expect(toast.error).toHaveBeenCalledWith("Please enter a food name!");
+    (toast.error as Mock).mockReset();
+
+    (calorieApiService.getCaloriesForItem as Mock).mockClear();
+    (calorieApiService.getCaloriesForItem as Mock).mockRejectedValue("test error");
+
+    item.name = "test";
+
+    rerender(
+      <IntakeItemEditProvider intakeItem={item}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+
+    fireEvent.click(screen.getByText("handleCalcBtnClick"));
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith("Failed to calculate calories!");
+    });
+  });
+
+  it("should provide proper handleSuggestionClick", () => {
+    const mockSuggestions = [
+      {
+        original: "test",
+        suggestions: ["suggestion1", "suggestion2"],
+      },
+      {
+        original: "test2",
+        suggestions: ["suggestion3", "suggestion4"],
+      },
+    ];
+
+    const { intake, setIntake } = mockUseDayEdit({});
+    const item = intake.items[0];
+
+    const TestComponent = () => {
+      const { handleSuggestionClick, suggestions, setSuggestions } = useIntakeItemEdit();
+
+      return (
+        <>
+          <button onClick={() => setSuggestions(mockSuggestions)}>setSuggestions</button>
+          <button onClick={() => handleSuggestionClick("test", "suggestion1")}>
+            handleSuggestionClick
+          </button>
+
+          <ul>
+            {suggestions.map((suggestion: SpellingSuggestion, i: number) => (
+              <li data-testid="suggestion" key={i}>
+                {suggestion.suggestions.map((s: string, i: number) => (
+                  <span data-testid="suggestion-item" key={i}>
+                    {s}
+                  </span>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </>
+      );
+    };
+
+    render(
+      <IntakeItemEditProvider intakeItem={item}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+
+    // can't call setSuggestions in the same render as useIntakeItemEdit
+    fireEvent.click(screen.getByText("setSuggestions"));
+
+    const btn = screen.getByText("handleSuggestionClick");
+    fireEvent.click(btn);
+
+    const suggestionEls = screen.queryAllByTestId("suggestion");
+    expect(suggestionEls).toHaveLength(1);
+
+    const setIntakeArg = setIntake.mock.calls[0][0];
+    expect(typeof setIntakeArg).toBe("function");
+    const res = setIntakeArg(intake);
+    expect(res.items[0].name).toBe("suggestion1");
+  });
+
+  it("should provide proper handleIgnoreSuggestionClick", () => {
+    const mockSuggestions = [
+      {
+        original: "test",
+        suggestions: ["suggestion1", "suggestion2"],
+      },
+      {
+        original: "test2",
+        suggestions: ["suggestion3", "suggestion4"],
+      },
+    ];
+
+    const { intake } = mockUseDayEdit({});
+    const item = intake.items[0];
+
+    const TestComponent = () => {
+      const { handleIgnoreSuggestionClick, suggestions, setSuggestions } = useIntakeItemEdit();
+
+      return (
+        <>
+          <button onClick={() => setSuggestions(mockSuggestions)}>setSuggestions</button>
+          <button onClick={() => handleIgnoreSuggestionClick("test")}>
+            handleIgnoreSuggestionClick
+          </button>
+
+          <ul>
+            {suggestions.map((suggestion: SpellingSuggestion, i: number) => (
+              <li data-testid="suggestion" key={i}>
+                {suggestion.suggestions.map((s: string, i: number) => (
+                  <span data-testid="suggestion-item" key={i}>
+                    {s}
+                  </span>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </>
+      );
+    };
+
+    render(
+      <IntakeItemEditProvider intakeItem={item}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+
+    // can't call setSuggestions in the same render as useIntakeItemEdit
+    fireEvent.click(screen.getByText("setSuggestions"));
+    expect(screen.queryAllByTestId("suggestion")).toHaveLength(2);
+    expect(screen.getByText("suggestion1")).toBeInTheDocument();
+    expect(screen.getByText("suggestion2")).toBeInTheDocument();
+    expect(screen.getByText("suggestion3")).toBeInTheDocument();
+    expect(screen.getByText("suggestion4")).toBeInTheDocument();
+
+    const btn = screen.getByText("handleIgnoreSuggestionClick");
+    fireEvent.click(btn);
+
+    expect(screen.queryAllByTestId("suggestion")).toHaveLength(1);
+    expect(screen.queryByText("suggestion1")).not.toBeInTheDocument();
+    expect(screen.queryByText("suggestion2")).not.toBeInTheDocument();
+    expect(screen.getByText("suggestion3")).toBeInTheDocument();
+    expect(screen.getByText("suggestion4")).toBeInTheDocument();
+  });
+
+  it("should provide proper handleAddButtonClick", () => {
+    const { intake, setIntake, setCurrIntakeItemId } = mockUseDayEdit({});
+    const item = intake.items[0];
+
+    const TestComponent = () => {
+      const { handleAddButtonClick } = useIntakeItemEdit();
+      return <button onClick={handleAddButtonClick}>handleAddButtonClick</button>;
+    };
+
+    render(
+      <IntakeItemEditProvider intakeItem={item}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+    const btn = screen.getByText("handleAddButtonClick");
+    fireEvent.click(btn);
+
+    const setIntakeArg = setIntake.mock.calls[0][0];
+    expect(typeof setIntakeArg).toBe("function");
+    const res = setIntakeArg(intake);
+    expect(res.items).toHaveLength(2);
+
+    for (let i = 0; i < res.items.length; i++) {
+      assertNewIntakeItem(res.items[i]);
+    }
+
+    expect(setCurrIntakeItemId).toHaveBeenCalledWith(res.items[1].id);
+  });
+
+  it("should provide proper handleDeleteButtonClick", () => {
+    const items = [
+      intakeUtilService.getDefaultIntakeItem(),
+      intakeUtilService.getDefaultIntakeItem(),
+      intakeUtilService.getDefaultIntakeItem(),
+      intakeUtilService.getDefaultIntakeItem(),
+      intakeUtilService.getDefaultIntakeItem(),
+      intakeUtilService.getDefaultIntakeItem(),
+    ];
+
+    const { intake, setIntake, setCurrIntakeItemId } = mockUseDayEdit({
+      intake: { ...intakeUtilService.getDefaultIntake(), items },
+    });
+
+    const TestComponent = () => {
+      const { handleRemoveButtonClick } = useIntakeItemEdit();
+      return <button onClick={handleRemoveButtonClick}>handleRemoveButtonClick</button>;
+    };
+
+    // Remove item at index 0
+    const { rerender } = render(
+      <IntakeItemEditProvider intakeItem={intake.items[0]}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+
+    fireEvent.click(screen.getByText("handleRemoveButtonClick"));
+
+    const setIntakeArg = setIntake.mock.calls[0][0];
+    expect(typeof setIntakeArg).toBe("function");
+    const res = setIntakeArg(intake);
+    expect(res.items).toHaveLength(items.length - 1);
+    expect(setCurrIntakeItemId).toHaveBeenCalledWith(res.items[0].id);
+
+    items.splice(1, 1);
+
+    // Remove item at index 1 and goes to next item
+    rerender(
+      <IntakeItemEditProvider intakeItem={intake.items[1]}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+
+    fireEvent.click(screen.getByText("handleRemoveButtonClick"));
+
+    const setIntakeArg2 = setIntake.mock.calls[1][0];
+    expect(typeof setIntakeArg2).toBe("function");
+    const res2 = setIntakeArg2(intake);
+    expect(res2.items).toHaveLength(items.length - 1);
+    expect(setCurrIntakeItemId).toHaveBeenCalledWith(items[2].id);
+    items.splice(1, 1);
+
+    // Remove last item and goes to previous item
+    rerender(
+      <IntakeItemEditProvider intakeItem={intake.items[items.length - 1]}>
+        <TestComponent />
+      </IntakeItemEditProvider>
+    );
+
+    fireEvent.click(screen.getByText("handleRemoveButtonClick"));
+
+    const setIntakeArg3 = setIntake.mock.calls[2][0];
+    expect(typeof setIntakeArg3).toBe("function");
+    const res3 = setIntakeArg3(intake);
+    expect(res3.items).toHaveLength(items.length - 1);
+    expect(setCurrIntakeItemId).toHaveBeenCalledWith(items[items.length - 2].id);
+    items.splice(items.length - 1, 1);
   });
 });
