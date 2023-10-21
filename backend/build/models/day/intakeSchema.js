@@ -82,7 +82,7 @@ intakeItemSchema.pre("validate", function (next) {
   return __awaiter(this, void 0, void 0, function* () {
     try {
       const intakeItem = this.toObject();
-      if (intakeItem.calories) return next();
+      if (intakeItem.calories || intakeItem.name.toLowerCase() === "water") return next();
       const existingItemData = yield intakeService_1.default.getExistingIntakeItem(intakeItem);
       if (existingItemData && existingItemData.calories) {
         this.calories =

@@ -46,7 +46,10 @@ exports.getDay = getDay;
 const createDay = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const loggedInUserId = (0, ALSService_1.getLoggedInUserIdFromReq)();
     (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
-    const doc = yield dailyDataModel_1.DailyDataModel.create(Object.assign(Object.assign({}, req.body), { userId: loggedInUserId }));
+    const { date } = req.body;
+    if (!date)
+        throw new errorService_1.AppError("Please provide date", 400);
+    const doc = yield dailyDataModel_1.DailyDataModel.create(Object.assign(Object.assign({}, req.body), { date: new Date(date), userId: loggedInUserId }));
     res.status(201).send({
         status: "success",
         data: doc,

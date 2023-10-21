@@ -67,23 +67,6 @@ const dailyDataSchema = new mongoose_1.Schema({
     },
     timestamps: true,
 });
-dailyDataSchema.pre("save", function (next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { userId } = this;
-        if (!userId)
-            return next();
-        const latestEntry = yield DailyDataModel.findOne({ userId: userId }).sort({ date: -1 });
-        if (!latestEntry)
-            return next();
-        const lastSavedDate = latestEntry.date;
-        if (this.date.toDateString() !== lastSavedDate.toDateString())
-            return next();
-        const nextDay = new Date(lastSavedDate);
-        nextDay.setDate(nextDay.getDate() + 1);
-        this.date = nextDay;
-        next();
-    });
-});
 dailyDataSchema.pre("findOneAndUpdate", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const update = this.getUpdate();
