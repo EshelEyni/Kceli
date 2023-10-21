@@ -1,0 +1,258 @@
+import { createContext, useContext, useState, useRef, useEffect } from "react";
+import NSpell from "nspell";
+import { SpellingSuggestion } from "../../../types/app";
+import { useDayEdit } from "./DayEditContext";
+import { MeasurementUnit, NewIntakeItem } from "../../../../../shared/types/intake";
+import { AnyFunction } from "../../../../../shared/types/system";
+import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
+import calorieApiService from "../../../services/calorieApi/calorieApiService";
+import { debounce } from "../../../services/util/utilService";
+import { toast } from "react-hot-toast";
+
+export type IntakeItemEditContextType = {
+  intakeItem: NewIntakeItem;
+  isOneItem: boolean;
+  isCurrIntakeItem: boolean;
+  isManual: boolean;
+  inputFaded: string;
+  setInputFaded: React.Dispatch<React.SetStateAction<string>>;
+  isLoadingCal: boolean;
+  suggestions: SpellingSuggestion[];
+  isSuggestionListShown: boolean;
+  handleNameInputClick: (currIntakeItemId: string) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  decreaseQuantity: () => void;
+  increaseQuantity: () => void;
+  handleUnitInputClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  handleToggleManual: () => void;
+  handleCalcBtnClick: () => void;
+  handleWaterButtonClick: () => void;
+  handleSuggestionClick: (original: string, suggestion: string) => void;
+  handleIgnoreSuggestionClick: (original: string) => void;
+  handleAddButtonClick: () => void;
+  handleRemoveButtonClick: () => void;
+};
+
+type IntakeItemEditProviderProps = {
+  intakeItem: NewIntakeItem;
+  children: React.ReactNode;
+};
+
+const IntakeItemEditContext = createContext<IntakeItemEditContextType | undefined>(undefined);
+
+function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProviderProps) {
+  const { intake, setIntake, currIntakeItemId, setCurrIntakeItemId } = useDayEdit();
+  const isOneItem = intake.items.length === 1;
+  const isCurrIntakeItem = intakeItem.id === currIntakeItemId;
+  const [isInputNameEmpty, setIsInputNameEmpty] = useState(false);
+  const [isManual, setIsManual] = useState(false);
+  const [inputFaded, setInputFaded] = useState("");
+  const [isLoadingCal, setIsLoadingCal] = useState(false);
+  const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([]);
+  const [spellchecker, setSpellchecker] = useState<NSpell | null>(null);
+  const debouncedSpellcheck = useRef<AnyFunction | null>(null);
+  const isSuggestionListShown =
+    suggestions.length > 0 &&
+    suggestions[0].suggestions.length > 0 &&
+    !isInputNameEmpty &&
+    !!spellchecker;
+
+  function handleNameInputClick(itemId: string) {
+    if (itemId === currIntakeItemId) return;
+    setCurrIntakeItemId(itemId);
+  }
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const { value, name } = e.target;
+    switch (name) {
+      case "name":
+        handleChange({ ...intakeItem, name: value });
+        setIsInputNameEmpty(!value.length);
+        if (!value.length) setSuggestions([]);
+        if (!debouncedSpellcheck.current) return;
+        debouncedSpellcheck.current(value);
+        break;
+      case "quantity":
+        handleChange({ ...intakeItem, quantity: Number(value) });
+        break;
+      case "calories": {
+        const item = { ...intakeItem, calories: Number(value) };
+        delete item.caloriesPer100g;
+        handleChange(item);
+        setInputFaded("caloriesPer100g");
+        break;
+      }
+      case "caloriesPer100g": {
+        const caloriesPer100g = Number(value);
+        const calories = caloriesPer100g * (intakeItem.quantity / 100);
+        handleChange({ ...intakeItem, caloriesPer100g: Number(value), calories });
+        setInputFaded("calories");
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  function handleChange(intakeItem: NewIntakeItem) {
+    setIntake(prev => ({
+      ...prev,
+      items: prev.items.map(item => (item.id === intakeItem.id ? intakeItem : item)),
+    }));
+  }
+
+  function decreaseQuantity() {
+    const step = intakeUtilService.getQuantityStepPerUnit(intakeItem.unit);
+    if (intakeItem.quantity - step < 1) return;
+    handleChange({ ...intakeItem, quantity: intakeItem.quantity - step });
+  }
+
+  function increaseQuantity() {
+    const step = intakeUtilService.getQuantityStepPerUnit(intakeItem.unit);
+    handleChange({ ...intakeItem, quantity: intakeItem.quantity + step });
+  }
+
+  function handleUnitInputClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.preventDefault();
+    const currentUnitIdx = intakeUtilService.units.indexOf(intakeItem.unit);
+    const unit =
+      currentUnitIdx === intakeUtilService.units.length - 1
+        ? intakeUtilService.units[0]
+        : intakeUtilService.units[currentUnitIdx + 1];
+
+    const quantity = intakeUtilService.getUnitDefaultQuantity(unit);
+    handleChange({ ...intakeItem, unit, quantity });
+  }
+
+  function handleToggleManual() {
+    const item = { ...intakeItem };
+    if (isManual) delete item.calories, delete item.caloriesPer100g, setInputFaded("");
+    setIsManual(prev => !prev);
+    handleChange(item);
+  }
+
+  async function handleCalcBtnClick() {
+    if (!intakeItem.name.length) return toast.error("Please enter a food name!");
+    try {
+      setIsLoadingCal(true);
+      const calories = await calorieApiService.getCaloriesForItem(intakeItem);
+      handleChange({ ...intakeItem, calories });
+      setIsManual(true);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to calculate calories!");
+    } finally {
+      setIsLoadingCal(false);
+    }
+  }
+
+  function handleWaterButtonClick() {
+    const { name, unit, quantity } = intakeItem;
+    if (name === "water" && unit === MeasurementUnit.MILLILITER && quantity === 750) return;
+    handleChange({ ...intakeItem, name: "water", unit: MeasurementUnit.MILLILITER, quantity: 750 });
+  }
+
+  function handleSuggestionClick(original: string, suggestion: string) {
+    const name = intakeItem.name.replace(original, suggestion);
+    const filteredSuggestions = suggestions.filter(s => s.original !== original);
+    setSuggestions(filteredSuggestions);
+    handleChange({ ...intakeItem, name });
+  }
+
+  function handleIgnoreSuggestionClick(original: string) {
+    const filteredSuggestions = suggestions.filter(s => s.original !== original);
+    setSuggestions(filteredSuggestions);
+  }
+
+  function handleAddButtonClick() {
+    const newIntakeItem = intakeUtilService.getDefaultIntakeItem();
+    setIntake(prev => ({ ...prev, items: [...prev.items, newIntakeItem] }));
+    setCurrIntakeItemId(newIntakeItem.id);
+  }
+
+  function handleRemoveButtonClick() {
+    if (intake.items.length === 1) return;
+    const currIntakeItemIdx = intake.items.findIndex(i => i.id === intakeItem.id);
+    const prevIntakeItemId = intake.items[currIntakeItemIdx - 1]?.id;
+    const nextIntakeItemId = intake.items[currIntakeItemIdx + 1]?.id;
+    const items = [...intake.items];
+    items.splice(currIntakeItemIdx, 1);
+    setIntake(prev => ({ ...prev, items }));
+    setCurrIntakeItemId(nextIntakeItemId || prevIntakeItemId);
+  }
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/assets/dictionaries/en_US.aff").then(res => res.text()),
+      fetch("/assets/dictionaries/en_US.dic").then(res => res.text()),
+    ])
+      .then(([affData, dicData]) => {
+        const nspellInstance = new NSpell(affData, dicData);
+        setSpellchecker(nspellInstance);
+      })
+      .catch(error => {
+        // TODO: remove this when tests are fixed
+        const isTestEnv = process.env.NODE_ENV === "test";
+        if (isTestEnv) return;
+        console.error("Failed to load dictionaries:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    function spellcheck(text: string) {
+      if (!spellchecker) return;
+      const filteredWordSet = new Set(["nes", "ness"]);
+      const words = text.split(" ");
+      const suggestions = words
+        .filter(word => !filteredWordSet.has(word))
+        .map(word => ({
+          original: word,
+          suggestions: spellchecker.suggest(word),
+        }));
+      setSuggestions(suggestions);
+    }
+
+    debouncedSpellcheck.current = debounce(spellcheck, 1000).debouncedFunc;
+  }, [spellchecker]);
+
+  const value = {
+    intakeItem,
+    isOneItem,
+    isCurrIntakeItem,
+    isInputNameEmpty,
+    setIsInputNameEmpty,
+    isManual,
+    inputFaded,
+    setInputFaded,
+    isLoadingCal,
+    suggestions,
+    isSuggestionListShown,
+    handleNameInputClick,
+    handleInputChange,
+    decreaseQuantity,
+    increaseQuantity,
+    handleUnitInputClick,
+    handleToggleManual,
+    handleCalcBtnClick,
+    handleWaterButtonClick,
+    handleSuggestionClick,
+    handleIgnoreSuggestionClick,
+    handleAddButtonClick,
+    handleRemoveButtonClick,
+  };
+
+  return <IntakeItemEditContext.Provider value={value}>{children}</IntakeItemEditContext.Provider>;
+}
+
+function useIntakeItemEdit() {
+  const context = useContext(IntakeItemEditContext);
+  if (!context) {
+    throw new Error("useIntakeItemEdit must be used within an IntakeItemEditProvider");
+  }
+  return context;
+}
+
+export { IntakeItemEditProvider, useIntakeItemEdit };
+
+// Path: src/pages/Home/DayEdit/IntakeItemEditBtns.tsx

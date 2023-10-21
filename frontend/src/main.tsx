@@ -29,7 +29,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Router>
             <App />
             <Toaster
-              position="bottom-center"
+              position="top-center"
               gutter={12}
               toastOptions={{ error: { duration: 3000 } }}
             />

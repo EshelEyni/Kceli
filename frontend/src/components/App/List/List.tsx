@@ -5,10 +5,25 @@ type ListProps<T> = {
   render: (item: T, i: number, arr: T[]) => JSX.Element;
   className?: string;
   isOrdered?: boolean;
+  dataTestId?: string;
 };
 
-export const List = <T,>({ items, render, className, isOrdered = false }: ListProps<T>) => {
+export const List = <T,>({
+  items,
+  render,
+  className,
+  isOrdered = false,
+  dataTestId,
+}: ListProps<T>) => {
   if (isOrdered)
-    return <ol className={`list ${className ? className : ""}`}>{items.map(render)}</ol>;
-  return <ul className={`list ${className ? className : ""}`}>{items.map(render)}</ul>;
+    return (
+      <ol className={`list ${className ? className : ""}`} data-testid={dataTestId}>
+        {items.map(render)}
+      </ol>
+    );
+  return (
+    <ul className={`list ${className ? className : ""}`} data-testid={dataTestId}>
+      {items.map(render)}
+    </ul>
+  );
 };

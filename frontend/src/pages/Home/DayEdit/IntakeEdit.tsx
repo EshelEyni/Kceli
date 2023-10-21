@@ -1,11 +1,15 @@
 import { FC, useState } from "react";
+import toast from "react-hot-toast";
+import classnames from "classnames";
 import { NewIntakeItem } from "../../../../../shared/types/intake";
-import intakeUtilServiceTest from "../../../services/intakeUtil/intakeUtilService";
+import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
 import { List } from "../../../components/App/List/List";
 import { IntakeItemEdit } from "./IntakeItemEdit";
 import { Button } from "../../../components/App/Button/Button";
 import { useDayEdit } from "./DayEditContext";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
+import { IntakeItemEditProvider } from "./IntakeItemEditContext";
+import "./IntakeEdit.scss";
 
 export const IntakeEdit: FC = () => {
   const {
@@ -16,123 +20,83 @@ export const IntakeEdit: FC = () => {
     updateDailyData,
     setIntake,
     backgroundColor,
-    // setCurrIsValidIntake,
   } = useDayEdit();
 
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const isEditShown = !isReviewOpen && !isLoading && !isLoadingUpdate;
 
-  function handleAddButtonClick() {
-    setIntake(prev => ({
-      ...prev,
-      items: [...prev.items, intakeUtilServiceTest.getDefaultIntakeItem()],
-    }));
-  }
-
-  function handleRemoveButtonClick(index: number) {
-    if (intake.items.length === 1) return;
-    setIntake(prev => ({
-      ...prev,
-      items: prev.items.filter((_, i) => i !== index),
-    }));
-  }
-
   function handleSaveLaterButtonClick() {
     setIntake(prev => ({
       ...prev,
-      recordedAt: prev.recordedAt ? null : new Date(),
-      isRecorded: !prev.isRecorded,
+      recordedAt: null,
+      isRecorded: false,
     }));
   }
 
-  function handleIntakeItemChange(intakeItem: NewIntakeItem, idx: number) {
-    setIntake(prev => ({
-      ...prev,
-      items: prev.items.map((item, i) => (i === idx ? intakeItem : item)),
-    }));
+  function handleToggleReview() {
+    setIsReviewOpen(prev => !prev);
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!dailyData) return;
     const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
-    if (!iValidIntake) return;
-    // TODO: Add Toast notification
+    if (!iValidIntake) return toast.error("Please fill all intake items");
     intake.recordedAt = new Date();
     const isNewIntake = !dailyData.intakes.some(i => i.id === intake.id);
     const updatedIntakes = isNewIntake
       ? [...dailyData.intakes, intake]
-      : dailyData.intakes.map(currIntake => (currIntake.id === intake.id ? intake : currIntake));
+      : dailyData.intakes.map(i => (i.id === intake.id ? intake : i));
     updateDailyData({ ...dailyData, intakes: updatedIntakes });
-    setIntake(intakeUtilServiceTest.getDefaultIntake());
+    setIntake(intakeUtilService.getDefaultIntake());
   }
 
   return (
     <form className="intake-edit" onSubmit={handleSubmit} data-testid="intake-edit">
-      {isEditShown && (
-        <>
-          <div className="intake-edit__list-container">
-            <List
-              items={intake.items}
-              render={(item: NewIntakeItem, i: number, arr: NewIntakeItem[]) => {
-                if (i === arr.length - 1)
-                  return (
-                    <div className="last-intake-edit-item-container" key={i}>
-                      <IntakeItemEdit
-                        intakeItem={item}
-                        idx={i}
-                        handleChange={handleIntakeItemChange}
-                      />
-                      <div className="last-intake-edit-item__btn-container">
-                        {arr.length > 1 && (
-                          <Button onClickFn={() => handleRemoveButtonClick(i)}>remove item</Button>
-                        )}
-                        <Button onClickFn={handleAddButtonClick}>add item</Button>
-                      </div>
-                    </div>
-                  );
-                return (
-                  <IntakeItemEdit
-                    intakeItem={item}
-                    idx={i}
-                    key={i}
-                    handleChange={handleIntakeItemChange}
-                  />
-                );
-              }}
-            />
-          </div>
-        </>
-      )}
       {(isLoading || isLoadingUpdate) && (
         <SpinnerLoader withContainer={true} containerSize={{ height: "75px", width: "100%" }} />
       )}
-      {isReviewOpen && (
-        <>
-          <List
-            items={intake.items}
-            render={(item, i) => (
-              <p className="intake-edit-review-list__item">
-                <span>{`${i + 1})`}</span>
-                <p>{`${item.name} - ${item.quantity} ${item.unit} ${
-                  item.calories ? `- Calories ${item.calories}` : ""
-                }`}</p>
-              </p>
-            )}
-            className="intake-edit-review-list"
-          />
-        </>
+
+      {isEditShown && (
+        <List
+          items={intake.items}
+          render={(item: NewIntakeItem) => {
+            return (
+              <IntakeItemEditProvider intakeItem={item} key={item.id}>
+                <IntakeItemEdit />
+              </IntakeItemEditProvider>
+            );
+          }}
+          dataTestId="intake-edit-item-list"
+        />
       )}
+
+      {isReviewOpen && (
+        <List
+          items={intake.items}
+          render={(item, i) => (
+            <div className="intake-edit-review-list__item" key={item.id}>
+              <span>{`${i + 1})`}</span>
+              <p>{`${item.name} - ${item.quantity} ${item.unit} ${
+                item.calories ? `- Calories ${item.calories}` : ""
+              }`}</p>
+            </div>
+          )}
+          className="intake-edit-review-list"
+          dataTestId="intake-edit-review-list"
+        />
+      )}
+
       <div className="intake-edit-btns-container" style={{ backgroundColor }}>
         <Button
           onClickFn={handleSaveLaterButtonClick}
           className={
-            "intake-edit-btn btn-toggle-save-later" + (!intake.isRecorded ? " clicked" : "")
+            "intake-edit-btn btn-toggle-save-later" + classnames({ clicked: !intake.isRecorded })
           }
         >
           Save Later
         </Button>
-        <Button onClickFn={() => setIsReviewOpen(prev => !prev)} className="intake-edit-btn">
+        <Button onClickFn={handleToggleReview} className="intake-edit-btn">
           {isReviewOpen ? "Edit" : "Review"}
         </Button>
         <Button onClickFn={e => handleSubmit(e)} className="intake-edit-btn" type="submit">

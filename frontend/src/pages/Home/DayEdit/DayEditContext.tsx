@@ -38,6 +38,8 @@ export type DayEditContextType = {
   setNinjaAPIQuery: Dispatch<SetStateAction<NutritionQueryState>>;
   USDAAPIQuery: NutritionQueryState;
   setUSDAAPIQuery: Dispatch<SetStateAction<NutritionQueryState>>;
+  currIntakeItemId: string;
+  setCurrIntakeItemId: Dispatch<SetStateAction<string>>;
 };
 
 export enum ToggledElement {
@@ -58,6 +60,7 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
 
   const [openedElement, setOpenedElement] = useState<ToggledElement>(ToggledElement.IntakeEdit);
   const [intake, setIntake] = useState<NewIntake>(intakeUtilService.getDefaultIntake());
+  const [currIntakeItemId, setCurrIntakeItemId] = useState<string>(intake.items[0].id);
   const [chatGPTQuery, setChatGPTQuery] = useState<NutritionQueryState>(
     nutritionUtilService.getDefaultNutritionQuery("chatGPT")
   );
@@ -127,6 +130,8 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     setNinjaAPIQuery,
     USDAAPIQuery,
     setUSDAAPIQuery,
+    currIntakeItemId,
+    setCurrIntakeItemId,
   };
 
   return <DayEditContext.Provider value={value}>{children}</DayEditContext.Provider>;

@@ -335,6 +335,54 @@ describe("DayEditContext", () => {
     expect(screen.getByTestId("intake-test")).toHaveTextContent("test");
   });
 
+  it("should provide proper currIntakeItemId value", () => {
+    mockUseAuth({});
+    mockUseGetTodayData({
+      dailyData: null,
+      isSuccess: false,
+    });
+
+    const TestComponent = () => {
+      const { intake, currIntakeItemId, setCurrIntakeItemId } = useDayEdit();
+
+      function handleSetBtnClick() {
+        setCurrIntakeItemId("test");
+      }
+
+      return (
+        <>
+          <div data-testid="curr-intake-item-id-test">{currIntakeItemId}</div>
+          <div data-testid="first-intake-item-id-test">{intake.items[0].id}</div>
+
+          <button onClick={handleSetBtnClick} data-testid="curr-intake-item-id-btn">
+            Set
+          </button>
+        </>
+      );
+    };
+
+    const { rerender } = render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    const firstIntakeItemId = screen.getByTestId("first-intake-item-id-test").textContent;
+    const currIntakeItemId = screen.getByTestId("curr-intake-item-id-test").textContent;
+
+    expect(currIntakeItemId).toBe(firstIntakeItemId);
+
+    fireEvent.click(screen.getByTestId("curr-intake-item-id-btn"));
+
+    rerender(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.getByTestId("curr-intake-item-id-test")).toHaveTextContent("test");
+  });
+
   it("should provide proper chatGPTQuery value", () => {
     mockUseAuth({});
     mockUseGetTodayData({

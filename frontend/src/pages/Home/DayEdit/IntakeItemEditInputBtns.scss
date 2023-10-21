@@ -1,0 +1,51 @@
+@import "../../../styles/main.scss";
+
+.intake-item-edit__inputs-btns {
+  display: flex;
+  align-items: center;
+  gap: rem(10px);
+  flex-wrap: wrap;
+
+  .quantity-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: rem(5px);
+    border-radius: 25px;
+    color: white;
+    font-size: rem(16px);
+    position: relative;
+    font-style: italic;
+    top: 1px;
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      padding: 0;
+      min-width: unset;
+
+      svg {
+        color: white;
+        width: rem(40px);
+        height: rem(40px);
+      }
+    }
+
+    .quantity-input {
+      text-align: center;
+      font-weight: 600;
+      max-width: rem(100px);
+      color: var(--color-text-gray);
+      font-size: rem(20px);
+      height: rem(40px);
+      padding: 0;
+      width: rem(75px);
+    }
+  }
+
+  .btn {
+    min-width: rem(100px);
+  }
+}

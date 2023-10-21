@@ -1,18 +1,10 @@
 import { FC } from "react";
-import { SpellingSuggestion } from "../../../types/app";
 import { Button } from "../../../components/App/Button/Button";
+import { useIntakeItemEdit } from "./IntakeItemEditContext";
 
-type SpellingSuggestionListProps = {
-  suggestions: SpellingSuggestion[];
-  handleSuggestionClick: (original: string, suggestion: string) => void;
-  handleIgnoreSuggestionClick: (original: string) => void;
-};
+export const SpellingSuggestionList: FC = () => {
+  const { suggestions, handleSuggestionClick, handleIgnoreSuggestionClick } = useIntakeItemEdit();
 
-export const SpellingSuggestionList: FC<SpellingSuggestionListProps> = ({
-  suggestions,
-  handleSuggestionClick,
-  handleIgnoreSuggestionClick,
-}) => {
   return (
     <ul className="spelling-suggestion-list">
       {suggestions.map(s => (

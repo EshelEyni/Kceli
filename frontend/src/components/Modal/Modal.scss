@@ -32,7 +32,13 @@
   }
 
   &.create-day-modal {
-    top: 20%;
+    top: 75%;
+  }
+
+  @include for-desktop-layout {
+    &.create-day-modal {
+      top: 20%;
+    }
   }
 }
 

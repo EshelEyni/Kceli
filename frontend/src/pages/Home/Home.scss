@@ -19,11 +19,6 @@
     font-weight: 700;
     margin-top: rem(30px);
     padding: rem(10px);
-
-    &:hover {
-      background-color: var(--color-primary);
-      scale: 1.05;
-    }
   }
 
   @include for-desktop-layout {
