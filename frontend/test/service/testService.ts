@@ -3,6 +3,7 @@ import { DayData } from "../../../shared/types/dayData";
 import { act } from "@testing-library/react";
 import { CombinedIntake, IntakeItem, MeasurementUnit } from "../../../shared/types/intake";
 import { Workout, WorkoutItemAerobic } from "../../../shared/types/workout";
+import { SpellingSuggestion } from "../../src/types/app";
 
 function createTestUser(): User {
   return {
@@ -82,6 +83,13 @@ function createTestAerobicWorkoutItem(): WorkoutItemAerobic {
   };
 }
 
+function createTestSpellingSuggestion(): SpellingSuggestion {
+  return {
+    original: "test",
+    suggestions: ["suggestion1", "suggestion2"],
+  };
+}
+
 async function waitForTick() {
   await act(async () => {
     await new Promise(resolve => setTimeout(resolve, 0));
@@ -95,5 +103,6 @@ export default {
   createTestIntakeItem,
   createTestWorkout,
   createTestAerobicWorkoutItem,
+  createTestSpellingSuggestion,
   waitForTick,
 };

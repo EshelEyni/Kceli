@@ -8,9 +8,13 @@ import { ToggledElement, useDayEdit } from "../../src/pages/Home/DayEdit/DayEdit
 import testService from "./testService";
 import { useDeleteWorkout } from "../../src/hooks/useDeleteWorkout";
 import { useNavigate } from "react-router-dom";
+import { DayData } from "../../../shared/types/dayData";
+import { NewIntakeItem } from "../../../shared/types/intake";
+import { SpellingSuggestion } from "../../src/types/app";
+import { useIntakeItemEdit } from "../../src/pages/Home/DayEdit/IntakeItemEditContext";
 
 export type MockUseDayEdit = {
-  dailyData?: any;
+  dailyData?: DayData;
   isLoading?: boolean;
   isSuccess?: boolean;
   isError?: boolean;
@@ -32,6 +36,30 @@ export type MockUseDayEdit = {
   calRemainingPct?: any;
   currIntakeItemId?: any;
   setCurrIntakeItemId?: any;
+};
+
+export type MockUseIntakeItemEdit = {
+  intakeItem?: NewIntakeItem;
+  isOneItem?: boolean;
+  isCurrIntakeItem?: boolean;
+  isManual?: boolean;
+  inputFaded?: string;
+  setInputFaded?: any;
+  isLoadingCal?: boolean;
+  suggestions?: SpellingSuggestion[];
+  setSuggestions?: any;
+  isSuggestionListShown?: boolean;
+  handleNameInputClick?: any;
+  handleInputChange?: any;
+  decreaseQuantity?: any;
+  increaseQuantity?: any;
+  handleUnitBtnClick?: any;
+  handleToggleManual?: any;
+  handleCalcBtnClick?: any;
+  handleSuggestionClick?: any;
+  handleIgnoreSuggestionClick?: any;
+  handleAddButtonClick?: any;
+  handleRemoveButtonClick?: any;
 };
 
 function mockUseAuth(loggedInUser: any) {
@@ -93,7 +121,7 @@ function mockUseDayEdit({
   currIntakeItemId = "",
   setCurrIntakeItemId = vi.fn(),
 }: MockUseDayEdit): MockUseDayEdit {
-  const state = {
+  const value = {
     dailyData,
     isLoading,
     isSuccess,
@@ -118,9 +146,61 @@ function mockUseDayEdit({
     setCurrIntakeItemId,
   };
 
-  (useDayEdit as Mock).mockReturnValue(state);
+  (useDayEdit as Mock).mockReturnValue(value);
 
-  return state;
+  return value;
+}
+
+function mockUseIntakeItemEdit({
+  intakeItem = testService.createTestIntakeItem(),
+  isOneItem = false,
+  isCurrIntakeItem = false,
+  isManual = false,
+  inputFaded = "",
+  setInputFaded = vi.fn(),
+  isLoadingCal = false,
+  suggestions = [],
+  setSuggestions = vi.fn(),
+  isSuggestionListShown = false,
+  handleNameInputClick = vi.fn(),
+  handleInputChange = vi.fn(),
+  decreaseQuantity = vi.fn(),
+  increaseQuantity = vi.fn(),
+  handleUnitBtnClick = vi.fn(),
+  handleToggleManual = vi.fn(),
+  handleCalcBtnClick = vi.fn(),
+  handleSuggestionClick = vi.fn(),
+  handleIgnoreSuggestionClick = vi.fn(),
+  handleAddButtonClick = vi.fn(),
+  handleRemoveButtonClick = vi.fn(),
+}: MockUseIntakeItemEdit): MockUseIntakeItemEdit {
+  const value = {
+    intakeItem,
+    isOneItem,
+    isCurrIntakeItem,
+    isManual,
+    inputFaded,
+    setInputFaded,
+    isLoadingCal,
+    suggestions,
+    setSuggestions,
+    isSuggestionListShown,
+    handleNameInputClick,
+    handleInputChange,
+    decreaseQuantity,
+    increaseQuantity,
+    handleUnitBtnClick,
+    handleToggleManual,
+    handleCalcBtnClick,
+    handleSuggestionClick,
+    handleIgnoreSuggestionClick,
+    handleAddButtonClick,
+    handleRemoveButtonClick,
+  };
+
+  (useIntakeItemEdit as Mock).mockReturnValue(value);
+
+  return value;
 }
 
 function mockUseDeleteWorkout({
@@ -148,4 +228,5 @@ export {
   mockUseDayEdit,
   mockUseDeleteWorkout,
   mockUseNavigate,
+  mockUseIntakeItemEdit,
 };

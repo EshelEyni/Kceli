@@ -5,59 +5,73 @@ import { login } from "../../store/slices/authSlice";
 import "./Login.scss";
 import { AppDispatch } from "../../types/app";
 import { Button } from "../../components/App/Button/Button";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const [error, setError] = useState<string>("");
 
   const [user, setUser] = useState({
     username: "eshel2",
     password: "eshel123",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setUser({
       ...user,
       [e.target.name]: e.target.value,
     });
-  };
+  }
 
-  const onLogin = async () => {
+  async function onLogin() {
     try {
       const { username, password } = user;
       await dispatch(login(username, password));
       navigate("/home");
     } catch (err) {
-      setError((err as any).stack);
+      if (err instanceof Error) toast.error(err.message);
+      else toast.error("An unknown error occurred");
     }
-  };
+  }
 
   return (
-    <section className="login-page">
-      {error && <div className="login-page__error-msg">{error}</div>}
-      <div>
-        <h1>login</h1>
-        <div>username</div>
-        <input
-          type="text"
-          name="username"
-          onChange={handleChange}
-          autoComplete="off"
-          value={user.username}
-        />
-        <div>password</div>
-        <input
-          type="password"
-          name="password"
-          onChange={handleChange}
-          autoComplete="off"
-          value={user.password}
-        />
-      </div>
+    <main className="page">
+      <form className="login-form">
+        <h1 className="login-form__title">login</h1>
 
-      <Button onClickFn={onLogin}>login</Button>
-    </section>
+        <div className="login-form__input-container">
+          <label htmlFor="username" className="login-form__label">
+            username
+          </label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            onChange={handleChange}
+            autoComplete="off"
+            value={user.username}
+            className="login-form__input"
+          />
+        </div>
+
+        <div className="login-form__input-container">
+          <label htmlFor="password" className="login-form__label">
+            password
+          </label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            onChange={handleChange}
+            autoComplete="off"
+            value={user.password}
+            className="login-form__input"
+          />
+        </div>
+
+        <Button onClickFn={onLogin}>login</Button>
+      </form>
+    </main>
   );
 };
 
