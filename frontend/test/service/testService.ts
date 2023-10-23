@@ -32,7 +32,7 @@ function createTestDailyData(): DayData {
     id: "test",
     userId: "test",
     date: new Date(),
-    intakes: [createTestIntake()],
+    intakes: [createTestIntake({})],
     workouts: [createTestWorkout()],
     weight: 100,
     waist: 100,
@@ -43,12 +43,22 @@ function createTestDailyData(): DayData {
   };
 }
 
-function createTestIntake(): CombinedIntake {
+function createTestIntake({
+  id = "test",
+  isRecorded = false,
+  recordedAt = new Date(),
+  items = [createTestIntakeItem()],
+}: {
+  id?: string;
+  isRecorded?: boolean;
+  recordedAt?: Date;
+  items?: IntakeItem[];
+}): CombinedIntake {
   return {
-    id: "test",
-    isRecorded: false,
-    recordedAt: new Date(),
-    items: [createTestIntakeItem()],
+    id,
+    isRecorded,
+    recordedAt,
+    items,
   };
 }
 

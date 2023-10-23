@@ -114,7 +114,7 @@ function mockUseDayEdit({
   openedElement = ToggledElement.IntakeEdit,
   setOpenedElement = vi.fn(),
   recommendedWaterIntake = 0,
-  intake = testService.createTestIntake(),
+  intake = testService.createTestIntake({}),
   setIntake = vi.fn(),
   calConsumedPct = 0,
   calRemainingPct = 0,
@@ -218,6 +218,7 @@ function mockUseDeleteWorkout({
 
 function mockUseNavigate(navigate = vi.fn()) {
   (useNavigate as Mock).mockImplementation(() => navigate);
+  return navigate;
 }
 
 export {

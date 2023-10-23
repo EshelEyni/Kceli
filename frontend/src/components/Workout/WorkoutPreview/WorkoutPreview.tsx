@@ -8,10 +8,10 @@ import { useDeleteWorkout } from "../../../hooks/useDeleteWorkout";
 
 type WorkoutPreviewProps = {
   workout: Workout;
-  isTodayDetails?: boolean;
+  isDayEdit?: boolean;
 };
 
-export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isTodayDetails = false }) => {
+export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isDayEdit = false }) => {
   const { removeWorkout } = useDeleteWorkout();
   const navigate = useNavigate();
   const duration = workoutUtilService.calcDuration({ workout: workout as Workout });
@@ -38,7 +38,7 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isTodayDetail
       </section>
 
       <div className="workout-preview__btns">
-        {!isTodayDetails && (
+        {!isDayEdit && (
           <>
             <Button
               className="btn workout-page__btn"

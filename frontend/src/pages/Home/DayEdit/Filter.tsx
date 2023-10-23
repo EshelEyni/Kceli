@@ -15,10 +15,12 @@ export const DayEditFilter: FC = () => {
     {
       name: "intakes",
       value: ToggledElement.IntakeList,
+      isShown: dailyData?.intakes.some(intake => intake.isRecorded === true),
     },
     {
       name: "unrecorded",
       value: ToggledElement.UnRecordedIntakeList,
+      isShown: dailyData?.intakes.some(intake => intake.isRecorded === false),
     },
     {
       name: "water",

@@ -574,9 +574,9 @@ describe("DayEditContext", () => {
       dailyData: {
         ...testService.createTestDailyData(),
         intakes: [
-          testService.createTestIntake(),
-          { ...testService.createTestIntake(), isRecorded: true },
-          { ...testService.createTestIntake(), isRecorded: true },
+          testService.createTestIntake({}),
+          { ...testService.createTestIntake({}), isRecorded: true },
+          { ...testService.createTestIntake({}), isRecorded: true },
         ],
       },
       isSuccess: true,
@@ -603,9 +603,9 @@ describe("DayEditContext", () => {
       dailyData: {
         ...testService.createTestDailyData(),
         intakes: [
-          testService.createTestIntake(),
-          { ...testService.createTestIntake(), isRecorded: true },
-          { ...testService.createTestIntake(), isRecorded: true },
+          testService.createTestIntake({}),
+          { ...testService.createTestIntake({}), isRecorded: true },
+          { ...testService.createTestIntake({}), isRecorded: true },
         ],
       },
       isSuccess: true,
@@ -629,9 +629,9 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     const intakes = [
-      testService.createTestIntake(),
-      { ...testService.createTestIntake(), isRecorded: true },
-      { ...testService.createTestIntake(), isRecorded: true },
+      testService.createTestIntake({}),
+      { ...testService.createTestIntake({}), isRecorded: true },
+      { ...testService.createTestIntake({}), isRecorded: true },
     ];
 
     mockUseGetTodayData({
@@ -658,9 +658,9 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     const intakes = [
-      testService.createTestIntake(),
-      { ...testService.createTestIntake(), isRecorded: true },
-      { ...testService.createTestIntake(), isRecorded: true },
+      testService.createTestIntake({}),
+      { ...testService.createTestIntake({}), isRecorded: true },
+      { ...testService.createTestIntake({}), isRecorded: true },
     ];
 
     mockUseGetTodayData({

@@ -47,7 +47,7 @@ export const DayEdit: FC = () => {
           {openedElement === ToggledElement.Workouts && (
             <List
               items={dailyData.workouts}
-              render={item => <WorkoutPreview workout={item} isTodayDetails={true} key={item.id} />}
+              render={item => <WorkoutPreview workout={item} isDayEdit={true} key={item.id} />}
             />
           )}
           {isListShown && <IntakeList />}

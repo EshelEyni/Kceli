@@ -86,7 +86,7 @@ describe("Intake Edit", () => {
 
   it.only("should submit intake when save intake button is clicked", () => {
     const dailyDatWithNoIntakes = { ...testService.createTestDailyData(), intakes: [] };
-    const intake = testService.createTestIntake();
+    const intake = testService.createTestIntake({});
 
     const { dailyData, updateDailyData, setIntake } = mockUseDayEdit({
       dailyData: dailyDatWithNoIntakes,
@@ -121,7 +121,7 @@ describe("Intake Edit", () => {
 
   it("should not submit intake when one of the intake items is invalid and call toast", () => {
     const dailyDatWithNoIntakes = { ...testService.createTestDailyData(), intakes: [] };
-    const intake = testService.createTestIntake();
+    const intake = testService.createTestIntake({});
     intake.items[0].name = "";
 
     const { updateDailyData, setIntake } = mockUseDayEdit({
@@ -140,7 +140,7 @@ describe("Intake Edit", () => {
 
   it("should set recordedAt to new Date when intake is submitted", () => {
     const dailyDatWithNoIntakes = { ...testService.createTestDailyData(), intakes: [] };
-    const intake = testService.createTestIntake();
+    const intake = testService.createTestIntake({});
     intake.recordedAt = null;
 
     const { updateDailyData } = mockUseDayEdit({
@@ -158,7 +158,7 @@ describe("Intake Edit", () => {
 
   it("should add intake if it is new", () => {
     const dailyDatWithNoIntakes = { ...testService.createTestDailyData(), intakes: [] };
-    const intake = testService.createTestIntake();
+    const intake = testService.createTestIntake({});
 
     const { updateDailyData } = mockUseDayEdit({
       dailyData: dailyDatWithNoIntakes,
@@ -174,7 +174,7 @@ describe("Intake Edit", () => {
   });
 
   it("should update intake if it is not new", () => {
-    const intake = testService.createTestIntake();
+    const intake = testService.createTestIntake({});
     const dailyDataWithIntake = { ...testService.createTestDailyData(), intakes: [intake] };
 
     const { updateDailyData } = mockUseDayEdit({
