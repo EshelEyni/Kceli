@@ -53,8 +53,17 @@ export type FormattedNinjaAPIResDataItem = {
 
 export type FormattedNinjaAPIResData = FormattedNinjaAPIResDataItem[];
 
-export type FormattedUSDAFoodObject = {
+// export type FormattedUSDAFoodObject = {
+//   description: string;
+//   servingSize?: string;
+//   [key: string]: string;
+// };
+
+interface BaseFormattedUSDAFoodObject {
   description: string;
   servingSize?: string;
+}
+
+export type FormattedUSDAFoodObject = BaseFormattedUSDAFoodObject & {
   [key: string]: string;
 };

@@ -14,7 +14,7 @@ import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
 import { useIntakeItemEdit } from "../../src/pages/Home/DayEdit/IntakeItemEditContext";
 
 export type MockUseDayEdit = {
-  dailyData?: DayData;
+  dailyData?: DayData | null;
   isLoading?: boolean;
   isSuccess?: boolean;
   isError?: boolean;

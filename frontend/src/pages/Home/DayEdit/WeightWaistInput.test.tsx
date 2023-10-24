@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { it, describe, expect, afterEach, vi } from "vitest";
 import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
@@ -27,7 +28,7 @@ describe("Weight Waist Input", () => {
       ...testService.createDailyData(),
       weight: "",
       waist: "",
-    };
+    } as any;
 
     mockUseDayEdit({ dailyData });
 
@@ -43,7 +44,7 @@ describe("Weight Waist Input", () => {
       ...testService.createDailyData(),
       weight: "",
       waist: "",
-    };
+    } as any;
 
     const { updateDailyData } = mockUseDayEdit({ dailyData });
 
