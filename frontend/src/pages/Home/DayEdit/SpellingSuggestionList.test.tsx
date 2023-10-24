@@ -9,10 +9,10 @@ vi.mock("./IntakeItemEditContext");
 
 describe("SpellingSuggestionList", () => {
   const suggestions = [
-    testService.createTestSpellingSuggestion(),
-    testService.createTestSpellingSuggestion(),
-    testService.createTestSpellingSuggestion(),
-    testService.createTestSpellingSuggestion(),
+    testService.createSpellingSuggestion(),
+    testService.createSpellingSuggestion(),
+    testService.createSpellingSuggestion(),
+    testService.createSpellingSuggestion(),
   ];
 
   afterEach(() => {

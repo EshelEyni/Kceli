@@ -127,7 +127,6 @@ export const Modal: FC<ModalProps> & {
   const [isModalAbove, setIsModalAbove] = useState(false);
 
   const close = () => {
-    console.log("close");
     onClose?.();
     if (externalStateControl) {
       externalStateControl.setOpenedModalName("");

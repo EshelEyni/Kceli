@@ -36,7 +36,7 @@ describe("Day Edit", () => {
   it("should render content when showContent is true", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createTestDailyData(),
+      dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
     });
 
@@ -48,7 +48,7 @@ describe("Day Edit", () => {
   it("should render weight waist input when openedElement is WeightWaistInput", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createTestDailyData(),
+      dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
       openedElement: "WeightWaistInput",
     });
@@ -61,7 +61,7 @@ describe("Day Edit", () => {
   it("should render intake edit when openedElement is IntakeEdit", async () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createTestDailyData(),
+      dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
       openedElement: "IntakeEdit",
     });
@@ -76,7 +76,7 @@ describe("Day Edit", () => {
     mockUseNavigate();
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createTestDailyData(),
+      dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
       openedElement: "Workouts",
     });
@@ -89,7 +89,7 @@ describe("Day Edit", () => {
   it("should render intake list when openedElement is IntakeList", async () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createTestDailyData(),
+      dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
       openedElement: "IntakeList",
     });
@@ -102,7 +102,7 @@ describe("Day Edit", () => {
   it("should render unrecorded intake list when openedElement is UnRecordedIntakeList", async () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createTestDailyData(),
+      dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
       openedElement: "UnRecordedIntakeList",
     });
@@ -115,7 +115,7 @@ describe("Day Edit", () => {
   it("should render nutrition query when openedElement is Query", async () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createTestDailyData(),
+      dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
       openedElement: "Query",
     });
@@ -128,7 +128,7 @@ describe("Day Edit", () => {
   it("should render water edit when openedElement is Water", async () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createTestDailyData(),
+      dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
       openedElement: "Water",
     });

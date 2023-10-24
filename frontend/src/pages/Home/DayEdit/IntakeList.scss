@@ -1,0 +1,55 @@
+@import "../../../styles/main.scss";
+
+.intake-list__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: rem(8px);
+
+  &__total-calories,
+  &__title {
+    font-size: rem(22px);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  &__total-calories {
+    font-size: rem(16px);
+    align-self: flex-end;
+  }
+}
+
+.intake-list {
+  align-items: flex-start;
+  gap: rem(10px);
+
+  .intake-list-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: rem(10px);
+    width: 100%;
+    padding: rem(10px);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    box-shadow: 1px 3px 8px 5px rgba(0, 0, 0, 0.15);
+
+    &__title {
+      font-size: rem(18px);
+      color: var(--color-text);
+    }
+  }
+}
+
+.delete-intake-modal {
+  transform: translate(-50%, -50%);
+
+  .btn {
+    background-color: var(--color-text-gray);
+  }
+}

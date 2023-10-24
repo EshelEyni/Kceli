@@ -159,7 +159,7 @@ describe("DayEditContext", () => {
     const TestComponent = () => {
       const { updateDailyData } = useDayEdit();
       return (
-        <button onClick={() => updateDailyData({ ...testService.createTestDailyData() })}>
+        <button onClick={() => updateDailyData({ ...testService.createDailyData() })}>
           Update
         </button>
       );
@@ -197,7 +197,7 @@ describe("DayEditContext", () => {
     expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeEdit);
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), weight: undefined },
+      dailyData: { ...testService.createDailyData(), weight: undefined },
       isSuccess: true,
     });
 
@@ -233,7 +233,7 @@ describe("DayEditContext", () => {
     expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeEdit);
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), weight: 80 },
+      dailyData: { ...testService.createDailyData(), weight: 80 },
       isSuccess: true,
     });
 
@@ -572,11 +572,11 @@ describe("DayEditContext", () => {
 
     mockUseGetTodayData({
       dailyData: {
-        ...testService.createTestDailyData(),
+        ...testService.createDailyData(),
         intakes: [
-          testService.createTestIntake({}),
-          { ...testService.createTestIntake({}), isRecorded: true },
-          { ...testService.createTestIntake({}), isRecorded: true },
+          testService.createIntake({}),
+          { ...testService.createIntake({}), isRecorded: true },
+          { ...testService.createIntake({}), isRecorded: true },
         ],
       },
       isSuccess: true,
@@ -601,11 +601,11 @@ describe("DayEditContext", () => {
 
     mockUseGetTodayData({
       dailyData: {
-        ...testService.createTestDailyData(),
+        ...testService.createDailyData(),
         intakes: [
-          testService.createTestIntake({}),
-          { ...testService.createTestIntake({}), isRecorded: true },
-          { ...testService.createTestIntake({}), isRecorded: true },
+          testService.createIntake({}),
+          { ...testService.createIntake({}), isRecorded: true },
+          { ...testService.createIntake({}), isRecorded: true },
         ],
       },
       isSuccess: true,
@@ -629,13 +629,13 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     const intakes = [
-      testService.createTestIntake({}),
-      { ...testService.createTestIntake({}), isRecorded: true },
-      { ...testService.createTestIntake({}), isRecorded: true },
+      testService.createIntake({}),
+      { ...testService.createIntake({}), isRecorded: true },
+      { ...testService.createIntake({}), isRecorded: true },
     ];
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), intakes },
+      dailyData: { ...testService.createDailyData(), intakes },
       isSuccess: true,
     });
 
@@ -658,13 +658,13 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     const intakes = [
-      testService.createTestIntake({}),
-      { ...testService.createTestIntake({}), isRecorded: true },
-      { ...testService.createTestIntake({}), isRecorded: true },
+      testService.createIntake({}),
+      { ...testService.createIntake({}), isRecorded: true },
+      { ...testService.createIntake({}), isRecorded: true },
     ];
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), intakes },
+      dailyData: { ...testService.createDailyData(), intakes },
       isSuccess: true,
     });
 
@@ -687,7 +687,7 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), targetCaloricIntake: 2000 },
+      dailyData: { ...testService.createDailyData(), targetCaloricIntake: 2000 },
       isSuccess: true,
     });
 
@@ -709,7 +709,7 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), targetCaloricIntake: 2000 },
+      dailyData: { ...testService.createDailyData(), targetCaloricIntake: 2000 },
       isSuccess: true,
     });
 
@@ -777,7 +777,7 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), weight: 80 },
+      dailyData: { ...testService.createDailyData(), weight: 80 },
       isSuccess: true,
     });
 
@@ -800,7 +800,7 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), targetCaloricIntake: 2000 },
+      dailyData: { ...testService.createDailyData(), targetCaloricIntake: 2000 },
       isSuccess: true,
     });
 
@@ -823,7 +823,7 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), targetCaloricIntake: 2000 },
+      dailyData: { ...testService.createDailyData(), targetCaloricIntake: 2000 },
       isSuccess: true,
     });
 
@@ -846,7 +846,7 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), weight: 80 },
+      dailyData: { ...testService.createDailyData(), weight: 80 },
       isSuccess: true,
     });
 
@@ -869,7 +869,7 @@ describe("DayEditContext", () => {
     mockUseAuth({});
 
     mockUseGetTodayData({
-      dailyData: { ...testService.createTestDailyData(), weight: 80 },
+      dailyData: { ...testService.createDailyData(), weight: 80 },
       isSuccess: true,
     });
 

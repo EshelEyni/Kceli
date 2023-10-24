@@ -1,24 +1,15 @@
 import { FC } from "react";
 import { List } from "../../../components/App/List/List";
-import { Button } from "../../../components/App/Button/Button";
 import { ToggledElement, useDayEdit } from "./DayEditContext";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { IntakePreview } from "./IntakePreview";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
-import { Intake } from "../../../../../shared/types/intake";
 import { getCleanTime } from "../../../services/util/utilService";
+import "./IntakeList.scss";
 
 export const IntakeList: FC = () => {
-  const {
-    dailyData,
-    unrecordedIntakes,
-    recordedIntakes,
-    openedElement,
-    setOpenedElement,
-    setIntake,
-    updateDailyData,
-    isLoadingUpdate,
-  } = useDayEdit();
+  const { dailyData, unrecordedIntakes, recordedIntakes, openedElement, isLoadingUpdate } =
+    useDayEdit();
 
   if (!dailyData) return null;
 
@@ -28,81 +19,42 @@ export const IntakeList: FC = () => {
     if (!a.recordedAt || !b.recordedAt) return 0;
     return new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime();
   });
+
   const totalCalories = calorieUtilService.getTotalCaloriesFromDailyData({
     dailyData,
     isRecorded: isRecordedIntakesShown,
   });
 
-  function handleSaveBtnClick(intakeId: string) {
-    if (!dailyData) return;
-    const dataToUpdate = { ...dailyData };
-    dataToUpdate.intakes = dailyData.intakes.map(intake => {
-      if (intake.id === intakeId) {
-        intake.isRecorded = true;
-        intake.recordedAt = new Date();
-      }
-      return intake;
-    });
-    updateDailyData(dataToUpdate);
-  }
-
-  function handleEditBtnClick(intake: Intake) {
-    if (!dailyData) return;
-    const intakeToEdit = { ...intake };
-    setIntake(intakeToEdit);
-    setOpenedElement(ToggledElement.IntakeEdit);
-  }
-
-  function handleDeleteBtnClick(intakeId: string) {
-    if (!dailyData) return;
-    const dataToUpdate = { ...dailyData };
-    dataToUpdate.intakes = dailyData.intakes.filter(intake => intake.id !== intakeId);
-    updateDailyData(dataToUpdate);
-  }
-
   return (
     <>
-      {isLoadingUpdate && <SpinnerLoader />}
       <header className="intake-list__header" data-testid="intake-list-header">
-        <h3 className="intake-list__title">
+        <h3 className="intake-list__header__title">
           {isRecordedIntakesShown ? "Recorded" : "Unrecorded"} Intakes
         </h3>
-        <h4 className="intake-list__total-calories">total calories: {totalCalories}</h4>
+        <h4 className="intake-list__header__total-calories">total calories: {totalCalories}</h4>
       </header>
 
-      <List
-        className="intake-list"
-        items={sortedIntakes}
-        render={(item, i) => (
-          <li className="intake-preview-container" key={item.id}>
-            <h5 className="intake-list-item-title">
-              {`Intake ${i + 1}#  ${
-                item.recordedAt ? `- ${getCleanTime(item.recordedAt as unknown as string)}` : ""
-              }`}
-            </h5>
-            <IntakePreview intake={item} />
+      {isLoadingUpdate && <SpinnerLoader />}
+      {!isLoadingUpdate && (
+        <List
+          className="intake-list"
+          items={sortedIntakes}
+          render={(item, i) => {
+            const recordedStr = item.recordedAt
+              ? `- ${getCleanTime(item.recordedAt as unknown as string)}`
+              : "";
 
-            <p className="intake-preview__total-calories">{`Total Calories: ${calorieUtilService.getTotalCalories(
-              item
-            )}`}</p>
-
-            <div className="intake-list__btns-container">
-              <Button className="btn" onClickFn={() => handleDeleteBtnClick(item.id)}>
-                Delete
-              </Button>
-              {isRecordedIntakesShown ? (
-                <Button className="btn" onClickFn={() => handleEditBtnClick(item)}>
-                  Edit
-                </Button>
-              ) : (
-                <Button className="btn" onClickFn={() => handleSaveBtnClick(item.id)}>
-                  Save
-                </Button>
-              )}
-            </div>
-          </li>
-        )}
-      />
+            return (
+              <li className="intake-list-item" key={item.id}>
+                <h5 className="intake-list-item__title">
+                  Intake {i + 1}# {recordedStr}
+                </h5>
+                <IntakePreview intake={item} />
+              </li>
+            );
+          }}
+        />
+      )}
     </>
   );
 };

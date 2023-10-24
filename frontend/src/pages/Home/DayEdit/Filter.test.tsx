@@ -16,7 +16,7 @@ describe("Day Edit Filter", () => {
 
   it("should render all filter buttons where isShown prop is not provided", () => {
     const dailyData = {
-      ...testService.createTestDailyData(),
+      ...testService.createDailyData(),
       intakes: [],
       workouts: [],
     };
@@ -32,8 +32,8 @@ describe("Day Edit Filter", () => {
 
   it("should render intakes button if there are recorded intakes", () => {
     const dailyData = {
-      ...testService.createTestDailyData(),
-      intakes: [testService.createTestIntake({ isRecorded: true })],
+      ...testService.createDailyData(),
+      intakes: [testService.createIntake({ isRecorded: true })],
       workouts: [],
     };
 
@@ -45,8 +45,8 @@ describe("Day Edit Filter", () => {
 
   it("should render unrecorded button if there are unrecorded intakes", () => {
     const dailyData = {
-      ...testService.createTestDailyData(),
-      intakes: [testService.createTestIntake({ isRecorded: false })],
+      ...testService.createDailyData(),
+      intakes: [testService.createIntake({ isRecorded: false })],
       workouts: [],
     };
 
@@ -58,9 +58,9 @@ describe("Day Edit Filter", () => {
 
   it("should render workouts button if there are workouts", () => {
     const dailyData = {
-      ...testService.createTestDailyData(),
+      ...testService.createDailyData(),
       intakes: [],
-      workouts: [testService.createTestWorkout()],
+      workouts: [testService.createWorkout()],
     };
 
     mockUseDayEdit({ dailyData });
@@ -71,12 +71,12 @@ describe("Day Edit Filter", () => {
 
   it("should call setOpenedElement with proper value on button click", () => {
     const dailyData = {
-      ...testService.createTestDailyData(),
+      ...testService.createDailyData(),
       intakes: [
-        testService.createTestIntake({ isRecorded: true }),
-        testService.createTestIntake({ isRecorded: false }),
+        testService.createIntake({ isRecorded: true }),
+        testService.createIntake({ isRecorded: false }),
       ],
-      workouts: [testService.createTestWorkout()],
+      workouts: [testService.createWorkout()],
     };
 
     const { setOpenedElement } = mockUseDayEdit({ dailyData });

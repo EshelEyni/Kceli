@@ -1,0 +1,39 @@
+@import "../../../styles/main.scss";
+
+.intake-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: rem(10px);
+  margin-left: rem(25px);
+  list-style: decimal;
+
+  &__item-list {
+    &__item {
+      list-style: decimal;
+      font-size: rem(16px);
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--color-text);
+    }
+  }
+
+  &__total-calories {
+    color: inherit;
+    align-self: flex-end;
+    text-transform: capitalize;
+    font-weight: 600;
+  }
+
+  &__btns-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: rem(5px);
+
+    .btn {
+      padding: rem(10px) rem(15px);
+      background-color: var(--color-text-gray);
+    }
+  }
+}

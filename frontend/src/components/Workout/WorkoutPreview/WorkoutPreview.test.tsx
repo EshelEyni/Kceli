@@ -23,7 +23,7 @@ describe("Workout Preview", () => {
 
   it("should render workout preview", () => {
     const mockWorkout = {
-      ...testService.createTestWorkout(),
+      ...testService.createWorkout(),
       type: "anaerobic",
       split: "FBW",
     } as WorkoutAnaerobic;
@@ -42,7 +42,7 @@ describe("Workout Preview", () => {
   });
 
   it("should render workout preview without split if workout is aerobic", () => {
-    const mockWorkout = testService.createTestWorkout();
+    const mockWorkout = testService.createWorkout();
 
     render(<WorkoutPreview workout={mockWorkout} />);
 
@@ -51,7 +51,7 @@ describe("Workout Preview", () => {
   });
 
   it("should rebder workout preview without delete and edit buttons if isDayEdit is true", () => {
-    const mockWorkout = testService.createTestWorkout();
+    const mockWorkout = testService.createWorkout();
 
     render(<WorkoutPreview workout={mockWorkout} isDayEdit={true} />);
 
@@ -61,7 +61,7 @@ describe("Workout Preview", () => {
   });
 
   it("should call removeWorkout on delete button click", () => {
-    const mockWorkout = testService.createTestWorkout();
+    const mockWorkout = testService.createWorkout();
     const { removeWorkout } = useDeleteWorkout();
 
     render(<WorkoutPreview workout={mockWorkout} />);
@@ -73,7 +73,7 @@ describe("Workout Preview", () => {
   });
 
   it("should call navigate on edit button click", () => {
-    const mockWorkout = testService.createTestWorkout();
+    const mockWorkout = testService.createWorkout();
     const navigate = mockUseNavigate();
     render(<WorkoutPreview workout={mockWorkout} />);
 
@@ -84,7 +84,7 @@ describe("Workout Preview", () => {
   });
 
   it("should call navigate on open button click", () => {
-    const mockWorkout = testService.createTestWorkout();
+    const mockWorkout = testService.createWorkout();
     const navigate = mockUseNavigate();
 
     render(<WorkoutPreview workout={mockWorkout} />);

@@ -10,7 +10,7 @@ import { useDeleteWorkout } from "../../src/hooks/useDeleteWorkout";
 import { useNavigate } from "react-router-dom";
 import { DayData } from "../../../shared/types/dayData";
 import { NewIntakeItem } from "../../../shared/types/intake";
-import { SpellingSuggestion } from "../../src/types/app";
+import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
 import { useIntakeItemEdit } from "../../src/pages/Home/DayEdit/IntakeItemEditContext";
 
 export type MockUseDayEdit = {
@@ -36,6 +36,12 @@ export type MockUseDayEdit = {
   calRemainingPct?: any;
   currIntakeItemId?: any;
   setCurrIntakeItemId?: any;
+  chatGPTQuery?: NutritionQueryState;
+  setChatGPTQuery?: any;
+  ninjaAPIQuery?: NutritionQueryState;
+  setNinjaAPIQuery?: any;
+  USDAAPIQuery?: NutritionQueryState;
+  setUSDAAPIQuery?: any;
 };
 
 export type MockUseIntakeItemEdit = {
@@ -98,7 +104,7 @@ function mockUseCreateDay(value: { createDay: () => any; isLoading: boolean }) {
 }
 
 function mockUseDayEdit({
-  dailyData = testService.createTestDailyData(),
+  dailyData = testService.createDailyData(),
   isLoading = false,
   isSuccess = true,
   isError = false,
@@ -114,12 +120,18 @@ function mockUseDayEdit({
   openedElement = ToggledElement.IntakeEdit,
   setOpenedElement = vi.fn(),
   recommendedWaterIntake = 0,
-  intake = testService.createTestIntake({}),
+  intake = testService.createIntake({}),
   setIntake = vi.fn(),
   calConsumedPct = 0,
   calRemainingPct = 0,
   currIntakeItemId = "",
   setCurrIntakeItemId = vi.fn(),
+  chatGPTQuery = testService.createNutritionQuery({ type: "chatGPT" }),
+  setChatGPTQuery = vi.fn(),
+  ninjaAPIQuery = testService.createNutritionQuery({ type: "ninjaAPI" }),
+  setNinjaAPIQuery = vi.fn(),
+  USDAAPIQuery = testService.createNutritionQuery({ type: "usdaAPI" }),
+  setUSDAAPIQuery = vi.fn(),
 }: MockUseDayEdit): MockUseDayEdit {
   const value = {
     dailyData,
@@ -144,6 +156,12 @@ function mockUseDayEdit({
     calRemainingPct,
     currIntakeItemId: currIntakeItemId || intake.items[0].id,
     setCurrIntakeItemId,
+    chatGPTQuery,
+    setChatGPTQuery,
+    ninjaAPIQuery,
+    setNinjaAPIQuery,
+    USDAAPIQuery,
+    setUSDAAPIQuery,
   };
 
   (useDayEdit as Mock).mockReturnValue(value);
@@ -152,7 +170,7 @@ function mockUseDayEdit({
 }
 
 function mockUseIntakeItemEdit({
-  intakeItem = testService.createTestIntakeItem(),
+  intakeItem = testService.createIntakeItem(),
   isOneItem = false,
   isCurrIntakeItem = false,
   isManual = false,

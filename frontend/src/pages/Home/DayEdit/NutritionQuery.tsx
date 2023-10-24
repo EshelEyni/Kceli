@@ -3,10 +3,10 @@ import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../../components/App/Button/Button";
 import nutritionApiService from "../../../services/nutrition/nutritionApiService";
 import { RiGovernmentFill, RiOpenaiFill } from "react-icons/ri";
-import "./NutritionQuery.scss";
 import { GiNinjaHead } from "react-icons/gi";
 import { useDayEdit } from "./DayEditContext";
 import { NutritionQueryResponseHandler } from "./NutritionQueryResponseHandler";
+import "./NutritionQuery.scss";
 
 type NutritionQueryIFormInput = {
   chatGPTQuery: string;
@@ -24,8 +24,7 @@ export const NutritionQuery: FC = () => {
     setUSDAAPIQuery,
   } = useDayEdit();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { control, handleSubmit, setValue } = useForm<NutritionQueryIFormInput>({
+  const { control, handleSubmit } = useForm<NutritionQueryIFormInput>({
     defaultValues: {
       chatGPTQuery: "",
       ninjaAPIQuery: "",
@@ -80,7 +79,7 @@ export const NutritionQuery: FC = () => {
   return (
     <section className="nutrition-query" data-testid="nutrition-query">
       <section className="nutrition-query__desc">
-        <p>{`This tab let's you query the APIs used by the app.`}</p>
+        <p>{"This tab let's you query the APIs used by the app."}</p>
         <ul>
           <li>The first one is a chatbot that generates a response based on the input</li>
           <li>The second one is a food database.</li>
@@ -88,7 +87,7 @@ export const NutritionQuery: FC = () => {
         </ul>
       </section>
 
-      <form className="nutrition-query__form" autoComplete="off">
+      <form className="nutrition-query__form" autoComplete="off" data-testid="nutrition-query-form">
         <label htmlFor="chatGPTQuery">
           <span>Chat GPT</span>
           <RiOpenaiFill />

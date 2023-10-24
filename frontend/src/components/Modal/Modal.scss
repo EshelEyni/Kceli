@@ -4,31 +4,20 @@
   display: flex;
   flex-direction: column;
   position: absolute;
+  gap: rem(16px);
   top: 50%;
   left: 50%;
   background-color: var(--color-background);
-
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   padding: rem(32px);
   transform: translateX(-50%);
   z-index: 1000;
+  width: 100%;
+  max-width: rem(320px);
 
-  .modal-hover-guard-zone {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  &.confirm-delete-msg {
-    top: 50%;
-    position: fixed;
-    transform: translate(-50%, -50%);
-    justify-content: space-between;
-    width: rem(320px);
-    height: rem(260px);
-    z-index: 3500;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  .delete-btn {
+    background-color: var(--color-danger);
   }
 
   &.create-day-modal {
