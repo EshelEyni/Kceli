@@ -1,5 +1,5 @@
 import { Document, Schema, model } from "mongoose";
-import { intakeSchema } from "./intakeSchema";
+import { intakeSchema } from "../intake/intakeModel";
 import { IDailyData } from "../../types/iTypes";
 import calorieService from "../../services/calorie/calorieService";
 import { UserModel } from "../user/userModel";

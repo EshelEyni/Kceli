@@ -9,6 +9,9 @@
   list-style: decimal;
 
   &__item-list {
+    margin: 0;
+    align-items: flex-start;
+
     &__item {
       list-style: decimal;
       font-size: rem(16px);
@@ -29,11 +32,21 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    flex-wrap: wrap-reverse;
     gap: rem(5px);
 
     .btn {
+      font-size: rem(14px);
       padding: rem(10px) rem(15px);
       background-color: var(--color-text-gray);
     }
+  }
+}
+
+.delete-intake-modal {
+  transform: translate(-50%, -50%);
+
+  .btn {
+    background-color: var(--color-text-gray);
   }
 }

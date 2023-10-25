@@ -12,6 +12,7 @@ import { List } from "../../../components/App/List/List";
 import { WorkoutPreview } from "../../../components/Workout/WorkoutPreview/WorkoutPreview";
 import { NutritionQuery } from "./NutritionQuery";
 import { WaterEdit } from "./WaterEdit";
+import { FavoriteIntakes } from "./FavoriteIntakes";
 
 export const DayEdit: FC = () => {
   const {
@@ -24,7 +25,7 @@ export const DayEdit: FC = () => {
     backgroundColor,
   } = useDayEdit();
 
-  const showContent = isSuccess && dailyData && !isLoadingUpdate;
+  const showContent = isSuccess && dailyData && !isLoadingUpdate && !isLoading;
   const isLoaderShown = isLoading || isLoadingUpdate;
   const isListShown =
     openedElement === ToggledElement.IntakeList ||
@@ -50,6 +51,7 @@ export const DayEdit: FC = () => {
               render={item => <WorkoutPreview workout={item} isDayEdit={true} key={item.id} />}
             />
           )}
+          {openedElement === ToggledElement.FavoriteIntake && <FavoriteIntakes />}
           {isListShown && <IntakeList />}
           {openedElement === ToggledElement.Query && <NutritionQuery />}
           {openedElement === ToggledElement.Water && <WaterEdit />}

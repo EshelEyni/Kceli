@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import dayDataApiService from "../services/dayDataApi/dayDataApiService";
+import dayDataApiService from "../services/dayData/dayDataApiService";
 
 export function useCreateDay() {
   const queryClient = useQueryClient();

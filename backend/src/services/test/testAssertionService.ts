@@ -33,8 +33,8 @@ function assertDailyData(dailyData: DayData) {
 function assertIntake(intake: NewIntake | Intake) {
   expect(intake).toEqual(
     expect.objectContaining({
-      name: expect.any(String),
       items: expect.any(Array),
+      isRecorded: expect.any(Boolean),
     })
   );
 

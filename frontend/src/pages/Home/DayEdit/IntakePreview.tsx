@@ -3,22 +3,31 @@ import { Intake } from "../../../../../shared/types/intake";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { Modal } from "../../../components/Modal/Modal";
 import { Button } from "../../../components/App/Button/Button";
-
-import "./IntakePreview.scss";
 import { ToggledElement, useDayEdit } from "./DayEditContext";
 import { createId } from "../../../services/util/utilService";
+import "./IntakePreview.scss";
+import { useAddFavoriteIntake } from "../../../hooks/useAddFavoriteIntake";
+import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
+import { List } from "../../../components/App/List/List";
+import { useDeleteFavoriteIntake } from "../../../hooks/useDeleteFavoriteIntake";
 
 type IntakePreviewProps = {
   intake: Intake;
+  isFavorite?: boolean;
 };
 
-export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
+export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = false }) => {
   const { dailyData, openedElement, setOpenedElement, setIntake, updateDailyData } = useDayEdit();
+
+  const { addFavoriteIntake, isLoading: isLoadingAddToFav } = useAddFavoriteIntake();
+  const { removeFavoriteIntake } = useDeleteFavoriteIntake();
+
   const isRecordedIntakesShown = openedElement === ToggledElement.IntakeList;
 
   const totalCalories = calorieUtilService.getTotalCalories(intake);
 
   function handleDeleteBtnClick(intakeId: string) {
+    if (isFavorite) return removeFavoriteIntake(intakeId);
     if (!dailyData) return;
     const dataToUpdate = { ...dailyData };
     dataToUpdate.intakes = dailyData.intakes.filter(intake => intake.id !== intakeId);
@@ -53,21 +62,30 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     updateDailyData(dataToUpdate);
   }
 
+  function handleAddToFavBtnClick(intake: Intake) {
+    addFavoriteIntake(intake);
+  }
+
+  if (isLoadingAddToFav)
+    return <SpinnerLoader withContainer={true} containerSize={{ height: "50px" }} />;
+
   return (
     <section className="intake-preview" data-testid="intake-preview">
-      <ol className="intake-preview__item-list">
-        {intake.items.map(item => (
+      <List
+        items={intake.items}
+        className="intake-preview__item-list"
+        render={item => (
           <li
             className="intake-preview__item-list__item"
             data-testid="intake-preview-item"
             key={item.id}
           >
-            {`${item.name} - ${item.quantity} ${item.unit} - caolries: ${Math.round(
+            {`${item.name} - ${item.quantity} ${item.unit} - calories: ${Math.round(
               item.calories
             )}`}
           </li>
-        ))}
-      </ol>
+        )}
+      />
 
       <p className="intake-preview__total-calories">total calories: {totalCalories}</p>
 
@@ -76,11 +94,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
           <Modal.OpenBtn modalName="delete-intake">
             <button className="btn">Delete</button>
           </Modal.OpenBtn>
-          <Modal.Window
-            name="delete-intake"
-            className="delete-intake-modal"
-            style={{ top: window.scrollY + 100 }}
-          >
+          <Modal.Window name="delete-intake" className="delete-intake-modal">
             <h2>Are you sure you want to delete this intake?</h2>
             <Modal.CloseBtn onClickFn={() => handleDeleteBtnClick(intake.id)}>
               <button className="btn delete-btn">Delete</button>
@@ -103,6 +117,12 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
         {!isRecordedIntakesShown && (
           <Button className="btn" onClickFn={() => handleSaveBtnClick(intake.id)}>
             Save
+          </Button>
+        )}
+
+        {!isFavorite && (
+          <Button className="btn" onClickFn={() => handleAddToFavBtnClick(intake)}>
+            add to favorite
           </Button>
         )}
       </div>

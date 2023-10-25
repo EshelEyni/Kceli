@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useIntakeItemEdit } from "./IntakeItemEditContext";
 
-export const IntakeItenEditInputName: FC = () => {
+export const IntakeItemEditInputName: FC = () => {
   const { intakeItem, handleNameInputClick, handleInputChange } = useIntakeItemEdit();
 
   return (

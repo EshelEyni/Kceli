@@ -9,9 +9,11 @@ import testService from "./testService";
 import { useDeleteWorkout } from "../../src/hooks/useDeleteWorkout";
 import { useNavigate } from "react-router-dom";
 import { DayData } from "../../../shared/types/dayData";
-import { NewIntakeItem } from "../../../shared/types/intake";
+import { Intake, NewIntakeItem } from "../../../shared/types/intake";
 import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
 import { useIntakeItemEdit } from "../../src/pages/Home/DayEdit/IntakeItemEditContext";
+import { useAddFavoriteIntake } from "../../src/hooks/useAddFavoriteIntake";
+import { useGetUserFavoriteIntakes } from "../../src/hooks/useGetUserFavoriteIntakes";
 
 export type MockUseDayEdit = {
   dailyData?: DayData | null;
@@ -42,6 +44,10 @@ export type MockUseDayEdit = {
   setNinjaAPIQuery?: any;
   USDAAPIQuery?: NutritionQueryState;
   setUSDAAPIQuery?: any;
+  favoriteIntakes?: Intake[] | undefined;
+  isLoadingFavoriteIntakes?: boolean;
+  isSuccessFavoriteIntakes?: boolean;
+  isErrorFavoriteIntakes?: boolean;
 };
 
 export type MockUseIntakeItemEdit = {
@@ -99,6 +105,21 @@ function mockUseGetTodayData({
   (useGetTodayData as Mock).mockReturnValue({ dailyData, isLoading, isSuccess, isError });
 }
 
+function mockUseAddFavoriteIntake({
+  addFavoriteIntake = vi.fn(),
+  isLoading = false,
+}: {
+  addFavoriteIntake?: any;
+  isLoading?: boolean;
+}) {
+  (useAddFavoriteIntake as Mock).mockReturnValue({
+    addFavoriteIntake,
+    isLoading,
+  });
+
+  return { addFavoriteIntake, isLoading };
+}
+
 function mockUseCreateDay(value: { createDay: () => any; isLoading: boolean }) {
   (useCreateDay as Mock).mockReturnValue(value);
 }
@@ -132,6 +153,10 @@ function mockUseDayEdit({
   setNinjaAPIQuery = vi.fn(),
   USDAAPIQuery = testService.createNutritionQuery({ type: "usdaAPI" }),
   setUSDAAPIQuery = vi.fn(),
+  favoriteIntakes = [testService.createIntake({}), testService.createIntake({})] as Intake[],
+  isLoadingFavoriteIntakes = false,
+  isSuccessFavoriteIntakes = false,
+  isErrorFavoriteIntakes = false,
 }: MockUseDayEdit): MockUseDayEdit {
   const value = {
     dailyData,
@@ -162,6 +187,10 @@ function mockUseDayEdit({
     setNinjaAPIQuery,
     USDAAPIQuery,
     setUSDAAPIQuery,
+    favoriteIntakes,
+    isLoadingFavoriteIntakes,
+    isSuccessFavoriteIntakes,
+    isErrorFavoriteIntakes,
   };
 
   (useDayEdit as Mock).mockReturnValue(value);
@@ -239,6 +268,30 @@ function mockUseNavigate(navigate = vi.fn()) {
   return navigate;
 }
 
+function mockUseGetUserFavoriteIntakes({
+  favoriteIntakes = [testService.createIntake({}), testService.createIntake({})] as Intake[],
+  error = null,
+  isLoading = false,
+  isSuccess = false,
+  isError = false,
+}: {
+  favoriteIntakes?: Intake[];
+  error?: unknown;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  isError?: boolean;
+}) {
+  (useGetUserFavoriteIntakes as Mock).mockReturnValue({
+    favoriteIntakes,
+    error,
+    isLoading,
+    isSuccess,
+    isError,
+  });
+
+  return { favoriteIntakes, error, isLoading, isSuccess, isError };
+}
+
 export {
   mockUseAuth,
   mockUseUpdateTodayData,
@@ -248,4 +301,6 @@ export {
   mockUseDeleteWorkout,
   mockUseNavigate,
   mockUseIntakeItemEdit,
+  mockUseAddFavoriteIntake,
+  mockUseGetUserFavoriteIntakes,
 };

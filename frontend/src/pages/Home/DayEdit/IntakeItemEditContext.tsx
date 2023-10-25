@@ -4,7 +4,7 @@ import { SpellingSuggestion } from "../../../types/app";
 import { useDayEdit } from "./DayEditContext";
 import { NewIntakeItem } from "../../../../../shared/types/intake";
 import { AnyFunction } from "../../../../../shared/types/system";
-import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
+import intakeUtilService from "../../../services/intake/intakeUtilService";
 import calorieApiService from "../../../services/calorieApi/calorieApiService";
 import { debounce } from "../../../services/util/utilService";
 import { toast } from "react-hot-toast";
@@ -138,7 +138,8 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
       handleChange({ ...intakeItem, calories });
       setIsManual(true);
     } catch (error) {
-      console.error(error);
+      const isTestEnv = process.env.NODE_ENV === "test";
+      if (!isTestEnv) console.error(error);
       toast.error("Failed to calculate calories!");
     } finally {
       setIsLoadingCal(false);

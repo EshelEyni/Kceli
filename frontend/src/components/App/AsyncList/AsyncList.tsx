@@ -28,9 +28,9 @@ export const AsyncList = <T,>({
     <div className={`list-container ${className}`}>
       {isLoading && <SpinnerLoader />}
       {isSuccess && !isEmpty && (
-        <div className={`list ${className}`}>
+        <ul className={`list ${className}`}>
           {items.map((item, idx, arr) => render(item, idx, arr))}
-        </div>
+        </ul>
       )}
       {isSuccess && isEmpty && <Empty entityName={entityName} />}
       {isError && <ErrorMsg msg={`Couldn't get ${entityName}. Please try again later.`} />}

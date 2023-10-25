@@ -53,6 +53,7 @@ const updateOne = <T>(model: Model<T>, allowedFields?: string[]) =>
     const { collectionName } = model.collection;
     const dataName = _getDataName(collectionName);
     const { id } = req.params;
+
     validateIds({ id, entityName: dataName });
     validatePatchRequestBody(req.body);
     if (allowedFields)

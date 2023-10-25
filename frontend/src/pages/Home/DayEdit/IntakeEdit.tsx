@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import toast from "react-hot-toast";
 import classnames from "classnames";
 import { NewIntakeItem } from "../../../../../shared/types/intake";
-import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
+import intakeUtilService from "../../../services/intake/intakeUtilService";
 import { List } from "../../../components/App/List/List";
 import { IntakeItemEdit } from "./IntakeItemEdit";
 import { Button } from "../../../components/App/Button/Button";
@@ -29,7 +29,7 @@ export const IntakeEdit: FC = () => {
     setIntake(prev => ({
       ...prev,
       recordedAt: null,
-      isRecorded: false,
+      isRecorded: !prev.isRecorded,
     }));
   }
 
@@ -92,7 +92,7 @@ export const IntakeEdit: FC = () => {
         <Button
           onClickFn={handleSaveLaterButtonClick}
           className={
-            "intake-edit-btn btn-toggle-save-later" + classnames({ clicked: !intake.isRecorded })
+            "intake-edit-btn btn-toggle-save-later " + classnames({ clicked: !intake.isRecorded })
           }
         >
           Save Later

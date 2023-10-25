@@ -41,4 +41,8 @@ export interface Intake extends BasicIntake {
   items: IntakeItem[];
 }
 
-export type CombinedIntake = NewIntake | Intake;
+export interface FavoriteIntake extends Intake {
+  userId: string;
+}
+
+export type CombinedIntake = NewIntake | Intake | FavoriteIntake;

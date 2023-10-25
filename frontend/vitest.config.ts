@@ -15,7 +15,7 @@ export default defineConfig({
       exclude: ["packages/template/*"],
     },
     root,
-    include: ["WaterEdit.test.tsx"],
+    include: ["IntakePreview.test.tsx"],
     exclude: [...configDefaults.exclude, "packages/template/*"],
     outputFile: "test-results.html",
     cache: {

@@ -1,18 +1,24 @@
-import { it, describe, expect, afterEach, vi } from "vitest";
+import { it, describe, expect, afterEach, vi, beforeEach } from "vitest";
 import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import testService from "../../../../test/service/testService";
 import { IntakePreview } from "./IntakePreview";
 import { Intake } from "../../../../../shared/types/intake";
-import { mockUseDayEdit } from "../../../../test/service/mockService";
+import { mockUseAddFavoriteIntake, mockUseDayEdit } from "../../../../test/service/mockService";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { DayData } from "../../../../../shared/types/dayData";
 import { ToggledElement } from "./DayEditContext";
 
 vi.mock("./DayEditContext");
+vi.mock("../../../hooks/useAddFavoriteIntake");
 
 describe("Intake Preview", () => {
   const intake = testService.createIntake({}) as Intake;
+
+  beforeEach(() => {
+    mockUseAddFavoriteIntake({});
+    mockUseDayEdit({});
+  });
 
   afterEach(() => {
     cleanup();
@@ -20,13 +26,11 @@ describe("Intake Preview", () => {
   });
 
   it("should render intake preview", () => {
-    mockUseDayEdit({});
     render(<IntakePreview intake={intake} />);
     expect(screen.getByTestId("intake-preview")).toBeInTheDocument();
   });
 
   it("should render intake items", () => {
-    mockUseDayEdit({});
     render(<IntakePreview intake={intake} />);
 
     const items = screen.getAllByTestId("intake-preview-item");
@@ -34,7 +38,6 @@ describe("Intake Preview", () => {
   });
 
   it("should render total calories", () => {
-    mockUseDayEdit({});
     render(<IntakePreview intake={intake} />);
 
     const totalCalories = screen.getByText(
@@ -44,7 +47,6 @@ describe("Intake Preview", () => {
   });
 
   it("should open modal on delete btn click", () => {
-    mockUseDayEdit({});
     render(
       <div id="app">
         <IntakePreview intake={intake} />
@@ -58,7 +60,6 @@ describe("Intake Preview", () => {
   });
 
   it("should close modal on cancel btn click", () => {
-    mockUseDayEdit({});
     render(
       <div id="app">
         <IntakePreview intake={intake} />
@@ -183,5 +184,36 @@ describe("Intake Preview", () => {
     expect(intakes.length).toBe(1);
     const [a] = intakes;
     expect(a).toEqual({ ...intake, isRecorded: true, recordedAt: expect.any(Date) });
+  });
+
+  it("should render add to favorite button", () => {
+    mockUseDayEdit({ openedElement: ToggledElement.IntakeList });
+    render(<IntakePreview intake={intake} />);
+
+    const addToFavBtn = screen.getByText("add to favorite");
+    expect(addToFavBtn).toBeInTheDocument();
+  });
+
+  it("should call handleAddToFavBtnClick on add to fav btn click", () => {
+    mockUseDayEdit({ openedElement: ToggledElement.IntakeList });
+
+    const { addFavoriteIntake } = mockUseAddFavoriteIntake({});
+
+    render(<IntakePreview intake={intake} />);
+
+    const addToFavBtn = screen.getByText("add to favorite");
+    fireEvent.click(addToFavBtn);
+
+    expect(addFavoriteIntake).toHaveBeenCalledTimes(1);
+    expect(addFavoriteIntake).toHaveBeenCalledWith(intake);
+  });
+
+  it("should render spinner loader when isLoadingAddToFav = true", () => {
+    mockUseDayEdit({ openedElement: ToggledElement.IntakeList });
+    mockUseAddFavoriteIntake({ isLoading: true });
+    render(<IntakePreview intake={intake} />);
+
+    const loader = screen.getByTestId("spinner-loader");
+    expect(loader).toBeInTheDocument();
   });
 });

@@ -12,6 +12,7 @@ import testService from "../../../../test/service/testService";
 vi.mock("./DayEditContext");
 vi.mock("../../../hooks/useDeleteWorkout");
 vi.mock("react-router-dom");
+vi.mock("nspell");
 
 describe("Day Edit", () => {
   afterEach(() => {
@@ -58,7 +59,7 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("weight-waist-details")).toBeInTheDocument();
   });
 
-  it("should render intake edit when openedElement is IntakeEdit", async () => {
+  it("should render intake edit when openedElement is IntakeEdit", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
@@ -71,7 +72,7 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("intake-edit")).toBeInTheDocument();
   });
 
-  it("should render workout list when openedElement is Workouts", async () => {
+  it("should render workout list when openedElement is Workouts", () => {
     mockUseDeleteWorkout({});
     mockUseNavigate();
     mockUseDayEdit({
@@ -86,7 +87,7 @@ describe("Day Edit", () => {
     expect(workoutPreviews.length).toBeGreaterThan(0);
   });
 
-  it("should render intake list when openedElement is IntakeList", async () => {
+  it("should render intake list when openedElement is IntakeList", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
@@ -99,7 +100,7 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("intake-list-header")).toBeInTheDocument();
   });
 
-  it("should render unrecorded intake list when openedElement is UnRecordedIntakeList", async () => {
+  it("should render unrecorded intake list when openedElement is UnRecordedIntakeList", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
@@ -112,7 +113,20 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("intake-list-header")).toBeInTheDocument();
   });
 
-  it("should render nutrition query when openedElement is Query", async () => {
+  it("should render favorite intake list when openedElement is FavoriteIntakeList", () => {
+    mockUseDayEdit({
+      isSuccess: true,
+      dailyData: testService.createDailyData(),
+      isLoadingUpdate: false,
+      openedElement: "FavoriteIntake",
+    });
+
+    render(<DayEdit />);
+
+    expect(screen.getByTestId("day-edit-favorite-intakes")).toBeInTheDocument();
+  });
+
+  it("should render nutrition query when openedElement is Query", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
@@ -125,7 +139,7 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("nutrition-query")).toBeInTheDocument();
   });
 
-  it("should render water edit when openedElement is Water", async () => {
+  it("should render water edit when openedElement is Water", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),

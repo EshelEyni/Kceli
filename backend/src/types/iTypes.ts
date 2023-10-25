@@ -54,6 +54,10 @@ export interface IIntake extends Document {
   recordedAt?: Date;
 }
 
+export interface IFavoriteIntake extends IIntake {
+  userId: mongoose.Types.ObjectId;
+}
+
 export interface IIntakeItem extends Document {
   name: string;
   unit: MeasurementUnit;

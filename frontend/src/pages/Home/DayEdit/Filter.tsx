@@ -23,6 +23,10 @@ export const DayEditFilter: FC = () => {
       isShown: dailyData?.intakes.some(intake => intake.isRecorded === false),
     },
     {
+      name: "favorites",
+      value: ToggledElement.FavoriteIntake,
+    },
+    {
       name: "water",
       value: ToggledElement.Water,
     },

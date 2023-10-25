@@ -7,7 +7,7 @@ export const SpellingSuggestionList: FC = () => {
   const { suggestions, handleSuggestionClick, handleIgnoreSuggestionClick } = useIntakeItemEdit();
 
   return (
-    <ul className="spelling-suggestion-list">
+    <ul className="spelling-suggestion-list" data-testid="spelling-suggestion-list">
       {suggestions.map((s: SpellingSuggestion, i: number) => (
         <li className="spelling-suggestion-list__item" key={i}>
           {s.suggestions.map(suggestion => (

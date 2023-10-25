@@ -16,10 +16,10 @@ import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { Tippy } from "../App/Tippy/Tippy";
 import { debounce } from "../../services/util/utilService";
 
-type UserPreviewModalPosition = {
+type ModalPosition = {
   top?: number;
   bottom?: number;
-  left: number;
+  left?: number;
 };
 
 type ModalProps = {
@@ -68,8 +68,8 @@ type ModalContextType = {
   openedModalName: string;
   close: () => void;
   open: (name: string) => void;
-  position: UserPreviewModalPosition | null;
-  setPosition: React.Dispatch<React.SetStateAction<UserPreviewModalPosition | null>>;
+  position: ModalPosition | null;
+  setPosition: React.Dispatch<React.SetStateAction<ModalPosition | null>>;
   isModalAbove: boolean;
   setIsModalAbove: React.Dispatch<React.SetStateAction<boolean>>;
   modalHoverGuardZone: ModalHoverGuardZone | null;
@@ -112,7 +112,7 @@ export const Modal: FC<ModalProps> & {
   ModalHoverOpen: FC<ModalHoverActivatorProps>;
 } = ({ children, externalStateControl, onClose, onOpen, onAfterClose }) => {
   const [openedModalName, setOpenedModalName] = useState("");
-  const [position, setPosition] = useState<UserPreviewModalPosition | null>(null);
+  const [position, setPosition] = useState<ModalPosition | null>(null);
 
   /*
    * ModalHoverGuardZone is a CSS pseudo element that is used to prevent the modal from closing
@@ -203,6 +203,26 @@ const OpenBtn: FC<OpenBtnProps> = ({
       });
     };
   }, [setPositionByRef, calculatePosition]);
+
+  useEffect(() => {
+    if (setPositionByRef) return;
+
+    function setResponsivePosition() {
+      const top = window.innerHeight + window.scrollY * 0.25;
+      setPosition({ top });
+    }
+
+    const events = ["wheel", "scroll", "resize"];
+    events.forEach(event => {
+      window.addEventListener(event, setResponsivePosition);
+    });
+
+    return () => {
+      events.forEach(event => {
+        window.removeEventListener(event, setResponsivePosition);
+      });
+    };
+  }, [setPositionByRef, setPosition, modalHeight, calculatePosition]);
 
   return cloneElement(children, {
     onClick: handleClick,

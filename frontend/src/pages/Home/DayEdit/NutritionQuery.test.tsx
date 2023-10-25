@@ -256,7 +256,11 @@ describe("Nutrition Query", () => {
 
   it("should render chatGPT query response where status is not 'idle'", () => {
     mockUseDayEdit({
-      chatGPTQuery: testService.createNutritionQuery({ type: "chatGPT", status: "success" }),
+      chatGPTQuery: testService.createNutritionQuery({
+        type: "chatGPT",
+        status: "success",
+        response: testService.createNutritionQueryResponse("chatGPT"),
+      }),
     });
     render(<NutritionQuery />);
 
@@ -265,7 +269,11 @@ describe("Nutrition Query", () => {
 
   it("should render ninjaAPI query response where status is not 'idle'", () => {
     mockUseDayEdit({
-      ninjaAPIQuery: testService.createNutritionQuery({ type: "ninjaAPI", status: "success" }),
+      ninjaAPIQuery: testService.createNutritionQuery({
+        type: "ninjaAPI",
+        status: "success",
+        response: testService.createNutritionQueryResponse("ninjaAPI"),
+      }),
     });
     render(<NutritionQuery />);
 
@@ -274,7 +282,11 @@ describe("Nutrition Query", () => {
 
   it("should render USDAAPI query response where status is not 'idle'", () => {
     mockUseDayEdit({
-      USDAAPIQuery: testService.createNutritionQuery({ type: "usdaAPI", status: "success" }),
+      USDAAPIQuery: testService.createNutritionQuery({
+        type: "usdaAPI",
+        status: "success",
+        response: testService.createNutritionQueryResponse("usdaAPI"),
+      }),
     });
     render(<NutritionQuery />);
 

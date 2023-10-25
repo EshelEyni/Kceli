@@ -10,7 +10,7 @@ import { MeasurementUnit } from "../../../../../shared/types/intake";
 import calorieApiService from "../../../services/calorieApi/calorieApiService";
 import { toast } from "react-hot-toast";
 import { assertNewIntakeItem } from "../../../../test/service/testAssertionService";
-import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
+import intakeUtilService from "../../../services/intake/intakeUtilService";
 
 vi.mock("./DayEditContext");
 vi.mock("nspell");
@@ -31,13 +31,14 @@ describe("IntakeItemEditContext", () => {
       const { intakeItem } = useIntakeItemEdit();
       return <div>{intakeItem.id}</div>;
     };
+
     render(
       <IntakeItemEditProvider intakeItem={item}>
         <TestComponent />
       </IntakeItemEditProvider>
     );
 
-    expect(screen.getByText(intake.id)).toBeInTheDocument();
+    expect(screen.getByText(item.id)).toBeInTheDocument();
   });
 
   it("should provide proper isOneItem", () => {

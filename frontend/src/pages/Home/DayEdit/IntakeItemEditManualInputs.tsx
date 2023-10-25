@@ -11,7 +11,10 @@ export const IntakeItemEditManualInputs: FC = () => {
   }
 
   return (
-    <div className="intake-item-edit__manuall-calorie-edit">
+    <div
+      className="intake-item-edit__manuall-calorie-edit"
+      data-testid="intake-item-edit-manuall-calorie-edit"
+    >
       <input
         type="number"
         name="calories"

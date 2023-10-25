@@ -4,7 +4,12 @@ import mongoose from "mongoose";
 import { User, UserCredenitials } from "../../../../shared/types/user";
 import tokenService from "../token/tokenService";
 import { UserModel } from "../../models/user/userModel";
-import { MeasurementUnit, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
+import {
+  IntakeItem,
+  MeasurementUnit,
+  NewIntake,
+  NewIntakeItem,
+} from "../../../../shared/types/intake";
 import { DailyDataModel } from "../../models/day/dailyDataModel";
 import { getLoggedInUserIdFromReq } from "../ALSService";
 import { Workout, WorkoutItemAerobic } from "../../../../shared/types/workout";
@@ -122,6 +127,25 @@ function getMockNewIntakeItem(): NewIntakeItem {
     name: "test",
     unit: MeasurementUnit.UNIT,
     quantity: 1,
+  };
+}
+
+function getMockIntake(): NewIntake {
+  return {
+    id: getMongoId(),
+    items: [getMockIntakeItem()],
+    isRecorded: true,
+    recordedAt: null,
+  };
+}
+
+function getMockIntakeItem(): IntakeItem {
+  return {
+    id: getMongoId(),
+    name: "test",
+    unit: MeasurementUnit.UNIT,
+    quantity: 1,
+    calories: 1,
   };
 }
 
@@ -640,6 +664,8 @@ export {
   createTestDailyData,
   getNewMockIntake,
   getMockNewIntakeItem,
+  getMockIntake,
+  getMockIntakeItem,
   getMockWorkout,
   getMockWorkoutItem,
   getMongoId,

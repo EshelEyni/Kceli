@@ -5,11 +5,12 @@ import calorieUtilService from "../../../services/calorieUtil/calorieUtilService
 import { DayData } from "../../../../../shared/types/dayData";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { Intake, NewIntake } from "../../../../../shared/types/intake";
-import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
+import intakeUtilService from "../../../services/intake/intakeUtilService";
 import { useAuth } from "../../../hooks/useAuth";
 import waterConsumptionService from "../../../services/waterConsumption/waterConsumptionService";
 import nutritionUtilService from "../../../services/nutrition/nutritionUtilService";
 import { NutritionQueryState } from "../../../types/app";
+import { useGetUserFavoriteIntakes } from "../../../hooks/useGetUserFavoriteIntakes";
 
 export type DayEditContextType = {
   dailyData: DayData | undefined;
@@ -40,12 +41,17 @@ export type DayEditContextType = {
   setUSDAAPIQuery: Dispatch<SetStateAction<NutritionQueryState>>;
   currIntakeItemId: string;
   setCurrIntakeItemId: Dispatch<SetStateAction<string>>;
+  favoriteIntakes: Intake[] | undefined;
+  isLoadingFavoriteIntakes: boolean;
+  isSuccessFavoriteIntakes: boolean;
+  isErrorFavoriteIntakes: boolean;
 };
 
 export enum ToggledElement {
   IntakeEdit = "IntakeEdit",
   IntakeList = "IntakeList",
   UnRecordedIntakeList = "UnRecordedIntakeList",
+  FavoriteIntake = "FavoriteIntake",
   Water = "Water",
   WeightWaistInput = "WeightWaistInput",
   Workouts = "Workouts",
@@ -58,6 +64,13 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
   const { loggedInUser } = useAuth();
   const { dailyData, isLoading, isSuccess, isError } = useGetTodayData();
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
+
+  const {
+    favoriteIntakes,
+    isLoading: isLoadingFavoriteIntakes,
+    isSuccess: isSuccessFavoriteIntakes,
+    isError: isErrorFavoriteIntakes,
+  } = useGetUserFavoriteIntakes();
 
   const [openedElement, setOpenedElement] = useState<ToggledElement>(ToggledElement.IntakeEdit);
   const [intake, setIntake] = useState<NewIntake>(intakeUtilService.getDefaultIntake());
@@ -133,6 +146,10 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     setUSDAAPIQuery,
     currIntakeItemId,
     setCurrIntakeItemId,
+    favoriteIntakes,
+    isLoadingFavoriteIntakes,
+    isSuccessFavoriteIntakes,
+    isErrorFavoriteIntakes,
   };
 
   return <DayEditContext.Provider value={value}>{children}</DayEditContext.Provider>;

@@ -1,8 +1,25 @@
-import { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 import { MeasurementUnit } from "../../../../shared/types/intake";
 import openAIService from "../../services/openAI/openAIService";
 import intakeService from "../../services/intake/intakeService";
-import { IIntake, IIntakeItem } from "../../types/iTypes";
+import { IFavoriteIntake, IIntake, IIntakeItem } from "../../types/iTypes";
+
+const schemaOptions = {
+  toObject: {
+    virtuals: true,
+    transform: (_: Document, ret: Record<string, unknown>) => {
+      delete ret._id;
+      return ret;
+    },
+  },
+  toJSON: {
+    virtuals: true,
+    transform: (_: Document, ret: Record<string, unknown>) => {
+      delete ret._id;
+      return ret;
+    },
+  },
+};
 
 const intakeItemSchema = new Schema<IIntakeItem>(
   {
@@ -24,22 +41,7 @@ const intakeItemSchema = new Schema<IIntakeItem>(
       default: 0,
     },
   },
-  {
-    toObject: {
-      virtuals: true,
-      transform: (_: Document, ret: Record<string, unknown>) => {
-        delete ret._id;
-        return ret;
-      },
-    },
-    toJSON: {
-      virtuals: true,
-      transform: (_: Document, ret: Record<string, unknown>) => {
-        delete ret._id;
-        return ret;
-      },
-    },
-  }
+  schemaOptions
 );
 
 intakeItemSchema.pre("validate", async function (next) {
@@ -75,24 +77,26 @@ const intakeSchema = new Schema<IIntake>(
       type: Date,
     },
   },
-  {
-    toObject: {
-      virtuals: true,
-      transform: (_: Document, ret: Record<string, unknown>) => {
-        delete ret._id;
-        return ret;
-      },
-    },
-    toJSON: {
-      virtuals: true,
-      transform: (_: Document, ret: Record<string, unknown>) => {
-        delete ret._id;
-        return ret;
-      },
-    },
-  }
+  schemaOptions
 );
 
-export { intakeSchema };
+const favoriteIntakeSchema = new Schema<IFavoriteIntake>(
+  {
+    ...(intakeSchema.obj as IIntake),
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
+  },
+  schemaOptions
+);
+
+const FavoriteIntakeModel = mongoose.model(
+  "FavoriteIntake",
+  favoriteIntakeSchema,
+  "favorite_intakes"
+);
+
+export { FavoriteIntakeModel, intakeSchema };
 
 // Path: src/models/day/dailyDataModel.ts

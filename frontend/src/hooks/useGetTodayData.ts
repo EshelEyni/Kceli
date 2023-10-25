@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { DayData } from "../../../shared/types/dayData";
-import dayDataApiService from "../services/dayDataApi/dayDataApiService";
+import dayDataApiService from "../services/dayData/dayDataApiService";
 
 type useGetTodayDataResult = {
   dailyData: DayData | undefined;

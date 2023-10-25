@@ -1,0 +1,14 @@
+@import "../../../styles/main.scss";
+
+.day-edit__favorite-intakes {
+  width: 100%;
+
+  &__list {
+    gap: rem(10px);
+    width: 100%;
+
+    li {
+      width: 100%;
+    }
+  }
+}

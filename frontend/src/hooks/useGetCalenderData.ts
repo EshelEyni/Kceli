@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { DayData } from "../../../shared/types/dayData";
-import dayDataApiService from "../services/dayDataApi/dayDataApiService";
+import dayDataApiService from "../services/dayData/dayDataApiService";
 import { getDaysInMonth, isSameDay } from "../services/util/utilService";
 import { useAuth } from "./useAuth";
 import { User } from "../../../shared/types/user";

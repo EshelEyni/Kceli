@@ -2,7 +2,7 @@
 import { it, describe, expect, afterEach, vi } from "vitest";
 import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { IntakeItenEditInputName } from "./IntakeItenEditInputName";
+import { IntakeItemEditInputName } from "./IntakeItemEditInputName";
 import { mockUseIntakeItemEdit } from "../../../../test/service/mockService";
 
 vi.mock("./IntakeItemEditContext");
@@ -16,7 +16,7 @@ describe("IntakeItenEditInputName", () => {
   it("should render input", () => {
     mockUseIntakeItemEdit({});
 
-    render(<IntakeItenEditInputName />);
+    render(<IntakeItemEditInputName />);
 
     expect(screen.getByRole("textbox")).toBeInTheDocument();
   });
@@ -24,7 +24,7 @@ describe("IntakeItenEditInputName", () => {
   it("should have correct value", () => {
     const { intakeItem } = mockUseIntakeItemEdit({});
 
-    render(<IntakeItenEditInputName />);
+    render(<IntakeItemEditInputName />);
 
     expect(screen.getByRole("textbox")).toHaveValue(intakeItem!.name);
   });
@@ -32,7 +32,7 @@ describe("IntakeItenEditInputName", () => {
   it("should call handleNameInputClick on click", () => {
     const { handleNameInputClick, intakeItem } = mockUseIntakeItemEdit({});
 
-    render(<IntakeItenEditInputName />);
+    render(<IntakeItemEditInputName />);
 
     fireEvent.click(screen.getByRole("textbox"));
 
@@ -42,7 +42,7 @@ describe("IntakeItenEditInputName", () => {
   it("should call handleInputChange on change", () => {
     const { handleInputChange } = mockUseIntakeItemEdit({});
 
-    render(<IntakeItenEditInputName />);
+    render(<IntakeItemEditInputName />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "test1" } });
 

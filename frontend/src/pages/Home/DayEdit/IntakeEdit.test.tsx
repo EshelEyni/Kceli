@@ -84,7 +84,7 @@ describe("Intake Edit", () => {
     expect(screen.queryByText("Edit")).not.toBeInTheDocument();
   });
 
-  it.only("should submit intake when save intake button is clicked", () => {
+  it("should submit intake when save intake button is clicked", () => {
     const dailyDatWithNoIntakes = { ...testService.createDailyData(), intakes: [] };
     const intake = testService.createIntake({});
 

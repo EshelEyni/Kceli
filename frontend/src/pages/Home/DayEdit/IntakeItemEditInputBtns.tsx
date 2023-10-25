@@ -19,7 +19,7 @@ export const IntakeItemEditInputBtns: FC = () => {
   } = useIntakeItemEdit();
 
   return (
-    <section className="intake-item-edit__inputs-btns">
+    <section className="intake-item-edit__inputs-btns" data-testid="intake-item-edit-inputs-btns">
       <div className="quantity-input-container">
         <Button onClickFn={decreaseQuantity}>
           <AiFillMinusCircle />

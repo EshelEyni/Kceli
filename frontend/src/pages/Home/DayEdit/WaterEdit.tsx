@@ -5,7 +5,7 @@ import "./WaterEdit.scss";
 import { useDayEdit } from "./DayEditContext";
 import { MeasurementUnit } from "../../../../../shared/types/intake";
 import toast from "react-hot-toast";
-import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
+import intakeUtilService from "../../../services/intake/intakeUtilService";
 
 type WaterValue = {
   name: string;

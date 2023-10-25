@@ -4,10 +4,12 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { DayEditProvider, ToggledElement, useDayEdit } from "./DayEditContext";
 import testService from "../../../../test/service/testService";
-import intakeUtilService from "../../../services/intakeUtil/intakeUtilService";
+import intakeUtilService from "../../../services/intake/intakeUtilService";
 import {
+  mockUseAddFavoriteIntake,
   mockUseAuth,
   mockUseGetTodayData,
+  mockUseGetUserFavoriteIntakes,
   mockUseUpdateTodayData,
 } from "../../../../test/service/mockService";
 import nutritionUtilService from "../../../services/nutrition/nutritionUtilService";
@@ -16,12 +18,15 @@ import { FormattedNinjaAPIResData } from "../../../../../shared/types/system";
 vi.mock("../../../hooks/useGetTodayData");
 vi.mock("../../../hooks/useAuth");
 vi.mock("../../../hooks/useUpdateTodayData");
+vi.mock("../../../hooks/useGetUserFavoriteIntakes");
 
 describe("DayEditContext", () => {
   beforeEach(() => {
     mockUseAuth({});
     mockUseGetTodayData({});
     mockUseUpdateTodayData({});
+    mockUseAddFavoriteIntake({});
+    mockUseGetUserFavoriteIntakes({});
   });
 
   afterEach(() => {
@@ -887,5 +892,115 @@ describe("DayEditContext", () => {
     const regexOfHexColor = /^#[0-9a-f]{6}$/i;
 
     expect(screen.getByTestId("background-color-test")).toHaveTextContent(regexOfHexColor);
+  });
+
+  it("should provide proper favoriteIntakes", () => {
+    mockUseAuth({});
+
+    mockUseGetTodayData({
+      dailyData: { ...testService.createDailyData(), weight: 80 },
+      isSuccess: true,
+    });
+
+    const { favoriteIntakes } = mockUseGetUserFavoriteIntakes({});
+
+    const TestComponent = () => {
+      const { favoriteIntakes } = useDayEdit();
+      return (
+        <div>
+          {favoriteIntakes?.map(intake => (
+            <div key={intake.id}>{intake.id}</div>
+          ))}
+        </div>
+      );
+    };
+
+    render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    for (const intake of favoriteIntakes) {
+      expect(screen.getByText(intake.id)).toBeInTheDocument();
+    }
+  });
+
+  it("should provide proper isLoadingFavoriteIntakes", () => {
+    mockUseAuth({});
+
+    mockUseGetTodayData({
+      dailyData: { ...testService.createDailyData(), weight: 80 },
+      isSuccess: true,
+    });
+
+    mockUseGetUserFavoriteIntakes({
+      isLoading: true,
+    });
+
+    const TestComponent = () => {
+      const { isLoadingFavoriteIntakes } = useDayEdit();
+      return <div>{isLoadingFavoriteIntakes.toString()}</div>;
+    };
+
+    render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.getByText("true")).toBeInTheDocument();
+  });
+
+  it("should provide proper isErrorFavoriteIntakes", () => {
+    mockUseAuth({});
+
+    mockUseGetTodayData({
+      dailyData: { ...testService.createDailyData(), weight: 80 },
+      isSuccess: true,
+    });
+
+    mockUseGetUserFavoriteIntakes({
+      isError: true,
+    });
+
+    const TestComponent = () => {
+      const { isErrorFavoriteIntakes } = useDayEdit();
+      return <div>{isErrorFavoriteIntakes.toString()}</div>;
+    };
+
+    render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.getByText("true")).toBeInTheDocument();
+  });
+
+  it("should provide proper isSuccessFavoriteIntakes", () => {
+    mockUseAuth({});
+
+    mockUseGetTodayData({
+      dailyData: { ...testService.createDailyData(), weight: 80 },
+      isSuccess: true,
+    });
+
+    mockUseGetUserFavoriteIntakes({
+      isSuccess: true,
+    });
+
+    const TestComponent = () => {
+      const { isSuccessFavoriteIntakes } = useDayEdit();
+      return <div>{isSuccessFavoriteIntakes.toString()}</div>;
+    };
+
+    render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.getByText("true")).toBeInTheDocument();
   });
 });
