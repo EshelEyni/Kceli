@@ -5,6 +5,7 @@ import { User, UserCredenitials } from "../../../../shared/types/user";
 import tokenService from "../token/tokenService";
 import { UserModel } from "../../models/user/userModel";
 import {
+  FavoriteIntake,
   IntakeItem,
   MeasurementUnit,
   NewIntake,
@@ -140,6 +141,19 @@ function getMockIntake(): NewIntake {
     recordedAt: null,
     name: "test",
     type: "food",
+  };
+}
+
+function getMockFavoriteIntake(): FavoriteIntake {
+  return {
+    id: getMongoId(),
+    items: [getMockIntakeItem()],
+    isRecorded: true,
+    recordedAt: null,
+    name: "test",
+    type: "food",
+    userId: getMongoId(),
+    sortOrder: 0,
   };
 }
 
@@ -669,6 +683,7 @@ export {
   getNewMockIntake,
   getMockNewIntakeItem,
   getMockIntake,
+  getMockFavoriteIntake,
   getMockIntakeItem,
   getMockWorkout,
   getMockWorkoutItem,

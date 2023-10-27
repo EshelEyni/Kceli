@@ -1,6 +1,12 @@
 import { User } from "../../../../shared/types/user";
 import { DayData } from "../../../../shared/types/dayData";
-import { Intake, IntakeItem, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
+import {
+  FavoriteIntake,
+  Intake,
+  IntakeItem,
+  NewIntake,
+  NewIntakeItem,
+} from "../../../../shared/types/intake";
 
 function assertUser(user: User) {
   expect(user).toEqual(
@@ -41,6 +47,12 @@ function assertIntake(intake: NewIntake | Intake) {
   intake.items.forEach(assertIntakeItem);
 }
 
+function assertFavoriteIntake(intake: FavoriteIntake) {
+  assertIntake(intake);
+  expect(intake.userId).toEqual(expect.any(Object));
+  expect(intake.sortOrder).toEqual(expect.any(Number));
+}
+
 function assertIntakeItem(item: NewIntakeItem | IntakeItem) {
   expect(item).toEqual(
     expect.objectContaining({
@@ -52,4 +64,4 @@ function assertIntakeItem(item: NewIntakeItem | IntakeItem) {
   );
 }
 
-export { assertUser, assertDailyData, assertIntake, assertIntakeItem };
+export { assertUser, assertDailyData, assertIntake, assertIntakeItem, assertFavoriteIntake };

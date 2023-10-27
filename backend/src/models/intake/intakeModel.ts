@@ -93,7 +93,7 @@ const favoriteIntakeSchema = new Schema<IFavoriteIntake>(
     ...(intakeSchema.obj as IIntake),
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: [true, "Please provide a user id"],
     },
     sortOrder: {
       type: Number,
