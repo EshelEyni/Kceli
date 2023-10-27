@@ -9,7 +9,7 @@ export function useUpdateTodayData() {
     mutationFn: (data: DayData) => dayDataApiService.update(data),
     onSuccess: data => {
       queryClient.setQueryData(["today"], data);
-      queryClient.invalidateQueries(["userDailyStats"]);
+      queryClient.invalidateQueries(["userDailyStats", "userDailyStats"]);
     },
   });
 

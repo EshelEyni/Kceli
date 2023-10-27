@@ -55,7 +55,16 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
   function handleSaveBtnClick(intakeId: string) {
     if (!dailyData) return;
     const dataToUpdate = { ...dailyData };
-    if (isFavorite) dataToUpdate.intakes = [...dailyData.intakes, intake];
+    if (isFavorite)
+      dataToUpdate.intakes = [
+        ...dailyData.intakes,
+        {
+          ...intake,
+          id: createId(),
+          isRecorded: true,
+          recordedAt: new Date(),
+        },
+      ];
     else {
       dataToUpdate.intakes = dailyData.intakes.map(intake => {
         if (intake.id !== intakeId) return intake;

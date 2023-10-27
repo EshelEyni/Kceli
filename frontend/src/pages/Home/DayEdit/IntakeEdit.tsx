@@ -11,10 +11,10 @@ import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/Spinner
 import { IntakeItemEditProvider } from "./IntakeItemEditContext";
 import { useAddFavoriteIntake } from "../../../hooks/useAddFavoriteIntake";
 import { useUpdateFavoriteIntake } from "../../../hooks/useUpdateFavoriteIntake";
-import "./IntakeEdit.scss";
 import { LastTimeYouAteTitle } from "./LastTimeYouAteTitle";
 import { PreSaveCalorieCount } from "./PreSaveCalorieCount";
 import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
+import "./IntakeEdit.scss";
 
 export const IntakeEdit: FC = () => {
   const {
@@ -32,6 +32,8 @@ export const IntakeEdit: FC = () => {
   const isLoading =
     isLoadingDailyData || isLoadingUpdate || isLoadingAddToFav || isLoadingUpdateFav;
 
+  const isTimeInputShown = intake.recordedAt && intake.isRecorded;
+
   function handleIntakeNameInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     const { value: name } = e.target;
@@ -41,6 +43,20 @@ export const IntakeEdit: FC = () => {
   function handleToggleIntakeType() {
     const newType = intake.type === "food" ? "drink" : "food";
     setIntake(prev => ({ ...prev, type: newType }));
+  }
+
+  function handleTimeInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const { value: time } = e.target;
+    const [hours, minutes] = time.split(":");
+    const recordedAt = new Date(intake.recordedAt as string);
+    recordedAt.setHours(+hours);
+    recordedAt.setMinutes(+minutes);
+    setIntake(prev => ({ ...prev, recordedAt }));
+  }
+
+  function handleClearButtonClick() {
+    setIntake(intakeUtilService.getDefaultIntake());
   }
 
   function handleSaveToFavoriteButtonClick(e: React.FormEvent<HTMLFormElement>) {
@@ -95,6 +111,15 @@ export const IntakeEdit: FC = () => {
             <Button onClickFn={handleToggleIntakeType} className="intake-edit-btn">
               <span>{intake.type}</span>
             </Button>
+
+            {isTimeInputShown && (
+              <input
+                className="intake-edit__header__time-input"
+                type="time"
+                value={new Date(intake.recordedAt as string).toISOString().slice(11, 16)}
+                onChange={handleTimeInputChange}
+              />
+            )}
           </header>
           <List
             items={intake.items}
@@ -117,8 +142,11 @@ export const IntakeEdit: FC = () => {
       </div>
 
       <div className="intake-edit-btns-container" style={{ backgroundColor }}>
+        <Button onClickFn={handleClearButtonClick} className="intake-edit-btn">
+          clear
+        </Button>
         <Button
-          onClickFn={e => handleSaveToFavoriteButtonClick(e)}
+          onClickFn={handleSaveToFavoriteButtonClick}
           className="intake-edit-btn"
           type="submit"
         >

@@ -1,4 +1,10 @@
+import { User, UserDailyStatsResult } from "../../../../shared/types/user";
 import { RecommendedWeight } from "../../types/app";
+
+type WeightGoalPercentageParams = {
+  loggedInUser: User;
+  userDailyStats: UserDailyStatsResult[];
+};
 
 function getDefaultUserImgUrl(): string {
   return "https://res.cloudinary.com/dng9sfzqt/image/upload/v1681677382/user-chirper_ozii7u.png";
@@ -30,4 +36,29 @@ function getUtilWeightLossGoal() {
   };
 }
 
-export default { getDefaultUserImgUrl, calcRecommendedWeight, getUtilWeightLossGoal };
+function calcPercentageWeightGoal({ loggedInUser, userDailyStats }: WeightGoalPercentageParams) {
+  const { weightLossGoal, weight } = loggedInUser;
+  const { startingWeight, weightGoal } = weightLossGoal;
+  const lastDailyUpdatedWeight = userDailyStats.findLast(stat => stat?.weight)?.weight;
+  const currentWeight = lastDailyUpdatedWeight || weight;
+  const weightDiff = startingWeight - currentWeight;
+  if (weightDiff < 0) return 0;
+  const res = Math.round((weightDiff / weightGoal) * 100);
+  return res;
+}
+
+function isReachedGoalWeight({
+  loggedInUser,
+  userDailyStats,
+}: WeightGoalPercentageParams): boolean {
+  const percentageWeightGoal = calcPercentageWeightGoal({ loggedInUser, userDailyStats });
+  return percentageWeightGoal >= 100;
+}
+
+export default {
+  getDefaultUserImgUrl,
+  calcRecommendedWeight,
+  getUtilWeightLossGoal,
+  calcPercentageWeightGoal,
+  isReachedGoalWeight,
+};

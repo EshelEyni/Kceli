@@ -31,7 +31,7 @@ export interface BasicIntake {
   id: string;
   name: string;
   isRecorded: boolean;
-  recordedAt: Date | null;
+  recordedAt: Date | string | null;
   type: "food" | "drink";
 }
 
