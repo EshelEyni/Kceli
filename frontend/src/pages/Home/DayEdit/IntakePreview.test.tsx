@@ -7,7 +7,7 @@ import { Intake } from "../../../../../shared/types/intake";
 import { mockUseAddFavoriteIntake, mockUseDayEdit } from "../../../../test/service/mockService";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { DayData } from "../../../../../shared/types/dayData";
-import { ToggledElement } from "./DayEditContext";
+import { DayEditTab } from "./DayEditContext";
 
 vi.mock("./DayEditContext");
 vi.mock("../../../hooks/useAddFavoriteIntake");
@@ -99,7 +99,7 @@ describe("Intake Preview", () => {
   });
 
   it("should render edit & duplicate button where opened element = IntakeList", () => {
-    mockUseDayEdit({ openedElement: ToggledElement.IntakeList });
+    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
     render(<IntakePreview intake={intake} />);
 
     const editBtn = screen.getByText("Edit");
@@ -112,7 +112,7 @@ describe("Intake Preview", () => {
   });
 
   it("should render save button where opened element = UnRecordedIntakeList", () => {
-    mockUseDayEdit({ openedElement: ToggledElement.UnRecordedIntakeList });
+    mockUseDayEdit({ openedTab: DayEditTab.UnRecordedIntakeList });
     render(<IntakePreview intake={intake} />);
 
     const editBtn = screen.queryByText("Edit");
@@ -125,8 +125,8 @@ describe("Intake Preview", () => {
   });
 
   it("should call handleEditBtnClick on edit btn click", () => {
-    const { setIntake, setOpenedElement } = mockUseDayEdit({
-      openedElement: ToggledElement.IntakeList,
+    const { setIntake, setOpenedTab } = mockUseDayEdit({
+      openedTab: DayEditTab.IntakeList,
     });
     render(<IntakePreview intake={intake} />);
 
@@ -135,15 +135,15 @@ describe("Intake Preview", () => {
 
     expect(setIntake).toHaveBeenCalledTimes(1);
     expect(setIntake).toHaveBeenCalledWith(intake);
-    expect(setOpenedElement).toHaveBeenCalledTimes(1);
-    expect(setOpenedElement).toHaveBeenCalledWith(ToggledElement.IntakeEdit);
+    expect(setOpenedTab).toHaveBeenCalledTimes(1);
+    expect(setOpenedTab).toHaveBeenCalledWith(DayEditTab.IntakeEdit);
   });
 
   it("should call handleDuplicateBtnClick on duplicate btn click", () => {
     const dailyData = { ...testService.createDailyData(), intakes: [intake] };
     const { updateDailyData } = mockUseDayEdit({
       dailyData,
-      openedElement: ToggledElement.IntakeList,
+      openedTab: DayEditTab.IntakeList,
     });
     render(<IntakePreview intake={intake} />);
 
@@ -170,7 +170,7 @@ describe("Intake Preview", () => {
     const dailyData = { ...testService.createDailyData(), intakes: [intake] };
     const { updateDailyData } = mockUseDayEdit({
       dailyData,
-      openedElement: ToggledElement.UnRecordedIntakeList,
+      openedTab: DayEditTab.UnRecordedIntakeList,
     });
     render(<IntakePreview intake={intake} />);
 
@@ -187,7 +187,7 @@ describe("Intake Preview", () => {
   });
 
   it("should render add to favorite button", () => {
-    mockUseDayEdit({ openedElement: ToggledElement.IntakeList });
+    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
     render(<IntakePreview intake={intake} />);
 
     const addToFavBtn = screen.getByText("add to favorite");
@@ -195,7 +195,7 @@ describe("Intake Preview", () => {
   });
 
   it("should call handleAddToFavBtnClick on add to fav btn click", () => {
-    mockUseDayEdit({ openedElement: ToggledElement.IntakeList });
+    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
 
     const { addFavoriteIntake } = mockUseAddFavoriteIntake({});
 
@@ -209,7 +209,7 @@ describe("Intake Preview", () => {
   });
 
   it("should render spinner loader when isLoadingAddToFav = true", () => {
-    mockUseDayEdit({ openedElement: ToggledElement.IntakeList });
+    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
     mockUseAddFavoriteIntake({ isLoading: true });
     render(<IntakePreview intake={intake} />);
 

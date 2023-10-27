@@ -8,6 +8,13 @@
   margin-left: rem(25px);
   list-style: decimal;
 
+  &__title {
+    font-size: rem(18px);
+    font-weight: 600;
+    color: var(--color-text);
+    text-transform: capitalize;
+  }
+
   &__item-list {
     margin: 0;
     align-items: flex-start;
@@ -29,6 +36,7 @@
   }
 
   &__btns-container {
+    position: relative;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -44,6 +52,7 @@
 }
 
 .delete-intake-modal {
+  position: absolute;
   transform: translate(-50%, -50%);
 
   .btn {

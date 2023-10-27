@@ -9,11 +9,14 @@ import { DayData } from "../../../../shared/types/dayData";
 import { useAuth } from "../../hooks/useAuth";
 import { Modal } from "../../components/Modal/Modal";
 import "./Home.scss";
+import { useGetColorByCalories } from "../../hooks/useGetColorByCalories";
 
 const Homepage = () => {
   const { loggedInUser } = useAuth();
   const { dailyData } = useGetTodayData();
   const { createDay, isLoading: isLoadingCreateDay } = useCreateDay();
+  const { backgroundColor } = useGetColorByCalories();
+
   const isTodayDetailsShown = loggedInUser && !isLoadingCreateDay;
   const isCreateDayBtnShown = loggedInUser && dailyData && !_calcIsCurrDay(dailyData);
 
@@ -39,7 +42,11 @@ const Homepage = () => {
       {isCreateDayBtnShown && (
         <Modal>
           <Modal.OpenBtn modalName="create-day">
-            <button className="home__btn" data-testid="create-day-open-modal-btn">
+            <button
+              className="home__btn"
+              data-testid="create-day-open-modal-btn"
+              style={{ backgroundColor }}
+            >
               start a new day
             </button>
           </Modal.OpenBtn>

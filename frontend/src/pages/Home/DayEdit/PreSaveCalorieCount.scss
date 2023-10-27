@@ -1,0 +1,15 @@
+@import "../../../styles/main.scss";
+
+.pre-save-calorie-count {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: rem(8px);
+
+  strong,
+  p {
+    font-size: rem(18px);
+    font-weight: 600;
+    color: var(--color-secondary);
+  }
+}

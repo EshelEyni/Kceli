@@ -4,7 +4,7 @@ import { useUpdateTodayData } from "../../src/hooks/useUpdateTodayData";
 import { useGetTodayData } from "../../src/hooks/useGetTodayData";
 import { Mock, vi } from "vitest";
 import { useCreateDay } from "../../src/hooks/useCreateDay";
-import { ToggledElement, useDayEdit } from "../../src/pages/Home/DayEdit/DayEditContext";
+import { DayEditTab, useDayEdit } from "../../src/pages/Home/DayEdit/DayEditContext";
 import testService from "./testService";
 import { useDeleteWorkout } from "../../src/hooks/useDeleteWorkout";
 import { useNavigate } from "react-router-dom";
@@ -29,8 +29,8 @@ export type MockUseDayEdit = {
   consumedCalories?: any;
   targetCaloricIntakePerDay?: any;
   backgroundColor?: any;
-  openedElement?: any;
-  setOpenedElement?: any;
+  openedTab?: any;
+  setOpenedTab?: any;
   recommendedWaterIntake?: any;
   intake?: any;
   setIntake?: any;
@@ -138,8 +138,8 @@ function mockUseDayEdit({
   consumedCalories = 0,
   targetCaloricIntakePerDay = 0,
   backgroundColor = "white",
-  openedElement = ToggledElement.IntakeEdit,
-  setOpenedElement = vi.fn(),
+  openedTab = DayEditTab.IntakeEdit,
+  setOpenedTab = vi.fn(),
   recommendedWaterIntake = 0,
   intake = testService.createIntake({}),
   setIntake = vi.fn(),
@@ -172,8 +172,8 @@ function mockUseDayEdit({
     consumedCalories,
     targetCaloricIntakePerDay,
     backgroundColor,
-    openedElement,
-    setOpenedElement,
+    openedTab,
+    setOpenedTab,
     recommendedWaterIntake,
     intake,
     setIntake,

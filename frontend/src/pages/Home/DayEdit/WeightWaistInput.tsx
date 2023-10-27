@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { useDayEdit } from "./DayEditContext";
+import { DayEditTab, useDayEdit } from "./DayEditContext";
 import { Button } from "../../../components/App/Button/Button";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { Controller, useForm } from "react-hook-form";
+import "./WeightWaistInput.scss";
 
 interface WeightWaistIFormInput {
   weight: number | string;
@@ -10,11 +11,17 @@ interface WeightWaistIFormInput {
 }
 
 export const WeightWaistInput: FC = () => {
-  const { dailyData, isLoading, updateDailyData } = useDayEdit();
+  const { dailyData, isLoading, updateDailyData, setOpenedTab } = useDayEdit();
 
   const { control, handleSubmit } = useForm<WeightWaistIFormInput>({
     defaultValues: { weight: "", waist: "" },
   });
+
+  function handleDismissBtnClick() {
+    if (!dailyData) return;
+    updateDailyData({ ...dailyData, isWeightWaistIgnored: true });
+    setOpenedTab(DayEditTab.IntakeEdit);
+  }
 
   function onSubmit(data: WeightWaistIFormInput) {
     if (!dailyData) return;
@@ -60,9 +67,18 @@ export const WeightWaistInput: FC = () => {
               />
             )}
           />
-          <Button className="btn" type="submit">
-            update
-          </Button>
+
+          <div className="weight-waist-form__btns-container">
+            <Button className="btn" type="submit">
+              update
+            </Button>
+
+            {!dailyData.isWeightWaistIgnored && (
+              <Button className="btn" onClickFn={handleDismissBtnClick}>
+                dissmis
+              </Button>
+            )}
+          </div>
         </form>
       ) : (
         <div className="weight-waist-details" data-testid="weight-waist-details">

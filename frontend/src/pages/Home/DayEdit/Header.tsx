@@ -43,6 +43,7 @@ export const DayEditHeader: FC = () => {
           <strong>{Math.abs(remainingCalories)} </strong>
           calories {calConsumedTitle}
         </p>
+        <hr />
 
         {consumedCalories > 0 && (
           <p
@@ -52,6 +53,7 @@ export const DayEditHeader: FC = () => {
             <strong>{Math.round(consumedCalories)}</strong> calories consumed
           </p>
         )}
+        <hr />
 
         <div className="day-edit__header__percentages-container">
           <div
@@ -69,6 +71,7 @@ export const DayEditHeader: FC = () => {
             <p className="day-edit__header__percentage__value">{calRemainingPct}%</p>
           </div>
         </div>
+        <hr />
 
         <p
           className="day-edit__header__titles__title"
@@ -77,6 +80,7 @@ export const DayEditHeader: FC = () => {
           estimated to {estimatedKGChange > 0 ? "gain" : "lose"}
           <strong> {Math.abs(estimatedKGChange)}</strong> kg
         </p>
+        <hr />
       </div>
     </header>
   );

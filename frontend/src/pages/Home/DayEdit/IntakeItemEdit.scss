@@ -12,15 +12,6 @@
     width: 100%;
   }
 
-  .error-msg {
-    font-style: normal;
-    font-weight: 600;
-    font-size: rem(20px);
-    text-transform: uppercase;
-    padding: rem(5px) rem(10px);
-    color: var(--color-warning);
-  }
-
   .intake-item-input {
     width: 100%;
     padding: rem(12px) rem(25px);
@@ -56,17 +47,12 @@
     border-radius: 10px;
     cursor: pointer;
 
-    &.active {
-      filter: brightness(0.9);
-    }
-
     span {
       font-size: rem(18px);
       position: relative;
       font-weight: 600;
       color: var(--color-text-gray);
       text-transform: uppercase;
-      top: 1px;
     }
 
     &.calc-calories-btn {

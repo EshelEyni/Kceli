@@ -65,6 +65,9 @@ intakeItemSchema.pre("validate", async function (next) {
 
 const intakeSchema = new Schema<IIntake>(
   {
+    name: {
+      type: String,
+    },
     items: {
       type: [intakeItemSchema],
       required: [true, "Please provide intake items"],
@@ -75,6 +78,11 @@ const intakeSchema = new Schema<IIntake>(
     },
     recordedAt: {
       type: Date,
+    },
+    type: {
+      type: String,
+      enum: ["food", "drink"],
+      default: "food",
     },
   },
   schemaOptions
@@ -87,9 +95,18 @@ const favoriteIntakeSchema = new Schema<IFavoriteIntake>(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
+    sortOrder: {
+      type: Number,
+      default: 0,
+    },
   },
   schemaOptions
 );
+
+favoriteIntakeSchema.pre("save", async function (next) {
+  this._id = new mongoose.Types.ObjectId();
+  next();
+});
 
 const FavoriteIntakeModel = mongoose.model(
   "FavoriteIntake",

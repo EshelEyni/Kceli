@@ -1,47 +1,53 @@
 import { FC } from "react";
-import { ToggledElement, useDayEdit } from "./DayEditContext";
+import { DayEditTab, useDayEdit } from "./DayEditContext";
 import { Button } from "../../../components/App/Button/Button";
 import "./Filter.scss";
 
 export const DayEditFilter: FC = () => {
-  const { dailyData, setOpenedElement } = useDayEdit();
+  const { dailyData, setOpenedTab, setSearchParams } = useDayEdit();
   if (!dailyData) return null;
+
+  function handleBtnClick(value: DayEditTab) {
+    setOpenedTab(value);
+    const searchParams = new URLSearchParams({ tab: value.toString() });
+    setSearchParams(searchParams);
+  }
 
   const filterBy = [
     {
       name: "add",
-      value: ToggledElement.IntakeEdit,
+      value: DayEditTab.IntakeEdit,
     },
     {
       name: "intakes",
-      value: ToggledElement.IntakeList,
+      value: DayEditTab.IntakeList,
       isShown: dailyData?.intakes.some(intake => intake.isRecorded === true),
     },
     {
       name: "unrecorded",
-      value: ToggledElement.UnRecordedIntakeList,
+      value: DayEditTab.UnRecordedIntakeList,
       isShown: dailyData?.intakes.some(intake => intake.isRecorded === false),
     },
     {
       name: "favorites",
-      value: ToggledElement.FavoriteIntake,
+      value: DayEditTab.FavoriteIntake,
     },
     {
       name: "water",
-      value: ToggledElement.Water,
+      value: DayEditTab.Water,
     },
     {
       name: "weight",
-      value: ToggledElement.WeightWaistInput,
+      value: DayEditTab.WeightWaistInput,
     },
     {
       name: "workouts",
-      value: ToggledElement.Workouts,
+      value: DayEditTab.Workouts,
       isShown: dailyData?.workouts.length > 0,
     },
     {
       name: "query",
-      value: ToggledElement.Query,
+      value: DayEditTab.Query,
     },
   ];
 
@@ -51,7 +57,7 @@ export const DayEditFilter: FC = () => {
         if (item.isShown === false) return null;
         return (
           <li className="filter__item" key={item.value}>
-            <Button className="btn" onClickFn={() => setOpenedElement(item.value)}>
+            <Button className="btn" onClickFn={() => handleBtnClick(item.value)}>
               {item.name}
             </Button>
           </li>

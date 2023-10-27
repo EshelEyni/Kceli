@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { List } from "../../../components/App/List/List";
-import { ToggledElement, useDayEdit } from "./DayEditContext";
+import { DayEditTab, useDayEdit } from "./DayEditContext";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { IntakePreview } from "./IntakePreview";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
@@ -8,12 +8,12 @@ import { getCleanTime } from "../../../services/util/utilService";
 import "./IntakeList.scss";
 
 export const IntakeList: FC = () => {
-  const { dailyData, unrecordedIntakes, recordedIntakes, openedElement, isLoadingUpdate } =
+  const { dailyData, unrecordedIntakes, recordedIntakes, openedTab, isLoadingUpdate } =
     useDayEdit();
 
   if (!dailyData) return null;
 
-  const isRecordedIntakesShown = openedElement === ToggledElement.IntakeList;
+  const isRecordedIntakesShown = openedTab === DayEditTab.IntakeList;
   const intakes = isRecordedIntakesShown ? recordedIntakes : unrecordedIntakes;
   const sortedIntakes = intakes.sort((a, b) => {
     if (!a.recordedAt || !b.recordedAt) return 0;

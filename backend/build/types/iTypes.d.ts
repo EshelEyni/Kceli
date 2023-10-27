@@ -38,15 +38,22 @@ export interface IDailyData extends Document {
     workouts: IWorkout[];
     weight?: number;
     waist?: number;
+    isWeightWaistIgnored?: boolean;
     totalDailyEnergyExpenditure?: number;
     targetCaloricIntake?: number;
     createdAt: Date;
     updatedAt: Date;
 }
 export interface IIntake extends Document {
+    name: string;
     items: IIntakeItem[];
     isRecorded: boolean;
     recordedAt?: Date;
+    type: "food" | "drink";
+}
+export interface IFavoriteIntake extends IIntake {
+    userId: mongoose.Types.ObjectId;
+    sortOrder: number;
 }
 export interface IIntakeItem extends Document {
     name: string;

@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DailyDataModel = void 0;
 const mongoose_1 = require("mongoose");
-const intakeSchema_1 = require("./intakeSchema");
+const intakeModel_1 = require("../intake/intakeModel");
 const calorieService_1 = __importDefault(require("../../services/calorie/calorieService"));
 const userModel_1 = require("../user/userModel");
 const ALSService_1 = require("../../services/ALSService");
@@ -36,6 +36,10 @@ const dailyDataSchema = new mongoose_1.Schema({
     waist: {
         type: Number,
     },
+    isWeightWaistIgnored: {
+        type: Boolean,
+        default: false,
+    },
     totalDailyEnergyExpenditure: {
         type: Number,
     },
@@ -43,7 +47,7 @@ const dailyDataSchema = new mongoose_1.Schema({
         type: Number,
     },
     intakes: {
-        type: [intakeSchema_1.intakeSchema],
+        type: [intakeModel_1.intakeSchema],
         default: [],
     },
     workouts: {

@@ -6,9 +6,11 @@ const units: MeasurementUnit[] = Object.values(MeasurementUnit);
 function getDefaultIntake(): NewIntake {
   return {
     id: createId(),
+    name: "",
     items: [getDefaultIntakeItem()],
     isRecorded: true,
     recordedAt: null,
+    type: "food",
   };
 }
 

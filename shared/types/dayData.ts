@@ -12,6 +12,7 @@ export interface DayData extends BasicDayData {
   workouts: Workout[];
   weight: number;
   waist: number;
+  isWeightWaistIgnored: boolean;
   totalDailyEnergyExpenditure: number;
   targetCaloricIntake: number;
   createdAt: Date;

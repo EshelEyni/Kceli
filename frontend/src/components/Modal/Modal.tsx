@@ -204,26 +204,6 @@ const OpenBtn: FC<OpenBtnProps> = ({
     };
   }, [setPositionByRef, calculatePosition]);
 
-  useEffect(() => {
-    if (setPositionByRef) return;
-
-    function setResponsivePosition() {
-      const top = window.innerHeight + window.scrollY * 0.25;
-      setPosition({ top });
-    }
-
-    const events = ["wheel", "scroll", "resize"];
-    events.forEach(event => {
-      window.addEventListener(event, setResponsivePosition);
-    });
-
-    return () => {
-      events.forEach(event => {
-        window.removeEventListener(event, setResponsivePosition);
-      });
-    };
-  }, [setPositionByRef, setPosition, modalHeight, calculatePosition]);
-
   return cloneElement(children, {
     onClick: handleClick,
     ref,

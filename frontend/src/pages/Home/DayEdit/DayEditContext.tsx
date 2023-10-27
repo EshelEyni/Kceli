@@ -4,13 +4,14 @@ import { useUpdateTodayData } from "../../../hooks/useUpdateTodayData";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { DayData } from "../../../../../shared/types/dayData";
 import { UseMutateFunction } from "@tanstack/react-query";
-import { Intake, NewIntake } from "../../../../../shared/types/intake";
+import { CombinedIntake, FavoriteIntake, Intake } from "../../../../../shared/types/intake";
 import intakeUtilService from "../../../services/intake/intakeUtilService";
 import { useAuth } from "../../../hooks/useAuth";
 import waterConsumptionService from "../../../services/waterConsumption/waterConsumptionService";
 import nutritionUtilService from "../../../services/nutrition/nutritionUtilService";
 import { NutritionQueryState } from "../../../types/app";
 import { useGetUserFavoriteIntakes } from "../../../hooks/useGetUserFavoriteIntakes";
+import { useSearchParams } from "react-router-dom";
 
 export type DayEditContextType = {
   dailyData: DayData | undefined;
@@ -25,12 +26,11 @@ export type DayEditContextType = {
   estimatedKGChange: number;
   consumedCalories: number;
   targetCaloricIntakePerDay: number;
-  backgroundColor: string;
-  openedElement: ToggledElement;
-  setOpenedElement: (element: ToggledElement) => void;
+  openedTab: DayEditTab;
+  setOpenedTab: (element: DayEditTab) => void;
   recommendedWaterIntake: number;
-  intake: NewIntake;
-  setIntake: Dispatch<SetStateAction<NewIntake>>;
+  intake: CombinedIntake;
+  setIntake: Dispatch<SetStateAction<CombinedIntake>>;
   calConsumedPct: number;
   calRemainingPct: number;
   chatGPTQuery: NutritionQueryState;
@@ -41,13 +41,15 @@ export type DayEditContextType = {
   setUSDAAPIQuery: Dispatch<SetStateAction<NutritionQueryState>>;
   currIntakeItemId: string;
   setCurrIntakeItemId: Dispatch<SetStateAction<string>>;
-  favoriteIntakes: Intake[] | undefined;
+  favoriteIntakes: FavoriteIntake[] | undefined;
   isLoadingFavoriteIntakes: boolean;
   isSuccessFavoriteIntakes: boolean;
   isErrorFavoriteIntakes: boolean;
+  isEmptyFavoriteIntakes: boolean;
+  setSearchParams: (params: URLSearchParams) => void;
 };
 
-export enum ToggledElement {
+export enum DayEditTab {
   IntakeEdit = "IntakeEdit",
   IntakeList = "IntakeList",
   UnRecordedIntakeList = "UnRecordedIntakeList",
@@ -70,10 +72,15 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     isLoading: isLoadingFavoriteIntakes,
     isSuccess: isSuccessFavoriteIntakes,
     isError: isErrorFavoriteIntakes,
+    isEmpty: isEmptyFavoriteIntakes,
   } = useGetUserFavoriteIntakes();
 
-  const [openedElement, setOpenedElement] = useState<ToggledElement>(ToggledElement.IntakeEdit);
-  const [intake, setIntake] = useState<NewIntake>(intakeUtilService.getDefaultIntake());
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [openedTab, setOpenedTab] = useState<DayEditTab>(
+    (searchParams.get("tab") as DayEditTab) || DayEditTab.IntakeEdit
+  );
+
+  const [intake, setIntake] = useState<CombinedIntake>(intakeUtilService.getDefaultIntake());
   const [currIntakeItemId, setCurrIntakeItemId] = useState<string>(intake.items[0].id);
   const [chatGPTQuery, setChatGPTQuery] = useState<NutritionQueryState>(
     nutritionUtilService.getDefaultNutritionQuery("chatGPT")
@@ -107,14 +114,12 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     dailyData
   );
 
-  const backgroundColor = calorieUtilService.getBcgByCosumedCalories({
-    consumedCalories,
-    targetCalorie: targetCaloricIntakePerDay,
-  });
-
   useEffect(() => {
-    if (!isSuccess || !dailyData || !!dailyData?.weight) return;
-    setOpenedElement(ToggledElement.WeightWaistInput);
+    if (!isSuccess || !dailyData || !!dailyData?.weight || dailyData?.isWeightWaistIgnored) return;
+    setOpenedTab(DayEditTab.WeightWaistInput);
+    const searchParams = new URLSearchParams({ tab: DayEditTab.WeightWaistInput });
+    setSearchParams(searchParams);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dailyData, isSuccess]);
 
   const value = {
@@ -130,9 +135,8 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     consumedCalories,
     targetCaloricIntakePerDay,
     estimatedKGChange,
-    backgroundColor,
-    openedElement,
-    setOpenedElement,
+    openedTab,
+    setOpenedTab,
     recommendedWaterIntake,
     intake,
     setIntake,
@@ -150,6 +154,8 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     isLoadingFavoriteIntakes,
     isSuccessFavoriteIntakes,
     isErrorFavoriteIntakes,
+    isEmptyFavoriteIntakes,
+    setSearchParams,
   };
 
   return <DayEditContext.Provider value={value}>{children}</DayEditContext.Provider>;

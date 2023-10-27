@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { DayEditProvider, ToggledElement, useDayEdit } from "./DayEditContext";
+import { DayEditProvider, DayEditTab, useDayEdit } from "./DayEditContext";
 import testService from "../../../../test/service/testService";
 import intakeUtilService from "../../../services/intake/intakeUtilService";
 import {
@@ -181,7 +181,7 @@ describe("DayEditContext", () => {
     expect(mockUpdateFunction).toHaveBeenCalledTimes(1);
   });
 
-  it("updates openedElement to WeightWaistInput when dailyData.weight is falsey", () => {
+  it("updates openedTab to WeightWaistInput when dailyData.weight is falsey", () => {
     mockUseAuth({});
     mockUseGetTodayData({
       dailyData: null,
@@ -189,8 +189,8 @@ describe("DayEditContext", () => {
     });
 
     const TestComponent = () => {
-      const { openedElement } = useDayEdit();
-      return <div data-testid="open-element-test">{openedElement}</div>;
+      const { openedTab } = useDayEdit();
+      return <div data-testid="open-element-test">{openedTab}</div>;
     };
 
     const { rerender } = render(
@@ -199,7 +199,7 @@ describe("DayEditContext", () => {
       </DayEditProvider>
     );
 
-    expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeEdit);
+    expect(screen.getByTestId("open-element-test")).toHaveTextContent(DayEditTab.IntakeEdit);
 
     mockUseGetTodayData({
       dailyData: { ...testService.createDailyData(), weight: undefined },
@@ -212,12 +212,10 @@ describe("DayEditContext", () => {
       </DayEditProvider>
     );
 
-    expect(screen.getByTestId("open-element-test")).toHaveTextContent(
-      ToggledElement.WeightWaistInput
-    );
+    expect(screen.getByTestId("open-element-test")).toHaveTextContent(DayEditTab.WeightWaistInput);
   });
 
-  it("should keep openedElement to IntakeEdit when dailyData.weight is truthy", () => {
+  it("should keep openedTab to IntakeEdit when dailyData.weight is truthy", () => {
     mockUseAuth({});
     mockUseGetTodayData({
       dailyData: null,
@@ -225,8 +223,8 @@ describe("DayEditContext", () => {
     });
 
     const TestComponent = () => {
-      const { openedElement } = useDayEdit();
-      return <div data-testid="open-element-test">{openedElement}</div>;
+      const { openedTab } = useDayEdit();
+      return <div data-testid="open-element-test">{openedTab}</div>;
     };
 
     const { rerender } = render(
@@ -235,7 +233,7 @@ describe("DayEditContext", () => {
       </DayEditProvider>
     );
 
-    expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeEdit);
+    expect(screen.getByTestId("open-element-test")).toHaveTextContent(DayEditTab.IntakeEdit);
 
     mockUseGetTodayData({
       dailyData: { ...testService.createDailyData(), weight: 80 },
@@ -248,10 +246,10 @@ describe("DayEditContext", () => {
       </DayEditProvider>
     );
 
-    expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeEdit);
+    expect(screen.getByTestId("open-element-test")).toHaveTextContent(DayEditTab.IntakeEdit);
   });
 
-  it("should change openedElement to IntakeList when clicked on IntakeListBtn", () => {
+  it("should change openedTab to IntakeList when clicked on IntakeListBtn", () => {
     mockUseAuth({});
     mockUseGetTodayData({
       dailyData: null,
@@ -259,12 +257,12 @@ describe("DayEditContext", () => {
     });
 
     const TestComponent = () => {
-      const { openedElement, setOpenedElement } = useDayEdit();
+      const { openedTab, setOpenedTab } = useDayEdit();
       return (
         <>
-          <div data-testid="open-element-test">{openedElement}</div>
+          <div data-testid="open-element-test">{openedTab}</div>
           <button
-            onClick={() => setOpenedElement(ToggledElement.IntakeList)}
+            onClick={() => setOpenedTab(DayEditTab.IntakeList)}
             data-testid="open-element-btn"
           >
             Open
@@ -279,7 +277,7 @@ describe("DayEditContext", () => {
       </DayEditProvider>
     );
 
-    expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeEdit);
+    expect(screen.getByTestId("open-element-test")).toHaveTextContent(DayEditTab.IntakeEdit);
 
     fireEvent.click(screen.getByTestId("open-element-btn"));
 
@@ -289,7 +287,7 @@ describe("DayEditContext", () => {
       </DayEditProvider>
     );
 
-    expect(screen.getByTestId("open-element-test")).toHaveTextContent(ToggledElement.IntakeList);
+    expect(screen.getByTestId("open-element-test")).toHaveTextContent(DayEditTab.IntakeList);
   });
 
   it("should provide proper intake value", () => {
@@ -870,30 +868,6 @@ describe("DayEditContext", () => {
     expect(typeof value === "number").toBe(true);
   });
 
-  it("should provide proper backgroundColor value", () => {
-    mockUseAuth({});
-
-    mockUseGetTodayData({
-      dailyData: { ...testService.createDailyData(), weight: 80 },
-      isSuccess: true,
-    });
-
-    const TestComponent = () => {
-      const { backgroundColor } = useDayEdit();
-      return <div data-testid="background-color-test">{backgroundColor}</div>;
-    };
-
-    render(
-      <DayEditProvider>
-        <TestComponent />
-      </DayEditProvider>
-    );
-
-    const regexOfHexColor = /^#[0-9a-f]{6}$/i;
-
-    expect(screen.getByTestId("background-color-test")).toHaveTextContent(regexOfHexColor);
-  });
-
   it("should provide proper favoriteIntakes", () => {
     mockUseAuth({});
 
@@ -993,6 +967,32 @@ describe("DayEditContext", () => {
     const TestComponent = () => {
       const { isSuccessFavoriteIntakes } = useDayEdit();
       return <div>{isSuccessFavoriteIntakes.toString()}</div>;
+    };
+
+    render(
+      <DayEditProvider>
+        <TestComponent />
+      </DayEditProvider>
+    );
+
+    expect(screen.getByText("true")).toBeInTheDocument();
+  });
+
+  it("should provide proper isEmptyFavoriteIntakes", () => {
+    mockUseAuth({});
+
+    mockUseGetTodayData({
+      dailyData: { ...testService.createDailyData(), weight: 80 },
+      isSuccess: true,
+    });
+
+    mockUseGetUserFavoriteIntakes({
+      favoriteIntakes: [],
+    });
+
+    const TestComponent = () => {
+      const { isEmptyFavoriteIntakes } = useDayEdit();
+      return <div>{isEmptyFavoriteIntakes.toString()}</div>;
     };
 
     render(

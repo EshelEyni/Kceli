@@ -3,7 +3,7 @@ import { Intake } from "../../../../../shared/types/intake";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { Modal } from "../../../components/Modal/Modal";
 import { Button } from "../../../components/App/Button/Button";
-import { ToggledElement, useDayEdit } from "./DayEditContext";
+import { DayEditTab, useDayEdit } from "./DayEditContext";
 import { createId } from "../../../services/util/utilService";
 import "./IntakePreview.scss";
 import { useAddFavoriteIntake } from "../../../hooks/useAddFavoriteIntake";
@@ -17,14 +17,17 @@ type IntakePreviewProps = {
 };
 
 export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = false }) => {
-  const { dailyData, openedElement, setOpenedElement, setIntake, updateDailyData } = useDayEdit();
+  const { dailyData, openedTab, setOpenedTab, setIntake, updateDailyData } = useDayEdit();
 
   const { addFavoriteIntake, isLoading: isLoadingAddToFav } = useAddFavoriteIntake();
   const { removeFavoriteIntake } = useDeleteFavoriteIntake();
 
-  const isRecordedIntakesShown = openedElement === ToggledElement.IntakeList;
-
+  const isRecordedIntakesShown = openedTab === DayEditTab.IntakeList;
+  const isSaveBtnShown = !isRecordedIntakesShown || isFavorite;
   const totalCalories = calorieUtilService.getTotalCalories(intake);
+  const favoriteIntakeTitle = isFavorite
+    ? intake.name ?? intake.items.map(item => item.name).join(", ")
+    : null;
 
   function handleDeleteBtnClick(intakeId: string) {
     if (isFavorite) return removeFavoriteIntake(intakeId);
@@ -38,7 +41,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
     if (!dailyData) return;
     const intakeToEdit = { ...intake };
     setIntake(intakeToEdit);
-    setOpenedElement(ToggledElement.IntakeEdit);
+    setOpenedTab(DayEditTab.IntakeEdit);
   }
 
   function handleDuplicateBtnClick(intake: Intake) {
@@ -52,13 +55,15 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
   function handleSaveBtnClick(intakeId: string) {
     if (!dailyData) return;
     const dataToUpdate = { ...dailyData };
-    dataToUpdate.intakes = dailyData.intakes.map(intake => {
-      if (intake.id === intakeId) {
+    if (isFavorite) dataToUpdate.intakes = [...dailyData.intakes, intake];
+    else {
+      dataToUpdate.intakes = dailyData.intakes.map(intake => {
+        if (intake.id !== intakeId) return intake;
         intake.isRecorded = true;
         intake.recordedAt = new Date();
-      }
-      return intake;
-    });
+        return intake;
+      });
+    }
     updateDailyData(dataToUpdate);
   }
 
@@ -71,6 +76,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
 
   return (
     <section className="intake-preview" data-testid="intake-preview">
+      {favoriteIntakeTitle && <h2 className="intake-preview__title">{favoriteIntakeTitle}</h2>}
       <List
         items={intake.items}
         className="intake-preview__item-list"
@@ -89,12 +95,16 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
 
       <p className="intake-preview__total-calories">total calories: {totalCalories}</p>
 
-      <div className="intake-preview__btns-container">
+      <div id="intake-preview-btns-container" className="intake-preview__btns-container">
         <Modal>
           <Modal.OpenBtn modalName="delete-intake">
             <button className="btn">Delete</button>
           </Modal.OpenBtn>
-          <Modal.Window name="delete-intake" className="delete-intake-modal">
+          <Modal.Window
+            name="delete-intake"
+            elementId="intake-preview-btns-container"
+            className="delete-intake-modal"
+          >
             <h2>Are you sure you want to delete this intake?</h2>
             <Modal.CloseBtn onClickFn={() => handleDeleteBtnClick(intake.id)}>
               <button className="btn delete-btn">Delete</button>
@@ -104,6 +114,13 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
             </Modal.CloseBtn>
           </Modal.Window>
         </Modal>
+
+        {isFavorite && (
+          <Button className="btn" onClickFn={() => handleEditBtnClick(intake)}>
+            Edit
+          </Button>
+        )}
+
         {isRecordedIntakesShown && (
           <>
             <Button className="btn" onClickFn={() => handleEditBtnClick(intake)}>
@@ -114,7 +131,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
             </Button>
           </>
         )}
-        {!isRecordedIntakesShown && (
+        {isSaveBtnShown && (
           <Button className="btn" onClickFn={() => handleSaveBtnClick(intake.id)}>
             Save
           </Button>
@@ -122,7 +139,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
 
         {!isFavorite && (
           <Button className="btn" onClickFn={() => handleAddToFavBtnClick(intake)}>
-            add to favorite
+            add to fav
           </Button>
         )}
       </div>

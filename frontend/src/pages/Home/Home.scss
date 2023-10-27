@@ -7,7 +7,6 @@
   min-height: calc(100vh - rem(75px));
   height: 100%;
   width: 100%;
-  background-color: var(--color-primary);
 
   .home__btn {
     background-color: var(--color-primary);
@@ -17,13 +16,12 @@
     font-size: rem(25px);
     text-transform: uppercase;
     font-weight: 700;
-    margin-top: rem(30px);
     padding: rem(10px);
   }
 
   @include for-desktop-layout {
     padding: rem(50px) 0;
-    background-color: white;
+    gap: rem(25px);
 
     .home__btn {
       border-radius: rem(5px);
@@ -33,7 +31,6 @@
 
 .create-day-modal {
   align-items: center;
-
   gap: rem(10px);
 
   &__title {

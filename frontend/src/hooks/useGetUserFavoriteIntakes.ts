@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { Intake } from "../../../shared/types/intake";
+import { FavoriteIntake } from "../../../shared/types/intake";
 import intakeApiService from "../services/intake/intakeApiService";
 
 type useGetUserFavoriteIntakesResult = {
-  favoriteIntakes: Intake[] | undefined;
+  favoriteIntakes: FavoriteIntake[] | undefined;
   error: unknown;
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
+  isEmpty: boolean;
 };
 
 export function useGetUserFavoriteIntakes(): useGetUserFavoriteIntakesResult {
@@ -22,5 +23,7 @@ export function useGetUserFavoriteIntakes(): useGetUserFavoriteIntakesResult {
     queryFn: intakeApiService.getUserFavoriteIntakes,
   });
 
-  return { favoriteIntakes, error, isLoading, isSuccess, isError };
+  const isEmpty = !!favoriteIntakes && favoriteIntakes.length === 0;
+
+  return { favoriteIntakes, error, isLoading, isSuccess, isError, isEmpty };
 }

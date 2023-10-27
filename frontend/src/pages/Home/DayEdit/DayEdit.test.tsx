@@ -46,12 +46,12 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("day-edit-header")).toBeInTheDocument();
   });
 
-  it("should render weight waist input when openedElement is WeightWaistInput", () => {
+  it("should render weight waist input when openedTab is WeightWaistInput", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
-      openedElement: "WeightWaistInput",
+      openedTab: "WeightWaistInput",
     });
 
     render(<DayEdit />);
@@ -59,12 +59,12 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("weight-waist-details")).toBeInTheDocument();
   });
 
-  it("should render intake edit when openedElement is IntakeEdit", () => {
+  it("should render intake edit when openedTab is IntakeEdit", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
-      openedElement: "IntakeEdit",
+      openedTab: "IntakeEdit",
     });
 
     render(<DayEdit />);
@@ -72,14 +72,14 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("intake-edit")).toBeInTheDocument();
   });
 
-  it("should render workout list when openedElement is Workouts", () => {
+  it("should render workout list when openedTab is Workouts", () => {
     mockUseDeleteWorkout({});
     mockUseNavigate();
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
-      openedElement: "Workouts",
+      openedTab: "Workouts",
     });
 
     render(<DayEdit />);
@@ -87,12 +87,12 @@ describe("Day Edit", () => {
     expect(workoutPreviews.length).toBeGreaterThan(0);
   });
 
-  it("should render intake list when openedElement is IntakeList", () => {
+  it("should render intake list when openedTab is IntakeList", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
-      openedElement: "IntakeList",
+      openedTab: "IntakeList",
     });
 
     render(<DayEdit />);
@@ -100,12 +100,12 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("intake-list-header")).toBeInTheDocument();
   });
 
-  it("should render unrecorded intake list when openedElement is UnRecordedIntakeList", () => {
+  it("should render unrecorded intake list when openedTab is UnRecordedIntakeList", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
-      openedElement: "UnRecordedIntakeList",
+      openedTab: "UnRecordedIntakeList",
     });
 
     render(<DayEdit />);
@@ -113,12 +113,12 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("intake-list-header")).toBeInTheDocument();
   });
 
-  it("should render favorite intake list when openedElement is FavoriteIntakeList", () => {
+  it("should render favorite intake list when openedTab is FavoriteIntakeList", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
-      openedElement: "FavoriteIntake",
+      openedTab: "FavoriteIntake",
     });
 
     render(<DayEdit />);
@@ -126,12 +126,12 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("day-edit-favorite-intakes")).toBeInTheDocument();
   });
 
-  it("should render nutrition query when openedElement is Query", () => {
+  it("should render nutrition query when openedTab is Query", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
-      openedElement: "Query",
+      openedTab: "Query",
     });
 
     render(<DayEdit />);
@@ -139,12 +139,12 @@ describe("Day Edit", () => {
     expect(screen.getByTestId("nutrition-query")).toBeInTheDocument();
   });
 
-  it("should render water edit when openedElement is Water", () => {
+  it("should render water edit when openedTab is Water", () => {
     mockUseDayEdit({
       isSuccess: true,
       dailyData: testService.createDailyData(),
       isLoadingUpdate: false,
-      openedElement: "Water",
+      openedTab: "Water",
     });
 
     render(<DayEdit />);

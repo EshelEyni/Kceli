@@ -3,7 +3,7 @@ import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { DayEditFilter } from "./Filter";
 import { mockUseDayEdit } from "../../../../test/service/mockService";
-import { ToggledElement } from "./DayEditContext";
+import { DayEditTab } from "./DayEditContext";
 import testService from "../../../../test/service/testService";
 
 vi.mock("./DayEditContext");
@@ -69,7 +69,7 @@ describe("Day Edit Filter", () => {
     expect(screen.getByText("workouts")).toBeInTheDocument();
   });
 
-  it("should call setOpenedElement with proper value on button click", () => {
+  it("should call setOpenedTab with proper value on button click", () => {
     const dailyData = {
       ...testService.createDailyData(),
       intakes: [
@@ -79,18 +79,18 @@ describe("Day Edit Filter", () => {
       workouts: [testService.createWorkout()],
     };
 
-    const { setOpenedElement } = mockUseDayEdit({ dailyData });
+    const { setOpenedTab } = mockUseDayEdit({ dailyData });
     render(<DayEditFilter />);
 
     const filterEl = screen.getByTestId("day-edit-filter");
     const btns = filterEl.getElementsByTagName("button");
-    const toggledElementValues = Object.values(ToggledElement);
+    const toggledElementValues = Object.values(DayEditTab);
 
     for (let i = 0; i < btns.length; i++) {
       const btn = btns[i];
       const toggledElement = toggledElementValues[i];
       fireEvent.click(btn);
-      expect(setOpenedElement).toHaveBeenCalledWith(toggledElement);
+      expect(setOpenedTab).toHaveBeenCalledWith(toggledElement);
     }
   });
 });

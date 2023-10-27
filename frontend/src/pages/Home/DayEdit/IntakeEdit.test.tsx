@@ -38,15 +38,6 @@ describe("Intake Edit", () => {
     expect(screen.getByTestId("intake-edit-item-list")).toBeInTheDocument();
   });
 
-  it("should render intake review list when isReviewOpen is true", () => {
-    mockUseDayEdit({});
-    render(<IntakeEdit />);
-    const toggleReviewBtn = screen.getByText("Review");
-    fireEvent.click(toggleReviewBtn);
-
-    expect(screen.getByTestId("intake-edit-review-list")).toBeInTheDocument();
-  });
-
   it("should call setIntake with default intake when save later button is clicked", () => {
     const { setIntake, intake } = mockUseDayEdit({});
     render(<IntakeEdit />);

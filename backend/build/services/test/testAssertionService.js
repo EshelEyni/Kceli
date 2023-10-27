@@ -25,8 +25,8 @@ function assertDailyData(dailyData) {
 exports.assertDailyData = assertDailyData;
 function assertIntake(intake) {
     expect(intake).toEqual(expect.objectContaining({
-        name: expect.any(String),
         items: expect.any(Array),
+        isRecorded: expect.any(Boolean),
     }));
     intake.items.forEach(assertIntakeItem);
 }

@@ -1,18 +1,22 @@
 import { FC } from "react";
 import { Header } from "../Header/Header";
 import { Nav } from "../Nav/Nav";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { FaHome, FaRegCalendarAlt, FaUser } from "react-icons/fa";
 import { GiWeightLiftingUp } from "react-icons/gi";
 import { useAuth } from "../../../hooks/useAuth";
 import "./AppHeader.scss";
 import { GoalIndicator } from "../../GoalIndicator/GoalIndicator";
+import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
 
 export const AppHeader: FC = () => {
   const { loggedInUser } = useAuth();
+  const { backgroundColor } = useGetColorByCalories();
+  const location = useLocation();
+  const isHomePage = location.pathname.includes("/home");
 
   return (
-    <Header className="app-header">
+    <Header className="app-header" style={isHomePage ? { backgroundColor } : undefined}>
       <GoalIndicator />
       <Nav className="app-nav">
         <NavLink to="/home" className="app-nav-link">

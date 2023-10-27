@@ -118,6 +118,8 @@ function getNewMockIntake(): NewIntake {
     items: [getMockNewIntakeItem()],
     isRecorded: true,
     recordedAt: null,
+    name: "test",
+    type: "food",
   };
 }
 
@@ -136,6 +138,8 @@ function getMockIntake(): NewIntake {
     items: [getMockIntakeItem()],
     isRecorded: true,
     recordedAt: null,
+    name: "test",
+    type: "food",
   };
 }
 

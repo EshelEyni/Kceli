@@ -9,34 +9,54 @@
   position: relative;
   flex-grow: 1;
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: rem(20px);
+    width: 100%;
+    margin-bottom: rem(10px);
+
+    &__name-input {
+      flex-grow: 1;
+      padding: rem(12px);
+      border-radius: 5px;
+      font-size: rem(20px);
+      text-transform: capitalize;
+      height: rem(40px);
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: rem(10px);
+      height: rem(40px);
+      width: rem(100px);
+      background-color: white;
+      border-radius: 10px;
+      cursor: pointer;
+
+      span {
+        font-size: rem(18px);
+        font-weight: 600;
+        color: var(--color-text-gray);
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &__info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
   .intake-edit-item-list {
     display: flex;
     flex-direction: column;
     gap: rem(10px);
-  }
-
-  .intake-edit-review-title {
-    font-size: rem(18px);
-    font-weight: 600;
-    color: white;
-    text-transform: uppercase;
-    margin-bottom: rem(10px);
-  }
-
-  .intake-edit-review-list {
-    align-items: flex-start;
-
-    .intake-edit-review-list__item {
-      display: flex;
-      align-items: center;
-      gap: rem(8px);
-      font-size: rem(16px);
-      color: white;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.2s ease-in-out;
-    }
   }
 
   .intake-edit-item__btns-container {

@@ -9,7 +9,7 @@ const getUserFavoriteIntakes = asyncErrorCatcher(async (req: Request, res: Respo
   const loggedInUserId = getLoggedInUserIdFromReq();
   validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
 
-  const docs = await FavoriteIntakeModel.find({ userId: loggedInUserId });
+  const docs = await FavoriteIntakeModel.find({ userId: loggedInUserId }).sort("-sortOrder");
 
   res.send({
     status: "success",
@@ -34,7 +34,13 @@ const createFavoriteIntake = asyncErrorCatcher(async (req: Request, res: Respons
   });
 });
 
-const updateFavoriteIntake = updateOne(FavoriteIntakeModel, ["items", "isRecorded", "recordedAt"]);
+const updateFavoriteIntake = updateOne(FavoriteIntakeModel, [
+  "items",
+  "isRecorded",
+  "recordedAt",
+  "sortOrder",
+  "type",
+]);
 
 const removeFavoriteIntake = deleteOne(FavoriteIntakeModel);
 

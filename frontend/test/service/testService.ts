@@ -45,6 +45,7 @@ function createDailyData(): DayData {
     workouts: [createWorkout()],
     weight: 100,
     waist: 100,
+    isWeightWaistIgnored: false,
     totalDailyEnergyExpenditure: 100,
     targetCaloricIntake: 100,
     createdAt: new Date(),
@@ -54,20 +55,32 @@ function createDailyData(): DayData {
 
 function createIntake({
   id = createId(),
+  name = "test",
+  sortOrder = 0,
   isRecorded = false,
   recordedAt = new Date(),
   items = [createIntakeItem()],
+  userId = "testUserId",
+  type = "food",
 }: {
   id?: string;
+  name?: string;
+  sortOrder?: number;
   isRecorded?: boolean;
   recordedAt?: Date;
   items?: IntakeItem[];
+  userId?: string;
+  type?: "food" | "drink";
 }): CombinedIntake {
   return {
     id,
+    name,
+    sortOrder,
     isRecorded,
     recordedAt,
     items,
+    userId,
+    type,
   };
 }
 

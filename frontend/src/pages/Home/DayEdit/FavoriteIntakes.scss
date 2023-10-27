@@ -1,14 +1,38 @@
 @import "../../../styles/main.scss";
 
 .day-edit__favorite-intakes {
+  display: flex;
+  flex-direction: column;
+  gap: rem(10px);
+  align-items: center;
   width: 100%;
+
+  &__input {
+    width: 50%;
+    height: rem(40px);
+    padding: rem(5px) rem(20px);
+    border-radius: 25px;
+    font-size: rem(18px);
+
+    &::placeholder {
+      font-size: rem(18px);
+      color: var(--color-text-gray);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
 
   &__list {
     gap: rem(10px);
     width: 100%;
 
-    li {
+    &__item {
       width: 100%;
+      background-color: var(--color-background);
+      padding: rem(10px);
+      border-radius: 5px;
     }
   }
 }

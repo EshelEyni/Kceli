@@ -2,7 +2,7 @@ import { FC } from "react";
 import { IntakeEdit } from "./IntakeEdit";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../../components/Msg/ErrorMsg/ErrorMsg";
-import { ToggledElement, useDayEdit } from "./DayEditContext";
+import { DayEditTab, useDayEdit } from "./DayEditContext";
 import "./DayEdit.scss";
 import { DayEditFilter } from "./Filter";
 import { DayEditHeader } from "./Header";
@@ -13,23 +13,15 @@ import { WorkoutPreview } from "../../../components/Workout/WorkoutPreview/Worko
 import { NutritionQuery } from "./NutritionQuery";
 import { WaterEdit } from "./WaterEdit";
 import { FavoriteIntakes } from "./FavoriteIntakes";
+import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
 
 export const DayEdit: FC = () => {
-  const {
-    dailyData,
-    isLoading,
-    isSuccess,
-    isError,
-    isLoadingUpdate,
-    openedElement,
-    backgroundColor,
-  } = useDayEdit();
-
+  const { dailyData, isLoading, isSuccess, isError, isLoadingUpdate, openedTab } = useDayEdit();
+  const { backgroundColor } = useGetColorByCalories();
   const showContent = isSuccess && dailyData && !isLoadingUpdate && !isLoading;
   const isLoaderShown = isLoading || isLoadingUpdate;
   const isListShown =
-    openedElement === ToggledElement.IntakeList ||
-    openedElement === ToggledElement.UnRecordedIntakeList;
+    openedTab === DayEditTab.IntakeList || openedTab === DayEditTab.UnRecordedIntakeList;
 
   return (
     <section
@@ -43,18 +35,18 @@ export const DayEdit: FC = () => {
         <>
           <DayEditHeader />
           <DayEditFilter />
-          {openedElement === ToggledElement.WeightWaistInput && <WeightWaistInput />}
-          {openedElement === ToggledElement.IntakeEdit && <IntakeEdit />}
-          {openedElement === ToggledElement.Workouts && (
+          {openedTab === DayEditTab.WeightWaistInput && <WeightWaistInput />}
+          {openedTab === DayEditTab.IntakeEdit && <IntakeEdit />}
+          {openedTab === DayEditTab.Workouts && (
             <List
               items={dailyData.workouts}
               render={item => <WorkoutPreview workout={item} isDayEdit={true} key={item.id} />}
             />
           )}
-          {openedElement === ToggledElement.FavoriteIntake && <FavoriteIntakes />}
+          {openedTab === DayEditTab.FavoriteIntake && <FavoriteIntakes />}
           {isListShown && <IntakeList />}
-          {openedElement === ToggledElement.Query && <NutritionQuery />}
-          {openedElement === ToggledElement.Water && <WaterEdit />}
+          {openedTab === DayEditTab.Query && <NutritionQuery />}
+          {openedTab === DayEditTab.Water && <WaterEdit />}
         </>
       )}
     </section>

@@ -24,6 +24,10 @@ const dailyDataSchema = new Schema<IDailyData>(
     waist: {
       type: Number,
     },
+    isWeightWaistIgnored: {
+      type: Boolean,
+      default: false,
+    },
     totalDailyEnergyExpenditure: {
       type: Number,
     },

@@ -29,8 +29,10 @@ export interface IntakeItem extends BasicIntakeItem {
 
 export interface BasicIntake {
   id: string;
+  name: string;
   isRecorded: boolean;
   recordedAt: Date | null;
+  type: "food" | "drink";
 }
 
 export interface NewIntake extends BasicIntake {
@@ -43,6 +45,7 @@ export interface Intake extends BasicIntake {
 
 export interface FavoriteIntake extends Intake {
   userId: string;
+  sortOrder: number;
 }
 
 export type CombinedIntake = NewIntake | Intake | FavoriteIntake;

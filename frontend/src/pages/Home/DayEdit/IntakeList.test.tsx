@@ -4,7 +4,7 @@ import "@testing-library/jest-dom/vitest";
 import { IntakeList } from "./IntakeList";
 import { mockUseDayEdit } from "../../../../test/service/mockService";
 import testService from "../../../../test/service/testService";
-import { ToggledElement } from "./DayEditContext";
+import { DayEditTab } from "./DayEditContext";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { DayData } from "../../../../../shared/types/dayData";
 import { getCleanTime } from "../../../services/util/utilService";
@@ -24,7 +24,7 @@ describe("Intake List", () => {
       testService.createIntake({ isRecorded: true, recordedAt: new Date("2021-01-03") }),
     ];
 
-    mockUseDayEdit({ recordedIntakes, openedElement: ToggledElement.IntakeList });
+    mockUseDayEdit({ recordedIntakes, openedTab: DayEditTab.IntakeList });
     render(<IntakeList />);
 
     expect(screen.getAllByTestId("intake-preview").length).toBe(3);
@@ -37,7 +37,7 @@ describe("Intake List", () => {
 
     const { dailyData: dailyData1 } = mockUseDayEdit({
       recordedIntakes,
-      openedElement: ToggledElement.IntakeList,
+      openedTab: DayEditTab.IntakeList,
     });
 
     const totalCalories1 = calorieUtilService.getTotalCaloriesFromDailyData({
@@ -53,7 +53,7 @@ describe("Intake List", () => {
 
     const { dailyData: dailyData2 } = mockUseDayEdit({
       recordedIntakes,
-      openedElement: ToggledElement.UnRecordedIntakeList,
+      openedTab: DayEditTab.UnRecordedIntakeList,
     });
 
     const totalCalories2 = calorieUtilService.getTotalCaloriesFromDailyData({
@@ -99,7 +99,7 @@ describe("Intake List", () => {
       (intake, i) => `Intake ${i + 1}# - ${getCleanTime(intake.recordedAt as unknown as string)}`
     );
 
-    mockUseDayEdit({ recordedIntakes, openedElement: ToggledElement.IntakeList });
+    mockUseDayEdit({ recordedIntakes, openedTab: DayEditTab.IntakeList });
     render(<IntakeList />);
 
     const elements = screen.getAllByText(/Intake \d+#/);

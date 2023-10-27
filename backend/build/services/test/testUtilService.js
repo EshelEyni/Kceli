@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMockUSDAApiResponse = exports.getMockNinjaApiResponse = exports.getMockDailyData = exports.deleteTestUser = exports.getMockedUser = exports.getMongoId = exports.getMockWorkoutItem = exports.getMockWorkout = exports.getMockNewIntakeItem = exports.getNewMockIntake = exports.createTestDailyData = exports.createValidUserCreds = exports.createTestUser = exports.deleteManyTestUsers = exports.createManyTestUsers = exports.mockGetLoggedInUserIdFromReq = exports.getLoginTokenStrForTest = void 0;
+exports.getMockUSDAApiResponse = exports.getMockNinjaApiResponse = exports.getMockDailyData = exports.deleteTestUser = exports.getMockedUser = exports.getMongoId = exports.getMockWorkoutItem = exports.getMockWorkout = exports.getMockIntakeItem = exports.getMockIntake = exports.getMockNewIntakeItem = exports.getNewMockIntake = exports.createTestDailyData = exports.createValidUserCreds = exports.createTestUser = exports.deleteManyTestUsers = exports.createManyTestUsers = exports.mockGetLoggedInUserIdFromReq = exports.getLoginTokenStrForTest = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 require("dotenv").config();
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -124,6 +124,8 @@ function getNewMockIntake() {
         items: [getMockNewIntakeItem()],
         isRecorded: true,
         recordedAt: null,
+        name: "test",
+        type: "food",
     };
 }
 exports.getNewMockIntake = getNewMockIntake;
@@ -136,6 +138,27 @@ function getMockNewIntakeItem() {
     };
 }
 exports.getMockNewIntakeItem = getMockNewIntakeItem;
+function getMockIntake() {
+    return {
+        id: getMongoId(),
+        items: [getMockIntakeItem()],
+        isRecorded: true,
+        recordedAt: null,
+        name: "test",
+        type: "food",
+    };
+}
+exports.getMockIntake = getMockIntake;
+function getMockIntakeItem() {
+    return {
+        id: getMongoId(),
+        name: "test",
+        unit: intake_1.MeasurementUnit.UNIT,
+        quantity: 1,
+        calories: 1,
+    };
+}
+exports.getMockIntakeItem = getMockIntakeItem;
 function getMockWorkout() {
     return {
         id: getMongoId(),
