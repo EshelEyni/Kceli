@@ -98,7 +98,7 @@ export const FavoriteIntakes: FC = () => {
                         style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                         className="day-edit__favorite-intakes__list__item"
                       >
-                        <IntakePreview intake={intake} isFavorite={true} />
+                        <IntakePreview intake={intake} />
                       </li>
                     )}
                   </Draggable>

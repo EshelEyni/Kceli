@@ -7,13 +7,16 @@ import { useCreateDay } from "../../src/hooks/useCreateDay";
 import { DayEditTab, useDayEdit } from "../../src/pages/Home/DayEdit/DayEditContext";
 import testService from "./testService";
 import { useDeleteWorkout } from "../../src/hooks/useDeleteWorkout";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { DayData } from "../../../shared/types/dayData";
 import { Intake, NewIntakeItem } from "../../../shared/types/intake";
 import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
 import { useIntakeItemEdit } from "../../src/pages/Home/DayEdit/IntakeItemEditContext";
 import { useAddFavoriteIntake } from "../../src/hooks/useAddFavoriteIntake";
 import { useGetUserFavoriteIntakes } from "../../src/hooks/useGetUserFavoriteIntakes";
+import { useUpdateFavoriteIntake } from "../../src/hooks/useUpdateFavoriteIntake";
+import { useGetColorByCalories } from "../../src/hooks/useGetColorByCalories";
+import { useDeleteFavoriteIntake } from "../../src/hooks/useDeleteFavoriteIntake";
 
 export type MockUseDayEdit = {
   dailyData?: DayData | null;
@@ -48,6 +51,8 @@ export type MockUseDayEdit = {
   isLoadingFavoriteIntakes?: boolean;
   isSuccessFavoriteIntakes?: boolean;
   isErrorFavoriteIntakes?: boolean;
+  isEmptyFavoriteIntakes?: boolean;
+  setSearchParams?: any;
 };
 
 export type MockUseIntakeItemEdit = {
@@ -92,10 +97,10 @@ function mockUseUpdateTodayData({
 }
 
 function mockUseGetTodayData({
-  dailyData,
-  isLoading,
-  isSuccess,
-  isError,
+  dailyData = testService.createDailyData({}),
+  isLoading = false,
+  isSuccess = true,
+  isError = false,
 }: {
   dailyData?: any;
   isLoading?: boolean;
@@ -103,6 +108,8 @@ function mockUseGetTodayData({
   isError?: boolean;
 }) {
   (useGetTodayData as Mock).mockReturnValue({ dailyData, isLoading, isSuccess, isError });
+
+  return { dailyData, isLoading, isSuccess, isError };
 }
 
 function mockUseAddFavoriteIntake({
@@ -120,12 +127,27 @@ function mockUseAddFavoriteIntake({
   return { addFavoriteIntake, isLoading };
 }
 
+function mockUseDeleteFavoriteIntake({
+  removeFavoriteIntake = vi.fn(),
+  isLoading = false,
+}: {
+  removeFavoriteIntake?: any;
+  isLoading?: boolean;
+}) {
+  (useDeleteFavoriteIntake as Mock).mockReturnValue({
+    removeFavoriteIntake,
+    isLoading,
+  });
+
+  return { removeFavoriteIntake, isLoading };
+}
+
 function mockUseCreateDay(value: { createDay: () => any; isLoading: boolean }) {
   (useCreateDay as Mock).mockReturnValue(value);
 }
 
 function mockUseDayEdit({
-  dailyData = testService.createDailyData(),
+  dailyData = testService.createDailyData({}),
   isLoading = false,
   isSuccess = true,
   isError = false,
@@ -157,6 +179,8 @@ function mockUseDayEdit({
   isLoadingFavoriteIntakes = false,
   isSuccessFavoriteIntakes = false,
   isErrorFavoriteIntakes = false,
+  isEmptyFavoriteIntakes = false,
+  setSearchParams = vi.fn(),
 }: MockUseDayEdit): MockUseDayEdit {
   const value = {
     dailyData,
@@ -179,7 +203,7 @@ function mockUseDayEdit({
     setIntake,
     calConsumedPct,
     calRemainingPct,
-    currIntakeItemId: currIntakeItemId || intake.items[0].id,
+    currIntakeItemId: currIntakeItemId ?? intake.items[0].id,
     setCurrIntakeItemId,
     chatGPTQuery,
     setChatGPTQuery,
@@ -191,6 +215,8 @@ function mockUseDayEdit({
     isLoadingFavoriteIntakes,
     isSuccessFavoriteIntakes,
     isErrorFavoriteIntakes,
+    isEmptyFavoriteIntakes,
+    setSearchParams,
   };
 
   (useDayEdit as Mock).mockReturnValue(value);
@@ -199,7 +225,7 @@ function mockUseDayEdit({
 }
 
 function mockUseIntakeItemEdit({
-  intakeItem = testService.createIntakeItem(),
+  intakeItem = testService.createIntakeItem({}),
   isOneItem = false,
   isCurrIntakeItem = false,
   isManual = false,
@@ -268,18 +294,31 @@ function mockUseNavigate(navigate = vi.fn()) {
   return navigate;
 }
 
+function mockUseSearchParams({
+  searchParams = { get: vi.fn() },
+  setSearchParams = vi.fn(),
+}: {
+  searchParams?: any;
+  setSearchParams?: any;
+}) {
+  (useSearchParams as Mock).mockImplementation(() => [searchParams, setSearchParams]);
+  return { searchParams, setSearchParams };
+}
+
 function mockUseGetUserFavoriteIntakes({
   favoriteIntakes = [testService.createIntake({}), testService.createIntake({})] as Intake[],
   error = null,
   isLoading = false,
   isSuccess = false,
   isError = false,
+  isEmpty = false,
 }: {
   favoriteIntakes?: Intake[];
   error?: unknown;
   isLoading?: boolean;
   isSuccess?: boolean;
   isError?: boolean;
+  isEmpty?: boolean;
 }) {
   (useGetUserFavoriteIntakes as Mock).mockReturnValue({
     favoriteIntakes,
@@ -287,9 +326,30 @@ function mockUseGetUserFavoriteIntakes({
     isLoading,
     isSuccess,
     isError,
+    isEmpty,
   });
 
   return { favoriteIntakes, error, isLoading, isSuccess, isError };
+}
+
+function mockUseUpdateFavoriteIntake({
+  updateFavoriteIntake = vi.fn(),
+  isLoading = false,
+}: {
+  updateFavoriteIntake?: any;
+  isLoading?: boolean;
+}) {
+  (useUpdateFavoriteIntake as Mock).mockReturnValue({
+    updateFavoriteIntake,
+    isLoading,
+  });
+
+  return { updateFavoriteIntake, isLoading };
+}
+
+function mockUseGetColorByCalories({ backgroundColor = "white" }: { backgroundColor?: string }) {
+  (useGetColorByCalories as Mock).mockReturnValue(backgroundColor);
+  return { backgroundColor };
 }
 
 export {
@@ -303,4 +363,8 @@ export {
   mockUseIntakeItemEdit,
   mockUseAddFavoriteIntake,
   mockUseGetUserFavoriteIntakes,
+  mockUseUpdateFavoriteIntake,
+  mockUseGetColorByCalories,
+  mockUseDeleteFavoriteIntake,
+  mockUseSearchParams,
 };

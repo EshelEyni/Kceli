@@ -87,47 +87,6 @@ describe("Day Router: GET Actions", () => {
     });
   });
 
-  fdescribe("GET /calenderData", () => {
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it("should return 200 and an array of days", async () => {
-      await DailyDataModel.create({ userId: validUser.id });
-      const res = await request(app).get("/calenderData").set("Cookie", [token]);
-      expect(res.statusCode).toEqual(200);
-      expect(res.body).toEqual({
-        status: "success",
-        requestedAt: expect.any(String),
-        results: expect.any(Number),
-        data: expect.any(Array),
-      });
-      const days = res.body.data;
-      expect(days.length).toBeGreaterThan(0);
-      days.forEach(assertDailyData);
-    });
-
-    it("should return 200 and an array of days if days match the query", async () => {
-      await DailyDataModel.create({ userId: validUser.id });
-      const currentDate = new Date();
-      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      const [startDate, endDate] = [firstDayOfMonth, lastDayOfMonth];
-      const url = `?date[gte]=${startDate}&date[lte]=${endDate}`;
-      const res = await request(app).get(url).set("Cookie", [token]);
-      expect(res.statusCode).toEqual(200);
-      expect(res.body).toEqual({
-        status: "success",
-        requestedAt: expect.any(String),
-        results: expect.any(Number),
-        data: expect.any(Array),
-      });
-      const days = res.body.data;
-      expect(days.length).toBeGreaterThan(0);
-      days.forEach(assertDailyData);
-    });
-  });
-
   describe("GET /:id", () => {
     let dailtDataId: string;
 
@@ -168,21 +127,10 @@ describe("Day Router: GET Actions", () => {
       jest.clearAllMocks();
     });
 
-    it("should return 200 and today's day if a day with the given ID exists", async () => {
+    it("should return 200 and the last day user inserted", async () => {
       await DailyDataModel.create({ userId: validUser.id });
       const res = await request(app).get(`/today`).set("Cookie", [token]);
       expect(res.statusCode).toEqual(200);
-      expect(res.body).toEqual({
-        status: "success",
-        data: expect.any(Object),
-      });
-      assertDailyData(res.body.data);
-      await DailyDataModel.deleteMany({});
-    });
-
-    it("should return 201 if a day with the given ID does not exist", async () => {
-      const res = await request(app).get(`/today`).set("Cookie", [token]);
-      expect(res.statusCode).toEqual(201);
       expect(res.body).toEqual({
         status: "success",
         data: expect.any(Object),
@@ -213,6 +161,50 @@ describe("Day Router: GET Actions", () => {
           message: "The user belonging to this token does not exist.",
         })
       );
+    });
+  });
+
+  describe("GET /calenderData", () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it("should return 200 and an array of days", async () => {
+      await DailyDataModel.create({ userId: validUser.id });
+      const month = new Date().getMonth() + 1;
+      const year = new Date().getFullYear();
+      const url = `/calenderData?month=${month}&year=${year}`;
+      const res = await request(app).get(url).set("Cookie", [token]);
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual({
+        status: "success",
+        requestedAt: expect.any(String),
+        results: expect.any(Number),
+        data: expect.any(Array),
+      });
+      const days = res.body.data;
+      expect(days.length).toBeGreaterThan(0);
+      days.forEach(assertDailyData);
+    });
+
+    it("should return 200 and an array of days if days match the query", async () => {
+      await DailyDataModel.create({ userId: validUser.id });
+      const currentDate = new Date();
+      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      const [startDate, endDate] = [firstDayOfMonth, lastDayOfMonth];
+      const url = `?date[gte]=${startDate}&date[lte]=${endDate}`;
+      const res = await request(app).get(url).set("Cookie", [token]);
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual({
+        status: "success",
+        requestedAt: expect.any(String),
+        results: expect.any(Number),
+        data: expect.any(Array),
+      });
+      const days = res.body.data;
+      expect(days.length).toBeGreaterThan(0);
+      days.forEach(assertDailyData);
     });
   });
 
@@ -252,6 +244,35 @@ describe("Day Router: GET Actions", () => {
         expect.objectContaining({
           status: "fail",
           message: `No daily data was found with the id: ${dailtDataId}`,
+        })
+      );
+    });
+  });
+
+  describe("POST /", () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it("should return 201 and the created day", async () => {
+      const res = await request(app).post(`/`).set("Cookie", [token]).send({ date: new Date() });
+
+      expect(res.statusCode).toEqual(201);
+      expect(res.body).toEqual({
+        status: "success",
+        data: expect.any(Object),
+      });
+      assertDailyData(res.body.data);
+    });
+
+    it("should return 400 if date is not provided", async () => {
+      const res = await request(app).post(`/`).set("Cookie", [token]).send({});
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          status: "fail",
+          message: "Please provide date",
         })
       );
     });

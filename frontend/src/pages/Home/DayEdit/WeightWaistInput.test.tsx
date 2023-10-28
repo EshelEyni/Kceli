@@ -25,7 +25,7 @@ describe("Weight Waist Input", () => {
 
   it("should render form", () => {
     const dailyData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       weight: "",
       waist: "",
     } as any;
@@ -41,7 +41,7 @@ describe("Weight Waist Input", () => {
 
   it("should update daily data when submiting form", async () => {
     const dailyData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       weight: "",
       waist: "",
     } as any;
@@ -69,7 +69,7 @@ describe("Weight Waist Input", () => {
 
   it("should render weight and waist", () => {
     const dailyData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       weight: 80,
       waist: 80,
     };

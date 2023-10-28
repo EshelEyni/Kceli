@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MeasurementUnit } from "../../../../shared/types/intake";
 import openAIService from "./openAIService";
 import { Configuration, OpenAIApi } from "openai";
+import { getMockIntakeItem } from "../test/testUtilService";
 
 jest.mock("openai", () => {
   const mockOpenAIConfiguration = {
@@ -43,7 +43,7 @@ describe("Open AI Service", () => {
 
       openai.createChatCompletion = jest.fn().mockResolvedValue(response);
 
-      const result = await openAIService.getText(prompt, "gpt-4");
+      const result = await openAIService.getText(prompt);
       expect(openai.createChatCompletion).toHaveBeenCalledWith({
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
@@ -80,9 +80,7 @@ describe("Open AI Service", () => {
 
       openai.createChatCompletion = jest.fn().mockResolvedValue(response);
 
-      await expect(openAIService.getText(prompt, "gpt-4")).rejects.toThrow(
-        "message is falsey"
-      );
+      await expect(openAIService.getText(prompt)).rejects.toThrow("message is falsey");
     });
 
     it("should throw an error if message is falsey for default model", async () => {
@@ -100,12 +98,7 @@ describe("Open AI Service", () => {
   });
 
   fdescribe("getCaloriesForIntakeItem", () => {
-    const intakeItem = {
-      tempId: "tempId",
-      name: "Sample intake item",
-      quantity: 1,
-      unit: MeasurementUnit.CUP,
-    };
+    const intakeItem = getMockIntakeItem();
 
     beforeEach(() => {
       jest.resetAllMocks();

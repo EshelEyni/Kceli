@@ -37,7 +37,7 @@ describe("Day Edit", () => {
   it("should render content when showContent is true", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
     });
 
@@ -49,7 +49,7 @@ describe("Day Edit", () => {
   it("should render weight waist input when openedTab is WeightWaistInput", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
       openedTab: "WeightWaistInput",
     });
@@ -62,7 +62,7 @@ describe("Day Edit", () => {
   it("should render intake edit when openedTab is IntakeEdit", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
       openedTab: "IntakeEdit",
     });
@@ -77,7 +77,7 @@ describe("Day Edit", () => {
     mockUseNavigate();
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
       openedTab: "Workouts",
     });
@@ -90,7 +90,7 @@ describe("Day Edit", () => {
   it("should render intake list when openedTab is IntakeList", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
       openedTab: "IntakeList",
     });
@@ -103,7 +103,7 @@ describe("Day Edit", () => {
   it("should render unrecorded intake list when openedTab is UnRecordedIntakeList", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
       openedTab: "UnRecordedIntakeList",
     });
@@ -116,7 +116,7 @@ describe("Day Edit", () => {
   it("should render favorite intake list when openedTab is FavoriteIntakeList", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
       openedTab: "FavoriteIntake",
     });
@@ -129,7 +129,7 @@ describe("Day Edit", () => {
   it("should render nutrition query when openedTab is Query", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
       openedTab: "Query",
     });
@@ -142,7 +142,7 @@ describe("Day Edit", () => {
   it("should render water edit when openedTab is Water", () => {
     mockUseDayEdit({
       isSuccess: true,
-      dailyData: testService.createDailyData(),
+      dailyData: testService.createDailyData({}),
       isLoadingUpdate: false,
       openedTab: "Water",
     });

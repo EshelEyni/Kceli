@@ -4,15 +4,19 @@ import "./PreSaveCalorieCount.scss";
 
 export const PreSaveCalorieCount: FC = () => {
   const { intake, consumedCalories, remainingCalories } = useDayEdit();
+
+  if (!intake || !intake.isRecorded) return null;
+
   const intakeTotalCalorie = intake.items.reduce((acc, curr) => {
     if (curr.calories === undefined) return acc;
     return acc + curr.calories;
   }, 0);
 
+  if (intakeTotalCalorie <= 0) return null;
+
   const preSaveConsumedCalories = consumedCalories + intakeTotalCalorie;
   const preSaveRemainingCalories = remainingCalories - intakeTotalCalorie;
 
-  if (intakeTotalCalorie <= 0) return null;
   return (
     <section className="pre-save-calorie-count">
       <p>

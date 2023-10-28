@@ -11,15 +11,19 @@
 
   &__header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: rem(20px);
+    flex-direction: column;
+    gap: rem(10px);
     width: 100%;
     margin-bottom: rem(10px);
 
+    &__input-name-btn-type {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     &__name-input {
-      flex-grow: 1;
       padding: rem(12px);
       border-radius: 5px;
       font-size: rem(20px);

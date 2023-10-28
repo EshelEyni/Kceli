@@ -37,7 +37,7 @@ async function getCaloriesForIntakeItem(intakeItem: IIntakeItem | IntakeItem): P
   const text = message.content as string;
   const calories = parseInt(text);
   if (isNaN(calories)) throw new AppError("calories is NaN", 500);
-  return calories;
+  return Math.round(calories);
 }
 
 export default {

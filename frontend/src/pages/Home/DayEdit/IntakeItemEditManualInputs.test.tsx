@@ -24,7 +24,7 @@ describe("IntakeItemEditManualInputs", () => {
   it("should have correct values", () => {
     const { intakeItem } = mockUseIntakeItemEdit({
       intakeItem: {
-        ...testService.createIntakeItem(),
+        ...testService.createIntakeItem({}),
         calories: 100,
         caloriesPer100g: 200,
       },

@@ -16,7 +16,7 @@ describe("Day Edit Filter", () => {
 
   it("should render all filter buttons where isShown prop is not provided", () => {
     const dailyData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       intakes: [],
       workouts: [],
     };
@@ -32,7 +32,7 @@ describe("Day Edit Filter", () => {
 
   it("should render intakes button if there are recorded intakes", () => {
     const dailyData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       intakes: [testService.createIntake({ isRecorded: true })],
       workouts: [],
     };
@@ -45,7 +45,7 @@ describe("Day Edit Filter", () => {
 
   it("should render unrecorded button if there are unrecorded intakes", () => {
     const dailyData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       intakes: [testService.createIntake({ isRecorded: false })],
       workouts: [],
     };
@@ -58,7 +58,7 @@ describe("Day Edit Filter", () => {
 
   it("should render workouts button if there are workouts", () => {
     const dailyData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       intakes: [],
       workouts: [testService.createWorkout()],
     };
@@ -71,7 +71,7 @@ describe("Day Edit Filter", () => {
 
   it("should call setOpenedTab with proper value on button click", () => {
     const dailyData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       intakes: [
         testService.createIntake({ isRecorded: true }),
         testService.createIntake({ isRecorded: false }),
@@ -79,7 +79,7 @@ describe("Day Edit Filter", () => {
       workouts: [testService.createWorkout()],
     };
 
-    const { setOpenedTab } = mockUseDayEdit({ dailyData });
+    const { setOpenedTab, setSearchParams } = mockUseDayEdit({ dailyData });
     render(<DayEditFilter />);
 
     const filterEl = screen.getByTestId("day-edit-filter");
@@ -90,7 +90,10 @@ describe("Day Edit Filter", () => {
       const btn = btns[i];
       const toggledElement = toggledElementValues[i];
       fireEvent.click(btn);
+      const searchParams = new URLSearchParams({ tab: toggledElement });
+
       expect(setOpenedTab).toHaveBeenCalledWith(toggledElement);
+      expect(setSearchParams).toHaveBeenCalledWith(searchParams);
     }
   });
 });

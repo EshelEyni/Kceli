@@ -148,6 +148,10 @@ describe("auth Service", () => {
       email: "test@example.com",
       password: "test-password",
       passwordConfirm: "test-password",
+      birthdate: new Date(),
+      gender: "male",
+      height: 180,
+      weight: 80,
     };
 
     const mockUser = { id: "1", username: "Test User", email: "test@example.com" };

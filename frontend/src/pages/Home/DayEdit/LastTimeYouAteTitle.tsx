@@ -10,7 +10,7 @@ export const LastTimeYouAteTitle: FC = () => {
     intake => intake.isRecorded && intake.type === "food"
   );
   if (!lastMeal) return null;
-  const lastMealTime = formatDateToRelativeTime(lastMeal.recordedAt as unknown as string);
+  const lastMealTime = formatDateToRelativeTime(lastMeal.recordedAt as string);
 
   return <h5 className="last-time-you-ate-title">Last time you ate: {lastMealTime}</h5>;
 };

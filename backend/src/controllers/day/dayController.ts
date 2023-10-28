@@ -29,6 +29,8 @@ const getCalenderData = asyncErrorCatcher(async (req: Request, res: Response) =>
 
   res.send({
     status: "success",
+    requestedAt: new Date().toISOString(),
+    results: docs.length,
     data: docs,
   });
 });

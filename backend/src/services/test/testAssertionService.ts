@@ -7,6 +7,7 @@ import {
   NewIntake,
   NewIntakeItem,
 } from "../../../../shared/types/intake";
+import { BasicWorkoutItem, Workout } from "../../../../shared/types/workout";
 
 function assertUser(user: User) {
   expect(user).toEqual(
@@ -64,4 +65,37 @@ function assertIntakeItem(item: NewIntakeItem | IntakeItem) {
   );
 }
 
-export { assertUser, assertDailyData, assertIntake, assertIntakeItem, assertFavoriteIntake };
+function assertWorkout(workout: Workout) {
+  expect(workout).toEqual(
+    expect.objectContaining({
+      id: expect.any(String),
+      userId: expect.any(String),
+      description: expect.any(String),
+      items: expect.any(Array),
+    })
+  );
+
+  for (const item of workout.items) {
+    assertWorkoutItem(item);
+  }
+}
+
+function assertWorkoutItem(item: BasicWorkoutItem) {
+  expect(item).toEqual(
+    expect.objectContaining({
+      name: expect.any(String),
+      isStarted: expect.any(Boolean),
+      isCompleted: expect.any(Boolean),
+    })
+  );
+}
+
+export {
+  assertUser,
+  assertDailyData,
+  assertIntake,
+  assertIntakeItem,
+  assertFavoriteIntake,
+  assertWorkout,
+  assertWorkoutItem,
+};

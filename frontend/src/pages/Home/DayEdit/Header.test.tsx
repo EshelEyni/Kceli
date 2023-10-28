@@ -23,7 +23,7 @@ describe("Day Edit Header", () => {
     }).format(date);
 
     mockUseDayEdit({
-      dailyData: { ...testService.createDailyData(), date },
+      dailyData: { ...testService.createDailyData({}), date },
     });
     render(<DayEditHeader />);
 

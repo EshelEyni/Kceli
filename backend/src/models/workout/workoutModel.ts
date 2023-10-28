@@ -1,14 +1,14 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { IWorkout } from "../../types/iTypes";
+import { IWorkout, IWorkoutItem } from "../../types/iTypes";
 import { WeightUnit } from "../../../../shared/types/workout";
 
-function validateAerobicFields(this: any, value: string) {
+function validateAerobicFields(this: IWorkoutItem, value: string) {
   if (value !== "aerobic") return true;
   if (!this.durationInMin) throw new Error("Duration is required for aerobic type");
   return true;
 }
 
-function validateAnaerobicFields(this: any, value: string) {
+function validateAnaerobicFields(this: IWorkoutItem, value: string) {
   if (value !== "anaerobic") return true;
 
   if (!this.sets) throw new Error("Sets are required for anaerobic type");
@@ -20,7 +20,7 @@ function validateAnaerobicFields(this: any, value: string) {
   return true;
 }
 
-function validateSupersetFields(this: any, value: string) {
+function validateSupersetFields(this: IWorkoutItem, value: string) {
   if (value !== "superset") return true;
 
   if (!this.sets) throw new Error("Sets are required for superset type");
@@ -30,7 +30,7 @@ function validateSupersetFields(this: any, value: string) {
   return true;
 }
 
-const workoutItemSchema = new Schema(
+const workoutItemSchema = new Schema<IWorkoutItem>(
   {
     name: {
       type: String,

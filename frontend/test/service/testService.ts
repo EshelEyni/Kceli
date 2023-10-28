@@ -14,6 +14,29 @@ type CreateTestNutritionQueryParams = {
   error?: NutritionQueryState["error"];
 };
 
+type MockDayData = {
+  id?: string;
+  userId?: string;
+  date?: Date;
+  intakes?: CombinedIntake[];
+  workouts?: Workout[];
+  weight?: number;
+  waist?: number;
+  isWeightWaistIgnored?: boolean;
+  totalDailyEnergyExpenditure?: number;
+  targetCaloricIntake?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+type MockIntakeItem = {
+  id?: string;
+  name?: string;
+  unit?: MeasurementUnit;
+  quantity?: number;
+  calories?: number;
+};
+
 function createUser(): User {
   return {
     id: "test",
@@ -36,20 +59,33 @@ function createUser(): User {
   };
 }
 
-function createDailyData(): DayData {
+function createDailyData({
+  id = createId(),
+  userId = "test",
+  date = new Date(),
+  intakes = [createIntake({})],
+  workouts = [createWorkout()],
+  weight = 100,
+  waist = 100,
+  isWeightWaistIgnored = false,
+  totalDailyEnergyExpenditure = 100,
+  targetCaloricIntake = 100,
+  createdAt = new Date(),
+  updatedAt = new Date(),
+}: MockDayData): DayData {
   return {
-    id: createId(),
-    userId: "test",
-    date: new Date(),
-    intakes: [createIntake({})],
-    workouts: [createWorkout()],
-    weight: 100,
-    waist: 100,
-    isWeightWaistIgnored: false,
-    totalDailyEnergyExpenditure: 100,
-    targetCaloricIntake: 100,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    id,
+    userId,
+    date,
+    intakes,
+    workouts,
+    weight,
+    waist,
+    isWeightWaistIgnored,
+    totalDailyEnergyExpenditure,
+    targetCaloricIntake,
+    createdAt,
+    updatedAt,
   };
 }
 
@@ -57,9 +93,9 @@ function createIntake({
   id = createId(),
   name = "test",
   sortOrder = 0,
-  isRecorded = false,
+  isRecorded = true,
   recordedAt = new Date(),
-  items = [createIntakeItem()],
+  items = [createIntakeItem({})],
   userId = "testUserId",
   type = "food",
 }: {
@@ -67,7 +103,7 @@ function createIntake({
   name?: string;
   sortOrder?: number;
   isRecorded?: boolean;
-  recordedAt?: Date;
+  recordedAt?: Date | string | null;
   items?: IntakeItem[];
   userId?: string;
   type?: "food" | "drink";
@@ -84,14 +120,14 @@ function createIntake({
   };
 }
 
-function createIntakeItem(): IntakeItem {
-  return {
-    id: "test",
-    name: "test",
-    unit: MeasurementUnit.GRAM,
-    quantity: 100,
-    calories: 100,
-  };
+function createIntakeItem({
+  id = "test",
+  name = "test",
+  unit = MeasurementUnit.GRAM,
+  quantity = 100,
+  calories = 100,
+}: MockIntakeItem): IntakeItem {
+  return { id, name, unit, quantity, calories };
 }
 
 function createWorkout(): Workout {

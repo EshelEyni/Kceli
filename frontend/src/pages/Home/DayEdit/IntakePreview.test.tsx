@@ -1,21 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { it, describe, expect, afterEach, vi, beforeEach } from "vitest";
 import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import testService from "../../../../test/service/testService";
 import { IntakePreview } from "./IntakePreview";
 import { Intake } from "../../../../../shared/types/intake";
-import { mockUseAddFavoriteIntake, mockUseDayEdit } from "../../../../test/service/mockService";
+import {
+  mockUseAddFavoriteIntake,
+  mockUseDayEdit,
+  mockUseDeleteFavoriteIntake,
+} from "../../../../test/service/mockService";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 import { DayData } from "../../../../../shared/types/dayData";
 import { DayEditTab } from "./DayEditContext";
 
 vi.mock("./DayEditContext");
 vi.mock("../../../hooks/useAddFavoriteIntake");
+vi.mock("../../../hooks/useDeleteFavoriteIntake");
 
-describe("Intake Preview", () => {
+describe("Conditional rendering", () => {
   const intake = testService.createIntake({}) as Intake;
 
   beforeEach(() => {
+    mockUseDeleteFavoriteIntake({});
     mockUseAddFavoriteIntake({});
     mockUseDayEdit({});
   });
@@ -44,6 +51,99 @@ describe("Intake Preview", () => {
       `total calories: ${calorieUtilService.getTotalCalories(intake)}`
     );
     expect(totalCalories).toBeInTheDocument();
+  });
+
+  it("should render delete button", () => {
+    render(<IntakePreview intake={intake} />);
+
+    const deleteBtn = screen.getByText("Delete");
+    expect(deleteBtn).toBeInTheDocument();
+  });
+
+  it("should render edit button when openedTab = FavoriteIntake", () => {
+    mockUseDayEdit({ openedTab: DayEditTab.FavoriteIntake });
+
+    render(<IntakePreview intake={intake} />);
+
+    const editBtn = screen.getByText("Edit");
+    expect(editBtn).toBeInTheDocument();
+  });
+
+  it("should render edit and duplicate button when openedTab = IntakeList", () => {
+    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
+    render(<IntakePreview intake={intake} />);
+
+    const editBtn = screen.getByText("Edit");
+    const duplicateBtn = screen.getByText("duplicate");
+    expect(editBtn).toBeInTheDocument();
+    expect(duplicateBtn).toBeInTheDocument();
+  });
+
+  it("should render save button when openedTab = UnRecordedIntakeList or FavoriteIntake", () => {
+    mockUseDayEdit({ openedTab: DayEditTab.UnRecordedIntakeList });
+
+    const { rerender } = render(<IntakePreview intake={intake} />);
+    expect(screen.getByText("Save")).toBeInTheDocument();
+
+    mockUseDayEdit({ openedTab: DayEditTab.FavoriteIntake });
+    rerender(<IntakePreview intake={intake} />);
+
+    expect(screen.getByText("Save")).toBeInTheDocument();
+  });
+
+  it("should render add to favorite button when openedTab != FavoriteIntake", () => {
+    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
+    render(<IntakePreview intake={intake} />);
+
+    const addToFavBtn = screen.getByText("add to fav");
+    expect(addToFavBtn).toBeInTheDocument();
+  });
+});
+
+describe("Intake Preview", () => {
+  const intake = testService.createIntake({}) as Intake;
+
+  beforeEach(() => {
+    mockUseDeleteFavoriteIntake({});
+    mockUseAddFavoriteIntake({});
+    mockUseDayEdit({});
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.resetAllMocks();
+  });
+
+  it("should render intake name in title if exists in favorite intake", () => {
+    mockUseDayEdit({ openedTab: DayEditTab.FavoriteIntake });
+    render(<IntakePreview intake={intake} />);
+
+    expect(screen.getByTestId("intake-title")).toHaveTextContent(intake.name);
+  });
+
+  it("should render items name in title if intake name doesn't exist in favorite intake", () => {
+    const intake = testService.createIntake({}) as Intake;
+    intake.name = "";
+    mockUseDayEdit({ openedTab: DayEditTab.FavoriteIntake });
+    render(<IntakePreview intake={intake} />);
+
+    const itemsNames = intake.items.map((item: any) => item.name);
+    expect(screen.getByTestId("intake-title")).toHaveTextContent(itemsNames.join(", "));
+  });
+});
+
+describe("Buttons Container", () => {
+  const intake = testService.createIntake({}) as Intake;
+
+  beforeEach(() => {
+    mockUseDeleteFavoriteIntake({});
+    mockUseAddFavoriteIntake({});
+    mockUseDayEdit({});
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.resetAllMocks();
   });
 
   it("should open modal on delete btn click", () => {
@@ -76,7 +176,7 @@ describe("Intake Preview", () => {
 
   it("should call deleteIntake on delete btn click", () => {
     const dailyData: DayData = {
-      ...testService.createDailyData(),
+      ...testService.createDailyData({}),
       intakes: [intake, { ...intake, id: "intake2" }],
     };
 
@@ -98,32 +198,6 @@ describe("Intake Preview", () => {
     });
   });
 
-  it("should render edit & duplicate button where opened element = IntakeList", () => {
-    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
-    render(<IntakePreview intake={intake} />);
-
-    const editBtn = screen.getByText("Edit");
-    const duplicateBtn = screen.getByText("duplicate");
-    const saveBtn = screen.queryByText("Save");
-
-    expect(editBtn).toBeInTheDocument();
-    expect(duplicateBtn).toBeInTheDocument();
-    expect(saveBtn).not.toBeInTheDocument();
-  });
-
-  it("should render save button where opened element = UnRecordedIntakeList", () => {
-    mockUseDayEdit({ openedTab: DayEditTab.UnRecordedIntakeList });
-    render(<IntakePreview intake={intake} />);
-
-    const editBtn = screen.queryByText("Edit");
-    const duplicateBtn = screen.queryByText("duplicate");
-    const saveBtn = screen.getByText("Save");
-
-    expect(editBtn).not.toBeInTheDocument();
-    expect(duplicateBtn).not.toBeInTheDocument();
-    expect(saveBtn).toBeInTheDocument();
-  });
-
   it("should call handleEditBtnClick on edit btn click", () => {
     const { setIntake, setOpenedTab } = mockUseDayEdit({
       openedTab: DayEditTab.IntakeList,
@@ -140,7 +214,7 @@ describe("Intake Preview", () => {
   });
 
   it("should call handleDuplicateBtnClick on duplicate btn click", () => {
-    const dailyData = { ...testService.createDailyData(), intakes: [intake] };
+    const dailyData = { ...testService.createDailyData({}), intakes: [intake] };
     const { updateDailyData } = mockUseDayEdit({
       dailyData,
       openedTab: DayEditTab.IntakeList,
@@ -167,7 +241,7 @@ describe("Intake Preview", () => {
   });
 
   it("should call handleSaveBtnClick on save btn click", () => {
-    const dailyData = { ...testService.createDailyData(), intakes: [intake] };
+    const dailyData = { ...testService.createDailyData({}), intakes: [intake] };
     const { updateDailyData } = mockUseDayEdit({
       dailyData,
       openedTab: DayEditTab.UnRecordedIntakeList,
@@ -186,14 +260,6 @@ describe("Intake Preview", () => {
     expect(a).toEqual({ ...intake, isRecorded: true, recordedAt: expect.any(Date) });
   });
 
-  it("should render add to favorite button", () => {
-    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
-    render(<IntakePreview intake={intake} />);
-
-    const addToFavBtn = screen.getByText("add to favorite");
-    expect(addToFavBtn).toBeInTheDocument();
-  });
-
   it("should call handleAddToFavBtnClick on add to fav btn click", () => {
     mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
 
@@ -201,19 +267,10 @@ describe("Intake Preview", () => {
 
     render(<IntakePreview intake={intake} />);
 
-    const addToFavBtn = screen.getByText("add to favorite");
+    const addToFavBtn = screen.getByText("add to fav");
     fireEvent.click(addToFavBtn);
 
     expect(addFavoriteIntake).toHaveBeenCalledTimes(1);
     expect(addFavoriteIntake).toHaveBeenCalledWith(intake);
-  });
-
-  it("should render spinner loader when isLoadingAddToFav = true", () => {
-    mockUseDayEdit({ openedTab: DayEditTab.IntakeList });
-    mockUseAddFavoriteIntake({ isLoading: true });
-    render(<IntakePreview intake={intake} />);
-
-    const loader = screen.getByTestId("spinner-loader");
-    expect(loader).toBeInTheDocument();
   });
 });

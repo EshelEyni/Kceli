@@ -63,7 +63,8 @@ export const IntakeEdit: FC = () => {
     e.preventDefault();
     const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
     if (!iValidIntake) return toast.error("Please fill all intake items");
-    intake.recordedAt = new Date();
+
+    (intake.recordedAt = null), (intake.isRecorded = false);
     if ("userId" in intake) updateFavoriteIntake(intake as FavoriteIntake);
     else addFavoriteIntake(intake);
     setIntake(intakeUtilService.getDefaultIntake());
@@ -72,7 +73,7 @@ export const IntakeEdit: FC = () => {
   function handleSaveLaterButtonClick() {
     setIntake(prev => ({
       ...prev,
-      recordedAt: null,
+      recordedAt: prev.isRecorded ? null : new Date(),
       isRecorded: !prev.isRecorded,
     }));
   }
@@ -82,13 +83,20 @@ export const IntakeEdit: FC = () => {
     if (!dailyData) return;
     const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
     if (!iValidIntake) return toast.error("Please fill all intake items");
-    intake.recordedAt = new Date();
+    if (intake.isRecorded && !intake.recordedAt) intake.recordedAt = new Date();
     const isNewIntake = !dailyData.intakes.some(i => i.id === intake.id);
     const updatedIntakes = isNewIntake
       ? [...dailyData.intakes, intake]
       : dailyData.intakes.map(i => (i.id === intake.id ? intake : i));
     updateDailyData({ ...dailyData, intakes: updatedIntakes });
     setIntake(intakeUtilService.getDefaultIntake());
+  }
+
+  function toLocalTime(isoString: string) {
+    const date = new Date(isoString);
+    const timezoneOffsetMinutes = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - timezoneOffsetMinutes);
+    return date.toISOString().slice(11, 16);
   }
 
   return (
@@ -99,25 +107,29 @@ export const IntakeEdit: FC = () => {
 
       {!isLoading && (
         <>
-          <header className="intake-edit__header">
-            <input
-              type="text"
-              placeholder="Name your intake"
-              autoComplete="off"
-              value={intake.name || ""}
-              onChange={handleIntakeNameInputChange}
-              className="intake-edit__header__name-input"
-            />
-            <Button onClickFn={handleToggleIntakeType} className="intake-edit-btn">
-              <span>{intake.type}</span>
-            </Button>
+          <header className="intake-edit__header" data-testid="intake-edit-header">
+            <div className="intake-edit__header__input-name-btn-type">
+              <input
+                type="text"
+                placeholder="Name your intake"
+                autoComplete="off"
+                value={intake.name || ""}
+                onChange={handleIntakeNameInputChange}
+                className="intake-edit__header__name-input"
+                data-testid="intake-edit-name-input"
+              />
+              <Button onClickFn={handleToggleIntakeType} className="intake-edit-btn">
+                <span>{intake.type}</span>
+              </Button>
+            </div>
 
             {isTimeInputShown && (
               <input
                 className="intake-edit__header__time-input"
                 type="time"
-                value={new Date(intake.recordedAt as string).toISOString().slice(11, 16)}
+                value={toLocalTime(intake.recordedAt as string)}
                 onChange={handleTimeInputChange}
+                data-testid="intake-edit-time-input"
               />
             )}
           </header>
@@ -136,12 +148,16 @@ export const IntakeEdit: FC = () => {
         </>
       )}
 
-      <div className="intake-edit__info-container">
+      <div className="intake-edit__info-container" data-testid="intake-edit-info-container">
         <LastTimeYouAteTitle />
         <PreSaveCalorieCount />
       </div>
 
-      <div className="intake-edit-btns-container" style={{ backgroundColor }}>
+      <div
+        className="intake-edit-btns-container"
+        data-testid="intake-edit-btns-container"
+        style={{ backgroundColor }}
+      >
         <Button onClickFn={handleClearButtonClick} className="intake-edit-btn">
           clear
         </Button>

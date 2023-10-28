@@ -9,7 +9,7 @@ export const DayEditFilter: FC = () => {
 
   function handleBtnClick(value: DayEditTab) {
     setOpenedTab(value);
-    const searchParams = new URLSearchParams({ tab: value.toString() });
+    const searchParams = new URLSearchParams({ tab: value });
     setSearchParams(searchParams);
   }
 

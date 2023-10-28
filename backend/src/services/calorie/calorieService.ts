@@ -29,7 +29,7 @@ function calcCaloriesFromExistingItem({
   existingItemData: ExistingIntakeItemData;
   intakeItem: IIntakeItem | NewIntakeItem;
 }) {
-  return existingItemData.calories * (intakeItem.quantity / existingItemData.quantity);
+  return Math.round(existingItemData.calories * (intakeItem.quantity / existingItemData.quantity));
 }
 
 export default {

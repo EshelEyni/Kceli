@@ -13,20 +13,20 @@ import { useDeleteFavoriteIntake } from "../../../hooks/useDeleteFavoriteIntake"
 
 type IntakePreviewProps = {
   intake: Intake;
-  isFavorite?: boolean;
 };
 
-export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = false }) => {
+export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
   const { dailyData, openedTab, setOpenedTab, setIntake, updateDailyData } = useDayEdit();
 
   const { addFavoriteIntake, isLoading: isLoadingAddToFav } = useAddFavoriteIntake();
   const { removeFavoriteIntake } = useDeleteFavoriteIntake();
 
-  const isRecordedIntakesShown = openedTab === DayEditTab.IntakeList;
-  const isSaveBtnShown = !isRecordedIntakesShown || isFavorite;
+  const isRecordedIntakeShown = openedTab === DayEditTab.IntakeList;
+  const isFavorite = openedTab === DayEditTab.FavoriteIntake;
+  const isSaveBtnShown = !isRecordedIntakeShown || isFavorite;
   const totalCalories = calorieUtilService.getTotalCalories(intake);
   const favoriteIntakeTitle = isFavorite
-    ? intake.name ?? intake.items.map(item => item.name).join(", ")
+    ? intake.name || intake.items.map(item => item.name).join(", ")
     : null;
 
   function handleDeleteBtnClick(intakeId: string) {
@@ -58,18 +58,12 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
     if (isFavorite)
       dataToUpdate.intakes = [
         ...dailyData.intakes,
-        {
-          ...intake,
-          id: createId(),
-          isRecorded: true,
-          recordedAt: new Date(),
-        },
+        { ...intake, id: createId(), isRecorded: true, recordedAt: new Date() },
       ];
     else {
       dataToUpdate.intakes = dailyData.intakes.map(intake => {
         if (intake.id !== intakeId) return intake;
-        intake.isRecorded = true;
-        intake.recordedAt = new Date();
+        (intake.isRecorded = true), (intake.recordedAt = new Date());
         return intake;
       });
     }
@@ -85,7 +79,11 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
 
   return (
     <section className="intake-preview" data-testid="intake-preview">
-      {favoriteIntakeTitle && <h2 className="intake-preview__title">{favoriteIntakeTitle}</h2>}
+      {favoriteIntakeTitle && (
+        <h2 className="intake-preview__title" data-testid="intake-title">
+          {favoriteIntakeTitle}
+        </h2>
+      )}
       <List
         items={intake.items}
         className="intake-preview__item-list"
@@ -124,22 +122,18 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake, isFavorite = fal
           </Modal.Window>
         </Modal>
 
-        {isFavorite && (
+        {(isFavorite || isRecordedIntakeShown) && (
           <Button className="btn" onClickFn={() => handleEditBtnClick(intake)}>
             Edit
           </Button>
         )}
 
-        {isRecordedIntakesShown && (
-          <>
-            <Button className="btn" onClickFn={() => handleEditBtnClick(intake)}>
-              Edit
-            </Button>
-            <Button className="btn" onClickFn={() => handleDuplicateBtnClick(intake)}>
-              duplicate
-            </Button>
-          </>
+        {isRecordedIntakeShown && (
+          <Button className="btn" onClickFn={() => handleDuplicateBtnClick(intake)}>
+            duplicate
+          </Button>
         )}
+
         {isSaveBtnShown && (
           <Button className="btn" onClickFn={() => handleSaveBtnClick(intake.id)}>
             Save
