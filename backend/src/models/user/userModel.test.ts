@@ -268,6 +268,9 @@ describe("User Model", () => {
       expect(user.isAdmin).toEqual(false);
       expect(user.loginAttempts).toEqual(0);
       expect(user.lockedUntil).toEqual(0);
+      expect(user.weightLossGoal.startingWeight).toEqual(0);
+      expect(user.weightLossGoal.weightGoal).toEqual(0);
+      // expect(user.workoutSchedule).toEqual([]);
     });
   });
 

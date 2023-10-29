@@ -1,0 +1,56 @@
+@import "../../../styles/main.scss";
+
+.workout-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: rem(10px);
+  width: 100%;
+
+  &__item {
+    flex: 0 0 rem(175px);
+  }
+
+  .workout-preview {
+    &__info {
+      h3 {
+        font-size: rem(13px);
+      }
+    }
+
+    &__btns {
+      gap: rem(5px);
+      .btn {
+        padding: rem(5px) rem(10px);
+        font-size: rem(12px);
+      }
+    }
+  }
+}
+
+@include for-desktop-layout {
+  .workout-list {
+    &__item {
+      flex: 0 0 rem(300px);
+    }
+
+    .workout-preview {
+      &__info {
+        h3 {
+          font-size: unset;
+        }
+      }
+
+      &__btns {
+        gap: rem(10px);
+
+        .btn {
+          padding: rem(8px) rem(12px);
+          font-size: unset;
+        }
+      }
+    }
+  }
+}

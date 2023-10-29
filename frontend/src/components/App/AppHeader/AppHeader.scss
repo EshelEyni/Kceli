@@ -3,13 +3,12 @@
 .app-header {
   width: 100%;
   height: rem(75px);
-
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 rem(10px);
   background-color: var(--color-primary);
-  // border-bottom: 2px solid var(--color-secondary-border);
+  border-bottom: 1px solid var(--color-secondary-border);
 
   .goal-indicator {
     flex-direction: row;

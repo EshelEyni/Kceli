@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { ProfileProvider } from "./contexts/ProfileContext";
 import { WorkoutProvider } from "./contexts/WorkoutContext";
-import { WorkoutsProvider } from "./contexts/WorkoutsContext";
+import { WorkoutsProvider } from "./pages/Workout/WorkoutsContext";
 import { WorkoutEditProvider } from "./contexts/WorkoutEditContext";
 import { Route } from "./types/app";
 
@@ -67,6 +67,4 @@ const routes: Route[] = [
   },
 ];
 
-const nestedRoutes: Route[] = [];
-
-export { routes, nestedRoutes };
+export { routes };

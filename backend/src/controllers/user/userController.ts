@@ -29,6 +29,7 @@ const updateUser = updateOne(UserModel, [
   "email",
   "isApprovedLocation",
   "bio",
+  "workoutSchedule",
 ]);
 const removeUser = deleteOne(UserModel);
 

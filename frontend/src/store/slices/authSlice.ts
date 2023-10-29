@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserCredenitials } from "../../../../shared/types/user";
+import { User, UserCredenitials } from "../../../../shared/types/user";
 import authApiService from "../../services/authApi/authApiService";
 import { setIsPageLoading } from "./systemSlice";
 import { AppThunk, UserOrNull } from "../../types/app";
+import userApiService from "../../services/user/userApiService";
 
 interface AuthState {
   loggedInUser: UserOrNull;
@@ -52,5 +53,12 @@ export function logout(): AppThunk {
   return async dispatch => {
     await authApiService.logout();
     dispatch(setLoggedInUser(null));
+  };
+}
+
+export function updateLoggedInUser(user: User): AppThunk {
+  return async dispatch => {
+    const updatedUser = await userApiService.update(user);
+    dispatch(setLoggedInUser(updatedUser));
   };
 }

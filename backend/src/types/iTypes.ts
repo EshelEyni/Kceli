@@ -1,7 +1,7 @@
 import mongoose, { Document } from "mongoose";
 import { Gender } from "../../../shared/types/system";
 import { MeasurementUnit } from "../../../shared/types/intake";
-import { WeightLossGoal } from "../../../shared/types/user";
+import { UserWorkoutSchedule, WeightLossGoal } from "../../../shared/types/user";
 import { CombinedWorkoutItem, WeightUnit } from "../../../shared/types/workout";
 
 export interface IUser extends Document {
@@ -21,6 +21,7 @@ export interface IUser extends Document {
   totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
   weightLossGoal: WeightLossGoal;
+  workoutSchedule: UserWorkoutSchedule;
   isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -1,4 +1,13 @@
 import { Gender } from "./system";
+import { Workout } from "./workout";
+
+export type WorkoutDay = {
+  name: "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
+  value: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  workouts: Workout[];
+};
+
+export type UserWorkoutSchedule = WorkoutDay[];
 
 export interface UserCredenitials {
   username: string;
@@ -30,6 +39,7 @@ export interface User {
   totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
   weightLossGoal: WeightLossGoal;
+  workoutSchedule: UserWorkoutSchedule;
   createdAt: string;
 }
 
@@ -38,7 +48,6 @@ export type UserDailyStatsResult = {
   weight: number;
   waist: number;
 };
-
 
 export type WeightLossGoal = {
   startingWeight: number;

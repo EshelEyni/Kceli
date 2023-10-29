@@ -1,0 +1,8 @@
+@import "../../../styles/main.scss";
+
+.workout-schedule {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: rem(5px);
+  width: 100%;
+}

@@ -8,11 +8,13 @@
   height: 100%;
   padding: rem(10px);
   border-radius: 5px;
-  background-color: var(--color-primary);
+  background-color: var(--color-secondary);
   gap: rem(45px);
   border: 1px solid var(--color-secondary-border);
+  box-shadow: 0 0 12px 10px rgba(0, 0, 0, 0.15);
+  color: var(--color-text);
 
-  .workout-preview__info {
+  &__info {
     align-self: flex-start;
     display: flex;
     flex-direction: column;
@@ -22,11 +24,10 @@
       font-size: rem(16px);
       font-weight: 600;
       text-transform: capitalize;
-      color: var(--color-secondary);
     }
   }
 
-  .workout-preview__btns {
+  &__btns {
     align-self: flex-end;
     display: flex;
     justify-content: flex-end;
@@ -35,6 +36,7 @@
 
     .btn {
       padding: rem(8px) rem(12px);
+      background-color: var(--color-primary);
     }
   }
 }

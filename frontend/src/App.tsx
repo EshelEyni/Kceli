@@ -1,7 +1,7 @@
 import { useEffect, Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { routes, nestedRoutes } from "./routes";
+import { routes } from "./routes";
 import { Route as TypeOfRoute } from "./types/app";
 import { PageLoader } from "./components/Loaders/PageLoader/PageLoader";
 import { AuthGuard } from "./guards/AuthGuard";
@@ -12,13 +12,11 @@ import { AppDispatch } from "./types/app";
 import { useAuth } from "./hooks/useAuth";
 import { useSystem } from "./hooks/useSystem";
 import { AppHeader } from "./components/App/AppHeader/AppHeader";
-// import { useAppColors } from "./hooks/useAppColor";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   const { loggedInUser } = useAuth();
   const { isPageLoading } = useSystem();
-  // useAppColors();
 
   const routeElements = _getRouteElements();
 
@@ -45,19 +43,8 @@ function App() {
 
 function _getRouteElements() {
   return routes.map(route => (
-    <Route key={route.path} path={route.path} element={_getRouteElement(route)}>
-      {_getNestedRoutes(route)}
-    </Route>
-  ));
-}
-
-function _getNestedRoutes(route: TypeOfRoute) {
-  const getRoute = (route: TypeOfRoute) => (
     <Route key={route.path} path={route.path} element={_getRouteElement(route)} />
-  );
-  const isHomePage = route.path === "home";
-  if (isHomePage) return nestedRoutes.map(route => getRoute(route));
-  return nestedRoutes.filter(route => !route.homePageOnly).map(route => getRoute(route));
+  ));
 }
 
 function _getRouteElement(route: TypeOfRoute) {

@@ -1,11 +1,15 @@
-import { User } from "../../../shared/types/user";
+import { User, UserWorkoutSchedule } from "../../../shared/types/user";
 import { DayData } from "../../../shared/types/dayData";
 import { act } from "@testing-library/react";
 import { CombinedIntake, IntakeItem, MeasurementUnit } from "../../../shared/types/intake";
 import { Workout, WorkoutItemAerobic } from "../../../shared/types/workout";
 import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
 import { createId } from "../../src/services/util/utilService";
-import { FormattedNinjaAPIResData, FormattedUSDAFoodObject } from "../../../shared/types/system";
+import {
+  FormattedNinjaAPIResData,
+  FormattedUSDAFoodObject,
+  Gender,
+} from "../../../shared/types/system";
 
 type CreateTestNutritionQueryParams = {
   type: NutritionQueryState["type"];
@@ -37,25 +41,63 @@ type MockIntakeItem = {
   calories?: number;
 };
 
-function createUser(): User {
+type MockUser = {
+  id?: string;
+  username?: string;
+  fullname?: string;
+  email?: string;
+  imgUrl?: string;
+  isAdmin?: boolean;
+  weight?: number;
+  height?: number;
+  birthdate?: Date;
+  totalDailyEnergyExpenditure?: number;
+  targetCaloricIntakePerDay?: number;
+  weightLossGoal?: {
+    startingWeight: number;
+    weightGoal: number;
+  };
+  workoutSchedule?: UserWorkoutSchedule;
+  gender?: Gender;
+  createdAt?: string;
+};
+
+function createUser({
+  id = "test",
+  username = "test",
+  fullname = "test",
+  email = "test@email.com",
+  imgUrl = "test",
+  isAdmin = false,
+  weight = 100,
+  height = 100,
+  birthdate = new Date(),
+  totalDailyEnergyExpenditure = 100,
+  targetCaloricIntakePerDay = 100,
+  weightLossGoal = {
+    startingWeight: 100,
+    weightGoal: 100,
+  },
+  workoutSchedule = [],
+  gender = "female",
+  createdAt = "test",
+}: MockUser): User {
   return {
-    id: "test",
-    username: "test",
-    fullname: "test",
-    email: "test@email.com",
-    imgUrl: "test",
-    isAdmin: false,
-    weight: 100,
-    height: 100,
-    birthdate: new Date(),
-    totalDailyEnergyExpenditure: 100,
-    targetCaloricIntakePerDay: 100,
-    weightLossGoal: {
-      startingWeight: 100,
-      weightGoal: 100,
-    },
-    gender: "female",
-    createdAt: "test",
+    id,
+    username,
+    fullname,
+    email,
+    imgUrl,
+    isAdmin,
+    weight,
+    height,
+    birthdate,
+    totalDailyEnergyExpenditure,
+    targetCaloricIntakePerDay,
+    weightLossGoal,
+    workoutSchedule,
+    gender,
+    createdAt,
   };
 }
 
