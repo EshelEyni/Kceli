@@ -42,6 +42,7 @@ export const WaterEdit: FC = () => {
     if (!btn) return toast.error("Please select a value");
 
     const newWaterIntake = intakeUtilService.getDefaultIntake();
+    newWaterIntake.type = "drink";
     newWaterIntake.items[0].quantity = btn.value;
     newWaterIntake.items[0].unit = MeasurementUnit.MILLILITER;
     newWaterIntake.items[0].name = "water";

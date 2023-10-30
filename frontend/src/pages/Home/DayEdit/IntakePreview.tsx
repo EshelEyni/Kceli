@@ -16,7 +16,8 @@ type IntakePreviewProps = {
 };
 
 export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
-  const { dailyData, openedTab, setOpenedTab, setIntake, updateDailyData } = useDayEdit();
+  const { dailyData, openedTab, setOpenedTab, setIntake, updateDailyData, setCurrIntakeItemId } =
+    useDayEdit();
 
   const { addFavoriteIntake, isLoading: isLoadingAddToFav } = useAddFavoriteIntake();
   const { removeFavoriteIntake } = useDeleteFavoriteIntake();
@@ -42,6 +43,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     const intakeToEdit = { ...intake };
     setIntake(intakeToEdit);
     setOpenedTab(DayEditTab.IntakeEdit);
+    setCurrIntakeItemId(intake.items[0].id);
   }
 
   function handleDuplicateBtnClick(intake: Intake) {

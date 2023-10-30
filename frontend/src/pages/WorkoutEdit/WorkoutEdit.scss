@@ -1,65 +1,86 @@
 @import "../../styles/main";
 
-.workout-edit-page {
-  // padding: 0;
+.workout-edit {
   background-color: var(--color-primary);
   gap: rem(10px);
   position: relative;
 
-  .workout-edit__header {
+  .workout-edit__form {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: rem(1000px);
-
-    .btn--go-back {
-      align-self: flex-start;
-    }
-  }
-
-  .workout-edit-page__duration-container {
-    display: flex;
-    align-items: center;
-    gap: rem(8px);
-    padding: rem(10px) rem(20px);
-    background-color: var(--color-secondary);
-    border-radius: 5px;
-    font-size: rem(18px);
-    font-weight: 600;
-    color: var(--color-text-gray);
-    text-transform: uppercase;
-  }
-
-  .workout-edit__btns {
-    padding: 0 rem(10px);
-    margin: rem(15px) 0;
-    display: flex;
-    gap: rem(10px);
-  }
-
-  .workout-edit__items-list {
-    gap: rem(10px);
-
-    & > *:not(.spinner-loader-container) {
-      border-bottom: 1px solid var(--color-secondary-border);
-    }
-  }
-
-  .workout-edit-item__form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
     flex-wrap: wrap;
-    gap: rem(10px) rem(20px);
+    gap: rem(15px);
     width: 100%;
-    max-width: rem(1000px);
+    max-width: rem(600px);
     padding: 0 rem(10px) rem(10px) rem(10px);
 
-    .workout-edit-item__form--input-container {
+    .workout-edit-page__duration-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: rem(8px);
+      padding: rem(10px) rem(20px);
+      background-color: var(--color-secondary);
+      border-radius: 5px;
+      font-size: rem(18px);
+      font-weight: 600;
+      color: var(--color-text-gray);
+      text-transform: uppercase;
+      margin: rem(5px) 0;
+    }
+
+    &__btns {
+      margin: rem(5px) 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 100%;
+
+      gap: rem(10px);
+    }
+
+    .workout-edit__items-list {
+      display: flex;
+      flex-direction: column;
+      // align-items: center;
+      justify-content: center;
+      gap: rem(10px);
+      width: 100%;
+
+      &__item {
+        background-color: var(--color-background);
+        border-radius: 10px;
+      }
+
+      .workout-edit__form {
+        padding: rem(15px) rem(10px);
+        // background-color: var(--color-primary);
+        label {
+          color: var(--color-text-gray);
+        }
+
+        input {
+          border: 1px solid var(--color-border);
+          box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.15);
+          padding: rem(10px) rem(8px);
+        }
+
+        .btn {
+          background-color: var(--color-primary);
+        }
+
+        // border-bottom: 1px solid var(--color-secondary-border);
+      }
+    }
+
+    .workout-edit__form__input-container {
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       gap: rem(10px);
+      width: 100%;
 
       > * {
         font-weight: 600;
@@ -102,16 +123,17 @@
         justify-content: space-between;
         align-items: center;
       }
-    }
 
-    .workout-edit-item__form__input-container--btns {
-      width: 100%;
-      display: flex;
-      gap: rem(10px);
+      &__btns-container {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        gap: rem(10px);
 
-      .btn {
-        align-self: flex-end;
-        padding: rem(10px) rem(18px);
+        .btn {
+          align-self: flex-end;
+          padding: rem(10px) rem(18px);
+        }
       }
     }
 
@@ -122,12 +144,11 @@
       gap: rem(10px);
       width: 100%;
 
-      .workout-edit-item__form {
+      .workout-edit__form {
         padding: 0 0 rem(10px) 0;
         border-bottom: 1px solid var(--color-secondary-border);
       }
-      .workout-edit-item__form__input-container--btns {
-        grid-column: 1 / span 2;
+      .workout-edit__form__input-container--btns {
         padding: rem(5px) 0;
         align-items: flex-end;
         justify-content: flex-end;
@@ -135,7 +156,12 @@
       }
     }
 
-    .workout-edit-item__form__superset-item-container {
+    .workout-edit__form__superset-item-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .workout-edit__form__superset-item-container {
       display: flex;
       flex-direction: column;
       gap: rem(10px);
@@ -150,7 +176,7 @@
         color: var(--color-secondary);
       }
 
-      .workout-edit-item__form__superset-item-container__btns {
+      .workout-edit__form__superset-item-container__btns {
         display: flex;
         gap: rem(10px);
         align-items: flex-end;
@@ -159,6 +185,18 @@
 
       .superset__btn-delete {
         align-self: flex-end;
+      }
+    }
+
+    &__footer {
+      gap: rem(10px);
+      .btn {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: rem(90px);
+        height: rem(45px);
       }
     }
   }

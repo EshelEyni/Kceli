@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface SystemState {
+export interface SystemState {
   isPageLoading: boolean;
-  isScrollRedirectActive: boolean;
+  isAppHeaderBtnGoBtnShown: boolean;
 }
 
 const initialState: SystemState = {
   isPageLoading: true,
-  isScrollRedirectActive: true,
+  isAppHeaderBtnGoBtnShown: false,
 };
 
 const systemSlice = createSlice({
@@ -17,12 +17,12 @@ const systemSlice = createSlice({
     setIsPageLoading(state, action: PayloadAction<boolean>) {
       state.isPageLoading = action.payload;
     },
-    setIsScrollRedirectActive(state, action: PayloadAction<boolean>) {
-      state.isScrollRedirectActive = action.payload;
+    setGoBackBtnLink(state, action: PayloadAction<boolean>) {
+      state.isAppHeaderBtnGoBtnShown = action.payload;
     },
   },
 });
 
-export const { setIsPageLoading, setIsScrollRedirectActive } = systemSlice.actions;
+export const { setIsPageLoading, setGoBackBtnLink } = systemSlice.actions;
 
 export default systemSlice.reducer;

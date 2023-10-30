@@ -1,11 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../types/app";
+import { SystemState } from "../store/slices/systemSlice";
 
-type UseSystem = {
-  isPageLoading: boolean;
-};
-
-export function useSystem(): UseSystem {
-  const { isPageLoading } = useSelector((state: RootState) => state.system);
-  return { isPageLoading };
+export function useSystem(): SystemState {
+  const { isPageLoading, isAppHeaderBtnGoBtnShown: goBackBtnLink } = useSelector((state: RootState) => state.system);
+  return { isPageLoading, isAppHeaderBtnGoBtnShown: goBackBtnLink };
 }

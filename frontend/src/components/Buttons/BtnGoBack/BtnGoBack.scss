@@ -1,0 +1,24 @@
+@import "../../../styles/main.scss";
+
+.btn-go-back {
+  border: none;
+
+  span {
+    display: none;
+  }
+}
+
+@include for-desktop-layout {
+  .btn-go-back {
+    padding: rem(15px) rem(20px);
+    border: 1px solid var(--color-border);
+
+    span {
+      display: inline-block;
+    }
+
+    &__icon {
+      display: none;
+    }
+  }
+}

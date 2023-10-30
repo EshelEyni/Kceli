@@ -43,7 +43,6 @@ export const DayEditFilter: FC = () => {
     {
       name: "workouts",
       value: DayEditTab.Workouts,
-      isShown: dailyData?.workouts.length > 0,
     },
     {
       name: "query",

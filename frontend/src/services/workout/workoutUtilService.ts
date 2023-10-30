@@ -42,9 +42,10 @@ function getDefaultWormupItem(): WorkoutItemAerobic {
   };
 }
 
-function getDefaultAerobicWorkoutItem(): WorkoutItemAerobic {
+function getDefaultAerobicWorkoutItem(idx: number): WorkoutItemAerobic {
   return {
     ...getBasicDefaultWorkoutItem(),
+    name: `exercise ${idx + 1}`,
     type: "aerobic",
     durationInMin: 30,
   };
@@ -54,9 +55,10 @@ function getAnaerobicSet(): WorkoutSet {
   return { isCompleted: false };
 }
 
-function getDefaultAnaerobicWorkoutItem(): WorkoutItemAnaerobic {
+function getDefaultAnaerobicWorkoutItem(idx: number): WorkoutItemAnaerobic {
   return {
     ...getBasicDefaultWorkoutItem(),
+    name: `exercise ${idx + 1}`,
     type: "anaerobic",
     sets: Array.from({ length: 3 }, () => getAnaerobicSet()),
     reps: 10,
@@ -66,9 +68,10 @@ function getDefaultAnaerobicWorkoutItem(): WorkoutItemAnaerobic {
   };
 }
 
-function getDefaultWorkoutItemSuperset(): WorkoutItemSuperset {
+function getDefaultWorkoutItemSuperset(idx: number): WorkoutItemSuperset {
   return {
     ...getBasicDefaultWorkoutItem(),
+    name: `superset ${idx + 1}`,
     type: "superset",
     restInSec: 60,
     sets: Array.from({ length: 3 }, () => getAnaerobicSet()),
@@ -76,10 +79,10 @@ function getDefaultWorkoutItemSuperset(): WorkoutItemSuperset {
   };
 }
 
-function getDefaultSupersetItem(): SupersetItem {
+function getDefaultSupersetItem(idx: number): SupersetItem {
   return {
     id: createId(),
-    name: "",
+    name: `item ${idx + 1}`,
     reps: 10,
     weight: 10,
     weightUnit: WeightUnit.KG,
@@ -90,14 +93,14 @@ function calcDurationForAnaerobicItem(item: WorkoutItemAnaerobic) {
   const numOfSets = _getNumOfSets(item);
   const setDuration = (numOfSets * 30) / 60;
   const restBetweenSets = (item.restInSec * numOfSets) / 60;
-  return setDuration + restBetweenSets;
+  return Math.round(setDuration + restBetweenSets);
 }
 
 function calcDurationForSupersetItem(item: WorkoutItemSuperset) {
   const numOfSets = _getNumOfSets(item);
   const setDuration = (numOfSets * 30) / 60 + item.items.length;
   const restBetweenSets = (item.restInSec * numOfSets) / 60;
-  return setDuration + restBetweenSets;
+  return Math.round(setDuration + restBetweenSets);
 }
 
 function calcDuration({ workout, type = "all" }: { workout: Workout; type?: "all" | "remaining" }) {
@@ -121,7 +124,7 @@ function calcDuration({ workout, type = "all" }: { workout: Workout; type?: "all
       }
     }, 0);
 
-  return duration;
+  return Math.round(duration);
 }
 
 function _getNumOfSets(item: WorkoutItemAnaerobic | WorkoutItemSuperset) {

@@ -8,16 +8,21 @@ import { useAuth } from "../../../hooks/useAuth";
 import "./AppHeader.scss";
 import { GoalIndicator } from "../../GoalIndicator/GoalIndicator";
 import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
+import { useSystem } from "../../../hooks/useSystem";
+import { BtnGoBack } from "../../Buttons/BtnGoBack/BtnGoBack";
 
 export const AppHeader: FC = () => {
   const { loggedInUser } = useAuth();
+  const { isAppHeaderBtnGoBtnShown } = useSystem();
   const { backgroundColor } = useGetColorByCalories();
   const location = useLocation();
   const isHomePage = location.pathname.includes("/home");
 
   return (
     <Header className="app-header" style={isHomePage ? { backgroundColor } : undefined}>
-      <GoalIndicator />
+      <div className="app-header__btn-container">
+        {isAppHeaderBtnGoBtnShown ? <BtnGoBack /> : <GoalIndicator />}
+      </div>
       <Nav className="app-nav">
         <NavLink to="/home" className="app-nav-link">
           <FaHome className="app-nav-link__icon" />

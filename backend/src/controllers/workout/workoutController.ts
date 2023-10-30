@@ -38,7 +38,7 @@ const createWorkout = asyncErrorCatcher(async (req: Request, res: Response) => {
   });
 });
 
-const updateWorkout = updateOne(WorkoutModel, ["description", "items"]);
+const updateWorkout = updateOne(WorkoutModel, ["description", "type", "split", "items"]);
 const deleteWorkout = deleteOne(WorkoutModel);
 
 export { getAllWorkouts, getWorkout, createWorkout, updateWorkout, deleteWorkout };

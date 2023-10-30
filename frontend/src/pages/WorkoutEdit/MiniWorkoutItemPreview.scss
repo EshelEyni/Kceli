@@ -1,0 +1,13 @@
+@import "../../styles/main.scss";
+
+.mini-workout-item-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: rem(18px);
+  font-weight: 600;
+  color: var(--color-text-gray);
+  text-transform: capitalize;
+  width: 100%;
+  padding: rem(10px);
+}

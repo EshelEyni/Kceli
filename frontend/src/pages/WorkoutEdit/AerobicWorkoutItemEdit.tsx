@@ -1,70 +1,64 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Workout, WorkoutItemAerobic } from "../../../../shared/types/workout";
 import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
-import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../components/App/Button/Button";
-
-interface AerobicWorkoutItemEditIFormInput {
-  name: string;
-  durationInMin: number;
-}
+import { debounce } from "../../services/util/utilService";
+import { MiniWorkoutItemPreview } from "./MiniWorkoutItemPreview";
 
 type AerobicWorkoutItemEditProps = {
   item: WorkoutItemAerobic;
 };
 
 export const AerobicWorkoutItemEdit: FC<AerobicWorkoutItemEditProps> = ({ item }) => {
-  const { control, handleSubmit, setValue } = useForm<AerobicWorkoutItemEditIFormInput>({
-    defaultValues: {
-      name: item.name,
-      durationInMin: item.durationInMin,
-    },
-  });
+  const { workout, updateWorkout, removeWorkoutItem, currItemId } = useWorkoutEdit();
 
-  const { workout, updateWorkout, isLoadingUpdateWorkout, removeWorkoutItem } = useWorkoutEdit();
-
-  useEffect(() => {
-    setValue("name", item.name);
-    setValue("durationInMin", item.durationInMin);
-  }, [item, setValue]);
-
-  function onSubmit(data: AerobicWorkoutItemEditIFormInput) {
-    if (!workout || isLoadingUpdateWorkout) return;
-    const workoutToUpdate = {
-      ...workout,
-      items: workout.items.map(item => {
-        if (item.id === item.id) return { ...item, ...data } as WorkoutItemAerobic;
-        return item;
-      }),
-    } as Workout;
-
+  function handleInputNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const name = e.target.value;
+    const items = workout?.items.map(item => {
+      if (item.id !== item.id) return item;
+      return { ...item, name };
+    });
+    const workoutToUpdate = { ...workout, items } as Workout;
     updateWorkout(workoutToUpdate);
   }
 
-  return (
-    <form className="workout-edit-item__form" onSubmit={handleSubmit(onSubmit)}>
-      <div className="workout-edit-item__form--input-container name-input">
-        <label>Name:</label>
-        <Controller name="name" control={control} render={({ field }) => <input {...field} />} />
-      </div>
+  function handleInputDurationChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const durationInMin = Number(e.target.value);
+    const items = workout?.items.map(item => {
+      if (item.id !== item.id) return item;
+      return { ...item, durationInMin };
+    });
+    const workoutToUpdate = { ...workout, items } as Workout;
+    updateWorkout(workoutToUpdate);
+  }
 
-      <div className="workout-edit-item__form--input-container">
-        <label>Duration (in min):</label>
-        <Controller
-          name="durationInMin"
-          control={control}
-          render={({ field }) => <input type="number" {...field} />}
+  if (currItemId !== item.id) return <MiniWorkoutItemPreview item={item} />;
+
+  return (
+    <section className="workout-edit__form">
+      <div className="workout-edit__form__input-container name-input">
+        <label>Name:</label>
+        <input
+          autoComplete="off"
+          defaultValue={item.name}
+          onChange={debounce(handleInputNameChange, 500).debouncedFunc}
         />
       </div>
 
-      <div className="workout-edit-item__form__input-container--btns">
+      <div className="workout-edit__form__input-container">
+        <label>Duration (in min):</label>
+        <input
+          type="number"
+          defaultValue={item.durationInMin}
+          onChange={debounce(handleInputDurationChange, 500).debouncedFunc}
+        />
+      </div>
+
+      <div className="workout-edit__form__input-container__btns-container">
         <Button className="btn" onClickFn={() => removeWorkoutItem(item.id)}>
           delete
         </Button>
-        <Button type="submit" className="btn" isDisabled={isLoadingUpdateWorkout}>
-          Update
-        </Button>
       </div>
-    </form>
+    </section>
   );
 };

@@ -1,160 +1,168 @@
-import { FC, useEffect } from "react";
-import { WeightUnit, Workout, WorkoutItemAnaerobic } from "../../../../shared/types/workout";
+import { FC } from "react";
+import {
+  WeightUnit,
+  Workout,
+  WorkoutItemAnaerobic,
+  WorkoutSet,
+} from "../../../../shared/types/workout";
 import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
-import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../components/App/Button/Button";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import workoutUtilService from "../../services/workout/workoutUtilService";
-
-interface AnaerobicWorkoutItemEditIFormInput {
-  name: string;
-  sets: number;
-  reps: number;
-  weight: number;
-  weightUnit: WeightUnit;
-  restInSec: number;
-}
+import { debounce } from "../../services/util/utilService";
+import { MiniWorkoutItemPreview } from "./MiniWorkoutItemPreview";
 
 type AnaerobicWorkoutItemEditProps = {
   item: WorkoutItemAnaerobic;
 };
 
 export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({ item }) => {
-  const { control, handleSubmit, setValue } = useForm<AnaerobicWorkoutItemEditIFormInput>({
-    defaultValues: {
-      name: item.name,
-      sets: item.sets.length,
-      reps: item.reps,
-      weight: item.weight,
-      weightUnit: item.weightUnit,
-      restInSec: item.restInSec,
-    },
-  });
-
-  const { workout, updateWorkout, isLoadingUpdateWorkout, removeWorkoutItem } = useWorkoutEdit();
+  const { removeWorkoutItem, workout, updateWorkout, currItemId } = useWorkoutEdit();
 
   function handleRemoveBtnClick() {
     removeWorkoutItem(item.id);
   }
 
-  function onSubmit(data: AnaerobicWorkoutItemEditIFormInput) {
-    if (!workout || isLoadingUpdateWorkout) return;
-
-    const items = workout.items.map(i => {
-      if (i.id === item.id) {
-        const { sets: numOfSets, ...dataWithoutSets } = data;
-        const sets = Array(numOfSets).fill(workoutUtilService.getAnaerobicSet());
-        return { ...i, ...dataWithoutSets, sets } as WorkoutItemAnaerobic;
-      }
-      return i;
+  function handleInputNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const name = e.target.value;
+    const items = workout?.items.map(item => {
+      if (item.id !== item.id) return item;
+      return { ...item, name };
     });
-
     const workoutToUpdate = { ...workout, items } as Workout;
-
     updateWorkout(workoutToUpdate);
   }
 
-  useEffect(() => {
-    setValue("name", item.name);
-    setValue("sets", item.sets.length);
-    setValue("reps", item.reps);
-    setValue("weight", item.weight);
-    setValue("restInSec", item.restInSec);
-    setValue("weightUnit", item.weightUnit);
-  }, [item, setValue]);
+  function handleInputSetsChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const numOfSets = Number(e.target.value);
+    const sets = Array(numOfSets).fill(workoutUtilService.getAnaerobicSet()) as WorkoutSet[];
+    const items = workout?.items.map(item => {
+      if (item.id !== item.id) return item;
+      return { ...item, sets };
+    });
+    const workoutToUpdate = { ...workout, items } as Workout;
+    updateWorkout(workoutToUpdate);
+  }
 
+  function handleInputRepsChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const reps = Number(e.target.value);
+    const items = workout?.items.map(item => {
+      if (item.id !== item.id) return item;
+      return { ...item, reps };
+    });
+    const workoutToUpdate = { ...workout, items } as Workout;
+    updateWorkout(workoutToUpdate);
+  }
+
+  function handleInputWeightChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const weight = Number(e.target.value);
+    const items = workout?.items.map(item => {
+      if (item.id !== item.id) return item;
+      return { ...item, weight };
+    });
+    const workoutToUpdate = { ...workout, items } as Workout;
+    updateWorkout(workoutToUpdate);
+  }
+
+  function handleWeightUnitSelectChange(weightUnit: string) {
+    const items = workout?.items.map(item => {
+      if (item.id !== item.id) return item;
+      return { ...item, weightUnit };
+    });
+    const workoutToUpdate = { ...workout, items } as Workout;
+    updateWorkout(workoutToUpdate);
+  }
+
+  function handleInputRestInSecChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const restInSec = Number(e.target.value);
+    const items = workout?.items.map(item => {
+      if (item.id !== item.id) return item;
+      return { ...item, restInSec };
+    });
+    const workoutToUpdate = { ...workout, items } as Workout;
+    updateWorkout(workoutToUpdate);
+  }
+
+  if (currItemId !== item.id) return <MiniWorkoutItemPreview item={item} />;
   return (
-    <form className="workout-edit-item__form" onSubmit={handleSubmit(onSubmit)}>
-      <div className="workout-edit-item__form--input-container name-input">
+    <section className="workout-edit__form">
+      <div className="workout-edit__form__input-container name-input">
         <label>Name:</label>
-        <Controller
-          name="name"
-          control={control}
-          render={({ field }) => <input {...field} autoComplete="off" />}
+        <input
+          autoComplete="off"
+          defaultValue={item.name}
+          onChange={debounce(handleInputNameChange, 500).debouncedFunc}
         />
       </div>
 
-      <div className="workout-edit-item__form--input-container">
+      <div className="workout-edit__form__input-container">
         <label>Sets:</label>
-        <Controller
-          name="sets"
-          control={control}
-          rules={{ min: 1, max: 10 }}
-          render={({ field }) => <input type="number" {...field} />}
+        <input
+          type="number"
+          defaultValue={item.sets.length}
+          onChange={debounce(handleInputSetsChange, 500).debouncedFunc}
         />
       </div>
 
-      <div className="workout-edit-item__form--input-container">
+      <div className="workout-edit__form__input-container">
         <label>Reps:</label>
-        <Controller
-          name="reps"
-          control={control}
-          rules={{ min: 1, max: 10 }}
-          render={({ field }) => <input type="number" {...field} />}
+        <input
+          type="number"
+          defaultValue={item.reps}
+          onChange={debounce(handleInputRepsChange, 500).debouncedFunc}
         />
       </div>
 
-      <div className="workout-edit-item__form--input-container">
+      <div className="workout-edit__form__input-container">
         <label>Weight:</label>
-        <Controller
-          name="weight"
-          control={control}
-          rules={{ min: 1 }}
-          render={({ field }) => <input type="number" {...field} />}
+        <input
+          type="number"
+          defaultValue={item.weight}
+          onChange={debounce(handleInputWeightChange, 500).debouncedFunc}
         />
       </div>
 
-      <div className="workout-edit-item__form--input-container">
+      <div className="workout-edit__form__input-container">
         <label>Weight unit:</label>
-        <Controller
-          name="weightUnit"
-          control={control}
-          render={({ field }) => (
-            <Select.Root onValueChange={value => field.onChange(value)}>
-              <Select.Trigger className="SelectTrigger">
-                <Select.Value placeholder={field.value === "kg" ? "kg" : "lbs"} />
-                <Select.Icon className="SelectIcon">
-                  <ChevronDownIcon />
-                </Select.Icon>
-              </Select.Trigger>
-              <Select.Portal>
-                <Select.Content className="SelectContent">
-                  <Select.Viewport className="SelectViewport">
-                    <Select.Group>
-                      <Select.Item value="kg" className="SelectItem" {...field.ref}>
-                        <Select.ItemText>kg</Select.ItemText>
-                      </Select.Item>
-                      <Select.Item value="lbs" className="SelectItem" {...field.ref}>
-                        <Select.ItemText>lbs</Select.ItemText>
-                      </Select.Item>
-                    </Select.Group>
-                  </Select.Viewport>
-                </Select.Content>
-              </Select.Portal>
-            </Select.Root>
-          )}
-        />
+
+        <Select.Root onValueChange={handleWeightUnitSelectChange}>
+          <Select.Trigger className="SelectTrigger">
+            <Select.Value placeholder={item.weightUnit} />
+            <Select.Icon className="SelectIcon">
+              <ChevronDownIcon />
+            </Select.Icon>
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Content className="SelectContent">
+              <Select.Viewport className="SelectViewport">
+                <Select.Group>
+                  {Object.values(WeightUnit).map(weightUnit => (
+                    <Select.Item value={weightUnit} className="SelectItem" key={weightUnit}>
+                      <Select.ItemText>{weightUnit}</Select.ItemText>
+                    </Select.Item>
+                  ))}
+                </Select.Group>
+              </Select.Viewport>
+            </Select.Content>
+          </Select.Portal>
+        </Select.Root>
       </div>
 
-      <div className="workout-edit-item__form--input-container">
+      <div className="workout-edit__form__input-container">
         <label>Rest (in sec):</label>
-        <Controller
-          name="restInSec"
-          control={control}
-          render={({ field }) => <input type="number" {...field} />}
+        <input
+          type="number"
+          defaultValue={item.restInSec}
+          onChange={debounce(handleInputRestInSecChange, 500).debouncedFunc}
         />
       </div>
 
-      <div className="workout-edit-item__form__input-container--btns">
+      <div className="workout-edit__form__input-container__btns-container">
         <Button className="btn" onClickFn={handleRemoveBtnClick}>
           delete
         </Button>
-
-        <Button type="submit" isDisabled={isLoadingUpdateWorkout} className="btn">
-          Update
-        </Button>
       </div>
-    </form>
+    </section>
   );
 };

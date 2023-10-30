@@ -10,20 +10,36 @@
   background-color: var(--color-primary);
   border-bottom: 1px solid var(--color-secondary-border);
 
-  .goal-indicator {
-    flex-direction: row;
+  &__btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(10px);
 
-    &__title,
-    &__text {
-      display: none;
+    .goal-indicator {
+      flex-direction: row;
+
+      &__title,
+      &__text {
+        display: none;
+      }
+
+      .goal-indicator-circle {
+        width: rem(50px);
+        height: rem(50px);
+
+        .goal-indicator__icon {
+          font-size: rem(25px);
+        }
+      }
     }
 
-    .goal-indicator-circle {
-      width: rem(50px);
-      height: rem(50px);
-
-      .goal-indicator__icon {
-        font-size: rem(25px);
+    .btn-go-back {
+      padding: 0;
+      svg {
+        width: rem(28px);
+        height: rem(28px);
+        fill: white;
       }
     }
   }
@@ -32,7 +48,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: rem(45px);
+    gap: rem(30px);
     width: 100%;
     height: 100%;
     padding: 0 rem(10px);
@@ -51,13 +67,11 @@
         width: rem(28px);
         height: rem(28px);
         fill: white;
-        // margin-right: rem(5px);
       }
 
       &.active {
         .app-nav-link__icon {
-          color: var(--color-info);
-          fill: var(--color-info);
+          scale: 1.2;
         }
 
         font-size: rem(20px);
@@ -69,21 +83,6 @@
 
 @include for-desktop-layout {
   .app-header {
-    .goal-indicator {
-      &__text {
-        display: unset;
-        width: auto;
-        gap: rem(5px);
-        font-size: rem(20px);
-        color: var(--color-secondary);
-        white-space: nowrap;
-
-        span {
-          font-size: rem(25px);
-        }
-      }
-    }
-
     .app-nav {
       .app-nav-link {
         .app-nav-link__icon {

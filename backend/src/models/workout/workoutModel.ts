@@ -1,21 +1,22 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { IWorkout, IWorkoutItem } from "../../types/iTypes";
 import { WeightUnit } from "../../../../shared/types/workout";
+import { AppError } from "../../services/error/errorService";
 
 function validateAerobicFields(this: IWorkoutItem, value: string) {
   if (value !== "aerobic") return true;
-  if (!this.durationInMin) throw new Error("Duration is required for aerobic type");
+  if (!this.durationInMin) throw new AppError("Duration is required for aerobic type", 400);
   return true;
 }
 
 function validateAnaerobicFields(this: IWorkoutItem, value: string) {
   if (value !== "anaerobic") return true;
 
-  if (!this.sets) throw new Error("Sets are required for anaerobic type");
-  if (!this.reps) throw new Error("Reps are required for anaerobic type");
-  if (!this.weight) throw new Error("Weight is required for anaerobic type");
-  if (!this.weightUnit) throw new Error("WeightUnit is required for anaerobic type");
-  if (!this.restInSec) throw new Error("RestInSec is required for anaerobic type");
+  if (!this.sets) throw new AppError("Sets are required for anaerobic type", 400);
+  if (!this.reps) throw new AppError("Reps are required for anaerobic type", 400);
+  if (!this.weight) throw new AppError("Weight is required for anaerobic type", 400);
+  if (!this.weightUnit) throw new AppError("WeightUnit is required for anaerobic type", 400);
+  if (!this.restInSec) throw new AppError("RestInSec is required for anaerobic type", 400);
 
   return true;
 }
@@ -23,9 +24,9 @@ function validateAnaerobicFields(this: IWorkoutItem, value: string) {
 function validateSupersetFields(this: IWorkoutItem, value: string) {
   if (value !== "superset") return true;
 
-  if (!this.sets) throw new Error("Sets are required for superset type");
-  if (!this.restInSec) throw new Error("RestInSec is required for superset type");
-  if (!this.items) throw new Error("Items are required for superset type");
+  if (!this.sets) throw new AppError("Sets are required for superset type", 400);
+  if (!this.restInSec) throw new AppError("RestInSec is required for superset type", 400);
+  if (!this.items) throw new AppError("Items are required for superset type", 400);
 
   return true;
 }
@@ -61,6 +62,7 @@ const workoutItemSchema = new Schema<IWorkoutItem>(
     sets: {
       type: [{ isCompleted: { type: Boolean } }],
       default: undefined,
+      _id: false,
     },
     reps: {
       type: Number,
@@ -101,7 +103,7 @@ const workoutItemSchema = new Schema<IWorkoutItem>(
             type: String,
             enum: {
               values: Object.values(WeightUnit),
-              message: "weightUnit must be either kg or lbs",
+              message: `weightUnit must be either ${Object.values(WeightUnit).join(", ")} `,
             },
             required: [true, "Please provide a weightUnit for the superset item"],
           },
