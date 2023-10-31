@@ -48,7 +48,7 @@ function getCalenderDays({ date, data, loggedInUser }: CalendarQueryParams): Cal
 function getCalendarDays(currDate: Date): Date[] {
   const daysInMonth = getDaysInMonth(currDate.getMonth() + 1, currDate.getFullYear());
 
-  const currentMonthDates = Array.from({ length: daysInMonth - 1 }, (_, i) => {
+  const currentMonthDates = Array.from({ length: daysInMonth }, (_, i) => {
     return new Date(currDate.getFullYear(), currDate.getMonth(), i + 1);
   });
 

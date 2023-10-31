@@ -1,12 +1,14 @@
-import { FC, useEffect, useRef, useState } from "react";
-import "./Timer.scss";
-import { useWorkout } from "../../../contexts/WorkoutContext";
-import { Button } from "../../App/Button/Button";
+import { FC, useEffect, useRef } from "react";
+import { useWorkout } from "../../contexts/WorkoutContext";
+import { Button } from "../../components/App/Button/Button";
 import { FaPause, FaPlay } from "react-icons/fa";
+import "./Timer.scss";
+import { SecondsCircle } from "./SecondsCircle";
+import { ItemDurationCircle } from "./ItemDurationCircle";
+import { TotalDurationCircle } from "./TotalDurationCircle";
 
 export const Timer: FC = () => {
-  const { currTime, isRunning, setIsRunning } = useWorkout();
-  const [time, setTime] = useState(currTime * 60);
+  const { time, setTime, isRunning, setIsRunning } = useWorkout();
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
   const minutesDisplay = Math.floor(time / 60)
@@ -43,20 +45,22 @@ export const Timer: FC = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [isRunning]);
-
-  useEffect(() => {
-    setTime(currTime * 60);
-  }, [currTime]);
+  }, [isRunning, setTime]);
 
   return (
     <section className="timer">
-      <div className="clock-wrapper">
-        <span>
-          {minutesDisplay}:{secondsDisplay < 10 ? `0${secondsDisplay}` : secondsDisplay}.
-          {fractionDisplay}
-        </span>
-      </div>
+      <TotalDurationCircle>
+        <ItemDurationCircle>
+          <SecondsCircle>
+            <div className="clock-wrapper">
+              <span className="timer__count">
+                {minutesDisplay}:{secondsDisplay < 10 ? `0${secondsDisplay}` : secondsDisplay}.
+                {fractionDisplay}
+              </span>
+            </div>
+          </SecondsCircle>
+        </ItemDurationCircle>
+      </TotalDurationCircle>
 
       <div className="timer__controls">
         <Button className="timer__controls__btn" onClickFn={handleToggleIsRunning}>

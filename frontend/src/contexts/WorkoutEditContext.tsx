@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { useUpdateWorkout } from "../hooks/useUpdateWorkout";
 import {
@@ -72,47 +72,30 @@ function WorkoutEditProvider({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const { id } = params as { id: string };
   const { workout, isLoading, isSuccess, isError } = useGetWorkout(id);
+  const itemsLengthRef = useRef<number>(0);
   const { updateWorkout, isLoading: isLoadingUpdateWorkout } = useUpdateWorkout();
   const [currItemId, setCurrItemId] = useState<string>("");
   const navigate = useNavigate();
-  const duration = workoutUtilService.calcDuration({ workout: workout as Workout });
+  const duration = workoutUtilService.calcWorkoutDuration({ workout: workout as Workout });
 
   function addWorkoutAerobicItem() {
     if (!workout) return;
-
-    const workoutToUpdate = {
-      ...workout,
-      items: [
-        ...workout.items,
-        workoutUtilService.getDefaultAerobicWorkoutItem(workout.items.length),
-      ],
-    } as Workout;
-
+    const item = workoutUtilService.getDefaultAerobicWorkoutItem(workout.items.length);
+    const workoutToUpdate = { ...workout, items: [...workout.items, item] } as Workout;
     updateWorkout(workoutToUpdate);
   }
 
   function addWorkoutAnaerobicItem() {
     if (!workout) return;
-    const workoutToUpdate = {
-      ...workout,
-      items: [
-        ...workout.items,
-        workoutUtilService.getDefaultAnaerobicWorkoutItem(workout.items.length),
-      ],
-    } as Workout;
+    const item = workoutUtilService.getDefaultAnaerobicWorkoutItem(workout.items.length);
+    const workoutToUpdate = { ...workout, items: [...workout.items, item] } as Workout;
     updateWorkout(workoutToUpdate);
   }
 
   function addSupersetWorkoutItem() {
     if (!workout) return;
-    const workoutToUpdate = {
-      ...workout,
-      items: [
-        ...workout.items,
-        workoutUtilService.getDefaultWorkoutItemSuperset(workout.items.length),
-      ],
-    } as Workout;
-
+    const item = workoutUtilService.getDefaultWorkoutItemSuperset(workout.items.length);
+    const workoutToUpdate = { ...workout, items: [...workout.items, item] } as Workout;
     updateWorkout(workoutToUpdate);
   }
 
@@ -154,6 +137,16 @@ function WorkoutEditProvider({ children }: { children: React.ReactNode }) {
     const firstItemId = workout.items[0].id;
     setCurrItemId(firstItemId);
   }, [workout, currItemId]);
+
+  useEffect(() => {
+    if (!workout) return;
+    if (!itemsLengthRef.current) {
+      itemsLengthRef.current = workout.items.length;
+      return;
+    }
+    if (itemsLengthRef.current < workout.items.length)
+      setCurrItemId(workout.items[workout.items.length - 1].id);
+  }, [workout]);
 
   const value = {
     updateWorkout,

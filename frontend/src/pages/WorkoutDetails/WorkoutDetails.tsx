@@ -6,7 +6,7 @@ import "./WorkoutDetails.scss";
 import { List } from "../../components/App/List/List";
 import { AerobicWorkoutItemDisplay } from "./AerobicWorkoutItemDisplay";
 import { CombinedWorkoutItem, WorkoutItemAerobic } from "../../../../shared/types/workout";
-import { Timer } from "../../components/Workout/Timer/Timer";
+import { Timer } from "./Timer";
 import { Button } from "../../components/App/Button/Button";
 import { AnaerobicWorkoutItemDisplay } from "./AnaerobicWorkoutItemDisplay";
 import { SupersetWorkoutItemDisplay } from "./SupersetWorkoutItemDisplay";
@@ -35,7 +35,8 @@ const WorkoutDetails: FC = () => {
 
   return (
     <main className="page workout-details">
-      <section className="workout-details__info">
+      <Timer />
+      {/* <section className="workout-details__info">
         <div className="workout-details__info__item">
           <h2>description:</h2>
           <h3> {workout.description}</h3>
@@ -74,7 +75,7 @@ const WorkoutDetails: FC = () => {
             </div>
           )}
         </>
-      )}
+      )} */}
     </main>
   );
 };

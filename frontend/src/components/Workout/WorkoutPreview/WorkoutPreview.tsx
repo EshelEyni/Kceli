@@ -14,7 +14,7 @@ type WorkoutPreviewProps = {
 export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isDayEdit = false }) => {
   const { removeWorkout } = useDeleteWorkout();
   const navigate = useNavigate();
-  const duration = workoutUtilService.calcDuration({ workout: workout as Workout });
+  const duration = workoutUtilService.calcWorkoutDuration({ workout: workout as Workout });
 
   function handleBtnEditClick(workoutId: string) {
     navigate(`/workouts/edit/${workoutId}`);

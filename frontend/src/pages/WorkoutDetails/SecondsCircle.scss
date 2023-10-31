@@ -1,0 +1,10 @@
+@import "../../styles/main.scss";
+
+.seconds-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  height: rem(180px);
+  width: rem(180px);
+}

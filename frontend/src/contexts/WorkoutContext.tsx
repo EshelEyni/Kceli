@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useContext, useState, useEffect } from "react";
 import {
   CombinedWorkoutItem,
   Workout,
@@ -24,6 +24,7 @@ type WorkoutContextType = {
   params: Readonly<Params<string>>;
   navigate: NavigateFunction;
   duration: number;
+  completedDuration: number;
   remainingDuration: number;
   currTime: number;
   setCurrTime: Dispatch<SetStateAction<number>>;
@@ -36,6 +37,8 @@ type WorkoutContextType = {
   unCompletedItems: CombinedWorkoutItem[];
   completedItems: CombinedWorkoutItem[];
   onCompleteAnaerobicSet: ({ item, setIdx }: onCompleteAnaerobicSetParams) => void;
+  time: number;
+  setTime: Dispatch<SetStateAction<number>>;
 };
 
 const WorkoutContext = createContext<WorkoutContextType | undefined>(undefined);
@@ -49,17 +52,20 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
   const { dailyData } = useGetTodayData();
   const { updateDailyData } = useUpdateTodayData();
 
-  const firstUncopmletedItem = _getFirstUncopmletedItem();
-  const [currTime, setCurrTime] = useState(
-    _getClockTimeForItem(firstUncopmletedItem as CombinedWorkoutItem)
-  );
+  const [currTime, setCurrTime] = useState(0);
+  const [time, setTime] = useState(currTime * 60);
+
   const [isRunning, setIsRunning] = useState(false);
   const [isWorkoutStarted, setIsWorkoutStarted] = useState(
     workout?.items.some(item => item.isStarted) || false
   );
 
-  const duration = workoutUtilService.calcDuration({ workout: workout as Workout });
-  const remainingDuration = workoutUtilService.calcDuration({
+  const duration = workoutUtilService.calcWorkoutDuration({ workout: workout as Workout });
+  const completedDuration = workoutUtilService.calcWorkoutDuration({
+    workout: workout as Workout,
+    type: "completed",
+  });
+  const remainingDuration = workoutUtilService.calcWorkoutDuration({
     workout: workout as Workout,
     type: "remaining",
   });
@@ -116,7 +122,7 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
   }
 
   function _onSetCompleteTimer() {
-    const item = _getFirstUncopmletedItem();
+    const item = workout?.items.find(item => !item.isCompleted);
     if (!item) return;
     const time = _getClockTimeForItem(item);
     setCurrTime(time);
@@ -135,10 +141,10 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     return { unCompletedItems, completedItems };
   }
 
-  function _getFirstUncopmletedItem(): CombinedWorkoutItem | undefined {
-    if (!workout) return undefined;
-    return workout.items.find(item => !item.isCompleted);
-  }
+  // function _getFirstUncopmletedItem(): CombinedWorkoutItem | undefined {
+  //   if (!workout) return undefined;
+  //   return workout.items.find(item => !item.isCompleted);
+  // }
 
   function _updateWorkoutInDailyData() {
     if (!dailyData || !workout) return;
@@ -180,6 +186,16 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
+  useEffect(() => {
+    if (!workout) return;
+    const firstUncopmletedItem = workout.items.find(item => !item.isCompleted);
+    setCurrTime(_getClockTimeForItem(firstUncopmletedItem));
+  }, [workout]);
+
+  useEffect(() => {
+    setTime(currTime * 60);
+  }, [currTime]);
+
   const value = {
     workout,
     isLoading,
@@ -188,9 +204,12 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     params,
     navigate,
     duration,
+    completedDuration,
     remainingDuration,
     currTime,
     setCurrTime,
+    time,
+    setTime,
     isRunning,
     setIsRunning,
     isWorkoutStarted,

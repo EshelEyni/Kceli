@@ -1,4 +1,4 @@
-@import "../../../styles/main.scss";
+@import "../../styles/main.scss";
 
 .timer {
   display: flex;
@@ -12,16 +12,14 @@
     align-items: center;
     width: rem(175px);
     height: rem(175px);
-    padding: rem(10px);
     border-radius: 50%;
     background-color: var(--color-primary);
-    border: 2px solid var(--color-secondary-border);
+  }
 
-    span {
-      font-size: rem(30px);
-      font-weight: 600;
-      color: var(--color-secondary);
-    }
+  &__count {
+    font-size: rem(30px);
+    font-weight: 600;
+    color: var(--color-secondary);
   }
   .timer__controls {
     display: flex;

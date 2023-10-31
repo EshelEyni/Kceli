@@ -28,7 +28,7 @@ describe("Workout Preview", () => {
       split: "FBW",
     } as WorkoutAnaerobic;
 
-    const duration = workoutUtilService.calcDuration({ workout: mockWorkout });
+    const duration = workoutUtilService.calcWorkoutDuration({ workout: mockWorkout });
     render(<WorkoutPreview workout={mockWorkout} />);
 
     expect(screen.getByTestId("workout-preview")).toBeInTheDocument();
