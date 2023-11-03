@@ -1,0 +1,16 @@
+@import "../../../styles/main.scss";
+
+.total-duration-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  height: rem(220px);
+  width: rem(220px);
+  box-shadow: 0 0 rem(10px) rgba(0, 0, 0, 0.2);
+
+  &__border {
+    border-radius: 50%;
+    border: rem(2px) solid var(--color-primary);
+  }
+}

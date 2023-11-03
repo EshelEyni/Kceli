@@ -19,6 +19,9 @@ const intakeService_1 = __importDefault(require("../../services/intake/intakeSer
 const calorieService_1 = __importDefault(require("../../services/calorie/calorieService"));
 const getCaloriesForItem = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const intakeItem = req.body;
+    const isEmptyBody = Object.keys(intakeItem).length === 0;
+    if (isEmptyBody)
+        throw new errorService_1.AppError("Empty body provided", 400);
     const existingItemData = yield intakeService_1.default.getExistingIntakeItem(intakeItem);
     let calories;
     if (existingItemData && existingItemData.calories) {

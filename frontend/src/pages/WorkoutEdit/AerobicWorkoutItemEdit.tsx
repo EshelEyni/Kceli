@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Workout, WorkoutItemAerobic } from "../../../../shared/types/workout";
-import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
+import { useWorkoutEdit } from "./WorkoutEditContext";
 import { Button } from "../../components/App/Button/Button";
 import { debounce } from "../../services/util/utilService";
 import { MiniWorkoutItemPreview } from "./MiniWorkoutItemPreview";
@@ -15,7 +15,7 @@ export const AerobicWorkoutItemEdit: FC<AerobicWorkoutItemEditProps> = ({ item }
   function handleInputNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const name = e.target.value;
     const items = workout?.items.map(item => {
-      if (item.id !== item.id) return item;
+      if (item.id !== currItemId) return item;
       return { ...item, name };
     });
     const workoutToUpdate = { ...workout, items } as Workout;
@@ -25,7 +25,7 @@ export const AerobicWorkoutItemEdit: FC<AerobicWorkoutItemEditProps> = ({ item }
   function handleInputDurationChange(e: React.ChangeEvent<HTMLInputElement>) {
     const durationInMin = Number(e.target.value);
     const items = workout?.items.map(item => {
-      if (item.id !== item.id) return item;
+      if (item.id !== currItemId) return item;
       return { ...item, durationInMin };
     });
     const workoutToUpdate = { ...workout, items } as Workout;

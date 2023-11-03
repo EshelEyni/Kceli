@@ -46,14 +46,16 @@ export const DayEditHeader: FC = () => {
         <hr />
 
         {consumedCalories > 0 && (
-          <p
-            className="day-edit__header__titles__title"
-            data-testid="day-edit-header-consumed-calories"
-          >
-            <strong>{Math.round(consumedCalories)}</strong> calories consumed
-          </p>
+          <>
+            <p
+              className="day-edit__header__titles__title"
+              data-testid="day-edit-header-consumed-calories"
+            >
+              <strong>{Math.round(consumedCalories)}</strong> calories consumed
+            </p>
+            <hr />
+          </>
         )}
-        <hr />
 
         <div className="day-edit__header__percentages-container">
           <div

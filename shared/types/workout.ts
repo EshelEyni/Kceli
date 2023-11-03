@@ -42,11 +42,9 @@ export interface WorkoutItemAerobic extends BasicWorkoutItem {
   durationInMin: number;
 }
 
-export type WorkoutSet = { isCompleted: boolean };
-
 export interface WorkoutItemAnaerobic extends BasicWorkoutItem {
   type: "anaerobic";
-  sets: WorkoutSet[];
+  sets: number;
   reps: number;
   weight: number;
   weightUnit: WeightUnit;
@@ -64,7 +62,7 @@ export type SupersetItem = {
 export interface WorkoutItemSuperset extends BasicWorkoutItem {
   type: "superset";
   items: SupersetItem[];
-  sets: WorkoutSet[];
+  sets: number;
   restInSec: number;
 }
 

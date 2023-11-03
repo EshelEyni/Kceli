@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
+import { useWorkoutEdit } from "./WorkoutEditContext";
 import { CombinedWorkoutItem } from "../../../../shared/types/workout";
 import "./MiniWorkoutItemPreview.scss";
 import { FaChevronDown } from "react-icons/fa";

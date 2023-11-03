@@ -4,7 +4,7 @@ import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
 import { CombinedWorkoutItem, Workout } from "../../../../shared/types/workout";
 import { Empty } from "../../components/App/Empty/Empty";
 import { Button } from "../../components/App/Button/Button";
-import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
+import { useWorkoutEdit } from "./WorkoutEditContext";
 import { AerobicWorkoutItemEdit } from "./AerobicWorkoutItemEdit";
 import { AnaerobicWorkoutItemEdit } from "./AnaerobicWorkoutItemEdit";
 import { SuperSetWorkoutItemEdit } from "./SuperSetWorkoutItemEdit";
@@ -24,6 +24,7 @@ import {
   NotDraggingStyle,
 } from "react-beautiful-dnd";
 import { StrictModeDroppable } from "../../components/App/StrictModeDroppable/StrictModeDroppable";
+import { debounce } from "../../services/util/utilService";
 
 const WorkoutEdit: FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -40,6 +41,7 @@ const WorkoutEdit: FC = () => {
     updateWorkout,
     duration,
   } = useWorkoutEdit();
+
   const [workoutItems, setWorkoutItems] = useState<CombinedWorkoutItem[]>(workout?.items ?? []);
   const isAnaeobic = workout && workout?.type === "anaerobic";
 
@@ -136,7 +138,11 @@ const WorkoutEdit: FC = () => {
       <form className="workout-edit__form">
         <div className="workout-edit__form__input-container name-input">
           <label>description:</label>
-          <input type="text" value={workout.description} onChange={handleDescInputChange} />
+          <input
+            type="text"
+            defaultValue={workout.description}
+            onChange={debounce(handleDescInputChange, 500).debouncedFunc}
+          />
         </div>
 
         <div className="workout-edit__form__input-container">

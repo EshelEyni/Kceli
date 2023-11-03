@@ -21,6 +21,7 @@ const getAllWorkouts = (0, errorService_1.asyncErrorCatcher)((req, res) => __awa
     const docs = yield workoutModel_1.WorkoutModel.find({ userId: loggedInUserId });
     res.send({
         status: "success",
+        requestedAt: new Date().toISOString(),
         results: docs.length,
         data: docs,
     });
@@ -39,7 +40,7 @@ const createWorkout = (0, errorService_1.asyncErrorCatcher)((req, res) => __awai
     });
 }));
 exports.createWorkout = createWorkout;
-const updateWorkout = (0, factoryService_1.updateOne)(workoutModel_1.WorkoutModel, ["description", "items"]);
+const updateWorkout = (0, factoryService_1.updateOne)(workoutModel_1.WorkoutModel, ["description", "type", "split", "items"]);
 exports.updateWorkout = updateWorkout;
 const deleteWorkout = (0, factoryService_1.deleteOne)(workoutModel_1.WorkoutModel);
 exports.deleteWorkout = deleteWorkout;

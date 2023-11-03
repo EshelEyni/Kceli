@@ -1,5 +1,5 @@
 import { describe, beforeEach, it, expect } from "vitest";
-import { setIsPageLoading, setIsScrollRedirectActive } from "./systemSlice";
+import { setIsPageLoading } from "./systemSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import systemReducer from "./systemSlice";
 
@@ -23,15 +23,5 @@ describe("systemSlice", () => {
     store.dispatch(setIsPageLoading(false));
     const state2 = store.getState().system;
     expect(state2.isPageLoading).toBe(false);
-  });
-
-  it("should set isScrollRedirectActive", () => {
-    store.dispatch(setIsScrollRedirectActive(true));
-    const state1 = store.getState().system;
-    expect(state1.isScrollRedirectActive).toBe(true);
-
-    store.dispatch(setIsScrollRedirectActive(false));
-    const state2 = store.getState().system;
-    expect(state2.isScrollRedirectActive).toBe(false);
   });
 });

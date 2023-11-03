@@ -4,13 +4,11 @@ import {
   Workout,
   WorkoutAnaerobic,
   WorkoutItemSuperset,
-  WorkoutSet,
 } from "../../../../shared/types/workout";
-import { useWorkoutEdit } from "../../contexts/WorkoutEditContext";
+import { useWorkoutEdit } from "./WorkoutEditContext";
 import { Button } from "../../components/App/Button/Button";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import workoutUtilService from "../../services/workout/workoutUtilService";
 import { debounce } from "../../services/util/utilService";
 import { MiniWorkoutItemPreview } from "./MiniWorkoutItemPreview";
 
@@ -29,7 +27,7 @@ export const SuperSetWorkoutItemEdit: FC<WorkoutItemSupersetEditProps> = ({ item
   function handleInputNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const name = e.target.value;
     const items = workout?.items.map(item => {
-      if (item.id !== item.id) return item;
+      if (item.id !== currItemId) return item;
       return { ...item, name };
     });
     const workoutToUpdate = { ...workout, items } as Workout;
@@ -39,7 +37,7 @@ export const SuperSetWorkoutItemEdit: FC<WorkoutItemSupersetEditProps> = ({ item
   function handleInputRestInSecChange(e: React.ChangeEvent<HTMLInputElement>) {
     const restInSec = Number(e.target.value);
     const items = workout?.items.map(item => {
-      if (item.id !== item.id) return item;
+      if (item.id !== currItemId) return item;
       return { ...item, restInSec };
     });
     const workoutToUpdate = { ...workout, items } as Workout;
@@ -47,10 +45,9 @@ export const SuperSetWorkoutItemEdit: FC<WorkoutItemSupersetEditProps> = ({ item
   }
 
   function handleInputSetsChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const numOfSets = Number(e.target.value);
-    const sets = Array(numOfSets).fill(workoutUtilService.getAnaerobicSet()) as WorkoutSet[];
+    const sets = Number(e.target.value);
     const items = workout?.items.map(item => {
-      if (item.id !== item.id) return item;
+      if (item.id !== currItemId) return item;
       return { ...item, sets };
     });
     const workoutToUpdate = { ...workout, items } as Workout;
@@ -141,7 +138,7 @@ export const SuperSetWorkoutItemEdit: FC<WorkoutItemSupersetEditProps> = ({ item
         <label>Sets:</label>
         <input
           type="number"
-          defaultValue={item.sets.length}
+          defaultValue={item.sets}
           onChange={debounce(handleInputSetsChange, 500).debouncedFunc}
         />
       </div>

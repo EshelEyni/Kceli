@@ -60,9 +60,8 @@ const workoutItemSchema = new Schema<IWorkoutItem>(
     },
     durationInMin: Number,
     sets: {
-      type: [{ isCompleted: { type: Boolean } }],
+      type: Number,
       default: undefined,
-      _id: false,
     },
     reps: {
       type: Number,

@@ -19,7 +19,7 @@ function calcTotalDailyEnergyExpenditure({ weight, height, age, gender }) {
     return Math.round(TDEE);
 }
 function calcCaloriesFromExistingItem({ existingItemData, intakeItem, }) {
-    return existingItemData.calories * (intakeItem.quantity / existingItemData.quantity);
+    return Math.round(existingItemData.calories * (intakeItem.quantity / existingItemData.quantity));
 }
 exports.default = {
     calcTargetCaloricIntakePerDay,

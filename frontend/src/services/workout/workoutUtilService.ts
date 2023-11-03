@@ -1,5 +1,4 @@
 import {
-  WorkoutSet,
   BasicWorkoutItem,
   Split,
   SupersetItem,
@@ -21,7 +20,7 @@ function getDefaultWorkout(): Workout {
     description: "no description",
     type: "anaerobic",
     split: "FBW",
-    items: [getDefaultWormupItem()],
+    items: [],
   };
 }
 
@@ -34,15 +33,6 @@ function getBasicDefaultWorkoutItem(): BasicWorkoutItem {
   };
 }
 
-function getDefaultWormupItem(): WorkoutItemAerobic {
-  return {
-    ...getBasicDefaultWorkoutItem(),
-    type: "aerobic",
-    name: "wormup",
-    durationInMin: 10,
-  };
-}
-
 function getDefaultAerobicWorkoutItem(idx: number): WorkoutItemAerobic {
   return {
     ...getBasicDefaultWorkoutItem(),
@@ -52,16 +42,12 @@ function getDefaultAerobicWorkoutItem(idx: number): WorkoutItemAerobic {
   };
 }
 
-function getAnaerobicSet(): WorkoutSet {
-  return { isCompleted: false };
-}
-
 function getDefaultAnaerobicWorkoutItem(idx: number): WorkoutItemAnaerobic {
   return {
     ...getBasicDefaultWorkoutItem(),
     name: `exercise ${idx + 1}`,
     type: "anaerobic",
-    sets: Array.from({ length: 3 }, () => getAnaerobicSet()),
+    sets: 3,
     reps: 10,
     weight: 10,
     weightUnit: WeightUnit.KG,
@@ -75,7 +61,7 @@ function getDefaultWorkoutItemSuperset(idx: number): WorkoutItemSuperset {
     name: `superset ${idx + 1}`,
     type: "superset",
     restInSec: 60,
-    sets: Array.from({ length: 3 }, () => getAnaerobicSet()),
+    sets: 3,
     items: [],
   };
 }
@@ -91,16 +77,16 @@ function getDefaultSupersetItem(idx: number): SupersetItem {
 }
 
 function calcDurationForAnaerobicItem(item: WorkoutItemAnaerobic) {
-  const numOfSets = _getNumOfSets(item);
-  const setDuration = (numOfSets * 30) / 60;
-  const restBetweenSets = (item.restInSec * numOfSets) / 60;
+  const { sets } = item;
+  const setDuration = (sets * 30) / 60;
+  const restBetweenSets = (item.restInSec * sets) / 60;
   return Math.round(setDuration + restBetweenSets);
 }
 
 function calcDurationForSupersetItem(item: WorkoutItemSuperset) {
-  const numOfSets = _getNumOfSets(item);
-  const setDuration = (numOfSets * 30) / 60 + item.items.length;
-  const restBetweenSets = (item.restInSec * numOfSets) / 60;
+  const { sets } = item;
+  const setDuration = (sets * 30) / 60 + item.items.length;
+  const restBetweenSets = (item.restInSec * sets) / 60;
   return Math.round(setDuration + restBetweenSets);
 }
 
@@ -137,21 +123,15 @@ function calcWorkoutDuration({
 
 function calcItemDuration(item: CombinedWorkoutItem) {
   switch (item.type) {
-    case "anaerobic":
-      return calcDurationForAnaerobicItem(item);
     case "aerobic":
       return item.durationInMin;
+    case "anaerobic":
+      return calcDurationForAnaerobicItem(item);
     case "superset":
       return calcDurationForSupersetItem(item);
     default:
       return 0;
   }
-}
-
-function _getNumOfSets(item: WorkoutItemAnaerobic | WorkoutItemSuperset) {
-  if (!item.sets) return 0;
-  const { length: setLength } = item.sets;
-  return Number(setLength);
 }
 
 export default {
@@ -165,5 +145,4 @@ export default {
   calcItemDuration,
   calcDurationForAnaerobicItem,
   calcDurationForSupersetItem,
-  getAnaerobicSet,
 };

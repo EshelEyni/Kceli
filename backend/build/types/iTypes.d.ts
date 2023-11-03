@@ -1,8 +1,8 @@
 import mongoose, { Document } from "mongoose";
 import { Gender } from "../../../shared/types/system";
 import { MeasurementUnit } from "../../../shared/types/intake";
-import { WeightLossGoal } from "../../../shared/types/user";
-import { CombinedWorkoutItem } from "../../../shared/types/workout";
+import { UserWorkoutSchedule, WeightLossGoal } from "../../../shared/types/user";
+import { CombinedWorkoutItem, WeightUnit } from "../../../shared/types/workout";
 export interface IUser extends Document {
     username: string;
     password: string;
@@ -20,6 +20,7 @@ export interface IUser extends Document {
     totalDailyEnergyExpenditure: number;
     targetCaloricIntakePerDay: number;
     weightLossGoal: WeightLossGoal;
+    workoutSchedule: UserWorkoutSchedule;
     isAdmin: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -61,6 +62,24 @@ export interface IIntakeItem extends Document {
     quantity: number;
     calories: number;
     _caloriesPer100g?: number;
+}
+export interface IWorkoutItem extends Document {
+    name: string;
+    isStarted: boolean;
+    isCompleted: boolean;
+    type: "aerobic" | "anaerobic" | "superset";
+    durationInMin?: number;
+    sets?: number;
+    reps?: number;
+    weight?: number;
+    weightUnit?: WeightUnit;
+    restInSec?: number;
+    items?: Array<{
+        name: string;
+        reps: number;
+        weight: number;
+        weightUnit: WeightUnit;
+    }>;
 }
 export interface IWorkout extends Document {
     type: "aerobic" | "anaerobic";

@@ -76,7 +76,7 @@ export interface IWorkoutItem extends Document {
   isCompleted: boolean;
   type: "aerobic" | "anaerobic" | "superset";
   durationInMin?: number;
-  sets?: Array<{ isCompleted: boolean }>;
+  sets?: number;
   reps?: number;
   weight?: number;
   weightUnit?: WeightUnit;

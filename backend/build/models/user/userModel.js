@@ -17,6 +17,44 @@ const mongoose_1 = require("mongoose");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const crypto_1 = __importDefault(require("crypto"));
 const calorieService_1 = __importDefault(require("../../services/calorie/calorieService"));
+const workoutModel_1 = require("../workout/workoutModel");
+const defaultWorkoutSchedule = [
+    {
+        name: "sun",
+        value: 0,
+        workouts: [],
+    },
+    {
+        name: "mon",
+        value: 1,
+        workouts: [],
+    },
+    {
+        name: "tue",
+        value: 2,
+        workouts: [],
+    },
+    {
+        name: "wed",
+        value: 3,
+        workouts: [],
+    },
+    {
+        name: "thu",
+        value: 4,
+        workouts: [],
+    },
+    {
+        name: "fri",
+        value: 5,
+        workouts: [],
+    },
+    {
+        name: "sat",
+        value: 6,
+        workouts: [],
+    },
+];
 const userSchema = new mongoose_1.Schema({
     username: {
         type: String,
@@ -88,6 +126,30 @@ const userSchema = new mongoose_1.Schema({
             startingWeight: 0,
             weightGoal: 0,
         },
+    },
+    workoutSchedule: {
+        type: [
+            {
+                name: {
+                    type: String,
+                    enum: {
+                        values: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
+                        message: "workoutSchedule name must be a valid day of the week",
+                    },
+                    required: [true, "Please provide a name for the workoutSchedule item"],
+                },
+                value: {
+                    type: Number,
+                    enum: {
+                        values: [0, 1, 2, 3, 4, 5, 6],
+                        message: "workoutSchedule value must be between 0 and 6",
+                    },
+                    required: [true, "Please provide a value for the workoutSchedule item"],
+                },
+                workouts: [workoutModel_1.workoutSchema],
+            },
+        ],
+        default: defaultWorkoutSchedule,
     },
     isAdmin: { type: Boolean, default: false },
     active: { type: Boolean, default: true },

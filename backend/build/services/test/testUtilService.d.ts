@@ -1,6 +1,7 @@
+/// <reference types="jest" />
 import mongoose from "mongoose";
 import { User, UserCredenitials } from "../../../../shared/types/user";
-import { IntakeItem, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
+import { FavoriteIntake, IntakeItem, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";
 import { Workout, WorkoutItemAerobic } from "../../../../shared/types/workout";
 import { NinjaAPIResData, USDAFoodObject } from "../../types/app";
 type CreateTestUserOptions = {
@@ -35,6 +36,7 @@ declare function getMockDailyData({ userId }: {
 declare function getNewMockIntake(): NewIntake;
 declare function getMockNewIntakeItem(): NewIntakeItem;
 declare function getMockIntake(): NewIntake;
+declare function getMockFavoriteIntake(): FavoriteIntake;
 declare function getMockIntakeItem(): IntakeItem;
 declare function getMockWorkout(): Workout;
 declare function getMockWorkoutItem(): WorkoutItemAerobic;
@@ -47,4 +49,4 @@ declare function getMockUSDAApiResponse(): {
         foods: USDAFoodObject[];
     };
 };
-export { getLoginTokenStrForTest, mockGetLoggedInUserIdFromReq, createManyTestUsers, deleteManyTestUsers, createTestUser, createValidUserCreds, createTestDailyData, getNewMockIntake, getMockNewIntakeItem, getMockIntake, getMockIntakeItem, getMockWorkout, getMockWorkoutItem, getMongoId, getMockedUser, deleteTestUser, getMockDailyData, getMockNinjaApiResponse, getMockUSDAApiResponse, };
+export { getLoginTokenStrForTest, mockGetLoggedInUserIdFromReq, createManyTestUsers, deleteManyTestUsers, createTestUser, createValidUserCreds, createTestDailyData, getNewMockIntake, getMockNewIntakeItem, getMockIntake, getMockFavoriteIntake, getMockIntakeItem, getMockWorkout, getMockWorkoutItem, getMongoId, getMockedUser, deleteTestUser, getMockDailyData, getMockNinjaApiResponse, getMockUSDAApiResponse, };

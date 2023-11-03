@@ -47,7 +47,7 @@ function getCaloriesForIntakeItem(intakeItem) {
         const calories = parseInt(text);
         if (isNaN(calories))
             throw new errorService_1.AppError("calories is NaN", 500);
-        return calories;
+        return Math.round(calories);
     });
 }
 exports.default = {

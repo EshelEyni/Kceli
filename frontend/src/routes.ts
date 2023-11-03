@@ -1,8 +1,8 @@
 import { lazy } from "react";
 import { ProfileProvider } from "./contexts/ProfileContext";
-import { WorkoutProvider } from "./contexts/WorkoutContext";
+import { WorkoutProvider } from "./pages/WorkoutDetails/WorkoutContext";
 import { WorkoutsProvider } from "./pages/Workout/WorkoutsContext";
-import { WorkoutEditProvider } from "./contexts/WorkoutEditContext";
+import { WorkoutEditProvider } from "./pages/WorkoutEdit/WorkoutEditContext";
 import { Route } from "./types/app";
 
 const Homepage = lazy(() => import("./pages/Home/Home"));

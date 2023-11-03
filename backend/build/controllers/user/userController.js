@@ -34,6 +34,7 @@ const updateUser = (0, factoryService_1.updateOne)(userModel_1.UserModel, [
     "email",
     "isApprovedLocation",
     "bio",
+    "workoutSchedule",
 ]);
 exports.updateUser = updateUser;
 const removeUser = (0, factoryService_1.deleteOne)(userModel_1.UserModel);

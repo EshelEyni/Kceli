@@ -37,6 +37,8 @@ const getCalenderData = (0, errorService_1.asyncErrorCatcher)((req, res) => __aw
     }).sort({ date: -1 });
     res.send({
         status: "success",
+        requestedAt: new Date().toISOString(),
+        results: docs.length,
         data: docs,
     });
 }));
@@ -60,10 +62,23 @@ const getToday = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(v
     const loggedInUserId = (0, ALSService_1.getLoggedInUserIdFromReq)();
     (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
     const doc = yield dailyDataModel_1.DailyDataModel.findOne({ userId: loggedInUserId }).sort({ date: -1 }).limit(1);
-    res.send({
-        status: "success",
-        data: doc,
-    });
+    if (!doc) {
+        const date = (0, utilService_1.getIsraeliDate)();
+        const doc = yield dailyDataModel_1.DailyDataModel.create({
+            date,
+            userId: loggedInUserId,
+        });
+        res.status(201).send({
+            status: "success",
+            data: doc,
+        });
+    }
+    else {
+        res.send({
+            status: "success",
+            data: doc,
+        });
+    }
 }));
 exports.getToday = getToday;
 const updateDay = (0, factoryService_1.updateOne)(dailyDataModel_1.DailyDataModel, [

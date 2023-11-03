@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMockUSDAApiResponse = exports.getMockNinjaApiResponse = exports.getMockDailyData = exports.deleteTestUser = exports.getMockedUser = exports.getMongoId = exports.getMockWorkoutItem = exports.getMockWorkout = exports.getMockIntakeItem = exports.getMockIntake = exports.getMockNewIntakeItem = exports.getNewMockIntake = exports.createTestDailyData = exports.createValidUserCreds = exports.createTestUser = exports.deleteManyTestUsers = exports.createManyTestUsers = exports.mockGetLoggedInUserIdFromReq = exports.getLoginTokenStrForTest = void 0;
+exports.getMockUSDAApiResponse = exports.getMockNinjaApiResponse = exports.getMockDailyData = exports.deleteTestUser = exports.getMockedUser = exports.getMongoId = exports.getMockWorkoutItem = exports.getMockWorkout = exports.getMockIntakeItem = exports.getMockFavoriteIntake = exports.getMockIntake = exports.getMockNewIntakeItem = exports.getNewMockIntake = exports.createTestDailyData = exports.createValidUserCreds = exports.createTestUser = exports.deleteManyTestUsers = exports.createManyTestUsers = exports.mockGetLoggedInUserIdFromReq = exports.getLoginTokenStrForTest = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 require("dotenv").config();
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -149,6 +149,19 @@ function getMockIntake() {
     };
 }
 exports.getMockIntake = getMockIntake;
+function getMockFavoriteIntake() {
+    return {
+        id: getMongoId(),
+        items: [getMockIntakeItem()],
+        isRecorded: true,
+        recordedAt: null,
+        name: "test",
+        type: "food",
+        userId: getMongoId(),
+        sortOrder: 0,
+    };
+}
+exports.getMockFavoriteIntake = getMockFavoriteIntake;
 function getMockIntakeItem() {
     return {
         id: getMongoId(),

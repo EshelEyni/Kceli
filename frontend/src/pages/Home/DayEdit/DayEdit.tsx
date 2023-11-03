@@ -39,6 +39,7 @@ export const DayEdit: FC = () => {
           {openedTab === DayEditTab.IntakeEdit && <IntakeEdit />}
           {openedTab === DayEditTab.Workouts && (
             <List
+              className="day-edit__workouts-list"
               items={dailyData.workouts}
               render={item => <WorkoutPreview workout={item} isDayEdit={true} key={item.id} />}
             />

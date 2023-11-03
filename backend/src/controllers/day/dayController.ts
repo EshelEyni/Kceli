@@ -3,7 +3,7 @@ import { DailyDataModel } from "../../models/day/dailyDataModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
 import { AppError, asyncErrorCatcher } from "../../services/error/errorService";
 import { deleteOne, getAll, getOne, updateOne } from "../../services/factory/factoryService";
-import { validateIds } from "../../services/util/utilService";
+import { getIsraeliDate, validateIds } from "../../services/util/utilService";
 import { addWeeks, endOfMonth, startOfMonth, subWeeks } from "date-fns";
 
 const getAllDays = getAll(DailyDataModel);
@@ -60,11 +60,23 @@ const getToday = asyncErrorCatcher(async (req: Request, res: Response) => {
   validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
 
   const doc = await DailyDataModel.findOne({ userId: loggedInUserId }).sort({ date: -1 }).limit(1);
+  if (!doc) {
+    const date = getIsraeliDate();
+    const doc = await DailyDataModel.create({
+      date,
+      userId: loggedInUserId,
+    });
 
-  res.send({
-    status: "success",
-    data: doc,
-  });
+    res.status(201).send({
+      status: "success",
+      data: doc,
+    });
+  } else {
+    res.send({
+      status: "success",
+      data: doc,
+    });
+  }
 });
 
 const updateDay = updateOne(DailyDataModel, [
