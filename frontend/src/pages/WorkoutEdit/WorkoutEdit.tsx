@@ -8,13 +8,10 @@ import { useWorkoutEdit } from "./WorkoutEditContext";
 import { AerobicWorkoutItemEdit } from "./AerobicWorkoutItemEdit";
 import { AnaerobicWorkoutItemEdit } from "./AnaerobicWorkoutItemEdit";
 import { SuperSetWorkoutItemEdit } from "./SuperSetWorkoutItemEdit";
-import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
 import workoutUtilService from "../../services/workout/workoutUtilService";
 import { AppDispatch } from "../../types/app";
 import { useDispatch } from "react-redux";
 import { setGoBackBtnLink } from "../../store/slices/systemSlice";
-import "./WorkoutEdit.scss";
 import { Footer } from "../../components/App/Footer/Footer";
 import {
   DragDropContext,
@@ -25,6 +22,9 @@ import {
 } from "react-beautiful-dnd";
 import { StrictModeDroppable } from "../../components/App/StrictModeDroppable/StrictModeDroppable";
 import { debounce } from "../../services/util/utilService";
+import { Select } from "../../components/App/Select/Select";
+import { FaChevronDown } from "react-icons/fa";
+import "./WorkoutEdit.scss";
 
 const WorkoutEdit: FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -147,54 +147,39 @@ const WorkoutEdit: FC = () => {
 
         <div className="workout-edit__form__input-container">
           <label>workout type:</label>
-          <Select.Root onValueChange={handleTypeSelectChange}>
-            <Select.Trigger className="SelectTrigger">
-              <Select.Value placeholder={workout.type} />
-              <Select.Icon className="SelectIcon">
-                <ChevronDownIcon />
-              </Select.Icon>
-            </Select.Trigger>
-            <Select.Portal>
-              <Select.Content className="SelectContent">
-                <Select.Viewport className="SelectViewport">
-                  <Select.Group>
-                    <Select.Item value="anaerobic" className="SelectItem">
-                      <Select.ItemText>anaerobic</Select.ItemText>
-                    </Select.Item>
-                    <Select.Item value="aerobic" className="SelectItem">
-                      <Select.ItemText>aerobic</Select.ItemText>
-                    </Select.Item>
-                  </Select.Group>
-                </Select.Viewport>
-              </Select.Content>
-            </Select.Portal>
-          </Select.Root>
+          <Select onChange={handleTypeSelectChange} listHeight={250}>
+            <Select.SelectTrigger>
+              <div>
+                <span>{workout.type}</span>
+                <FaChevronDown />
+              </div>
+            </Select.SelectTrigger>
+            <Select.SelectList>
+              <Select.SelectItem value="anaerobic">anaerobic</Select.SelectItem>
+              <Select.SelectItem value="aerobic">aerobic</Select.SelectItem>
+            </Select.SelectList>
+          </Select>
         </div>
 
         {isAnaeobic && (
           <div className="workout-edit__form__input-container">
             <label>split:</label>
-            <Select.Root onValueChange={handleSplitSelectChange}>
-              <Select.Trigger className="SelectTrigger">
-                <Select.Value placeholder={workout.split} />
-                <Select.Icon className="SelectIcon">
-                  <ChevronDownIcon />
-                </Select.Icon>
-              </Select.Trigger>
-              <Select.Portal>
-                <Select.Content className="SelectContent">
-                  <Select.Viewport className="SelectViewport">
-                    <Select.Group>
-                      {workoutUtilService.SPLIT_TYPES.map(type => (
-                        <Select.Item value={type} className="SelectItem" key={type}>
-                          <Select.ItemText>{type}</Select.ItemText>
-                        </Select.Item>
-                      ))}
-                    </Select.Group>
-                  </Select.Viewport>
-                </Select.Content>
-              </Select.Portal>
-            </Select.Root>
+
+            <Select onChange={handleSplitSelectChange} listHeight={250}>
+              <Select.SelectTrigger>
+                <div>
+                  <span>{workout.split}</span>
+                  <FaChevronDown />
+                </div>
+              </Select.SelectTrigger>
+              <Select.SelectList>
+                {workoutUtilService.SPLIT_TYPES.map(type => (
+                  <Select.SelectItem value={type} key={type}>
+                    {type}
+                  </Select.SelectItem>
+                ))}
+              </Select.SelectList>
+            </Select>
           </div>
         )}
 

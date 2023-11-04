@@ -2,10 +2,10 @@ import { FC } from "react";
 import { WeightUnit, Workout, WorkoutItemAnaerobic } from "../../../../shared/types/workout";
 import { useWorkoutEdit } from "./WorkoutEditContext";
 import { Button } from "../../components/App/Button/Button";
-import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { FaChevronDown } from "react-icons/fa";
 import { debounce } from "../../services/util/utilService";
 import { MiniWorkoutItemPreview } from "./MiniWorkoutItemPreview";
+import { Select } from "../../components/App/Select/Select";
 
 type AnaerobicWorkoutItemEditProps = {
   item: WorkoutItemAnaerobic;
@@ -119,27 +119,21 @@ export const AnaerobicWorkoutItemEdit: FC<AnaerobicWorkoutItemEditProps> = ({ it
       <div className="workout-edit__form__input-container">
         <label>Weight unit:</label>
 
-        <Select.Root onValueChange={handleWeightUnitSelectChange}>
-          <Select.Trigger className="SelectTrigger">
-            <Select.Value placeholder={item.weightUnit} />
-            <Select.Icon className="SelectIcon">
-              <ChevronDownIcon />
-            </Select.Icon>
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content className="SelectContent">
-              <Select.Viewport className="SelectViewport">
-                <Select.Group>
-                  {Object.values(WeightUnit).map(weightUnit => (
-                    <Select.Item value={weightUnit} className="SelectItem" key={weightUnit}>
-                      <Select.ItemText>{weightUnit}</Select.ItemText>
-                    </Select.Item>
-                  ))}
-                </Select.Group>
-              </Select.Viewport>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
+        <Select onChange={handleWeightUnitSelectChange} listHeight={250}>
+          <Select.SelectTrigger>
+            <div>
+              <span>{item.weightUnit}</span>
+              <FaChevronDown />
+            </div>
+          </Select.SelectTrigger>
+          <Select.SelectList>
+            {Object.values(WeightUnit).map(weightUnit => (
+              <Select.SelectItem value={weightUnit} key={weightUnit}>
+                {weightUnit}
+              </Select.SelectItem>
+            ))}
+          </Select.SelectList>
+        </Select>
       </div>
 
       <div className="workout-edit__form__input-container">

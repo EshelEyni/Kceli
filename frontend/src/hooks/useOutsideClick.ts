@@ -8,19 +8,22 @@ type OutsideClickRef<T extends HTMLElement> = {
 
 export function useOutsideClick<T extends HTMLElement>(
   handler: OutsideClickHandler,
-  listenCapturing = true
+  listenCapturing = true,
+  execkudedElementIds = [] as string[]
 ): OutsideClickRef<T> {
   const ref = useRef<T | null>(null);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
+      const currId = (e?.target as any)?.id;
+      if (execkudedElementIds.includes(currId)) return;
       if (ref.current && !ref.current.contains(e.target as Node)) handler();
     }
 
     document.addEventListener("click", handleClick, listenCapturing);
 
     return () => document.removeEventListener("click", handleClick, listenCapturing);
-  }, [handler, listenCapturing]);
+  }, [handler, listenCapturing, execkudedElementIds]);
 
   return { outsideClickRef: ref };
 }

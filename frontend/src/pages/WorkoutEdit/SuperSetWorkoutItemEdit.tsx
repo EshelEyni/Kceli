@@ -7,10 +7,10 @@ import {
 } from "../../../../shared/types/workout";
 import { useWorkoutEdit } from "./WorkoutEditContext";
 import { Button } from "../../components/App/Button/Button";
-import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { FaChevronDown } from "react-icons/fa";
 import { debounce } from "../../services/util/utilService";
 import { MiniWorkoutItemPreview } from "./MiniWorkoutItemPreview";
+import { Select } from "../../components/App/Select/Select";
 
 type WorkoutItemSupersetEditProps = { item: WorkoutItemSuperset };
 
@@ -99,7 +99,13 @@ export const SuperSetWorkoutItemEdit: FC<WorkoutItemSupersetEditProps> = ({ item
     updateWorkout(workoutToUpdate);
   }
 
-  function handleSelectItemWeightUnitChange(weightUnit: string, supersetItemId: string) {
+  function handleSelectItemWeightUnitChange({
+    weightUnit,
+    supersetItemId,
+  }: {
+    weightUnit: string;
+    supersetItemId: string;
+  }) {
     if (!workout) return;
     const items = (workout as WorkoutAnaerobic).items.map(i => {
       if (i.id !== item.id) return i;
@@ -176,29 +182,24 @@ export const SuperSetWorkoutItemEdit: FC<WorkoutItemSupersetEditProps> = ({ item
             <div className="workout-edit__form__input-container">
               <label>weight unit:</label>
 
-              <Select.Root
-                onValueChange={value => handleSelectItemWeightUnitChange(value, supersetItem.id)}
-              >
-                <Select.Trigger className="SelectTrigger">
-                  <Select.Value placeholder={supersetItem.weightUnit} />
-                  <Select.Icon className="SelectIcon">
-                    <ChevronDownIcon />
-                  </Select.Icon>
-                </Select.Trigger>
-                <Select.Portal>
-                  <Select.Content className="SelectContent">
-                    <Select.Viewport className="SelectViewport">
-                      <Select.Group>
-                        {Object.values(WeightUnit).map(weightUnit => (
-                          <Select.Item value={weightUnit} className="SelectItem" key={weightUnit}>
-                            <Select.ItemText>{weightUnit}</Select.ItemText>
-                          </Select.Item>
-                        ))}
-                      </Select.Group>
-                    </Select.Viewport>
-                  </Select.Content>
-                </Select.Portal>
-              </Select.Root>
+              <Select onChange={handleSelectItemWeightUnitChange} listHeight={250}>
+                <Select.SelectTrigger>
+                  <div>
+                    <span>{supersetItem.weightUnit}</span>
+                    <FaChevronDown />
+                  </div>
+                </Select.SelectTrigger>
+                <Select.SelectList>
+                  {Object.values(WeightUnit).map(weightUnit => (
+                    <Select.SelectItem
+                      value={{ weightUnit, supersetItemId: supersetItem.id }}
+                      key={weightUnit}
+                    >
+                      {weightUnit}
+                    </Select.SelectItem>
+                  ))}
+                </Select.SelectList>
+              </Select>
             </div>
             <div className="workout-edit__form__input-container__btns-container">
               <Button

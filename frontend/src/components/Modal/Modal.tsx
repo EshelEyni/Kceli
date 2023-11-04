@@ -204,10 +204,7 @@ const OpenBtn: FC<OpenBtnProps> = ({
     };
   }, [setPositionByRef, calculatePosition]);
 
-  return cloneElement(children, {
-    onClick: handleClick,
-    ref,
-  });
+  return cloneElement(children, { onClick: handleClick, ref });
 };
 
 const CloseBtn: FC<CloseBtnProps> = ({ children, onClickFn }) => {
