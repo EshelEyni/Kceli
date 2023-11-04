@@ -66,10 +66,12 @@ function assertIntakeItem(item: NewIntakeItem | IntakeItem) {
 }
 
 function assertWorkout(workout: Workout) {
+  const { id, userId } = workout;
+  expect(typeof id === "string" || typeof id === "object").toBeTruthy();
+  expect(typeof userId === "string" || typeof userId === "object").toBeTruthy();
+
   expect(workout).toEqual(
     expect.objectContaining({
-      id: expect.any(String),
-      userId: expect.any(String),
       description: expect.any(String),
       items: expect.any(Array),
     })

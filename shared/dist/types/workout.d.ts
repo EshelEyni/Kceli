@@ -12,6 +12,7 @@ interface BasicWorkout {
     readonly id: string;
     userId: string;
     description: string;
+    durationInMin?: number;
 }
 export interface WorkoutAnaerobic extends BasicWorkout {
     type: "anaerobic";
@@ -28,6 +29,7 @@ export interface BasicWorkoutItem {
     name: string;
     isStarted: boolean;
     isCompleted: boolean;
+    caloriesBurned?: number;
 }
 export interface WorkoutItemAerobic extends BasicWorkoutItem {
     type: "aerobic";

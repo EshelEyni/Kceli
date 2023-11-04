@@ -17,13 +17,13 @@ export const WorkoutDayPreview: FC<WorkoutDayProps> = ({ workoutDay }) => {
   const { loggedInUser, workouts } = useWorkouts();
   const dispatch: AppDispatch = useDispatch();
 
-  function handleRemoveButtonClick(workoutId: string) {
+  function handleRemoveButtonClick(index: number) {
     if (!loggedInUser || !workouts) return;
     const { workoutSchedule } = loggedInUser;
-    const UpdatedWorkoutSchedule = workoutSchedule.map(workoutDay => {
-      if (workoutDay.name !== workoutDay.name) return workoutDay;
-      const newWorkouts = workoutDay.workouts.filter(workout => workout.id !== workoutId);
-      return { ...workoutDay, workouts: newWorkouts };
+    const UpdatedWorkoutSchedule = workoutSchedule.map(wd => {
+      if (wd.name !== workoutDay.name) return wd;
+      const newWorkouts = wd.workouts.filter((_, i) => i !== index);
+      return { ...wd, workouts: newWorkouts };
     });
     dispatch(updateLoggedInUser({ ...loggedInUser, workoutSchedule: UpdatedWorkoutSchedule }));
   }
@@ -37,25 +37,25 @@ export const WorkoutDayPreview: FC<WorkoutDayProps> = ({ workoutDay }) => {
         >
           <h2 className="workout-day__name">{workoutDay.name}</h2>
           <ul {...provided.droppableProps} ref={provided.innerRef} className="workout-day__list">
-            {workoutDay.workouts.map((workout, index) => (
-              <Draggable key={workout.id} draggableId={workout.id} index={index}>
-                {provided => (
-                  <li
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                    style={{ ...provided.draggableProps.style }}
-                    className="workout-day__list__item"
-                  >
-                    <span>{workout.description}</span>
-                    <RiCloseCircleLine
-                      size={18}
-                      onClick={() => handleRemoveButtonClick(workout.id)}
-                    />
-                  </li>
-                )}
-              </Draggable>
-            ))}
+            {workoutDay.workouts.map((workout, index) => {
+              const draggableId = `workday-${workoutDay.name}-workout-${workout.id}`;
+              return (
+                <Draggable key={workout.id + index} draggableId={draggableId} index={index}>
+                  {provided => (
+                    <li
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      style={{ ...provided.draggableProps.style }}
+                      className="workout-day__list__item"
+                    >
+                      <span>{workout.description}</span>
+                      <RiCloseCircleLine size={18} onClick={() => handleRemoveButtonClick(index)} />
+                    </li>
+                  )}
+                </Draggable>
+              );
+            })}
           </ul>
           {provided.placeholder}
         </section>

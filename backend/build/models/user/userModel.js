@@ -12,13 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserModel = exports.userSchema = void 0;
+exports.UserModel = exports.userSchema = exports.defaultWorkoutSchedule = void 0;
 const mongoose_1 = require("mongoose");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const crypto_1 = __importDefault(require("crypto"));
 const calorieService_1 = __importDefault(require("../../services/calorie/calorieService"));
 const workoutModel_1 = require("../workout/workoutModel");
-const defaultWorkoutSchedule = [
+exports.defaultWorkoutSchedule = [
     {
         name: "sun",
         value: 0,
@@ -149,7 +149,7 @@ const userSchema = new mongoose_1.Schema({
                 workouts: [workoutModel_1.workoutSchema],
             },
         ],
-        default: defaultWorkoutSchedule,
+        default: exports.defaultWorkoutSchedule,
     },
     isAdmin: { type: Boolean, default: false },
     active: { type: Boolean, default: true },

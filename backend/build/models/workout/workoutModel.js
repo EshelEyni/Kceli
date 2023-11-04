@@ -122,6 +122,10 @@ const workoutItemSchema = new mongoose_1.Schema(
       type: Number,
       default: undefined,
     },
+    caloriesBurned: {
+      type: Number,
+      default: undefined,
+    },
     items: {
       type: [
         {
@@ -197,6 +201,10 @@ const workoutSchema = new mongoose_1.Schema(
       default: "no description",
     },
     items: [workoutItemSchema],
+    durationInMin: {
+      type: Number,
+      default: undefined,
+    },
   },
   {
     toObject: {

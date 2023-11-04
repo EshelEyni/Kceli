@@ -77,10 +77,6 @@
     }
   }
 
-  &__workouts-list {
-    gap: rem(10px);
-  }
-
   @include for-desktop-layout {
     justify-content: flex-start;
     flex-grow: 0;

@@ -87,6 +87,7 @@ export interface IWorkoutItem extends Document {
     weight: number;
     weightUnit: WeightUnit;
   }>;
+  caloriesBurned?: number;
 }
 
 export interface IWorkout extends Document {
@@ -95,4 +96,5 @@ export interface IWorkout extends Document {
   split: "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
   description: string;
   items: Array<CombinedWorkoutItem>;
+  durationInMin?: number;
 }

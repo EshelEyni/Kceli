@@ -11,8 +11,15 @@ export const GoalIndicator: FC = () => {
   const { loggedInUser } = useAuth();
   const { userDailyStats } = useGetUserDailyStats();
   const [isCircleClicked, setIsCircleClicked] = useState(false);
+  if (!loggedInUser || !userDailyStats) return null;
+  const percentage = userUtilService.calcPercentageWeightGoal({
+    loggedInUser,
+    userDailyStats,
+  });
+  const background = _generateGradient(percentage);
 
   function handleCircleClick() {
+    if (percentage < 100) return;
     sound.play();
     setIsCircleClicked(true);
     setTimeout(() => setIsCircleClicked(false), 15000);
@@ -24,14 +31,6 @@ export const GoalIndicator: FC = () => {
     sound.currentTime = 0;
     setIsCircleClicked(false);
   }
-
-  if (!loggedInUser || !userDailyStats) return null;
-
-  const percentage = userUtilService.calcPercentageWeightGoal({
-    loggedInUser,
-    userDailyStats,
-  });
-  const background = _generateGradient(percentage);
 
   return (
     <section className="goal-indicator">

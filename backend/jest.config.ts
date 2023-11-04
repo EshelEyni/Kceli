@@ -1,9 +1,9 @@
 import type { Config } from "@jest/types";
 
-const isGlobalTesting = true;
-// const isGlobalTesting = false;
+// const isGlobalTesting = true;
+const isGlobalTesting = false;
 
-const currPath = "/services/calorie";
+const currPath = "/models/day";
 const baseDir = isGlobalTesting ? "<rootDir>" : `<rootDir>/src/${currPath}`;
 // const specifiedPath = baseDir + "/Add.test.ts";
 // const collectCoverage = true;

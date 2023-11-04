@@ -8,7 +8,6 @@ import { useWorkoutEdit } from "./WorkoutEditContext";
 import { AerobicWorkoutItemEdit } from "./AerobicWorkoutItemEdit";
 import { AnaerobicWorkoutItemEdit } from "./AnaerobicWorkoutItemEdit";
 import { SuperSetWorkoutItemEdit } from "./SuperSetWorkoutItemEdit";
-import workoutUtilService from "../../services/workout/workoutUtilService";
 import { AppDispatch } from "../../types/app";
 import { useDispatch } from "react-redux";
 import { setGoBackBtnLink } from "../../store/slices/systemSlice";
@@ -21,9 +20,7 @@ import {
   NotDraggingStyle,
 } from "react-beautiful-dnd";
 import { StrictModeDroppable } from "../../components/App/StrictModeDroppable/StrictModeDroppable";
-import { debounce } from "../../services/util/utilService";
-import { Select } from "../../components/App/Select/Select";
-import { FaChevronDown } from "react-icons/fa";
+import { WorkoutEditMainInputs } from "./WorkoutEditMainInputs";
 import "./WorkoutEdit.scss";
 
 const WorkoutEdit: FC = () => {
@@ -43,7 +40,6 @@ const WorkoutEdit: FC = () => {
   } = useWorkoutEdit();
 
   const [workoutItems, setWorkoutItems] = useState<CombinedWorkoutItem[]>(workout?.items ?? []);
-  const isAnaeobic = workout && workout?.type === "anaerobic";
 
   const isItemsEmpty = workout?.items.length === 0;
   const isItemsListShown = isSuccess && !isItemsEmpty;
@@ -136,52 +132,12 @@ const WorkoutEdit: FC = () => {
   return (
     <main className="page workout-edit">
       <form className="workout-edit__form">
-        <div className="workout-edit__form__input-container name-input">
-          <label>description:</label>
-          <input
-            type="text"
-            defaultValue={workout.description}
-            onChange={debounce(handleDescInputChange, 500).debouncedFunc}
-          />
-        </div>
-
-        <div className="workout-edit__form__input-container">
-          <label>workout type:</label>
-          <Select onChange={handleTypeSelectChange} listHeight={250}>
-            <Select.SelectTrigger>
-              <div>
-                <span>{workout.type}</span>
-                <FaChevronDown />
-              </div>
-            </Select.SelectTrigger>
-            <Select.SelectList>
-              <Select.SelectItem value="anaerobic">anaerobic</Select.SelectItem>
-              <Select.SelectItem value="aerobic">aerobic</Select.SelectItem>
-            </Select.SelectList>
-          </Select>
-        </div>
-
-        {isAnaeobic && (
-          <div className="workout-edit__form__input-container">
-            <label>split:</label>
-
-            <Select onChange={handleSplitSelectChange} listHeight={250}>
-              <Select.SelectTrigger>
-                <div>
-                  <span>{workout.split}</span>
-                  <FaChevronDown />
-                </div>
-              </Select.SelectTrigger>
-              <Select.SelectList>
-                {workoutUtilService.SPLIT_TYPES.map(type => (
-                  <Select.SelectItem value={type} key={type}>
-                    {type}
-                  </Select.SelectItem>
-                ))}
-              </Select.SelectList>
-            </Select>
-          </div>
-        )}
+        <WorkoutEditMainInputs
+          workout={workout}
+          handleTypeSelectChange={handleTypeSelectChange}
+          handleDescInputChange={handleDescInputChange}
+          handleSplitSelectChange={handleSplitSelectChange}
+        />
 
         <div className="workout-edit-page__duration-container">
           <h3>duration:</h3>

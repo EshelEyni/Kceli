@@ -5,13 +5,15 @@ import { connectToTestDB, disconnectFromTestDB } from "../../services/test/testD
 import {
   createValidUserCreds,
   getMockDailyData,
+  getMockWorkout,
   getMongoId,
   getNewMockIntake,
   mockGetLoggedInUserIdFromReq,
 } from "../../services/test/testUtilService";
-import { UserModel } from "../user/userModel";
+import { UserModel, defaultWorkoutSchedule } from "../user/userModel";
 import { DailyDataModel } from "./dailyDataModel";
 import { DayData } from "../../../../shared/types/dayData";
+import { assertWorkout } from "../../services/test/testAssertionService";
 
 jest.mock("../../services/openAI/openAIService");
 jest.mock("../../services/intake/intakeService");
@@ -116,6 +118,42 @@ describe("Daily Data Model", () => {
 
     afterEach(async () => {
       await DailyDataModel.deleteMany({});
+    });
+
+    it("should add workout from user work out schedule", async () => {
+      const date = new Date();
+      const day = date.getDay();
+      const workoutSchedule = defaultWorkoutSchedule;
+      workoutSchedule[day].workouts = [getMockWorkout()];
+      const data = { ...createValidUserCreds(), workoutSchedule };
+      const user = await UserModel.create(data);
+      mockGetLoggedInUserIdFromReq(user.id);
+      const validDailyData = new DailyDataModel({ ...dailyData, userId: user.id, date });
+      const savedDailyData = (await validDailyData.save()).toObject();
+      expect(savedDailyData.workouts.length).toEqual(1);
+      savedDailyData.workouts.forEach((workout: any) => {
+        assertWorkout(workout);
+      });
+    });
+
+    fit("should last uncompleted workout if it exists", async () => {
+      const date = new Date();
+      const day = date.getDay() - 1;
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const index = day < 0 ? 6 : day;
+      const workoutSchedule = defaultWorkoutSchedule;
+      workoutSchedule[index].workouts = [getMockWorkout()];
+      const data = { ...createValidUserCreds(), workoutSchedule };
+      const user = await UserModel.create(data);
+      mockGetLoggedInUserIdFromReq(user.id);
+      await DailyDataModel.create({ ...dailyData, userId: user.id, date: yesterday });
+      const validDailyData = new DailyDataModel({ ...dailyData, userId: user.id, date });
+      const savedDailyData = (await validDailyData.save()).toObject();
+      expect(savedDailyData.workouts.length).toEqual(1);
+      savedDailyData.workouts.forEach((workout: any) => {
+        assertWorkout(workout);
+      });
     });
 
     it("should correctly calculate TDEE and target caloric intake when updating weight", async () => {

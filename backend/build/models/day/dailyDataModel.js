@@ -71,6 +71,28 @@ const dailyDataSchema = new mongoose_1.Schema({
     },
     timestamps: true,
 });
+dailyDataSchema.pre("save", function (next) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const day = new Date(this.get("date")).getDay();
+        const userId = this.get("userId");
+        const lastUncompletedWorkout = yield DailyDataModel.findOne({
+            userId,
+            "workouts.items": { $not: { $elemMatch: { isStarted: true } } },
+        }).select("workouts");
+        if (lastUncompletedWorkout) {
+            const { workouts } = lastUncompletedWorkout;
+            this.set("workouts", workouts !== null && workouts !== void 0 ? workouts : []);
+            return next();
+        }
+        const user = yield userModel_1.UserModel.findById(userId);
+        if (!user)
+            return next();
+        const { workoutSchedule } = user;
+        const workoutFromSchedule = workoutSchedule.find(workout => workout.value === day);
+        this.set("workouts", (_a = workoutFromSchedule === null || workoutFromSchedule === void 0 ? void 0 : workoutFromSchedule.workouts) !== null && _a !== void 0 ? _a : []);
+    });
+});
 dailyDataSchema.pre("findOneAndUpdate", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const update = this.getUpdate();

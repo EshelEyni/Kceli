@@ -19,21 +19,24 @@ export const WorkoutList: FC = () => {
         <StrictModeDroppable droppableId="workout-list" direction="horizontal">
           {provided => (
             <ul {...provided.droppableProps} ref={provided.innerRef} className="workout-list">
-              {(workouts as Workout[]).map((workout, index) => (
-                <Draggable key={workout.id} draggableId={workout.id} index={index}>
-                  {provided => (
-                    <li
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                      style={{ ...provided.draggableProps.style }}
-                      className="workout-list__item"
-                    >
-                      <WorkoutPreview key={workout.id} workout={workout} />
-                    </li>
-                  )}
-                </Draggable>
-              ))}
+              {(workouts as Workout[]).map((workout, index) => {
+                const draggableId = `workout-list-workout-${workout.id}-index-${index}`;
+                return (
+                  <Draggable key={workout.id + index} draggableId={draggableId} index={index}>
+                    {provided => (
+                      <li
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                        style={{ ...provided.draggableProps.style }}
+                        className="workout-list__item"
+                      >
+                        <WorkoutPreview workout={workout} />
+                      </li>
+                    )}
+                  </Draggable>
+                );
+              })}
               {provided.placeholder}
             </ul>
           )}

@@ -83,6 +83,12 @@
 
 @include for-desktop-layout {
   .app-header {
+    &__btn-container {
+      .btn-go-back {
+        padding: rem(15px) rem(20px);
+      }
+    }
+
     .app-nav {
       .app-nav-link {
         .app-nav-link__icon {

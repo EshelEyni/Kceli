@@ -83,6 +83,10 @@ const workoutItemSchema = new Schema<IWorkoutItem>(
       type: Number,
       default: undefined,
     },
+    caloriesBurned: {
+      type: Number,
+      default: undefined,
+    },
     items: {
       type: [
         {
@@ -157,6 +161,10 @@ const workoutSchema = new Schema<IWorkout>(
       default: "no description",
     },
     items: [workoutItemSchema],
+    durationInMin: {
+      type: Number,
+      default: undefined,
+    },
   },
   {
     toObject: {

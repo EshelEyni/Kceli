@@ -75,7 +75,7 @@ describe("Daily Data Model", () => {
     });
   });
 
-  fdescribe("Workout Item Schema", () => {
+  describe("Workout Item Schema", () => {
     afterEach(async () => {
       await WorkoutModel.deleteMany({});
     });

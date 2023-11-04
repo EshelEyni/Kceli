@@ -62,6 +62,27 @@ const dailyDataSchema = new Schema<IDailyData>(
   }
 );
 
+dailyDataSchema.pre("save", async function (next) {
+  const day = new Date(this.get("date")).getDay();
+  const userId = this.get("userId");
+  const lastUncompletedWorkout = await DailyDataModel.findOne({
+    userId,
+    "workouts.items": { $not: { $elemMatch: { isStarted: true } } },
+  }).select("workouts");
+
+  if (lastUncompletedWorkout) {
+    const { workouts } = lastUncompletedWorkout;
+    this.set("workouts", workouts ?? []);
+    return next();
+  }
+
+  const user = await UserModel.findById(userId);
+  if (!user) return next();
+  const { workoutSchedule } = user;
+  const workoutFromSchedule = workoutSchedule.find(workout => workout.value === day);
+  this.set("workouts", workoutFromSchedule?.workouts ?? []);
+});
+
 dailyDataSchema.pre("findOneAndUpdate", async function (next) {
   const update = this.getUpdate();
   const isWeightUpdated = update && "weight" in update;

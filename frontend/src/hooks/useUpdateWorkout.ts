@@ -8,7 +8,7 @@ export function useUpdateWorkout() {
   const { mutate: updateWorkout, isLoading } = useMutation({
     mutationFn: (data: Workout) => workoutApiService.update(data),
     onSuccess: data => {
-      queryClient.setQueryData([`workouts/${data.id}`], data);
+      queryClient.invalidateQueries(["workouts"]);
       queryClient.invalidateQueries([`workouts/${data.id}`]);
     },
   });

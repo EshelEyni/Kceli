@@ -8,12 +8,11 @@ import { DayEditFilter } from "./Filter";
 import { DayEditHeader } from "./Header";
 import { IntakeList } from "./IntakeList";
 import { WeightWaistInput } from "./WeightWaistInput";
-import { List } from "../../../components/App/List/List";
-import { WorkoutPreview } from "../../../components/Workout/WorkoutPreview/WorkoutPreview";
 import { NutritionQuery } from "./NutritionQuery";
 import { WaterEdit } from "./WaterEdit";
 import { FavoriteIntakes } from "./FavoriteIntakes";
 import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
+import { DayWorkouts } from "./DayWorkouts";
 
 export const DayEdit: FC = () => {
   const { dailyData, isLoading, isSuccess, isError, isLoadingUpdate, openedTab } = useDayEdit();
@@ -37,13 +36,7 @@ export const DayEdit: FC = () => {
           <DayEditFilter />
           {openedTab === DayEditTab.WeightWaistInput && <WeightWaistInput />}
           {openedTab === DayEditTab.IntakeEdit && <IntakeEdit />}
-          {openedTab === DayEditTab.Workouts && (
-            <List
-              className="day-edit__workouts-list"
-              items={dailyData.workouts}
-              render={item => <WorkoutPreview workout={item} isDayEdit={true} key={item.id} />}
-            />
-          )}
+          {openedTab === DayEditTab.Workouts && <DayWorkouts />}
           {openedTab === DayEditTab.FavoriteIntake && <FavoriteIntakes />}
           {isListShown && <IntakeList />}
           {openedTab === DayEditTab.Query && <NutritionQuery />}

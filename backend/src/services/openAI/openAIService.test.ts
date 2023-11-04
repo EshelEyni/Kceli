@@ -97,7 +97,7 @@ describe("Open AI Service", () => {
     });
   });
 
-  fdescribe("getCaloriesForIntakeItem", () => {
+  describe("getCaloriesForIntakeItem", () => {
     const intakeItem = getMockIntakeItem();
 
     beforeEach(() => {
@@ -157,6 +157,55 @@ describe("Open AI Service", () => {
       await expect(openAIService.getCaloriesForIntakeItem(intakeItem)).rejects.toThrow(
         "calories is NaN"
       );
+    });
+  });
+
+  fdescribe("getCalorieBurnForWorkoutItem", () => {
+    const user = {
+      birthdate: "1990-01-01",
+      weight: 180,
+      height: "6'0",
+    } as any;
+
+    const workoutItem = {
+      name: "Bench Press",
+      type: "anaerobic",
+      sets: 3,
+      reps: 10,
+      weight: 135,
+      weightUnit: "lbs",
+    } as any;
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it("should return calories burned for workout item from OpenAI", async () => {
+      const response = {
+        data: {
+          choices: [{ message: { content: "100" } }],
+        },
+      };
+
+      openai.createChatCompletion = jest.fn().mockResolvedValue(response);
+
+      const result = await openAIService.getCalorieBurnForWorkoutItem({ user, workoutItem });
+
+      expect(openai.createChatCompletion).toHaveBeenCalledWith({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "user",
+            content: `
+  Calculate calories burned for 33 year old 180 lb 6'0 in tall person.
+  Calculate calories burned for 3 sets of 10 reps of Bench Press with 135 lbs.
+  NOTE: Return the number of calories as an integer.
+  `,
+          },
+        ],
+      });
+
+      expect(result).toEqual(100);
     });
   });
 });

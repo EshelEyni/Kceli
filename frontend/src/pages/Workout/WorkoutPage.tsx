@@ -10,7 +10,6 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { updateLoggedInUser } from "../../store/slices/authSlice";
 import { AppDispatch } from "../../types/app";
 import { useDispatch } from "react-redux";
-import { createId } from "../../services/util/utilService";
 
 const WorkoutPage: FC = () => {
   const { createWorkout, isLoadingCreateWorkout, loggedInUser, workouts, setWorkoutSchedule } =
@@ -50,7 +49,6 @@ const WorkoutPage: FC = () => {
     const UpdatedWorkoutSchedule = workoutSchedule.map(workoutDay => {
       if (workoutDay.name !== destination.droppableId) return workoutDay;
       const workoutToAdd = { ...workouts[source.index] };
-      workoutToAdd.id = createId();
       const newWorkouts = [...workoutDay.workouts, workoutToAdd];
       return { ...workoutDay, workouts: newWorkouts };
     });
@@ -67,7 +65,6 @@ const WorkoutPage: FC = () => {
         const sourceDay = workoutSchedule.find(day => day.name === source.droppableId);
         if (!sourceDay) return workoutDay;
         const workoutToAdd = { ...sourceDay.workouts[source.index] };
-        workoutToAdd.id = createId();
         const newWorkouts = [...workoutDay.workouts, workoutToAdd];
         return { ...workoutDay, workouts: newWorkouts };
       }

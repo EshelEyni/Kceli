@@ -24,6 +24,8 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { Document, Schema } from "mongoose";
 import { IUser } from "../../types/iTypes";
+import { WorkoutDay } from "../../../../shared/types/user";
+export declare const defaultWorkoutSchedule: WorkoutDay[];
 declare const userSchema: Schema<IUser>;
 declare const UserModel: import("mongoose").Model<IUser, {}, {}, {}, Document<unknown, {}, IUser> & IUser & {
     _id: import("mongoose").Types.ObjectId;

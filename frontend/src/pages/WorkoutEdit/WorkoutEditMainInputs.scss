@@ -1,0 +1,93 @@
+@import "../../styles/main.scss";
+
+.workout-edit__form__input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: rem(10px);
+  width: 100%;
+
+  > * {
+    font-weight: 600;
+    color: var(--color-text-gray);
+  }
+
+  &.name-input {
+    grid-column: 1 / span 2;
+    input {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  label {
+    font-size: rem(16px);
+    font-weight: 600;
+    text-transform: capitalize;
+    color: var(--color-secondary);
+  }
+
+  input {
+    width: 100%;
+    height: rem(35px);
+    padding: rem(5px);
+    border-radius: 5px;
+    font-size: rem(18px);
+    text-transform: capitalize;
+  }
+
+  .select-trigger {
+    height: rem(35px);
+    font-size: rem(16px);
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: rem(5px) rem(10px);
+    background-color: var(--color-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.15);
+    height: fit-content;
+  }
+
+  .select-list {
+    font-size: rem(14px);
+    font-weight: 600;
+    width: 100%;
+    height: fit-content;
+    border-radius: 5px;
+    background-color: var(--color-secondary);
+    z-index: 1000;
+    box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.15);
+
+    &__item {
+      font-size: rem(18px);
+      font-weight: 600;
+      width: 100%;
+      padding: rem(5px) rem(10px);
+      color: var(--color-text-gray);
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &:hover {
+        background-color: var(--color-hover);
+      }
+    }
+  }
+
+  &__btns-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: rem(10px);
+
+    .btn {
+      align-self: flex-end;
+      padding: rem(10px) rem(18px);
+    }
+  }
+}

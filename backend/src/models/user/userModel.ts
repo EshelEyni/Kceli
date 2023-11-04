@@ -6,7 +6,7 @@ import { User, WorkoutDay } from "../../../../shared/types/user";
 import calorieService from "../../services/calorie/calorieService";
 import { workoutSchema } from "../workout/workoutModel";
 
-const defaultWorkoutSchedule: WorkoutDay[] = [
+export const defaultWorkoutSchedule: WorkoutDay[] = [
   {
     name: "sun",
     value: 0,
