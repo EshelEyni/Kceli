@@ -4,7 +4,7 @@ exports.WeightUnit = void 0;
 var WeightUnit;
 (function (WeightUnit) {
     WeightUnit["KG"] = "kg";
-    WeightUnit["LB"] = "lb";
+    WeightUnit["LBS"] = "lbs";
     WeightUnit["BodyWeight"] = "body-weight";
     WeightUnit["TRX"] = "trx";
     WeightUnit["Band"] = "band";

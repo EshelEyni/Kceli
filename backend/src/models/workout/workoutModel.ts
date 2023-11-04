@@ -75,7 +75,7 @@ const workoutItemSchema = new Schema<IWorkoutItem>(
       type: String,
       enum: {
         values: Object.values(WeightUnit),
-        message: "weightUnit must be either kg or lbs",
+        message: `weightUnit must be either ${Object.values(WeightUnit).join(", ")} `,
       },
       default: undefined,
     },

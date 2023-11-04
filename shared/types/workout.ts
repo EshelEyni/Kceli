@@ -3,7 +3,7 @@ export type WorkoutType = "anaerobic" | "aerobic";
 
 export enum WeightUnit {
   KG = "kg",
-  LB = "lb",
+  LBS = "lbs",
   BodyWeight = "body-weight",
   TRX = "trx",
   Band = "band",

@@ -2,7 +2,7 @@ export type Split = "FBW" | "A" | "B" | "C" | "D" | "E" | "F";
 export type WorkoutType = "anaerobic" | "aerobic";
 export declare enum WeightUnit {
     KG = "kg",
-    LB = "lb",
+    LBS = "lbs",
     BodyWeight = "body-weight",
     TRX = "trx",
     Band = "band"

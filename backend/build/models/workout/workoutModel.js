@@ -114,7 +114,7 @@ const workoutItemSchema = new mongoose_1.Schema(
       type: String,
       enum: {
         values: Object.values(workout_1.WeightUnit),
-        message: "weightUnit must be either kg or lbs",
+        message: `weightUnit must be either ${Object.values(workout_1.WeightUnit).join(", ")} `,
       },
       default: undefined,
     },
