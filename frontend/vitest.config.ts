@@ -4,7 +4,7 @@ import svgr from "vite-plugin-svgr";
 
 import { configDefaults, defineConfig } from "vitest/config";
 
-const root = "src/pages/home/DayEdit";
+const root = "src/pages/Workout";
 
 export default defineConfig({
   plugins: [svgr()],
@@ -15,7 +15,7 @@ export default defineConfig({
       exclude: ["packages/template/*"],
     },
     root,
-    include: ["PreSaveCalorieCount.test.tsx"],
+    include: ["WorkoutsContext.test.tsx"],
     exclude: [...configDefaults.exclude, "packages/template/*"],
     outputFile: "test-results.html",
     cache: {

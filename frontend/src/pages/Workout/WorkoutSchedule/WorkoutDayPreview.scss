@@ -28,11 +28,18 @@
 
     &__item {
       display: flex;
+      justify-content: center;
       align-items: center;
       gap: rem(5px);
+      background-color: var(--color-primary);
+      border-radius: 5px;
+      width: 100%;
+      padding: rem(5px) rem(10px);
 
       span {
         font-size: rem(18px);
+        font-weight: 500;
+        color: var(--color-secondary);
       }
 
       svg {

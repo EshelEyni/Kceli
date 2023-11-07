@@ -1,4 +1,4 @@
-import { User, UserWorkoutSchedule } from "../../../shared/types/user";
+import { User, UserWorkoutSchedule, WorkoutDay } from "../../../shared/types/user";
 import { DayData } from "../../../shared/types/dayData";
 import { act } from "@testing-library/react";
 import { CombinedIntake, IntakeItem, MeasurementUnit } from "../../../shared/types/intake";
@@ -78,7 +78,7 @@ function createUser({
     startingWeight: 100,
     weightGoal: 100,
   },
-  workoutSchedule = [],
+  workoutSchedule = createTestWorkSchedule(),
   gender = "female",
   createdAt = "test",
 }: MockUser): User {
@@ -99,6 +99,48 @@ function createUser({
     gender,
     createdAt,
   };
+}
+
+function createTestWorkSchedule() {
+  const defaultWorkoutSchedule: WorkoutDay[] = [
+    {
+      name: "sun",
+      value: 0,
+      workouts: [],
+    },
+    {
+      name: "mon",
+      value: 1,
+      workouts: [],
+    },
+    {
+      name: "tue",
+      value: 2,
+      workouts: [],
+    },
+    {
+      name: "wed",
+      value: 3,
+      workouts: [],
+    },
+    {
+      name: "thu",
+      value: 4,
+      workouts: [],
+    },
+    {
+      name: "fri",
+      value: 5,
+      workouts: [],
+    },
+    {
+      name: "sat",
+      value: 6,
+      workouts: [],
+    },
+  ];
+
+  return defaultWorkoutSchedule;
 }
 
 function createDailyData({

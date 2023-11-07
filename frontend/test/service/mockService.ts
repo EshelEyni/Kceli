@@ -17,6 +17,8 @@ import { useGetUserFavoriteIntakes } from "../../src/hooks/useGetUserFavoriteInt
 import { useUpdateFavoriteIntake } from "../../src/hooks/useUpdateFavoriteIntake";
 import { useGetColorByCalories } from "../../src/hooks/useGetColorByCalories";
 import { useDeleteFavoriteIntake } from "../../src/hooks/useDeleteFavoriteIntake";
+import { useGetWorkouts } from "../../src/hooks/useGetWorkouts";
+import { useCreateWorkout } from "../../src/hooks/useCreateWorkout";
 
 export type MockUseDayEdit = {
   dailyData?: DayData | null;
@@ -276,6 +278,40 @@ function mockUseIntakeItemEdit({
   return value;
 }
 
+function mockUseGetWorkouts({
+  workouts = [testService.createWorkout(), testService.createWorkout()],
+  error = null,
+  isLoading = false,
+  isSuccess = true,
+  isError = false,
+  isEmpty = false,
+}: {
+  workouts?: any;
+  error?: unknown;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  isError?: boolean;
+  isEmpty?: boolean;
+}) {
+  (useGetWorkouts as Mock).mockReturnValue({
+    workouts,
+    error,
+    isLoading,
+    isSuccess,
+    isError,
+    isEmpty,
+  });
+
+  return { workouts, error, isLoading, isSuccess, isError };
+}
+
+function mockUseCreateWorkout({ createWorkout = vi.fn(), isLoading = false }: any) {
+  (useCreateWorkout as Mock).mockReturnValue({
+    createWorkout,
+    isLoading,
+  });
+}
+
 function mockUseDeleteWorkout({
   removeWorkout = vi.fn(),
   isLoading = false,
@@ -358,6 +394,8 @@ export {
   mockUseGetTodayData,
   mockUseCreateDay,
   mockUseDayEdit,
+  mockUseGetWorkouts,
+  mockUseCreateWorkout,
   mockUseDeleteWorkout,
   mockUseNavigate,
   mockUseIntakeItemEdit,
