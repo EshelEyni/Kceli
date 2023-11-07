@@ -19,6 +19,8 @@ import { useGetColorByCalories } from "../../src/hooks/useGetColorByCalories";
 import { useDeleteFavoriteIntake } from "../../src/hooks/useDeleteFavoriteIntake";
 import { useGetWorkouts } from "../../src/hooks/useGetWorkouts";
 import { useCreateWorkout } from "../../src/hooks/useCreateWorkout";
+import { useWorkouts } from "../../src/pages/Workout/WorkoutsContext";
+import { useDispatch } from "react-redux";
 
 export type MockUseDayEdit = {
   dailyData?: DayData | null;
@@ -79,6 +81,22 @@ export type MockUseIntakeItemEdit = {
   handleIgnoreSuggestionClick?: any;
   handleAddButtonClick?: any;
   handleRemoveButtonClick?: any;
+};
+
+export type MockUseWorkouts = {
+  loggedInUser?: any;
+  workouts?: any;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  isError?: boolean;
+  isEmpty?: boolean;
+  createWorkout?: any;
+  isLoadingCreateWorkout?: boolean;
+  navigate?: any;
+  removeWorkout?: any;
+  isLoadingRemove?: boolean;
+  workoutSchedule?: any;
+  setWorkoutSchedule?: any;
 };
 
 function mockUseAuth(loggedInUser: any) {
@@ -388,6 +406,44 @@ function mockUseGetColorByCalories({ backgroundColor = "white" }: { backgroundCo
   return { backgroundColor };
 }
 
+function mockUseWorkouts({
+  loggedInUser = testService.createUser({}),
+  workouts = [testService.createWorkout(), testService.createWorkout()],
+  isLoading = false,
+  isSuccess = true,
+  isError = false,
+  isEmpty = false,
+  createWorkout = vi.fn(),
+  isLoadingCreateWorkout = false,
+  navigate = vi.fn(),
+  removeWorkout = vi.fn(),
+  isLoadingRemove = false,
+  workoutSchedule = testService.createWorkSchedule(),
+  setWorkoutSchedule = vi.fn(),
+}: MockUseWorkouts) {
+  const value = {
+    loggedInUser,
+    workouts,
+    isLoading,
+    isSuccess,
+    isError,
+    isEmpty,
+    createWorkout,
+    isLoadingCreateWorkout,
+    navigate,
+    removeWorkout,
+    isLoadingRemove,
+    workoutSchedule,
+    setWorkoutSchedule,
+  };
+
+  (useWorkouts as Mock).mockReturnValue(value);
+}
+
+function mockUseDispatch(value = vi.fn()) {
+  (useDispatch as Mock).mockReturnValue(value);
+}
+
 export {
   mockUseAuth,
   mockUseUpdateTodayData,
@@ -405,4 +461,6 @@ export {
   mockUseGetColorByCalories,
   mockUseDeleteFavoriteIntake,
   mockUseSearchParams,
+  mockUseWorkouts,
+  mockUseDispatch,
 };

@@ -8,7 +8,7 @@ export const WorkoutSchedule: FC = () => {
 
   if (!workoutSchedule) return null;
   return (
-    <ul className="workout-schedule">
+    <ul className="workout-schedule" data-testid="workout-schedule">
       {workoutSchedule.map(day => (
         <li key={day.name}>
           <WorkoutDayPreview workoutDay={day} />

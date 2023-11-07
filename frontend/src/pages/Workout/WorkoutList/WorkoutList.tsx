@@ -13,7 +13,7 @@ export const WorkoutList: FC = () => {
   const { workouts, isLoading, isSuccess, isError, isEmpty } = useWorkouts();
 
   return (
-    <>
+    <div className="workout-list-container" data-testid="workout-list">
       {isLoading && <SpinnerLoader />}
       {isSuccess && !isEmpty && (
         <StrictModeDroppable droppableId="workout-list" direction="horizontal">
@@ -44,6 +44,6 @@ export const WorkoutList: FC = () => {
       )}
       {isSuccess && isEmpty && <Empty entityName="workouts" />}
       {isError && <ErrorMsg msg="Couldn't get workouts. Please try again later" />}
-    </>
+    </div>
   );
 };

@@ -78,7 +78,7 @@ function createUser({
     startingWeight: 100,
     weightGoal: 100,
   },
-  workoutSchedule = createTestWorkSchedule(),
+  workoutSchedule = createWorkSchedule(),
   gender = "female",
   createdAt = "test",
 }: MockUser): User {
@@ -101,7 +101,7 @@ function createUser({
   };
 }
 
-function createTestWorkSchedule() {
+function createWorkSchedule() {
   const defaultWorkoutSchedule: WorkoutDay[] = [
     {
       name: "sun",
@@ -335,5 +335,6 @@ export default {
   createSpellingSuggestion,
   createNutritionQuery,
   createNutritionQueryResponse,
+  createWorkSchedule,
   waitForTick,
 };
