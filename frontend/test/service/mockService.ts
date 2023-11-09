@@ -22,6 +22,7 @@ import { useCreateWorkout } from "../../src/hooks/useCreateWorkout";
 import { useWorkouts } from "../../src/pages/Workout/WorkoutsContext";
 import { useDispatch } from "react-redux";
 import { useGetWorkout } from "../../src/hooks/useGetWorkout";
+import { useWorkout } from "../../src/pages/WorkoutDetails/WorkoutContext";
 
 export type MockUseDayEdit = {
   dailyData?: DayData | null;
@@ -98,6 +99,32 @@ export type MockUseWorkouts = {
   isLoadingRemove?: boolean;
   workoutSchedule?: any;
   setWorkoutSchedule?: any;
+};
+
+export type MockUseWorkout = {
+  workout?: any;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  isError?: boolean;
+  navigate?: any;
+  duration?: number;
+  completedDuration?: number;
+  remainingDuration?: number;
+  currItem?: any;
+  setCurrItem?: any;
+  isRunning?: boolean;
+  setIsRunning?: any;
+  isWorkoutStarted?: boolean;
+  onStart?: any;
+  onStartItem?: any;
+  onResetTimer?: any;
+  onCompleteItem?: any;
+  unCompletedItems?: any;
+  completedItems?: any;
+  time?: number;
+  setTime?: any;
+  initialTime?: number;
+  setInitialTime?: any;
 };
 
 function mockUseAuth(loggedInUser: any) {
@@ -448,6 +475,62 @@ function mockUseWorkouts({
   (useWorkouts as Mock).mockReturnValue(value);
 }
 
+function mockUseWorkout({
+  workout = testService.createWorkout({}),
+  isLoading = false,
+  isSuccess = true,
+  isError = false,
+  navigate = vi.fn(),
+  duration = 0,
+  completedDuration = 0,
+  remainingDuration = 0,
+  currItem = null,
+  setCurrItem = vi.fn(),
+  isRunning = false,
+  setIsRunning = vi.fn(),
+  isWorkoutStarted = false,
+  onStart = vi.fn(),
+  onStartItem = vi.fn(),
+  onResetTimer = vi.fn(),
+  onCompleteItem = vi.fn(),
+  unCompletedItems = [],
+  completedItems = [],
+  time = 0,
+  setTime = vi.fn(),
+  initialTime = 0,
+  setInitialTime = vi.fn(),
+}: MockUseWorkout): MockUseWorkout {
+  const value = {
+    workout,
+    isLoading,
+    isSuccess,
+    isError,
+    navigate,
+    duration,
+    completedDuration,
+    remainingDuration,
+    currItem,
+    setCurrItem,
+    isRunning,
+    setIsRunning,
+    isWorkoutStarted,
+    onStart,
+    onStartItem,
+    onResetTimer,
+    onCompleteItem,
+    unCompletedItems,
+    completedItems,
+    time,
+    setTime,
+    initialTime,
+    setInitialTime,
+  };
+
+  (useWorkout as Mock).mockReturnValue(value);
+
+  return value;
+}
+
 function mockUseGetWorkout({
   workout = testService.createWorkout({}),
   error = null,
@@ -496,5 +579,6 @@ export {
   mockUseDeleteFavoriteIntake,
   mockUseSearchParams,
   mockUseWorkouts,
+  mockUseWorkout,
   mockUseDispatch,
 };

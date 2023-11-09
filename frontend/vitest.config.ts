@@ -15,7 +15,7 @@ export default defineConfig({
       exclude: ["packages/template/*"],
     },
     root,
-    include: ["WorkoutContext.test.tsx"],
+    include: ["WorkoutDetails.test.tsx"],
     exclude: [...configDefaults.exclude, "packages/template/*"],
     outputFile: "test-results.html",
     cache: {

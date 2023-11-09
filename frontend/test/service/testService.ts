@@ -4,8 +4,10 @@ import { act } from "@testing-library/react";
 import { CombinedIntake, IntakeItem, MeasurementUnit } from "../../../shared/types/intake";
 import {
   CombinedWorkoutItem,
+  Split,
   WeightUnit,
   Workout,
+  WorkoutAnaerobic,
   WorkoutItemAerobic,
   WorkoutItemAnaerobic,
 } from "../../../shared/types/workout";
@@ -226,14 +228,18 @@ function createWorkout({
   description = "test",
   type = "aerobic",
   items = [createAerobicWorkoutItem({})],
+  split,
 }: {
   id?: string;
   userId?: string;
   description?: string;
   type?: "aerobic" | "anaerobic";
   items?: CombinedWorkoutItem[];
+  split?: Split;
 }): Workout {
-  return { id, userId, description, type, items } as Workout;
+  const workout = { id, userId, description, type, items } as Workout;
+  if (split) (workout as WorkoutAnaerobic).split = split;
+  return workout;
 }
 
 function createAerobicWorkoutItem({

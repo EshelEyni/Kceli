@@ -61,7 +61,7 @@ export const Timer: FC = () => {
   }, [isRunning, setTime, setIsRunning]);
 
   return (
-    <section className="timer">
+    <section className="timer" data-testid="timer">
       <TotalDurationCircle>
         <ItemDurationCircle>
           <SecondsCircle>

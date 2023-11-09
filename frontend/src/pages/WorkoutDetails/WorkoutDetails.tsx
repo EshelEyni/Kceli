@@ -26,7 +26,7 @@ const WorkoutDetails: FC = () => {
   if (!isSuccess || !workout) return null;
 
   return (
-    <main className="page workout-details">
+    <main className="page workout-details" data-testid="workout-details">
       <div className="workout-details__wrapper">
         <section className="workout-details__info">
           <div className="workout-details__info__item">
@@ -57,6 +57,7 @@ const WorkoutDetails: FC = () => {
               items={workout.items}
               className="workout-details__list"
               render={item => <WorkoutItemDisplay item={item} key={item.id} />}
+              dataTestId="workout-items-list"
             />
           </>
         )}
@@ -68,6 +69,7 @@ const WorkoutDetails: FC = () => {
               items={unCompletedItems}
               className="workout-details__list"
               render={item => <WorkoutItemDisplay item={item} key={item.id} />}
+              dataTestId="workout-uncompleted-items-list"
             />
             {completedItems.length > 0 && (
               <div className="workout-details__completed-list-container">
@@ -79,6 +81,7 @@ const WorkoutDetails: FC = () => {
                   items={completedItems}
                   className="workout-details__list"
                   render={item => <WorkoutItemDisplay item={item} key={item.id} />}
+                  dataTestId="workout-completed-items-list"
                 />
               </div>
             )}
