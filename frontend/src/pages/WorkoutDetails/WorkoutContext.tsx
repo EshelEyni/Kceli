@@ -5,7 +5,7 @@ import {
   WorkoutItemAnaerobic,
   WorkoutItemSuperset,
 } from "../../../../shared/types/workout";
-import { NavigateFunction, Params, useNavigate, useParams } from "react-router-dom";
+import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { useGetWorkout } from "../../hooks/useGetWorkout";
 import workoutUtilService from "../../services/workout/workoutUtilService";
 import { useGetTodayData } from "../../hooks/useGetTodayData";
@@ -21,7 +21,6 @@ type WorkoutContextType = {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
-  params: Readonly<Params<string>>;
   navigate: NavigateFunction;
   duration: number;
   completedDuration: number;
@@ -77,16 +76,15 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
   function onStart() {
     if (!dailyData || !workout) return;
     setIsWorkoutStarted(true);
-    const dailyDataToUpdate = { ...dailyData };
-    const isWorkoutExist = dailyDataToUpdate.workouts.some(w => w.id === workout.id);
-    dailyDataToUpdate.workouts = isWorkoutExist
-      ? dailyDataToUpdate.workouts.map(w => {
-          if (w.id === workout.id) w = workout;
-          return w;
-        })
-      : [...dailyDataToUpdate.workouts, workout as Workout];
 
-    updateDailyData(dailyDataToUpdate);
+    const isWorkoutExist = dailyData.workouts.some(w => w.id === workout.id);
+
+    if (!isWorkoutExist) {
+      const dailyDataToUpdate = { ...dailyData };
+      dailyDataToUpdate.workouts = [...dailyDataToUpdate.workouts, workout as Workout];
+      updateDailyData(dailyDataToUpdate);
+    }
+
     const isDev = process.env.NODE_ENV === "development";
     if (isDev) return;
     sound.play();
@@ -154,18 +152,18 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
   ) {
     if (!dailyData || !workout) return;
 
-    workout.items = workout.items.map(i => {
+    const updatedWorkout = { ...workout };
+    updatedWorkout.items = updatedWorkout.items.map(i => {
       if (i.id === item.id) i[statusKey] = statusValue;
       return i;
     });
 
-    const updatedWorkout = { ...workout };
     const updatedDailyData = { ...dailyData };
-
     updatedDailyData.workouts = dailyData.workouts.map(w => {
       if (w.id === updatedWorkout.id) return updatedWorkout;
       return w;
     });
+
     updateDailyData(updatedDailyData);
   }
 
@@ -195,7 +193,6 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     isSuccess,
     isError,
-    params,
     navigate,
     duration,
     completedDuration,
@@ -204,17 +201,17 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     setCurrItem,
     time,
     setTime,
+    initialTime,
+    setInitialTime,
     isRunning,
     setIsRunning,
     isWorkoutStarted,
-    onStart,
-    onStartItem,
     unCompletedItems,
     completedItems,
+    onStart,
+    onStartItem,
     onCompleteItem,
     onResetTimer,
-    initialTime,
-    setInitialTime,
   };
 
   return <WorkoutContext.Provider value={value}>{children}</WorkoutContext.Provider>;

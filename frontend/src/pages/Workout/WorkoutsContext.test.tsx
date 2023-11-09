@@ -59,7 +59,7 @@ describe("WorkoutsContext", () => {
   });
 
   it("should provide proper useGetWorkouts values", () => {
-    const workouts = [testService.createWorkout()];
+    const workouts = [testService.createWorkout({})];
     mockUseGetWorkouts({ workouts });
 
     const TestComponent = () => {

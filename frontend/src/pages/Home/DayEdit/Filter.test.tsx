@@ -60,7 +60,7 @@ describe("Day Edit Filter", () => {
     const dailyData = {
       ...testService.createDailyData({}),
       intakes: [],
-      workouts: [testService.createWorkout()],
+      workouts: [testService.createWorkout({})],
     };
 
     mockUseDayEdit({ dailyData });
@@ -76,7 +76,7 @@ describe("Day Edit Filter", () => {
         testService.createIntake({ isRecorded: true }),
         testService.createIntake({ isRecorded: false }),
       ],
-      workouts: [testService.createWorkout()],
+      workouts: [testService.createWorkout({})],
     };
 
     const { setOpenedTab, setSearchParams } = mockUseDayEdit({ dailyData });

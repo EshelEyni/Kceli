@@ -73,7 +73,7 @@ export const IntakeEdit: FC = () => {
   function handleSaveLaterButtonClick() {
     setIntake(prev => ({
       ...prev,
-      recordedAt: prev.isRecorded ? null : new Date(),
+      recordedAt: !prev.isRecorded ? null : new Date(),
       isRecorded: !prev.isRecorded,
     }));
   }

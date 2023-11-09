@@ -2,7 +2,13 @@ import { User, UserWorkoutSchedule, WorkoutDay } from "../../../shared/types/use
 import { DayData } from "../../../shared/types/dayData";
 import { act } from "@testing-library/react";
 import { CombinedIntake, IntakeItem, MeasurementUnit } from "../../../shared/types/intake";
-import { Workout, WorkoutItemAerobic } from "../../../shared/types/workout";
+import {
+  CombinedWorkoutItem,
+  WeightUnit,
+  Workout,
+  WorkoutItemAerobic,
+  WorkoutItemAnaerobic,
+} from "../../../shared/types/workout";
 import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
 import { createId } from "../../src/services/util/utilService";
 import {
@@ -148,7 +154,7 @@ function createDailyData({
   userId = "test",
   date = new Date(),
   intakes = [createIntake({})],
-  workouts = [createWorkout()],
+  workouts = [createWorkout({})],
   weight = 100,
   waist = 100,
   isWeightWaistIgnored = false,
@@ -214,25 +220,71 @@ function createIntakeItem({
   return { id, name, unit, quantity, calories };
 }
 
-function createWorkout(): Workout {
-  return {
-    id: "test",
-    userId: "test",
-    description: "test",
-    type: "aerobic",
-    items: [createAerobicWorkoutItem()],
-  };
+function createWorkout({
+  id = "test",
+  userId = "test",
+  description = "test",
+  type = "aerobic",
+  items = [createAerobicWorkoutItem({})],
+}: {
+  id?: string;
+  userId?: string;
+  description?: string;
+  type?: "aerobic" | "anaerobic";
+  items?: CombinedWorkoutItem[];
+}): Workout {
+  return { id, userId, description, type, items } as Workout;
 }
 
-function createAerobicWorkoutItem(): WorkoutItemAerobic {
+function createAerobicWorkoutItem({
+  id = "test",
+  name = "test",
+  isStarted = false,
+  isCompleted = false,
+  durationInMin = 100,
+}: {
+  id?: string;
+  name?: string;
+  isStarted?: boolean;
+  isCompleted?: boolean;
+  durationInMin?: number;
+}): WorkoutItemAerobic {
+  return { id, name, isStarted, type: "aerobic", isCompleted, durationInMin } as WorkoutItemAerobic;
+}
+
+function createAnarobicWorkoutItem({
+  id = "test",
+  name = "test",
+  isStarted = false,
+  isCompleted = false,
+  sets = 100,
+  reps = 100,
+  weight = 100,
+  weightUnit = WeightUnit.KG,
+  restInSec = 100,
+}: {
+  id?: string;
+  name?: string;
+  isStarted?: boolean;
+  isCompleted?: boolean;
+  sets?: number;
+  reps?: number;
+  weight?: number;
+  weightUnit?: WeightUnit;
+  restInSec?: number;
+}): WorkoutItemAnaerobic {
   return {
-    id: "test",
-    name: "test",
-    isStarted: false,
-    isCompleted: false,
-    type: "aerobic",
-    durationInMin: 100,
-  };
+    id,
+    name,
+    isStarted,
+    type: "anaerobic",
+    isCompleted,
+    sets,
+    reps,
+    weight,
+    weightUnit,
+    restInSec,
+  } as WorkoutItemAnaerobic;
 }
 
 function createSpellingSuggestion(): SpellingSuggestion {
@@ -332,6 +384,7 @@ export default {
   createIntakeItem,
   createWorkout,
   createAerobicWorkoutItem,
+  createAnarobicWorkoutItem,
   createSpellingSuggestion,
   createNutritionQuery,
   createNutritionQueryResponse,

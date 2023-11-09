@@ -7,7 +7,7 @@ import { useCreateDay } from "../../src/hooks/useCreateDay";
 import { DayEditTab, useDayEdit } from "../../src/pages/Home/DayEdit/DayEditContext";
 import testService from "./testService";
 import { useDeleteWorkout } from "../../src/hooks/useDeleteWorkout";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { DayData } from "../../../shared/types/dayData";
 import { Intake, NewIntakeItem } from "../../../shared/types/intake";
 import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
@@ -21,6 +21,7 @@ import { useGetWorkouts } from "../../src/hooks/useGetWorkouts";
 import { useCreateWorkout } from "../../src/hooks/useCreateWorkout";
 import { useWorkouts } from "../../src/pages/Workout/WorkoutsContext";
 import { useDispatch } from "react-redux";
+import { useGetWorkout } from "../../src/hooks/useGetWorkout";
 
 export type MockUseDayEdit = {
   dailyData?: DayData | null;
@@ -104,8 +105,8 @@ function mockUseAuth(loggedInUser: any) {
 }
 
 function mockUseUpdateTodayData({
-  updateDailyData,
-  isLoading,
+  updateDailyData = vi.fn(),
+  isLoading = false,
 }: {
   updateDailyData?: any;
   isLoading?: boolean;
@@ -114,6 +115,8 @@ function mockUseUpdateTodayData({
     updateDailyData,
     isLoading,
   });
+
+  return { updateDailyData, isLoading };
 }
 
 function mockUseGetTodayData({
@@ -297,7 +300,7 @@ function mockUseIntakeItemEdit({
 }
 
 function mockUseGetWorkouts({
-  workouts = [testService.createWorkout(), testService.createWorkout()],
+  workouts = [testService.createWorkout({}), testService.createWorkout({})],
   error = null,
   isLoading = false,
   isSuccess = true,
@@ -346,6 +349,11 @@ function mockUseDeleteWorkout({
 function mockUseNavigate(navigate = vi.fn()) {
   (useNavigate as Mock).mockImplementation(() => navigate);
   return navigate;
+}
+
+function mockUseParams(params = {}) {
+  (useParams as Mock).mockReturnValue(params);
+  return params;
 }
 
 function mockUseSearchParams({
@@ -408,7 +416,7 @@ function mockUseGetColorByCalories({ backgroundColor = "white" }: { backgroundCo
 
 function mockUseWorkouts({
   loggedInUser = testService.createUser({}),
-  workouts = [testService.createWorkout(), testService.createWorkout()],
+  workouts = [testService.createWorkout({}), testService.createWorkout({})],
   isLoading = false,
   isSuccess = true,
   isError = false,
@@ -440,6 +448,30 @@ function mockUseWorkouts({
   (useWorkouts as Mock).mockReturnValue(value);
 }
 
+function mockUseGetWorkout({
+  workout = testService.createWorkout({}),
+  error = null,
+  isLoading = false,
+  isSuccess = true,
+  isError = false,
+}: {
+  workout?: any;
+  error?: unknown;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  isError?: boolean;
+}) {
+  (useGetWorkout as Mock).mockReturnValue({
+    workout,
+    error,
+    isLoading,
+    isSuccess,
+    isError,
+  });
+
+  return { workout, error, isLoading, isSuccess, isError };
+}
+
 function mockUseDispatch(value = vi.fn()) {
   (useDispatch as Mock).mockReturnValue(value);
 }
@@ -451,9 +483,11 @@ export {
   mockUseCreateDay,
   mockUseDayEdit,
   mockUseGetWorkouts,
+  mockUseGetWorkout,
   mockUseCreateWorkout,
   mockUseDeleteWorkout,
   mockUseNavigate,
+  mockUseParams,
   mockUseIntakeItemEdit,
   mockUseAddFavoriteIntake,
   mockUseGetUserFavoriteIntakes,
