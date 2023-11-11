@@ -5,9 +5,6 @@ import { CombinedWorkoutItem, Workout } from "../../../../shared/types/workout";
 import { Empty } from "../../components/App/Empty/Empty";
 import { Button } from "../../components/App/Button/Button";
 import { useWorkoutEdit } from "./WorkoutEditContext";
-import { AerobicWorkoutItemEdit } from "./AerobicWorkoutItemEdit";
-import { AnaerobicWorkoutItemEdit } from "./AnaerobicWorkoutItemEdit";
-import { SuperSetWorkoutItemEdit } from "./SuperSetWorkoutItemEdit";
 import { AppDispatch } from "../../types/app";
 import { useDispatch } from "react-redux";
 import { setGoBackBtnLink } from "../../store/slices/systemSlice";
@@ -22,6 +19,7 @@ import {
 import { StrictModeDroppable } from "../../components/App/StrictModeDroppable/StrictModeDroppable";
 import { WorkoutEditMainInputs } from "./WorkoutEditMainInputs";
 import "./WorkoutEdit.scss";
+import { WorkoutItemEdit } from "./WorkoutItemEdit";
 
 const WorkoutEdit: FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -32,9 +30,7 @@ const WorkoutEdit: FC = () => {
     isSuccess,
     isError,
     navigate,
-    addWorkoutAerobicItem,
-    addWorkoutAnaerobicItem,
-    addSupersetWorkoutItem,
+    addWorkoutItem,
     updateWorkout,
     duration,
   } = useWorkoutEdit();
@@ -100,17 +96,6 @@ const WorkoutEdit: FC = () => {
     };
   }
 
-  function renderItem(item: CombinedWorkoutItem) {
-    switch (item.type) {
-      case "aerobic":
-        return <AerobicWorkoutItemEdit item={item} key={item.id} />;
-      case "anaerobic":
-        return <AnaerobicWorkoutItemEdit item={item} key={item.id} />;
-      case "superset":
-        return <SuperSetWorkoutItemEdit item={item} key={item.id} />;
-    }
-  }
-
   useEffect(() => {
     dispatch(setGoBackBtnLink(true));
 
@@ -145,13 +130,13 @@ const WorkoutEdit: FC = () => {
         </div>
 
         <div className="workout-edit__form__btns">
-          <Button className="btn workout-edit__btn" onClickFn={addWorkoutAerobicItem}>
+          <Button className="btn workout-edit__btn" onClickFn={() => addWorkoutItem("aerobic")}>
             add cardio
           </Button>
-          <Button className="btn workout-edit__btn" onClickFn={addWorkoutAnaerobicItem}>
+          <Button className="btn workout-edit__btn" onClickFn={() => addWorkoutItem("anaerobic")}>
             add set
           </Button>
-          <Button className="btn workout-edit__btn" onClickFn={addSupersetWorkoutItem}>
+          <Button className="btn workout-edit__btn" onClickFn={() => addWorkoutItem("superset")}>
             add superset
           </Button>
         </div>
@@ -176,7 +161,7 @@ const WorkoutEdit: FC = () => {
                           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                           className="workout-edit__items-list__item"
                         >
-                          {renderItem(item)}
+                          <WorkoutItemEdit item={item} />
                         </li>
                       )}
                     </Draggable>

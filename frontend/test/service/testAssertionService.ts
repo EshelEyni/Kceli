@@ -1,5 +1,6 @@
 import { expect } from "vitest";
 import { NewIntake, NewIntakeItem } from "../../../shared/types/intake";
+import { CombinedWorkoutItem, SupersetItem } from "../../../shared/types/workout";
 
 function assertNewIntake(intake: NewIntake) {
   expect(intake).toEqual(
@@ -32,4 +33,31 @@ function assertNewIntakeItem(item: NewIntakeItem) {
   if (item.caloriesPer100g) expect(item.caloriesPer100g).toEqual(expect.any(Number));
 }
 
-export { assertNewIntake, assertNewIntakeItem };
+function assertWorkoutItem(item: CombinedWorkoutItem) {
+  expect(item).toEqual(
+    expect.objectContaining({
+      id: expect.any(String),
+      name: expect.any(String),
+      isStarted: expect.any(Boolean),
+      isCompleted: expect.any(Boolean),
+    })
+  );
+
+  expect(item.type === "aerobic" || item.type === "anaerobic" || item.type === "superset").toBe(
+    true
+  );
+}
+
+function assetSupersetItem(item: SupersetItem) {
+  expect(item).toEqual(
+    expect.objectContaining({
+      id: expect.any(String),
+      name: expect.any(String),
+      reps: expect.any(Number),
+      weight: expect.any(Number),
+      weightUnit: expect.any(String),
+    })
+  );
+}
+
+export { assertNewIntake, assertNewIntakeItem, assertWorkoutItem, assetSupersetItem };

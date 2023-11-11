@@ -445,6 +445,7 @@ export default {
   createAerobicWorkoutItem,
   createAnaerobicWorkoutItem,
   createSupersetWorkoutItem,
+  createSupersetItem,
   createSpellingSuggestion,
   createNutritionQuery,
   createNutritionQueryResponse,

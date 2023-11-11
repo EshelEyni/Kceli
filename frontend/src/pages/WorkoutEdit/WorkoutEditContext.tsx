@@ -2,9 +2,11 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { useUpdateWorkout } from "../../hooks/useUpdateWorkout";
 import {
+  CombinedWorkoutItem,
   Split,
   SupersetItem,
   WeightUnit,
+  WorkOutItemTypes,
   Workout,
   WorkoutItemSuperset,
   WorkoutType,
@@ -22,9 +24,7 @@ type WorkoutEditContextType = {
   updateWorkout: UseMutateFunction<Workout, unknown, Workout, unknown>;
   isLoadingUpdateWorkout: boolean;
   navigate: NavigateFunction;
-  addWorkoutAerobicItem: () => void;
-  addWorkoutAnaerobicItem: () => void;
-  addSupersetWorkoutItem: () => void;
+  addWorkoutItem: (type: WorkOutItemTypes) => void;
   addWorkoutItemToSuperset: (item: WorkoutItemSuperset) => void;
   removeWorkoutItemFromSuperset: (itemId: string, supersetItemId: string) => void;
   removeWorkoutItem: (itemId: string) => void;
@@ -72,39 +72,41 @@ function WorkoutEditProvider({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const { id } = params as { id: string };
   const { workout, isLoading, isSuccess, isError } = useGetWorkout(id);
-  const { updateWorkout, isLoading: isLoadingUpdateWorkout } = useUpdateWorkout();
   const [currItemId, setCurrItemId] = useState<string>("");
-  const [isAddedNewItem, setIsAddedNewItem] = useState<boolean>(false);
+  const { updateWorkout, isLoading: isLoadingUpdateWorkout } = useUpdateWorkout();
   const navigate = useNavigate();
   const duration = workoutUtilService.calcWorkoutDuration({ workout: workout as Workout });
 
-  function addWorkoutAerobicItem() {
+  function addWorkoutItem(type: WorkOutItemTypes) {
     if (!workout) return;
-    const item = workoutUtilService.getDefaultAerobicWorkoutItem(workout.items.length);
-    const workoutToUpdate = { ...workout, items: [...workout.items, item] } as Workout;
-    setIsAddedNewItem(true);
-    updateWorkout(workoutToUpdate);
-  }
 
-  function addWorkoutAnaerobicItem() {
-    if (!workout) return;
-    const item = workoutUtilService.getDefaultAnaerobicWorkoutItem(workout.items.length);
-    const workoutToUpdate = { ...workout, items: [...workout.items, item] } as Workout;
-    setIsAddedNewItem(true);
-    updateWorkout(workoutToUpdate);
-  }
+    let item: CombinedWorkoutItem | null = null;
+    const idx = workout.items.length;
 
-  function addSupersetWorkoutItem() {
-    if (!workout) return;
-    const item = workoutUtilService.getDefaultWorkoutItemSuperset(workout.items.length);
+    switch (type) {
+      case "aerobic":
+        item = workoutUtilService.getDefaultAerobicWorkoutItem(idx);
+        break;
+      case "anaerobic":
+        item = workoutUtilService.getDefaultAnaerobicWorkoutItem(idx);
+        break;
+      case "superset":
+        item = workoutUtilService.getDefaultWorkoutItemSuperset(idx);
+        break;
+    }
+
+    if (!item) return;
+
     const workoutToUpdate = { ...workout, items: [...workout.items, item] } as Workout;
-    setIsAddedNewItem(true);
-    updateWorkout(workoutToUpdate);
+    updateWorkout(workoutToUpdate, {
+      onSuccess: (data: Workout) => setCurrItemId(data.items.at(-1)?.id || ""),
+    });
   }
 
   function removeWorkoutItem(itemId: string) {
     if (!workout) return;
-    const currItemIdx = workout.items.findIndex(item => item.id === itemId);
+    const currItemIdx = workout.items.findIndex(i => i.id === itemId);
+    if (currItemIdx === -1) return;
     const prevItemId = workout.items[currItemIdx - 1]?.id;
     const nextItemId = workout.items[currItemIdx + 1]?.id;
     const items = [...workout.items];
@@ -116,40 +118,26 @@ function WorkoutEditProvider({ children }: { children: React.ReactNode }) {
 
   function addWorkoutItemToSuperset(item: WorkoutItemSuperset) {
     if (!workout) return;
-    const defaultItem = workoutUtilService.getDefaultSupersetItem(item.items.length);
-    const items = workout.items.map(i => {
-      if (i.type !== "superset" || i.id !== item.id) return i;
-      return { ...i, items: [...i.items, defaultItem] };
-    });
-
+    const defaultSupersetItem = workoutUtilService.getDefaultSupersetItem(item.items.length);
+    const updatedItem = { ...item, items: [...item.items, defaultSupersetItem] };
+    const items = workout.items.map(i => (i.id !== item.id ? i : updatedItem));
     const workoutToUpdate = { ...workout, items } as Workout;
     updateWorkout(workoutToUpdate);
   }
 
   function removeWorkoutItemFromSuperset(itemId: string, supersetItemId: string) {
     if (!workout) return;
-    const items = workout.items.map(item => {
-      if (item.type !== "superset" || item.id !== itemId) return item;
-      return { ...item, items: item.items.filter(item => item.id !== supersetItemId) };
+    const items = workout.items.map(i => {
+      if (i.type !== "superset" || i.id !== itemId) return i;
+      return { ...i, items: i.items.filter(item => item.id !== supersetItemId) };
     });
     const workoutToUpdate = { ...workout, items } as Workout;
     updateWorkout(workoutToUpdate);
   }
 
   useEffect(() => {
-    if (currItemId !== "" || !workout) return;
-    const firstItemId = workout.items[0]?.id;
-    if (!firstItemId) return;
-    setCurrItemId(firstItemId);
+    if (!currItemId && workout?.items.length) setCurrItemId(workout.items[0].id);
   }, [workout, currItemId]);
-
-  useEffect(() => {
-    if (!workout || !isAddedNewItem) return;
-    const newItemId = workout.items[workout.items.length - 1]?.id;
-    if (!newItemId) return;
-    setCurrItemId(newItemId);
-    setIsAddedNewItem(false);
-  }, [workout, isAddedNewItem]);
 
   const value = {
     updateWorkout,
@@ -160,15 +148,13 @@ function WorkoutEditProvider({ children }: { children: React.ReactNode }) {
     isError,
     params,
     navigate,
-    addWorkoutAerobicItem,
-    addWorkoutAnaerobicItem,
-    addSupersetWorkoutItem,
-    addWorkoutItemToSuperset,
-    removeWorkoutItemFromSuperset,
-    removeWorkoutItem,
     duration,
     currItemId,
     setCurrItemId,
+    addWorkoutItem,
+    removeWorkoutItem,
+    addWorkoutItemToSuperset,
+    removeWorkoutItemFromSuperset,
   };
 
   return <WorkoutEditContext.Provider value={value}>{children}</WorkoutEditContext.Provider>;

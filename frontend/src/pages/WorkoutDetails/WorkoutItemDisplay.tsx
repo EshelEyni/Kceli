@@ -51,11 +51,18 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
         className="workout-item-display__info__superset-set-list"
         data-testid="workout-item-display-info-superset-set-list"
       >
-        {item.items.map((subItem, index) => (
-          <li className="workout-item-display__info__superset-set-list__item" key={index}>
-            {`${subItem.name} - ${subItem.reps} reps - ${subItem.weight} ${subItem.weightUnit}`}
-          </li>
-        ))}
+        {item.items.map((subItem, index) => {
+          const isWeightShown = subItem.weightUnit === "kg" || subItem.weightUnit === "lbs";
+          const weightStr = isWeightShown
+            ? `${subItem.weight} ${subItem.weightUnit}`
+            : subItem.weightUnit;
+
+          return (
+            <li className="workout-item-display__info__superset-set-list__item" key={index}>
+              {`${subItem.name} - ${subItem.reps} reps - ${weightStr}`}
+            </li>
+          );
+        })}
       </ul>
     );
   };
@@ -64,8 +71,11 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
     const basicTitle = `${item.name} - ${workoutUtilService.calcItemDuration(item)} min`;
 
     switch (item.type) {
-      case "anaerobic":
-        return `${basicTitle} - ${item.sets} * ${item.reps} - ${item.weight} ${item.weightUnit} - ${item.restInSec}s rest`;
+      case "anaerobic": {
+        const isWeightShown = item.weightUnit === "kg" || item.weightUnit === "lbs";
+        const weightStr = isWeightShown ? `${item.weight} ${item.weightUnit}` : item.weightUnit;
+        return `${basicTitle} - ${item.sets} * ${item.reps} - ${weightStr} - ${item.restInSec}s rest`;
+      }
       case "superset":
         return `${basicTitle} - ${item.sets} sets - ${item.items.length} items - ${item.restInSec}s rest`;
       default:

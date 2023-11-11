@@ -23,6 +23,7 @@ import { useWorkouts } from "../../src/pages/Workout/WorkoutsContext";
 import { useDispatch } from "react-redux";
 import { useGetWorkout } from "../../src/hooks/useGetWorkout";
 import { useWorkout } from "../../src/pages/WorkoutDetails/WorkoutContext";
+import { useUpdateWorkout } from "../../src/hooks/useUpdateWorkout";
 
 export type MockUseDayEdit = {
   dailyData?: DayData | null;
@@ -378,7 +379,7 @@ function mockUseNavigate(navigate = vi.fn()) {
   return navigate;
 }
 
-function mockUseParams(params = {}) {
+function mockUseParams(params: any = {}) {
   (useParams as Mock).mockReturnValue(params);
   return params;
 }
@@ -559,6 +560,21 @@ function mockUseDispatch(value = vi.fn()) {
   (useDispatch as Mock).mockReturnValue(value);
 }
 
+function mockUseUpdateWorkout({
+  updateWorkout = vi.fn(),
+  isLoading = false,
+}: {
+  updateWorkout?: any;
+  isLoading?: boolean;
+}) {
+  (useUpdateWorkout as Mock).mockReturnValue({
+    updateWorkout,
+    isLoading,
+  });
+
+  return { updateWorkout, isLoading };
+}
+
 export {
   mockUseAuth,
   mockUseUpdateTodayData,
@@ -581,4 +597,5 @@ export {
   mockUseWorkouts,
   mockUseWorkout,
   mockUseDispatch,
+  mockUseUpdateWorkout,
 };
