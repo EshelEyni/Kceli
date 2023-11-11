@@ -147,7 +147,7 @@ function getTimeZone(): string {
   return timeZoneName ? timeZoneName : "Time Zone Not Found";
 }
 
-function getDaysInMonth(year: number, month: number) {
+function getDaysInMonth({ month, year }: { month: number; year: number }) {
   return new Date(year, month + 1, 0).getDate();
 }
 

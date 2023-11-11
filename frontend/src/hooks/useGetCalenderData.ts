@@ -46,7 +46,10 @@ function getCalenderDays({ date, data, loggedInUser }: CalendarQueryParams): Cal
 }
 
 function getCalendarDays(currDate: Date): Date[] {
-  const daysInMonth = getDaysInMonth(currDate.getMonth() + 1, currDate.getFullYear());
+  const daysInMonth = getDaysInMonth({
+    month: currDate.getMonth(),
+    year: currDate.getFullYear(),
+  });
 
   const currentMonthDates = Array.from({ length: daysInMonth }, (_, i) => {
     return new Date(currDate.getFullYear(), currDate.getMonth(), i + 1);
@@ -62,7 +65,6 @@ function getCalendarDays(currDate: Date): Date[] {
   const nextMonthDates = Array.from({ length: 6 - lastDay }, (_, i) => {
     return new Date(currDate.getFullYear(), currDate.getMonth() + 1, i + 1);
   });
-
   return [...prevMonthDates, ...currentMonthDates, ...nextMonthDates];
 }
 
