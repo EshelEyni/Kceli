@@ -145,7 +145,9 @@ function WorkoutEditProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!workout || !isAddedNewItem) return;
-    setCurrItemId(workout.items[workout.items.length - 1].id);
+    const newItemId = workout.items[workout.items.length - 1]?.id;
+    if (!newItemId) return;
+    setCurrItemId(newItemId);
     setIsAddedNewItem(false);
   }, [workout, isAddedNewItem]);
 

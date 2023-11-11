@@ -9,7 +9,7 @@ type SecondsCircleProps = {
 export const SecondsCircle: FC<SecondsCircleProps> = ({ children }) => {
   const { isRunning } = useWorkout();
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
-  const prevValue = useRef(1);
+  const prevValue = useRef(0);
   const [background, setBackground] = useState(_generateGradient(1));
 
   useEffect(() => {
@@ -24,6 +24,7 @@ export const SecondsCircle: FC<SecondsCircleProps> = ({ children }) => {
       intervalIdRef.current = id;
     } else {
       if (intervalId) clearInterval(intervalId);
+      setBackground(_generateGradient(0));
     }
 
     return () => {
@@ -32,7 +33,7 @@ export const SecondsCircle: FC<SecondsCircleProps> = ({ children }) => {
   }, [isRunning]);
 
   return (
-    <div className="seconds-circle" style={{ background }}>
+    <div className="seconds-circle" data-testid="seconds-circle" style={{ background }}>
       {children}
     </div>
   );

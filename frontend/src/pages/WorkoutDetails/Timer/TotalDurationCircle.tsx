@@ -17,7 +17,11 @@ export const TotalDurationCircle: FC<TotalDurationCircleProps> = ({ children }) 
   }, [completedDuration, duration]);
 
   return (
-    <div className="total-duration-circle" style={{ background }}>
+    <div
+      className="total-duration-circle"
+      data-testid="total-duration-circle"
+      style={{ background }}
+    >
       <div className="total-duration-circle__border">{children}</div>
     </div>
   );

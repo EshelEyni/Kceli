@@ -5,11 +5,13 @@ import { CombinedIntake, IntakeItem, MeasurementUnit } from "../../../shared/typ
 import {
   CombinedWorkoutItem,
   Split,
+  SupersetItem,
   WeightUnit,
   Workout,
   WorkoutAnaerobic,
   WorkoutItemAerobic,
   WorkoutItemAnaerobic,
+  WorkoutItemSuperset,
 } from "../../../shared/types/workout";
 import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
 import { createId } from "../../src/services/util/utilService";
@@ -258,7 +260,7 @@ function createAerobicWorkoutItem({
   return { id, name, isStarted, type: "aerobic", isCompleted, durationInMin } as WorkoutItemAerobic;
 }
 
-function createAnarobicWorkoutItem({
+function createAnaerobicWorkoutItem({
   id = "test",
   name = "test",
   isStarted = false,
@@ -291,6 +293,57 @@ function createAnarobicWorkoutItem({
     weightUnit,
     restInSec,
   } as WorkoutItemAnaerobic;
+}
+
+function createSupersetWorkoutItem({
+  id = "test",
+  name = "test",
+  isStarted = false,
+  isCompleted = false,
+  sets = 3,
+  restInSec = 100,
+  items = [createSupersetItem({}), createSupersetItem({})],
+}: {
+  id?: string;
+  name?: string;
+  isStarted?: boolean;
+  isCompleted?: boolean;
+  sets?: number;
+  restInSec?: number;
+  items?: SupersetItem[];
+}): WorkoutItemSuperset {
+  return {
+    id,
+    name,
+    isStarted,
+    type: "superset",
+    isCompleted,
+    sets,
+    restInSec,
+    items,
+  } as WorkoutItemSuperset;
+}
+
+function createSupersetItem({
+  id = "test",
+  name = "test",
+  reps = 3,
+  weight = 25,
+  weightUnit = WeightUnit.KG,
+}: {
+  id?: string;
+  name?: string;
+  reps?: number;
+  weight?: number;
+  weightUnit?: WeightUnit;
+}): SupersetItem {
+  return {
+    id,
+    name,
+    reps,
+    weight,
+    weightUnit,
+  };
 }
 
 function createSpellingSuggestion(): SpellingSuggestion {
@@ -390,7 +443,8 @@ export default {
   createIntakeItem,
   createWorkout,
   createAerobicWorkoutItem,
-  createAnarobicWorkoutItem,
+  createAnaerobicWorkoutItem,
+  createSupersetWorkoutItem,
   createSpellingSuggestion,
   createNutritionQuery,
   createNutritionQueryResponse,

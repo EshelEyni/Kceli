@@ -23,8 +23,8 @@ export const ItemDurationCircle: FC<ItemDurationCircleProps> = ({ children }) =>
       }, 10);
 
       intervalIdRef.current = id;
-    } else {
-      if (intervalId) clearInterval(intervalId);
+    } else if (intervalId) {
+      clearInterval(intervalId);
     }
 
     return () => {
@@ -39,7 +39,7 @@ export const ItemDurationCircle: FC<ItemDurationCircleProps> = ({ children }) =>
   }, [initialTime, time]);
 
   return (
-    <div className="item-duration-circle" style={{ background }}>
+    <div className="item-duration-circle" data-testid="item-duration-circle" style={{ background }}>
       <div className="item-duration-circle__border">{children}</div>
     </div>
   );

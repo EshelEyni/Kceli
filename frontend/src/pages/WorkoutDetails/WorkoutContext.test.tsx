@@ -607,7 +607,7 @@ describe("WorkoutContext", () => {
 
   it("should not call onStartTimer when item is not aerobic when onStartitem is called", async () => {
     const workout = testService.createWorkout({
-      items: [testService.createAnarobicWorkoutItem({})],
+      items: [testService.createAnaerobicWorkoutItem({})],
     });
     const dailyData = testService.createDailyData({ workouts: [workout] });
     const { updateDailyData } = mockUseUpdateTodayData({});
