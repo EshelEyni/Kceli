@@ -1,4 +1,4 @@
-import { it, describe, expect, afterEach, vi, Mock, beforeEach } from "vitest";
+import { it, describe, expect, afterEach, vi, beforeEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { useDeleteWorkout } from "../../../hooks/useDeleteWorkout";
@@ -6,14 +6,23 @@ import { WorkoutPreview } from "./WorkoutPreview";
 import testService from "../../../../test/service/testService";
 import { WorkoutAnaerobic } from "../../../../../shared/types/workout";
 import workoutUtilService from "../../../services/workout/workoutUtilService";
-import { mockUseNavigate } from "../../../../test/service/mockService";
+import {
+  mockUseDeleteWorkout,
+  mockUseGetTodayData,
+  mockUseNavigate,
+  mockUseUpdateTodayData,
+} from "../../../../test/service/mockService";
 
 vi.mock("react-router-dom");
 vi.mock("../../../hooks/useDeleteWorkout");
+vi.mock("../../../hooks/useGetTodayData");
+vi.mock("../../../hooks/useUpdateTodayData");
 
 describe("Workout Preview", () => {
   beforeEach(() => {
-    (useDeleteWorkout as Mock).mockReturnValue({ removeWorkout: vi.fn() });
+    mockUseDeleteWorkout({});
+    mockUseGetTodayData({});
+    mockUseUpdateTodayData({});
   });
 
   afterEach(() => {
@@ -50,17 +59,17 @@ describe("Workout Preview", () => {
     expect(screen.queryByText(`split:`)).not.toBeInTheDocument();
   });
 
-  it("should rebder workout preview without delete and edit buttons if isDayEdit is true", () => {
+  it("should render workout preview without delete and edit buttons if isDayEdit is true", () => {
     const mockWorkout = testService.createWorkout({});
 
     render(<WorkoutPreview workout={mockWorkout} isDayEdit={true} />);
 
     expect(screen.getByTestId("workout-preview")).toBeInTheDocument();
-    expect(screen.queryByText("delete")).not.toBeInTheDocument();
+    expect(screen.queryByText("delete")).toBeInTheDocument();
     expect(screen.queryByText("edit")).not.toBeInTheDocument();
   });
 
-  it("should call removeWorkout on delete button click", () => {
+  it("should call removeWorkout on delete button click when isDayEdit is falsey", () => {
     const mockWorkout = testService.createWorkout({});
     const { removeWorkout } = useDeleteWorkout();
 
@@ -70,6 +79,22 @@ describe("Workout Preview", () => {
 
     expect(removeWorkout).toHaveBeenCalledTimes(1);
     expect(removeWorkout).toHaveBeenCalledWith(mockWorkout.id);
+  });
+
+  it("should call updateDailyData on delete button click when isDayEdit is truthy", () => {
+    const mockWorkout = testService.createWorkout({});
+    const { dailyData } = mockUseGetTodayData({});
+    const { updateDailyData } = mockUseUpdateTodayData({});
+
+    render(<WorkoutPreview workout={mockWorkout} isDayEdit={true} />);
+
+    screen.getByText("delete").click();
+
+    expect(updateDailyData).toHaveBeenCalledTimes(1);
+    expect(updateDailyData).toHaveBeenCalledWith({
+      ...dailyData,
+      workouts: [],
+    });
   });
 
   it("should call navigate on edit button click", () => {
