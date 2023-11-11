@@ -7,5 +7,5 @@ type EmptyProps = {
 };
 
 export const Empty: FC<EmptyProps> = ({ entityName }) => {
-  return <p className="empty">{`No ${entityName} could be found...`}</p>;
+  return <p className="empty" data-testid="empty-msg">{`No ${entityName} could be found...`}</p>;
 };

@@ -22,24 +22,27 @@ export const WorkoutEditMainInputs: FC<WorkoutEditMainInputsProps> = ({
   handleSplitSelectChange,
 }) => {
   const isAnaerobic = workout && workout?.type === "anaerobic";
+  const DEBOUNCE_TIME = 250;
 
   return (
     <>
       <div className="workout-edit__form__input-container name-input">
-        <label>description:</label>
+        <label htmlFor="description-input">description:</label>
         <input
+          id="description-input"
           type="text"
           defaultValue={workout.description}
-          onChange={debounce(handleDescInputChange, 500).debouncedFunc}
+          onChange={debounce(handleDescInputChange, DEBOUNCE_TIME).debouncedFunc}
         />
       </div>
       {handleDurationInputChange && (
         <div className="workout-edit__form__input-container name-input">
-          <label>duration:</label>
+          <label htmlFor="duration-input">duration:</label>
           <input
+            id="duration-input"
             type="number"
             defaultValue={workout.durationInMin}
-            onChange={debounce(handleDurationInputChange, 500).debouncedFunc}
+            onChange={debounce(handleDurationInputChange, DEBOUNCE_TIME).debouncedFunc}
           />
         </div>
       )}

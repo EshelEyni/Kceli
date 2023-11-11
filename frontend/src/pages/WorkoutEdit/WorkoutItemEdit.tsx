@@ -22,6 +22,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
     setCurrItemId,
   } = useWorkoutEdit();
   const duration = workoutUtilService.calcItemDuration(item);
+  const DEBOUNCE_TIME = 250;
 
   function handleInputNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const name = e.target.value;
@@ -120,30 +121,38 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
 
   if (currItemId !== item.id)
     return (
-      <section className="mini-workout-item-preview" onClick={() => setCurrItemId(item.id)}>
+      <section
+        className="mini-workout-item-preview"
+        data-testid="mini-workout-item-preview"
+        onClick={() => setCurrItemId(item.id)}
+      >
         <span>{item.name}</span>
         <FaChevronDown className="mini-workout-item-preview__icon" />
       </section>
     );
 
   return (
-    <section className="workout-edit__form">
+    <section className="workout-edit__form" data-testid="workout-item-edit">
       <div className="workout-edit__form__input-container name-input">
-        <label>Name:</label>
+        <label htmlFor="item-name-input">Name:</label>
         <input
+          id="item-name-input"
+          data-testid="workout-item-name-input"
           autoComplete="off"
           defaultValue={item.name}
-          onChange={debounce(handleInputNameChange, 500).debouncedFunc}
+          onChange={debounce(handleInputNameChange, DEBOUNCE_TIME).debouncedFunc}
         />
       </div>
 
       {item.type === "aerobic" && (
         <div className="workout-edit__form__input-container">
-          <label>Duration (in min):</label>
+          <label htmlFor="item-duration-input">Duration (in min):</label>
           <input
+            id="item-duration-input"
+            data-testid="workout-item-duration-input"
             type="number"
             defaultValue={duration}
-            onChange={debounce(handleInputDurationChange, 500).debouncedFunc}
+            onChange={debounce(handleInputDurationChange, DEBOUNCE_TIME).debouncedFunc}
           />
         </div>
       )}
@@ -151,20 +160,24 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
       {item.type !== "aerobic" && (
         <>
           <div className="workout-edit__form__input-container">
-            <label>Sets:</label>
+            <label htmlFor="item-sets-input">Sets:</label>
             <input
+              id="item-sets-input"
               type="number"
+              data-testid="workout-item-sets-input"
               defaultValue={item.sets}
-              onChange={debounce(handleInputSetsChange, 500).debouncedFunc}
+              onChange={debounce(handleInputSetsChange, DEBOUNCE_TIME).debouncedFunc}
             />
           </div>
 
           <div className="workout-edit__form__input-container">
-            <label>Rest (in sec):</label>
+            <label htmlFor="item-rest-input">Rest (in sec):</label>
             <input
+              id="item-rest-input"
               type="number"
+              data-testid="workout-item-rest-input"
               defaultValue={item.restInSec}
-              onChange={debounce(handleInputRestInSecChange, 500).debouncedFunc}
+              onChange={debounce(handleInputRestInSecChange, DEBOUNCE_TIME).debouncedFunc}
             />
           </div>
         </>
@@ -173,27 +186,31 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
       {item.type === "anaerobic" && (
         <>
           <div className="workout-edit__form__input-container">
-            <label>Reps:</label>
+            <label htmlFor="item-reps-input">reps:</label>
             <input
+              id="item-reps-input"
               type="number"
+              data-testid="workout-item-reps-input"
               defaultValue={item.reps}
-              onChange={debounce(handleInputRepsChange, 500).debouncedFunc}
+              onChange={debounce(handleInputRepsChange, DEBOUNCE_TIME).debouncedFunc}
             />
           </div>
 
           {(item.weightUnit === "kg" || item.weightUnit === "lbs") && (
             <div className="workout-edit__form__input-container">
-              <label>Weight:</label>
+              <label htmlFor="item-weight-input">weight:</label>
               <input
+                id="item-weight-input"
                 type="number"
+                data-testid="workout-item-weight-input"
                 defaultValue={item.weight}
-                onChange={debounce(handleInputWeightChange, 500).debouncedFunc}
+                onChange={debounce(handleInputWeightChange, DEBOUNCE_TIME).debouncedFunc}
               />
             </div>
           )}
 
           <div className="workout-edit__form__input-container">
-            <label>Weight unit:</label>
+            <label>weight unit:</label>
 
             <Select onChange={handleWeightUnitSelectChange} listHeight={250}>
               <Select.SelectTrigger>
@@ -215,7 +232,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
       )}
 
       {item.type === "superset" && (
-        <div className="workout-edit__form__superset-item-list">
+        <div className="workout-edit__form__superset-item-list" data-testid="superset-item-list">
           {item.items.map((supersetItem, i) => (
             <div className="workout-edit__form__superset-item-container" key={i}>
               <h3>Item {i + 1}</h3>
@@ -224,8 +241,9 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
                 <input
                   id={supersetItem.id}
                   type="text"
+                  data-testid="superset-item-name-input"
                   defaultValue={supersetItem.name}
-                  onChange={debounce(handleInputItemNameChange, 500).debouncedFunc}
+                  onChange={debounce(handleInputItemNameChange, DEBOUNCE_TIME).debouncedFunc}
                 />
               </div>
               <div className="workout-edit__form__input-container">
@@ -233,8 +251,9 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
                 <input
                   id={supersetItem.id}
                   type="number"
+                  data-testid="superset-item-reps-input"
                   defaultValue={supersetItem.reps}
-                  onChange={debounce(handleInputItemRepsChange, 500).debouncedFunc}
+                  onChange={debounce(handleInputItemRepsChange, DEBOUNCE_TIME).debouncedFunc}
                 />
               </div>
 
@@ -244,8 +263,9 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
                   <input
                     id={supersetItem.id}
                     type="number"
+                    data-testid="superset-item-weight-input"
                     defaultValue={supersetItem.weight}
-                    onChange={debounce(handleInputItemWeightChange, 500).debouncedFunc}
+                    onChange={debounce(handleInputItemWeightChange, DEBOUNCE_TIME).debouncedFunc}
                   />
                 </div>
               )}
@@ -275,6 +295,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
                 <Button
                   className="superset__btn-delete"
                   onClickFn={() => removeWorkoutItemFromSuperset(item.id, supersetItem.id)}
+                  dataTestId="delete-superset-item-btn"
                 >
                   delete
                 </Button>
@@ -285,7 +306,11 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
       )}
 
       <div className="workout-edit__form__input-container__btns-container">
-        <Button className="btn" onClickFn={handleRemoveBtnClick}>
+        <Button
+          className="btn"
+          onClickFn={handleRemoveBtnClick}
+          dataTestId="delete-workout-item-btn"
+        >
           delete
         </Button>
 
@@ -293,6 +318,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
           <Button
             className="btn workout-edit__btn"
             onClickFn={() => addWorkoutItemToSuperset(item)}
+            dataTestId="add-superset-item-btn"
           >
             add item
           </Button>

@@ -41,6 +41,10 @@
       gap: rem(10px);
     }
 
+    .workout-edit__items-list-container {
+      width: 100%;
+    }
+
     .workout-edit__items-list {
       display: flex;
       flex-direction: column;

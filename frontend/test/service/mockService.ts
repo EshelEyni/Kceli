@@ -24,6 +24,7 @@ import { useDispatch } from "react-redux";
 import { useGetWorkout } from "../../src/hooks/useGetWorkout";
 import { useWorkout } from "../../src/pages/WorkoutDetails/WorkoutContext";
 import { useUpdateWorkout } from "../../src/hooks/useUpdateWorkout";
+import { useWorkoutEdit } from "../../src/pages/WorkoutEdit/WorkoutEditContext";
 
 export type MockUseDayEdit = {
   dailyData?: DayData | null;
@@ -126,6 +127,24 @@ export type MockUseWorkout = {
   setTime?: any;
   initialTime?: number;
   setInitialTime?: any;
+};
+
+export type MockUseWorkoutEdit = {
+  workout?: any;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  isError?: boolean;
+  params?: any;
+  updateWorkout?: any;
+  isLoadingUpdateWorkout?: boolean;
+  navigate?: any;
+  addWorkoutItem?: any;
+  addWorkoutItemToSuperset?: any;
+  removeWorkoutItemFromSuperset?: any;
+  removeWorkoutItem?: any;
+  duration?: number;
+  currItemId?: string;
+  setCurrItemId?: any;
 };
 
 function mockUseAuth(loggedInUser: any) {
@@ -575,6 +594,46 @@ function mockUseUpdateWorkout({
   return { updateWorkout, isLoading };
 }
 
+function mockUseWorkoutEdit({
+  workout = testService.createWorkout({}),
+  isLoading = false,
+  isSuccess = true,
+  isError = false,
+  params = {},
+  updateWorkout = vi.fn(),
+  isLoadingUpdateWorkout = false,
+  navigate = vi.fn(),
+  addWorkoutItem = vi.fn(),
+  addWorkoutItemToSuperset = vi.fn(),
+  removeWorkoutItemFromSuperset = vi.fn(),
+  removeWorkoutItem = vi.fn(),
+  duration = 0,
+  currItemId = "",
+  setCurrItemId = vi.fn(),
+}: MockUseWorkoutEdit): MockUseWorkoutEdit {
+  const value = {
+    workout,
+    isLoading,
+    isSuccess,
+    isError,
+    params,
+    updateWorkout,
+    isLoadingUpdateWorkout,
+    navigate,
+    addWorkoutItem,
+    addWorkoutItemToSuperset,
+    removeWorkoutItemFromSuperset,
+    removeWorkoutItem,
+    duration,
+    currItemId,
+    setCurrItemId,
+  };
+
+  (useWorkoutEdit as Mock).mockReturnValue(value);
+
+  return value;
+}
+
 export {
   mockUseAuth,
   mockUseUpdateTodayData,
@@ -598,4 +657,5 @@ export {
   mockUseWorkout,
   mockUseDispatch,
   mockUseUpdateWorkout,
+  mockUseWorkoutEdit,
 };

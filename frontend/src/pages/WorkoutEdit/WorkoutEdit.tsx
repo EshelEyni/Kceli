@@ -115,7 +115,7 @@ const WorkoutEdit: FC = () => {
   if (!isSuccess || !workout) return null;
 
   return (
-    <main className="page workout-edit">
+    <main className="page workout-edit" data-testid="workout-edit-page">
       <form className="workout-edit__form">
         <WorkoutEditMainInputs
           workout={workout}
@@ -143,34 +143,39 @@ const WorkoutEdit: FC = () => {
 
         {isItemsEmpty && <Empty entityName="exercises" />}
         {isItemsListShown && (
-          <DragDropContext onDragEnd={onDragEnd}>
-            <StrictModeDroppable droppableId="droppable">
-              {provided => (
-                <ul
-                  className="workout-edit__items-list"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {workoutItems.map((item, index) => (
-                    <Draggable key={item.id} draggableId={item.id} index={index}>
-                      {(provided, snapshot) => (
-                        <li
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                          className="workout-edit__items-list__item"
-                        >
-                          <WorkoutItemEdit item={item} />
-                        </li>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </StrictModeDroppable>
-          </DragDropContext>
+          <div
+            className="workout-edit__items-list-container"
+            data-testid="workout-edit-items-list-container"
+          >
+            <DragDropContext onDragEnd={onDragEnd}>
+              <StrictModeDroppable droppableId="droppable">
+                {provided => (
+                  <ul
+                    className="workout-edit__items-list"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    {workoutItems.map((item, index) => (
+                      <Draggable key={item.id} draggableId={item.id} index={index}>
+                        {(provided, snapshot) => (
+                          <li
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                            className="workout-edit__items-list__item"
+                          >
+                            <WorkoutItemEdit item={item} />
+                          </li>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </ul>
+                )}
+              </StrictModeDroppable>
+            </DragDropContext>
+          </div>
         )}
 
         <Footer className="workout-edit__form__footer">

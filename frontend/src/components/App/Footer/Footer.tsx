@@ -7,5 +7,9 @@ type FooterProps = {
 };
 
 export const Footer: FC<FooterProps> = ({ children, className }) => {
-  return <footer className={className}>{children}</footer>;
+  return (
+    <footer className={className} data-testid="footer">
+      {children}
+    </footer>
+  );
 };
