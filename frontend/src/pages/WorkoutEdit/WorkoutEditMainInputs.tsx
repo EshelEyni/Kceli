@@ -51,7 +51,7 @@ export const WorkoutEditMainInputs: FC<WorkoutEditMainInputsProps> = ({
         <Select onChange={handleTypeSelectChange} listHeight={250}>
           <Select.SelectTrigger>
             <div>
-              <span>{workout.type}</span>
+              <span data-testid="workout-type">{workout.type}</span>
               <FaChevronDown />
             </div>
           </Select.SelectTrigger>

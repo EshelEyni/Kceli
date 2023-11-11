@@ -7,19 +7,24 @@ import { Workout } from "../../../../../shared/types/workout";
 import workoutUtilService from "../../../services/workout/workoutUtilService";
 import { WorkoutEditMainInputs } from "../../WorkoutEdit/WorkoutEditMainInputs";
 import "./DayWorkouts.scss";
-import { useUpdateTodayData } from "../../../hooks/useUpdateTodayData";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { useAuth } from "../../../hooks/useAuth";
 
 export const DayWorkouts: FC = () => {
   const { loggedInUser } = useAuth();
-  const { dailyData } = useDayEdit();
-  const { updateDailyData, isLoading } = useUpdateTodayData();
+  const { dailyData, updateDailyData, isLoadingUpdate } = useDayEdit();
   const [quickWorkout, setQuickWorkout] = useState<Workout | null>(null);
 
   function handleAddBtnClick() {
     const defaultWorkout = workoutUtilService.getDefaultWorkout();
     setQuickWorkout(defaultWorkout);
+  }
+
+  function handleDescInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!quickWorkout) return;
+    const description = e.target.value;
+    const updatedWorkout = { ...quickWorkout, description } as Workout;
+    setQuickWorkout(updatedWorkout);
   }
 
   function handleTypeSelectChange(type: string) {
@@ -32,13 +37,6 @@ export const DayWorkouts: FC = () => {
     if (!quickWorkout) return;
     const durationInMin = Number(e.target.value);
     const updatedWorkout = { ...quickWorkout, durationInMin } as Workout;
-    setQuickWorkout(updatedWorkout);
-  }
-
-  function handleDescInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!quickWorkout) return;
-    const description = e.target.value;
-    const updatedWorkout = { ...quickWorkout, description } as Workout;
     setQuickWorkout(updatedWorkout);
   }
 
@@ -64,14 +62,17 @@ export const DayWorkouts: FC = () => {
   }
 
   if (!dailyData) return null;
-  if (isLoading) return <SpinnerLoader />;
+  if (isLoadingUpdate) return <SpinnerLoader />;
   return (
-    <section className="day-edit__day-workouts">
+    <section className="day-edit__day-workouts" data-testid="day-workouts">
       <Button className="day-edit__day-workouts__btn" onClickFn={handleAddBtnClick}>
         add quick workout
       </Button>
       {quickWorkout && (
-        <form className="day-edit__day-workouts__quick-workout-form">
+        <form
+          className="day-edit__day-workouts__quick-workout-form"
+          data-testid="quick-workout-form"
+        >
           <WorkoutEditMainInputs
             workout={quickWorkout}
             handleTypeSelectChange={handleTypeSelectChange}
@@ -91,6 +92,7 @@ export const DayWorkouts: FC = () => {
         className="day-edit__day-workouts__workouts-list"
         items={dailyData.workouts}
         render={item => <WorkoutPreview workout={item} isDayEdit={true} key={item.id} />}
+        dataTestId="workouts-list"
       />
     </section>
   );
