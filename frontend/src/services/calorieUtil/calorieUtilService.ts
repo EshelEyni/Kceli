@@ -56,7 +56,7 @@ function getTotalCaloriesFromDailyData({
 }
 
 function _getTotalCaloriesFromIntake(intake: Intake): number {
-  return intake.items.reduce((acc, curr) => acc + curr.calories, 0);
+  return Math.round(intake.items.reduce((acc, curr) => acc + curr.calories, 0));
 }
 
 function getBcgByCosumedCalories({

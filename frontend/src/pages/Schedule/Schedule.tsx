@@ -5,7 +5,7 @@ import { useGetCalenderData } from "../../hooks/useGetCalenderData";
 import { CalenderDay } from "../../types/app";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
-import { DayInfo } from "./DayInfo";
+import { DayReport } from "./DayReport";
 import classnames from "classnames";
 import { Button } from "../../components/App/Button/Button";
 import { IoChevronBackCircleSharp, IoChevronForwardCircleSharp } from "react-icons/io5";
@@ -61,6 +61,13 @@ const SchedulePage: FC = () => {
     };
   }, [currDate, isSuccess]);
 
+  useEffect(() => {
+    if (!isSuccess || !!currDay) return;
+    const today = new Date();
+    const todayDay = days.find(d => isSameDay(d.date, today));
+    if (todayDay) setCurrDay(todayDay);
+  }, [days, isSuccess, currDay]);
+
   return (
     <main className="page schedule-page">
       {isLoading && <SpinnerLoader />}
@@ -69,7 +76,7 @@ const SchedulePage: FC = () => {
         <>
           <Header className="schedule-page__header">
             <h2 className="schedule-page__header__title">
-              {currDate.toLocaleString("default", { month: "long" })} {currDate.getFullYear()}
+              {currDate.toLocaleString("en-US", { month: "long" })} {currDate.getFullYear()}
             </h2>
             <div className="schedule-page__header__btns-container">
               <Button onClickFn={() => moveToMonth(-1)}>
@@ -83,13 +90,14 @@ const SchedulePage: FC = () => {
 
           <ul className="schedule-grid" ref={gridRef}>
             {dayNames.map(day => (
-              <li className="schedule-grid__item" key={day.short}>
+              <li className="schedule-grid__item weekday-item" key={day.short}>
                 <h3 className="schedule-grid__item__title">{day.short}</h3>
               </li>
             ))}
             {days.map(d => {
               const { backgroundColor, date } = d;
               const color = d.backgroundColor ? "white" : "";
+              const border = d.isBorder ? "4px solid var(--color-success)" : "none";
               return (
                 <li
                   className={classnames("schedule-grid__item", {
@@ -99,12 +107,14 @@ const SchedulePage: FC = () => {
                   style={{ backgroundColor, color }}
                   key={date.toISOString()}
                 >
-                  <h3 className="schedule-grid__item__title">{d.day}</h3>
+                  <div className="schedule-grid__item__wrapper" style={{ border }}>
+                    <h3>{d.day}</h3>
+                  </div>
                 </li>
               );
             })}
           </ul>
-          {currDay && <DayInfo day={currDay} />}
+          {currDay && <DayReport day={currDay} />}
         </>
       )}
     </main>

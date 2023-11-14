@@ -1,0 +1,60 @@
+@import "../../styles/main.scss";
+
+.day-report__intake-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: rem(5px) rem(15px);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background-color: var(--color-background);
+  box-shadow: 0 0 5px 0 rgba(black, 0.1);
+  width: rem(350px);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    &__title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+  }
+
+  .day-report__intake-preview__table {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    border-collapse: collapse;
+
+    &__head {
+      background-color: #f2f2f2;
+
+      th {
+        font-weight: bold;
+        text-align: start;
+        padding: rem(10px);
+        border-bottom: 2px solid #ddd;
+      }
+    }
+
+    &__body {
+      tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+
+      tr:hover {
+        background-color: #e8e8e8;
+      }
+
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+    }
+  }
+}

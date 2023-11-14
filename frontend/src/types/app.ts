@@ -63,6 +63,7 @@ export type CalenderDay = {
   id: string | null;
   data: DayData | null;
   backgroundColor: string;
+  isBorder: boolean;
   date: Date;
   day: number;
   consumedCalories: number;

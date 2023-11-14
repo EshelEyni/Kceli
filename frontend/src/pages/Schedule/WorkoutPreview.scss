@@ -1,0 +1,83 @@
+@import "../../styles/main.scss";
+
+.day-report__workout-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: rem(10px);
+  width: 100%;
+  //   border: 1px solid var(--color-border);
+  //   border-radius: 25px;
+  background-color: var(--color-background);
+  padding: rem(10px);
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: rem(10px);
+    width: 100%;
+    text-transform: capitalize;
+    font-size: rem(14px);
+
+    @include for-desktop-layout {
+      font-size: rem(18px);
+    }
+  }
+
+  .day-report__workout-preview__table {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    font-size: rem(11px);
+
+    @include for-desktop-layout {
+      font-size: rem(16px);
+    }
+
+    &__header {
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: white;
+      text-align: left;
+
+      th {
+        padding: rem(12px) rem(20px);
+      }
+
+      &__completed {
+        display: none;
+
+        @include for-desktop-layout {
+          display: table-cell;
+        }
+      }
+    }
+
+    &__body {
+      tr {
+        .completed {
+          display: none;
+
+          @include for-desktop-layout {
+            display: table-cell;
+          }
+        }
+      }
+      tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+      tr:hover {
+        background-color: #f0f0f0;
+      }
+
+      td {
+        padding: rem(10px) rem(20px);
+        border-bottom: 1px solid #e0e0e0;
+      }
+    }
+  }
+}

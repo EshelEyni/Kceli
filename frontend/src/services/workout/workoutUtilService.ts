@@ -98,7 +98,8 @@ function calcWorkoutDuration({
   type?: "all" | "remaining" | "completed";
 }) {
   if (!workout) return 0;
-  const duration = workout?.items
+  if (!workout.items.length && workout.durationInMin) return workout.durationInMin;
+  const duration = workout.items
     .filter(item => {
       if (type === "all") return true;
       if (type === "remaining") return !item.isCompleted;

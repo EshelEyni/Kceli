@@ -79,12 +79,14 @@ function setDataToDay({ date, data, loggedInUser }: CalendarQueryParams) {
   const consumedCalories = calorieUtilService.getTotalCalories(dayData);
 
   const backgroundColor = getBackgroundColor(dayData, loggedInUser, consumedCalories);
+  const isBorder = dayData.workouts.some(workout => workout.items.some(item => item.isCompleted));
 
   return {
     ...defaultDayData,
     id: dayData.id,
     data: dayData,
     backgroundColor,
+    isBorder,
   };
 }
 
@@ -93,6 +95,7 @@ function getDefaultDayData(date: Date): CalenderDay {
     id: null,
     data: null,
     backgroundColor: "",
+    isBorder: false,
     date: date,
     day: date.getDate(),
     consumedCalories: 0,

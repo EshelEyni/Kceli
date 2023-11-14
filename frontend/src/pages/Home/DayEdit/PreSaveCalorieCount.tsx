@@ -7,10 +7,12 @@ export const PreSaveCalorieCount: FC = () => {
 
   if (!intake || !intake.isRecorded) return null;
 
-  const intakeTotalCalorie = intake.items.reduce((acc, curr) => {
-    if (curr.calories === undefined) return acc;
-    return acc + curr.calories;
-  }, 0);
+  const intakeTotalCalorie = Math.round(
+    intake.items.reduce((acc, curr) => {
+      if (curr.calories === undefined) return acc;
+      return acc + curr.calories;
+    }, 0)
+  );
 
   if (intakeTotalCalorie <= 0) return null;
 
