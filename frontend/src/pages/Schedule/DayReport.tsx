@@ -28,7 +28,7 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
   const consumedCalories = calorieUtilService.getTotalCalories(data);
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, data);
   const calConsumedSufix = remainingCalories > 0 ? "remaining" : "over your limit";
-  const calConsumedTitle = `${remainingCalories} calories ${calConsumedSufix}`;
+  const calConsumedTitle = ` calories ${calConsumedSufix}`;
   const dateStr = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(day.date);
   const averageTimeBetweenMeals = dayDataUtilService.calcAverageTimeBetweenMeals(data);
   const { targetCaloricIntake } = data;
@@ -46,13 +46,29 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
         <div className="day-report__header__color-circle" style={{ background }} />
       </Header>
       <div className="day-report__weight">
-        <p>{`Weight: ${data.weight}`}</p>
-        <p>{`Waist: ${data.waist}`}</p>
+        <p>
+          <strong>Weight: </strong>
+          {data.weight}
+        </p>
+        <p>
+          <strong>Waist: </strong>
+          {data.waist}
+        </p>
       </div>
       <div className="day-report__calories">
-        <p>{`Consumed Calories: ${consumedCalories}`}</p>
-        <p>{calConsumedTitle}</p>
-        <p>{`Target Caloric Intake: ${data.targetCaloricIntake}`}</p>
+        <h3 className="day-report__calories__title">calories</h3>
+        <p>
+          <strong>consumed Calories: </strong>
+          {consumedCalories}
+        </p>
+        <p>
+          <strong>{calConsumedTitle}: </strong>
+          {Math.abs(remainingCalories)}
+        </p>
+        <p>
+          <strong>target caloric intake: </strong>
+          {data.targetCaloricIntake}
+        </p>
       </div>
       {data.intakes.length > 0 && (
         <div className="day-report__intakes">

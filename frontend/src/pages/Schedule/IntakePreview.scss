@@ -11,7 +11,7 @@
   border-radius: 5px;
   background-color: var(--color-background);
   box-shadow: 0 0 5px 0 rgba(black, 0.1);
-  width: rem(350px);
+  max-width: rem(350px);
 
   &__header {
     display: flex;
