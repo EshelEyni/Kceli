@@ -1,13 +1,13 @@
 import { createContext, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetUser } from "../hooks/useGetUser";
-import { User, UserDailyStatsResult } from "../../../shared/types/user";
-import { useUpdateUser } from "../hooks/useUpdateUser";
+import { useGetUser } from "../../hooks/useGetUser";
+import { User, UserDailyStatsResult } from "../../../../shared/types/user";
+import { useUpdateUser } from "../../hooks/useUpdateUser";
 import { UseMutateFunction } from "@tanstack/react-query";
-import userUtilService from "../services/user/userUtilService";
-import { CaloriesToLose, RecommendedWeight, TimeToWeightGoal } from "../types/app";
-import { useGetUserDailyStats } from "../hooks/useGetUserDailyStats";
-import { formatNumToK } from "../services/util/utilService";
+import userUtilService from "../../services/user/userUtilService";
+import { CaloriesToLose, RecommendedWeight, TimeToWeightGoal } from "../../types/app";
+import { useGetUserDailyStats } from "../../hooks/useGetUserDailyStats";
+import { formatNumToK } from "../../services/util/utilService";
 
 type ProfileContextType = {
   user: User | undefined;

@@ -1,0 +1,35 @@
+@import "../../styles/main.scss";
+
+.schedule-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(10px);
+
+  &__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: rem(10px);
+    height: rem(40px);
+    width: rem(100px);
+    background-color: var(--color-secondary);
+    border-radius: 10px;
+    cursor: pointer;
+
+    &.active {
+      background-color: var(--color-text-gray);
+
+      span {
+        color: var(--color-secondary);
+      }
+    }
+
+    span {
+      font-size: rem(18px);
+      font-weight: 600;
+      color: var(--color-text-gray);
+      text-transform: uppercase;
+    }
+  }
+}

@@ -4,7 +4,7 @@ import { getLoggedInUserIdFromReq } from "../../services/ALSService";
 import { AppError, asyncErrorCatcher } from "../../services/error/errorService";
 import { deleteOne, getAll, getOne, updateOne } from "../../services/factory/factoryService";
 import { getIsraeliDate, validateIds } from "../../services/util/utilService";
-import { addWeeks, endOfMonth, startOfMonth, subWeeks } from "date-fns";
+import { addMonths, endOfMonth, startOfMonth, subMonths } from "date-fns";
 
 const getAllDays = getAll(DailyDataModel);
 
@@ -16,14 +16,14 @@ const getCalenderData = asyncErrorCatcher(async (req: Request, res: Response) =>
 
   const startCurrentMonth = startOfMonth(new Date(Number(year), Number(month) - 1));
   const endCurrentMonth = endOfMonth(new Date(Number(year), Number(month) - 1));
-  const startPrevWeek = subWeeks(startCurrentMonth, 1);
-  const endNextWeek = addWeeks(endCurrentMonth, 1);
+  const startPrevMonth = startOfMonth(subMonths(startCurrentMonth, 1));
+  const endNextMonth = endOfMonth(addMonths(endCurrentMonth, 1));
 
   const docs = await DailyDataModel.find({
     userId: loggedInUserId,
     date: {
-      $gte: startPrevWeek,
-      $lt: endNextWeek,
+      $gte: startPrevMonth,
+      $lt: endNextMonth,
     },
   }).sort({ date: -1 });
 

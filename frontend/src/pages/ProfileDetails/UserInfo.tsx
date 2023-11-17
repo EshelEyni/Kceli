@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useProfile } from "../../contexts/ProfileContext";
+import { useProfile } from "./ProfileContext";
 import { Button } from "../../components/App/Button/Button";
 
 export const UserInfo: FC = () => {

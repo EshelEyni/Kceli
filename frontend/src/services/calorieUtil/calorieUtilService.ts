@@ -28,10 +28,12 @@ function calcEstimatedBodyFatStatusPerDay(
   return Number(estimatedBodyFatChangePerDay.toFixed(2));
 }
 
-function getTotalCalories(entity: DayData | Intake | undefined): number {
+function getTotalCalories(entity: DayData[] | DayData | Intake | undefined): number {
   switch (true) {
     case !entity:
       return 0;
+    case Array.isArray(entity):
+      return (entity as DayData[]).reduce((acc, curr) => acc + getTotalCalories(curr), 0);
     case entity && "intakes" in entity:
       return getTotalCaloriesFromDailyData({ dailyData: entity as DayData });
     case entity && "items" in entity:

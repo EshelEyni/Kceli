@@ -10,10 +10,15 @@ type WorkoutItemDisplayProps = {
 };
 
 export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
-  const { currItem, isWorkoutStarted, onStartItem, onCompleteItem } = useWorkout();
+  const { currItem, setCurrItem, isWorkoutStarted, onStartItem, onCompleteItem } = useWorkout();
   const isCurrentItem = currItem?.id === item.id;
 
-  const renderButtons = () => {
+  function handleDisplayItemClicked() {
+    if (isCurrentItem) setCurrItem(null);
+    else setCurrItem(item);
+  }
+
+  function renderButtons() {
     if (!isCurrentItem || !isWorkoutStarted) return null;
 
     return (
@@ -41,9 +46,9 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
         )}
       </div>
     );
-  };
+  }
 
-  const renderSupersetSetList = () => {
+  function renderSupersetSetList() {
     if (item.type !== "superset") return null;
 
     return (
@@ -65,9 +70,9 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
         })}
       </ul>
     );
-  };
+  }
 
-  const getItemTitle = () => {
+  function getItemTitle() {
     const basicTitle = `${item.name} - ${workoutUtilService.calcItemDuration(item)} min`;
 
     switch (item.type) {
@@ -81,10 +86,10 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
       default:
         return basicTitle;
     }
-  };
+  }
 
   return (
-    <section className="workout-item-display">
+    <section className="workout-item-display" onClick={handleDisplayItemClicked}>
       <div className="workout-item-display__info" data-testid="workout-item-display-info">
         <h4
           className="workout-item-display__info__title"

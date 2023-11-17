@@ -63,6 +63,7 @@ export type CalenderDay = {
   id: string | null;
   data: DayData | null;
   backgroundColor: string;
+  targetCalorie: number;
   isBorder: boolean;
   date: Date;
   day: number;
@@ -77,3 +78,9 @@ export type NutritionQueryState = {
   status: QueryStatus;
   error: string | null;
 };
+
+export enum ScheduleGridFilter {
+  Day = "day",
+  Week = "week",
+  Month = "month",
+}

@@ -72,7 +72,23 @@ const dailyDataSchema = new mongoose_1.Schema({
     timestamps: true,
 });
 dailyDataSchema.pre("save", function (next) {
-    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const userId = this.get("userId");
+        const prevDayTargetCaloricIntake = yield DailyDataModel.findOne({
+            userId,
+        })
+            .select("targetCaloricIntake")
+            .sort({ date: -1 })
+            .limit(1);
+        if (!prevDayTargetCaloricIntake)
+            return next();
+        const { targetCaloricIntake } = prevDayTargetCaloricIntake;
+        this.set("targetCaloricIntake", targetCaloricIntake);
+        next();
+    });
+});
+dailyDataSchema.pre("save", function (next) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const day = new Date(this.get("date")).getDay();
         const userId = this.get("userId");
@@ -81,8 +97,14 @@ dailyDataSchema.pre("save", function (next) {
             "workouts.items": { $not: { $elemMatch: { isStarted: true } } },
         }).select("workouts");
         if (lastUncompletedWorkout) {
-            const { workouts } = lastUncompletedWorkout;
-            this.set("workouts", workouts !== null && workouts !== void 0 ? workouts : []);
+            const workouts = (_a = lastUncompletedWorkout === null || lastUncompletedWorkout === void 0 ? void 0 : lastUncompletedWorkout.workouts.map(workout => {
+                workout.items = workout.items.map(item => {
+                    (item.isStarted = false), (item.isCompleted = false);
+                    return item;
+                });
+                return workout;
+            })) !== null && _a !== void 0 ? _a : [];
+            this.set("workouts", workouts);
             return next();
         }
         const user = yield userModel_1.UserModel.findById(userId);
@@ -90,7 +112,7 @@ dailyDataSchema.pre("save", function (next) {
             return next();
         const { workoutSchedule } = user;
         const workoutFromSchedule = workoutSchedule.find(workout => workout.value === day);
-        this.set("workouts", (_a = workoutFromSchedule === null || workoutFromSchedule === void 0 ? void 0 : workoutFromSchedule.workouts) !== null && _a !== void 0 ? _a : []);
+        this.set("workouts", (_b = workoutFromSchedule === null || workoutFromSchedule === void 0 ? void 0 : workoutFromSchedule.workouts) !== null && _b !== void 0 ? _b : []);
     });
 });
 dailyDataSchema.pre("findOneAndUpdate", function (next) {

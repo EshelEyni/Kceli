@@ -1,9 +1,10 @@
 import { lazy } from "react";
-import { ProfileProvider } from "./contexts/ProfileContext";
+import { ProfileProvider } from "./pages/ProfileDetails/ProfileContext";
 import { WorkoutProvider } from "./pages/WorkoutDetails/WorkoutContext";
 import { WorkoutsProvider } from "./pages/Workout/WorkoutsContext";
 import { WorkoutEditProvider } from "./pages/WorkoutEdit/WorkoutEditContext";
 import { Route } from "./types/app";
+import { ScheduleProvider } from "./pages/Schedule/ScheduleContext";
 
 const Homepage = lazy(() => import("./pages/Home/Home"));
 const LoginPage = lazy(() => import("./pages/Login/Login"));
@@ -49,6 +50,7 @@ const routes: Route[] = [
     path: "schedule",
     component: SchedulePage,
     authRequired: true,
+    provider: ScheduleProvider,
   },
   {
     path: "day/:id",

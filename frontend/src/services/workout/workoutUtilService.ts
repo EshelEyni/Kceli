@@ -1,3 +1,4 @@
+import { DayData } from "../../../../shared/types/dayData";
 import {
   BasicWorkoutItem,
   Split,
@@ -135,6 +136,10 @@ function calcItemDuration(item: CombinedWorkoutItem) {
   }
 }
 
+function getTotalWorkouts(entity: DayData[]) {
+  return entity.reduce((acc, curr) => acc + curr.workouts.length, 0);
+}
+
 export default {
   SPLIT_TYPES,
   getDefaultWorkout,
@@ -146,4 +151,5 @@ export default {
   calcItemDuration,
   calcDurationForAnaerobicItem,
   calcDurationForSupersetItem,
+  getTotalWorkouts,
 };

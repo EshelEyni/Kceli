@@ -41,7 +41,7 @@
       text-align: left;
 
       th {
-        padding: rem(6px) rem(10px);
+        padding: rem(3px) rem(5px);
 
         @include for-desktop-layout {
           padding: rem(12px) rem(20px);
@@ -76,7 +76,7 @@
 
       td {
         border-bottom: 1px solid #e0e0e0;
-        padding: rem(5px) rem(10px);
+        padding: rem(3px) rem(5px);
 
         @include for-desktop-layout {
           padding: rem(10px) rem(20px);

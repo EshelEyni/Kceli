@@ -63,6 +63,21 @@ const dailyDataSchema = new Schema<IDailyData>(
 );
 
 dailyDataSchema.pre("save", async function (next) {
+  const userId = this.get("userId");
+  const prevDayTargetCaloricIntake = await DailyDataModel.findOne({
+    userId,
+  })
+    .select("targetCaloricIntake")
+    .sort({ date: -1 })
+    .limit(1);
+
+  if (!prevDayTargetCaloricIntake) return next();
+  const { targetCaloricIntake } = prevDayTargetCaloricIntake;
+  this.set("targetCaloricIntake", targetCaloricIntake);
+  next();
+});
+
+dailyDataSchema.pre("save", async function (next) {
   const day = new Date(this.get("date")).getDay();
   const userId = this.get("userId");
   const lastUncompletedWorkout = await DailyDataModel.findOne({
@@ -71,8 +86,16 @@ dailyDataSchema.pre("save", async function (next) {
   }).select("workouts");
 
   if (lastUncompletedWorkout) {
-    const { workouts } = lastUncompletedWorkout;
-    this.set("workouts", workouts ?? []);
+    const workouts =
+      lastUncompletedWorkout?.workouts.map(workout => {
+        workout.items = workout.items.map(item => {
+          (item.isStarted = false), (item.isCompleted = false);
+          return item;
+        });
+        return workout;
+      }) ?? [];
+
+    this.set("workouts", workouts);
     return next();
   }
 

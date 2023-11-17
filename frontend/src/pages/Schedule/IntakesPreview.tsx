@@ -13,6 +13,12 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
   const [isTableShown, setIsTableShown] = useState(false);
   const title = intake.name || intake.items.map(item => item.name).join(", ");
   const totalCalories = calorieUtilService.getTotalCalories(intake);
+  const time = intake.recordedAt
+    ? new Date(intake.recordedAt).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
 
   function handleHeaderClick() {
     setIsTableShown(!isTableShown);
@@ -22,7 +28,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     <article className="day-report__intake-preview">
       <Header className="day-report__intake-preview__header" onClickFn={handleHeaderClick}>
         <h3 className="day-report__intake-preview__header__title">
-          {title} {totalCalories} kcal
+          {title} - {totalCalories} kcal - {time}
         </h3>
         <div>{isTableShown ? <FaChevronUp /> : <FaChevronDown />}</div>
       </Header>

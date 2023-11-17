@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useProfile } from "../../contexts/ProfileContext";
+import { useProfile } from "./ProfileContext";
 
 export const WeightToLose: FC = () => {
   const { weightToLose } = useProfile();

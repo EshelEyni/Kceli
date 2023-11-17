@@ -9,7 +9,7 @@
 
 .workout-list {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
   gap: rem(10px);
@@ -29,8 +29,8 @@
     &__btns {
       gap: rem(5px);
       .btn {
-        padding: rem(5px) rem(10px);
-        font-size: rem(12px);
+        padding: rem(6px) rem(12px);
+        font-size: rem(14px);
       }
     }
   }
@@ -38,6 +38,8 @@
 
 @include for-desktop-layout {
   .workout-list {
+    flex-direction: row;
+
     &__item {
       flex: 0 0 rem(300px);
     }
@@ -54,7 +56,6 @@
 
         .btn {
           padding: rem(8px) rem(12px);
-          font-size: unset;
         }
       }
     }

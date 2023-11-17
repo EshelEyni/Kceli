@@ -2,19 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import { DayData } from "../../../shared/types/dayData";
 import dayDataApiService from "../services/dayData/dayDataApiService";
 import { getDaysInMonth, isSameDay } from "../services/util/utilService";
-import { useAuth } from "./useAuth";
-import { User } from "../../../shared/types/user";
 import calorieUtilService from "../services/calorieUtil/calorieUtilService";
-import { CalenderDay, UserOrNull } from "../types/app";
+import { CalenderDay } from "../types/app";
 
 interface CalendarQueryParams {
   date: Date;
   data: DayData[] | undefined;
-  loggedInUser: User | null;
 }
 
 type useDaysResult = {
-  days: CalenderDay[];
+  calenderDays: CalenderDay[];
+  data: DayData[] | undefined;
   error: unknown;
   isLoading: boolean;
   isSuccess: boolean;
@@ -23,8 +21,6 @@ type useDaysResult = {
 };
 
 export function useGetCalenderData(currDate: Date): useDaysResult {
-  const { loggedInUser } = useAuth();
-
   const { data, error, isLoading, isSuccess, isError } = useQuery({
     queryKey: [`calenderData`, currDate],
     queryFn: () => {
@@ -33,19 +29,17 @@ export function useGetCalenderData(currDate: Date): useDaysResult {
       return dayDataApiService.getCalenderData(month, year);
     },
   });
-
   const isEmpty = !!data && data.length === 0;
-
-  const days = getCalenderDays({ date: currDate, data, loggedInUser });
-
-  return { days, error, isLoading, isSuccess, isError, isEmpty };
+  const calenderDays = setDataToDays({ date: currDate, data });
+  return { calenderDays, data, error, isLoading, isSuccess, isError, isEmpty };
 }
 
-function getCalenderDays({ date, data, loggedInUser }: CalendarQueryParams): CalenderDay[] {
-  return getCalendarDays(date).map(d => setDataToDay({ date: d, data, loggedInUser }));
+function setDataToDays({ date, data }: CalendarQueryParams): CalenderDay[] {
+  const callenderDays = getCalenderDays(date);
+  return callenderDays.map(d => setDataToDay({ date: d, data }));
 }
 
-function getCalendarDays(currDate: Date): Date[] {
+function getCalenderDays(currDate: Date): Date[] {
   const daysInMonth = getDaysInMonth({
     month: currDate.getMonth(),
     year: currDate.getFullYear(),
@@ -68,7 +62,7 @@ function getCalendarDays(currDate: Date): Date[] {
   return [...prevMonthDates, ...currentMonthDates, ...nextMonthDates];
 }
 
-function setDataToDay({ date, data, loggedInUser }: CalendarQueryParams) {
+function setDataToDay({ date, data }: CalendarQueryParams) {
   const defaultDayData = getDefaultDayData(date);
   if (!data) return defaultDayData;
 
@@ -77,14 +71,21 @@ function setDataToDay({ date, data, loggedInUser }: CalendarQueryParams) {
   if (!dayData) return defaultDayData;
 
   const consumedCalories = calorieUtilService.getTotalCalories(dayData);
-
-  const backgroundColor = getBackgroundColor(dayData, loggedInUser, consumedCalories);
+  const targetCalorie = getDayCaloriesIntake({
+    currDayData: dayData,
+    data,
+  });
+  const backgroundColor = calorieUtilService.getBcgByCosumedCalories({
+    consumedCalories,
+    targetCalorie,
+  });
   const isBorder = dayData.workouts.some(workout => workout.items.some(item => item.isCompleted));
 
   return {
     ...defaultDayData,
     id: dayData.id,
     data: dayData,
+    targetCalorie,
     backgroundColor,
     isBorder,
   };
@@ -94,6 +95,7 @@ function getDefaultDayData(date: Date): CalenderDay {
   return {
     id: null,
     data: null,
+    targetCalorie: 0,
     backgroundColor: "",
     isBorder: false,
     date: date,
@@ -102,16 +104,21 @@ function getDefaultDayData(date: Date): CalenderDay {
   };
 }
 
-function getBackgroundColor(
-  dayData: DayData,
-  loggedInUser: UserOrNull,
-  consumedCalories: number
-): string {
-  if (dayData && loggedInUser) {
-    return calorieUtilService.getBcgByCosumedCalories({
-      consumedCalories,
-      targetCalorie: loggedInUser.targetCaloricIntakePerDay,
-    });
-  }
-  return "";
+function getDayCaloriesIntake({
+  currDayData,
+  data,
+}: {
+  currDayData: DayData;
+  data: DayData[] | undefined;
+}) {
+  if (!data) return 0;
+  if (currDayData.targetCaloricIntake) return currDayData.targetCaloricIntake;
+  const avgDayTargetCalories = Math.round(
+    data.reduce((acc, day) => {
+      if (!day.targetCaloricIntake) return acc;
+      return acc + day.targetCaloricIntake;
+    }, 0) / data.filter(day => day.targetCaloricIntake).length
+  );
+
+  return avgDayTargetCalories;
 }

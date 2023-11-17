@@ -17,10 +17,10 @@ type DayReportProps = {
 
 export const DayReport: FC<DayReportProps> = ({ day }) => {
   const { loggedInUser } = useAuth();
-  const { data } = day;
+  const { data, backgroundColor } = day;
   if (!data)
     return (
-      <section className="day-report">
+      <section className="report day-report empty">
         <p>No data for this day</p>
       </section>
     );
@@ -31,29 +31,27 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
   const calConsumedTitle = ` calories ${calConsumedSufix}`;
   const dateStr = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(day.date);
   const averageTimeBetweenMeals = dayDataUtilService.calcAverageTimeBetweenMeals(data);
-  const { targetCaloricIntake } = data;
-  const background = targetCaloricIntake
-    ? calorieUtilService.getBcgByCosumedCalories({
-        consumedCalories,
-        targetCalorie: targetCaloricIntake,
-      })
-    : "gray";
 
   return (
-    <section className="day-report">
+    <section className="report day-report">
       <Header className="day-report__header">
         <h1>{dateStr}</h1>
-        <div className="day-report__header__color-circle" style={{ background }} />
+        <div className="day-report__header__color-circle" style={{ backgroundColor }} />
       </Header>
       <div className="day-report__weight">
-        <p>
-          <strong>Weight: </strong>
-          {data.weight}
-        </p>
-        <p>
-          <strong>Waist: </strong>
-          {data.waist}
-        </p>
+        {data.weight && (
+          <p>
+            <strong>Weight: </strong>
+            {data.weight}
+          </p>
+        )}
+
+        {data.waist && (
+          <p>
+            <strong>Waist: </strong>
+            {data.waist}
+          </p>
+        )}
       </div>
       <div className="day-report__calories">
         <h3 className="day-report__calories__title">calories</h3>
@@ -67,7 +65,7 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
         </p>
         <p>
           <strong>target caloric intake: </strong>
-          {data.targetCaloricIntake}
+          {day.targetCalorie}
         </p>
       </div>
       {data.intakes.length > 0 && (
@@ -78,7 +76,7 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
           <List
             className="day-report__intakes__list"
             items={data.intakes as Intake[]}
-            render={intake => <IntakePreview intake={intake} />}
+            render={intake => <IntakePreview intake={intake} key={intake.id} />}
           />
 
           <CalorieBar intakes={data.intakes as Intake[]} />

@@ -26,13 +26,13 @@ const getCalenderData = (0, errorService_1.asyncErrorCatcher)((req, res) => __aw
         throw new Error("Please provide month and year");
     const startCurrentMonth = (0, date_fns_1.startOfMonth)(new Date(Number(year), Number(month) - 1));
     const endCurrentMonth = (0, date_fns_1.endOfMonth)(new Date(Number(year), Number(month) - 1));
-    const startPrevWeek = (0, date_fns_1.subWeeks)(startCurrentMonth, 1);
-    const endNextWeek = (0, date_fns_1.addWeeks)(endCurrentMonth, 1);
+    const startPrevMonth = (0, date_fns_1.startOfMonth)((0, date_fns_1.subMonths)(startCurrentMonth, 1));
+    const endNextMonth = (0, date_fns_1.endOfMonth)((0, date_fns_1.addMonths)(endCurrentMonth, 1));
     const docs = yield dailyDataModel_1.DailyDataModel.find({
         userId: loggedInUserId,
         date: {
-            $gte: startPrevWeek,
-            $lt: endNextWeek,
+            $gte: startPrevMonth,
+            $lt: endNextMonth,
         },
     }).sort({ date: -1 });
     res.send({

@@ -10,7 +10,13 @@
   box-shadow: 0 0 rem(10px) rgba(0, 0, 0, 0.2);
 
   &__border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
+    height: rem(210px);
+    width: rem(210px);
+    background-color: var(--color-primary);
     border: rem(2px) solid var(--color-primary);
   }
 }

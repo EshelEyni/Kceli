@@ -1,72 +1,44 @@
-import { FC, useEffect, useRef, useState } from "react";
-import { days as dayNames, isSameDay } from "../../services/util/utilService";
+import { FC, useEffect } from "react";
+import { isSameDay } from "../../services/util/utilService";
 import "./Schedule.scss";
-import { useGetCalenderData } from "../../hooks/useGetCalenderData";
-import { CalenderDay } from "../../types/app";
+import { CalenderDay, ScheduleGridFilter } from "../../types/app";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
 import { DayReport } from "./DayReport";
-import classnames from "classnames";
 import { Button } from "../../components/App/Button/Button";
 import { IoChevronBackCircleSharp, IoChevronForwardCircleSharp } from "react-icons/io5";
 import { Header } from "../../components/App/Header/Header";
+import { usePageLoaded } from "../../hooks/usePageLoaded";
+import { DaysReport } from "./DaysReport";
+import { ScheduleFilter } from "./ScheduleFilter";
+import { useSchedule } from "./ScheduleContext";
+import { Calender } from "./Calender";
+import { WeekReport } from "./WeekReport";
 
 const SchedulePage: FC = () => {
-  const [currDate, setCurrDate] = useState<Date>(new Date());
-  const [currDay, setCurrDay] = useState<CalenderDay | null>(null);
-  const { days, isLoading, isSuccess, isError } = useGetCalenderData(currDate);
-  const gridRef = useRef<HTMLUListElement>(null);
-  const startX = useRef(0);
+  usePageLoaded({ title: "Schedule / Kceli" });
+  const {
+    currDate,
+    currDay,
+    setCurrDay,
+    currDays,
+    filterBy,
+    calenderDays,
+    isLoading,
+    isSuccess,
+    isError,
+    moveToMonth,
+  } = useSchedule();
 
-  function handleDayClick(day: CalenderDay) {
-    setCurrDay(day);
-  }
-
-  function moveToMonth(i: number) {
-    const newDate = new Date(currDate);
-    newDate.setMonth(currDate.getMonth() + i);
-    setCurrDate(newDate);
-  }
-
-  useEffect(() => {
-    const handleTouchStart = (e: TouchEvent) => {
-      const touch = e.touches[0];
-      startX.current = touch.clientX;
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const moveToMonth = (i: number) => {
-        const newDate = new Date(currDate);
-        newDate.setMonth(currDate.getMonth() + i);
-        setCurrDate(newDate);
-      };
-      const touch = e.changedTouches[0];
-      const endX = touch.clientX;
-      const threshold = 50;
-
-      if (endX - startX.current > threshold) moveToMonth(-1);
-      if (startX.current - endX > threshold) moveToMonth(1);
-    };
-
-    const gridElement = gridRef.current;
-
-    if (!gridElement) return;
-    gridElement.addEventListener("touchstart", handleTouchStart, false);
-    gridElement.addEventListener("touchend", handleTouchEnd, false);
-
-    return () => {
-      if (!gridElement) return;
-      gridElement.removeEventListener("touchstart", handleTouchStart);
-      gridElement.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [currDate, isSuccess]);
+  const isDayReportShown = !!currDay && filterBy === ScheduleGridFilter.Day;
+  const isDaysReportShown = currDays.length > 0 && filterBy === ScheduleGridFilter.Day;
 
   useEffect(() => {
     if (!isSuccess || !!currDay) return;
     const today = new Date();
-    const todayDay = days.find(d => isSameDay(d.date, today));
+    const todayDay = calenderDays.find(d => isSameDay(d.date, today));
     if (todayDay) setCurrDay(todayDay);
-  }, [days, isSuccess, currDay]);
+  }, [calenderDays, isSuccess, currDay, currDays, setCurrDay]);
 
   return (
     <main className="page schedule-page">
@@ -88,33 +60,11 @@ const SchedulePage: FC = () => {
             </div>
           </Header>
 
-          <ul className="schedule-grid" ref={gridRef}>
-            {dayNames.map(day => (
-              <li className="schedule-grid__item weekday-item" key={day.short}>
-                <h3 className="schedule-grid__item__title">{day.short}</h3>
-              </li>
-            ))}
-            {days.map(d => {
-              const { backgroundColor, date } = d;
-              const color = d.backgroundColor ? "white" : "";
-              const border = d.isBorder ? "4px solid var(--color-success)" : "none";
-              return (
-                <li
-                  className={classnames("schedule-grid__item", {
-                    active: currDay && isSameDay(d.date, currDay.date),
-                  })}
-                  onClick={() => handleDayClick(d)}
-                  style={{ backgroundColor, color }}
-                  key={date.toISOString()}
-                >
-                  <div className="schedule-grid__item__wrapper" style={{ border }}>
-                    <h3>{d.day}</h3>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-          {currDay && <DayReport day={currDay} />}
+          <Calender />
+          <ScheduleFilter />
+          {isDayReportShown && <DayReport day={currDay as CalenderDay} />}
+          {isDaysReportShown && <DaysReport days={currDays} />}
+          {filterBy === ScheduleGridFilter.Week && <WeekReport />}
         </>
       )}
     </main>
