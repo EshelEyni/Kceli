@@ -1,4 +1,4 @@
-import { NewIntake, NewIntakeItem, MeasurementUnit } from "../../../../shared/types/intake";
+import { NewIntake, NewIntakeItem, MeasurementUnit, Intake } from "../../../../shared/types/intake";
 import { createId } from "../util/utilService";
 
 const units: MeasurementUnit[] = Object.values(MeasurementUnit);
@@ -61,10 +61,21 @@ function getQuantityStepPerUnit(unit: MeasurementUnit): number {
   }
 }
 
+function sortIntakesByRecordedAt(intakes: Intake[]) {
+  const sortedIntakes = intakes.sort((a, b) => {
+    const aRecordedAt = new Date(a.recordedAt as any as string).getTime();
+    const bRecordedAt = new Date(b.recordedAt as any as string).getTime();
+    return aRecordedAt - bRecordedAt;
+  });
+
+  return sortedIntakes;
+}
+
 export default {
   getDefaultIntake,
   getDefaultIntakeItem,
   getUnitDefaultQuantity,
   getQuantityStepPerUnit,
   units,
+  sortIntakesByRecordedAt,
 };

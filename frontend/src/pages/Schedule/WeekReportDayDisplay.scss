@@ -1,0 +1,97 @@
+@import "../../styles/main.scss";
+
+.week-report-day-display {
+  display: flex;
+  flex-direction: column;
+  gap: rem(10px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  width: rem(370px);
+  height: fit-content;
+  padding: 0 0 rem(10px) 0;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: rem(10px);
+    padding: 0 rem(10px);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    border-radius: 10px 10px 0 0;
+    align-items: center;
+    height: rem(35px);
+  }
+
+  &__calories {
+    text-transform: capitalize;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-family: "Arial", sans-serif;
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        color: #333;
+      }
+
+      tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+
+      tr:hover {
+        background-color: #e8e8e8;
+      }
+
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      td {
+        color: #555;
+      }
+    }
+  }
+
+  &__show-intakes-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: rem(35px);
+    align-self: center;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+  }
+
+  &__intakes-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: rem(5px);
+  }
+
+  &__workouts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: rem(5px);
+
+    &__list {
+      align-items: flex-start;
+    }
+  }
+}

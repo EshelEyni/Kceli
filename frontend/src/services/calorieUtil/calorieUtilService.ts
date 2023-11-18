@@ -14,6 +14,14 @@ function calcRemainingCalories(loggedInUser: User | null, dailyData: DayData | u
   return remainingCalories;
 }
 
+function calcRemainingCaloriesFromDayData(dailyData: DayData | undefined): number {
+  if (!dailyData) return 0;
+  const targetCaloricIntakePerDay = dailyData.targetCaloricIntake;
+  const remainingCalories = Math.round(targetCaloricIntakePerDay - getTotalCalories(dailyData));
+
+  return remainingCalories;
+}
+
 function calcEstimatedBodyFatStatusPerDay(
   loggedInUser: User | null,
   dailyData: DayData | undefined
@@ -90,10 +98,53 @@ function getBcgByCosumedCalories({
   return bcg?.color || "#005FB3";
 }
 
+function getDailyExcessRate({
+  remainingCalories,
+  targetCaloricIntake,
+}: {
+  remainingCalories: number;
+  targetCaloricIntake: number;
+}) {
+  if (remainingCalories > 0) return 0;
+  return Math.round((Math.abs(remainingCalories) / targetCaloricIntake) * 100) || 0;
+}
+
+function getWeeklyExcessRateCalories(data: DayData[]) {
+  const totalCalories = data.reduce((acc, curr) => {
+    const remainingCalories = calcRemainingCaloriesFromDayData(curr);
+    if (remainingCalories < 0) return acc + Math.abs(remainingCalories);
+    return acc;
+  }, 0);
+  return totalCalories;
+}
+
+function getDayCaloriesIntake({
+  currDayData,
+  data,
+}: {
+  currDayData: DayData;
+  data: DayData[] | undefined;
+}) {
+  if (!data) return 0;
+  if (currDayData.targetCaloricIntake) return currDayData.targetCaloricIntake;
+  const avgDayTargetCalories = Math.round(
+    data.reduce((acc, day) => {
+      if (!day.targetCaloricIntake) return acc;
+      return acc + day.targetCaloricIntake;
+    }, 0) / data.filter(day => day.targetCaloricIntake).length
+  );
+
+  return avgDayTargetCalories;
+}
+
 export default {
   calcRemainingCalories,
   getBcgByCosumedCalories,
   getTotalCalories,
   calcEstimatedBodyFatStatusPerDay,
   getTotalCaloriesFromDailyData,
+  calcRemainingCaloriesFromDayData,
+  getDailyExcessRate,
+  getDayCaloriesIntake,
+  getWeeklyExcessRateCalories,
 };

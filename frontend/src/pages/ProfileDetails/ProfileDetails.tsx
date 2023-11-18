@@ -15,6 +15,7 @@ import { WeightToLose } from "./WeightToLose";
 const ProfileDetails = () => {
   const {
     user,
+    userDailyStats,
     isLoading,
     isSuccess,
     isError,
@@ -30,7 +31,7 @@ const ProfileDetails = () => {
   return (
     <main className="page profile-details">
       {isEditing ? <UserEdit /> : <UserInfo />}
-      <WeightWaistChart />
+      {userDailyStats && <WeightWaistChart data={userDailyStats} />}
 
       <GoalIndicator />
       {timeToCurrentWeightLossGoal && (

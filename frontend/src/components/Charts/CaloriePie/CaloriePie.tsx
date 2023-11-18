@@ -2,6 +2,7 @@ import { FC } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { Intake } from "../../../../../shared/types/intake";
 import { CHART_COLORS } from "../../../services/util/utilService";
+import intakeUtilService from "../../../services/intake/intakeUtilService";
 
 type CaloriePieProps = {
   intakes: Intake[];
@@ -9,8 +10,10 @@ type CaloriePieProps = {
 };
 
 export const CaloriePie: FC<CaloriePieProps> = ({ intakes, remainingCalories }) => {
+  const sortedIntakes = intakeUtilService.sortIntakesByRecordedAt(intakes);
+
   const pieData = [
-    ...intakes.map(i => ({
+    ...sortedIntakes.map(i => ({
       name: i.items.reduce((acc, curr, i, arr) => {
         if (arr.length === 1) return curr.name;
         if (i === 0) return acc + `${curr.name}, `;

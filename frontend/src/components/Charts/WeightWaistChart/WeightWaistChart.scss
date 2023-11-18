@@ -1,0 +1,13 @@
+@import "../../../styles/main.scss";
+
+.weight-waist-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: rem(10px);
+  width: 100%;
+
+  .btn {
+    background-color: var(--color-primary);
+  }
+}

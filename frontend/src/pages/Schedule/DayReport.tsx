@@ -10,6 +10,8 @@ import { Header } from "../../components/App/Header/Header";
 import { WorkoutPreview } from "./WorkoutPreview";
 import { IntakePreview } from "./IntakesPreview";
 import { List } from "../../components/App/List/List";
+import intakeUtilService from "../../services/intake/intakeUtilService";
+import { DayData } from "../../../../shared/types/dayData";
 
 type DayReportProps = {
   day: CalenderDay;
@@ -31,7 +33,7 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
   const calConsumedTitle = ` calories ${calConsumedSufix}`;
   const dateStr = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(day.date);
   const averageTimeBetweenMeals = dayDataUtilService.calcAverageTimeBetweenMeals(data);
-
+  const barData = getCalorieBarData(data);
   return (
     <section className="report day-report">
       <Header className="day-report__header">
@@ -79,7 +81,7 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
             render={intake => <IntakePreview intake={intake} key={intake.id} />}
           />
 
-          <CalorieBar intakes={data.intakes as Intake[]} />
+          <CalorieBar data={barData} />
         </div>
       )}
       {data.workouts.length > 0 && (
@@ -97,3 +99,18 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
     </section>
   );
 };
+
+function getCalorieBarData(data: DayData) {
+  const sortedIntakes = intakeUtilService.sortIntakesByRecordedAt(data.intakes as Intake[]);
+  const barData = sortedIntakes.map(i => ({
+    name: i.items.reduce((acc, curr, i, arr) => {
+      if (arr.length === 1) return curr.name;
+      if (i === 0) return acc + `${curr.name}, `;
+      if (i === arr.length - 1) return acc + `and ${curr.name}`;
+      return acc + ` ${curr.name}, `;
+    }, ""),
+    calories: i.items.reduce((acc, curr) => acc + curr.calories, 0),
+  }));
+
+  return barData;
+}

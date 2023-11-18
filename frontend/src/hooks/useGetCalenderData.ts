@@ -71,7 +71,7 @@ function setDataToDay({ date, data }: CalendarQueryParams) {
   if (!dayData) return defaultDayData;
 
   const consumedCalories = calorieUtilService.getTotalCalories(dayData);
-  const targetCalorie = getDayCaloriesIntake({
+  const targetCalorie = calorieUtilService.getDayCaloriesIntake({
     currDayData: dayData,
     data,
   });
@@ -102,23 +102,4 @@ function getDefaultDayData(date: Date): CalenderDay {
     day: date.getDate(),
     consumedCalories: 0,
   };
-}
-
-function getDayCaloriesIntake({
-  currDayData,
-  data,
-}: {
-  currDayData: DayData;
-  data: DayData[] | undefined;
-}) {
-  if (!data) return 0;
-  if (currDayData.targetCaloricIntake) return currDayData.targetCaloricIntake;
-  const avgDayTargetCalories = Math.round(
-    data.reduce((acc, day) => {
-      if (!day.targetCaloricIntake) return acc;
-      return acc + day.targetCaloricIntake;
-    }, 0) / data.filter(day => day.targetCaloricIntake).length
-  );
-
-  return avgDayTargetCalories;
 }

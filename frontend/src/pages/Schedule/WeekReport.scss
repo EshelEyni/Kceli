@@ -1,45 +1,13 @@
 @import "../../styles/main.scss";
 
-.week-report {
-  .table-container {
-    margin: 20px;
-    overflow-x: auto;
+.report.week-report {
+  display: flex;
+  flex-direction: column;
+  gap: rem(20px);
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.9rem;
-      color: #333;
-
-      thead {
-        tr {
-          background-color: #f7f7f7;
-
-          th {
-            padding: 10px 15px;
-            font-weight: bold;
-            border-bottom: 2px solid #ddd;
-            text-transform: capitalize;
-          }
-        }
-      }
-
-      tbody {
-        tr {
-          transition: background-color 0.3s;
-
-          &:hover {
-            background-color: #f0f0f0;
-          }
-
-          td {
-            padding: 10px 15px;
-            border-bottom: 1px solid #ddd;
-            text-transform: capitalize;
-          }
-        }
-      }
-    }
+  .week-report-day-display-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(20px);
   }
 }
