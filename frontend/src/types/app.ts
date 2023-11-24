@@ -84,3 +84,12 @@ export enum ScheduleGridFilter {
   Week = "week",
   Month = "month",
 }
+
+export interface Goal {
+  id: string;
+  userId: string;
+  date: Date | string;
+  type: "user" | "weekly" | "monthly";
+  description: string;
+  isCompleted: boolean;
+}

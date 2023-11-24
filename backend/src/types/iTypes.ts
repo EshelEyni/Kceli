@@ -98,3 +98,11 @@ export interface IWorkout extends Document {
   items: Array<CombinedWorkoutItem>;
   durationInMin?: number;
 }
+
+export interface IGoal extends Document {
+  userId: mongoose.Types.ObjectId;
+  type: "user" | "weekly" | "monthly";
+  date: Date;
+  description: string;
+  isCompleted: boolean;
+}

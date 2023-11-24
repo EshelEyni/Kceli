@@ -30,6 +30,11 @@ export const WeekReportTable: FC<WeekReportTableProps> = ({ currWeekData, prevWe
         prevWeek: 0,
         trend: 0,
       },
+      averageIntakesPerDay: {
+        currWeek: 0,
+        prevWeek: 0,
+        trend: 0,
+      },
       totalWorkouts: {
         currWeek: 0,
         prevWeek: 0,
@@ -107,6 +112,20 @@ export const WeekReportTable: FC<WeekReportTableProps> = ({ currWeekData, prevWe
     defaultData.exceededDays.trend =
       defaultData.exceededDays.currWeek - defaultData.exceededDays.prevWeek;
 
+    defaultData.averageIntakesPerDay.currWeek = Math.round(
+      currWeekData.reduce((acc, curr) => {
+        const intakesLength = curr.intakes.filter(i => i.type === "food").length;
+        return acc + intakesLength;
+      }, 0) / currWeekData.length
+    );
+
+    defaultData.averageIntakesPerDay.prevWeek = Math.round(
+      prevWeekData.reduce((acc, curr) => {
+        const intakesLength = curr.intakes.filter(i => i.type === "food").length;
+        return acc + intakesLength;
+      }, 0) / prevWeekData.length
+    );
+
     return defaultData;
   }
 
@@ -174,6 +193,13 @@ export const WeekReportTable: FC<WeekReportTableProps> = ({ currWeekData, prevWe
             <td>{tableData.exceededDays.currWeek}</td>
             <td>{tableData.exceededDays.prevWeek}</td>
             <td>{renderTrend({ trend: tableData.exceededDays.trend, positive: "down" })}</td>
+          </tr>
+
+          <tr>
+            <td>average intakes per day</td>
+            <td>{tableData.averageIntakesPerDay.currWeek}</td>
+            <td>{tableData.averageIntakesPerDay.prevWeek}</td>
+            <td></td>
           </tr>
         </tbody>
       </table>

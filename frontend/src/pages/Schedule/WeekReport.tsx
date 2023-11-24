@@ -7,6 +7,7 @@ import calorieUtilService from "../../services/calorieUtil/calorieUtilService";
 import { WeekReportDayDisplay } from "./WeekReportDayDisplay";
 import "./WeekReport.scss";
 import { WeekCaloriesBar } from "./WeekCaloriesBar";
+import { WeekGoals } from "./WeekGoals";
 
 export const WeekReport: FC = () => {
   const { currDays, data } = useSchedule();
@@ -65,14 +66,15 @@ export const WeekReport: FC = () => {
 
   return (
     <div className="report week-report">
-      <div className="week-report-day-display-container">
-        {currDays.map(d => (
-          <WeekReportDayDisplay key={d.id} calenderDay={d} />
-        ))}
-      </div>
+      <WeekReportTable currWeekData={currWeekData} prevWeekData={prevWeekData} />
+      <WeekGoals />
       {weightWaistData && <WeightWaistChart data={weightWaistData} />}
       {calorieData && <WeekCaloriesBar data={calorieData} />}
-      <WeekReportTable currWeekData={currWeekData} prevWeekData={prevWeekData} />
+      <div className="week-report-day-display-container">
+        {currDays.map((d, i) => (
+          <WeekReportDayDisplay key={d.id || i} calenderDay={d} />
+        ))}
+      </div>
     </div>
   );
 };

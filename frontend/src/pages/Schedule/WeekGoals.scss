@@ -1,0 +1,13 @@
+@import "../../styles/main.scss";
+
+.week-goals {
+  display: flex;
+  flex-direction: column;
+  gap: rem(15px);
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(5px);
+  }
+}

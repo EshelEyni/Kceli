@@ -1,7 +1,11 @@
 import { createContext, useContext, useState, useCallback } from "react";
 import { useGetCalenderData } from "../../hooks/useGetCalenderData";
-import { CalenderDay, ScheduleGridFilter } from "../../types/app";
+import { CalenderDay, Goal, ScheduleGridFilter } from "../../types/app";
 import { DayData } from "../../../../shared/types/dayData";
+import { useGetGoals } from "../../hooks/useGetWeekGoals";
+import { useAddGoal } from "../../hooks/useAddGoal";
+import { useUpdateGoal } from "../../hooks/useUpdateGoal";
+import { UseMutateFunction } from "@tanstack/react-query";
 
 type ScheduleContextType = {
   currDate: Date;
@@ -19,6 +23,16 @@ type ScheduleContextType = {
   moveToMonth: (i: number) => void;
   getWeekDays: (currDay: CalenderDay) => CalenderDay[];
   getMonthDays: (currDay: CalenderDay) => CalenderDay[];
+  weekGoals: Goal[] | undefined;
+  isGoalsLoading: boolean;
+  isGoalsSuccess: boolean;
+  isGoalsError: boolean;
+  isGoalsEmpty: boolean;
+  addGoal: UseMutateFunction<Goal, unknown, Partial<Goal>, unknown>;
+  isAddGoalLoading: boolean;
+  updateGoal: UseMutateFunction<Goal, unknown, Partial<Goal>, unknown>;
+  isUpdateGoalLoading: boolean;
+  isWeekGoalsEditEnabled: boolean;
 };
 
 const ScheduleContext = createContext<ScheduleContextType | undefined>(undefined);
@@ -29,6 +43,37 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
   const [currDays, setCurrDays] = useState<CalenderDay[]>([]);
   const [filterBy, setFilterBy] = useState<ScheduleGridFilter>(ScheduleGridFilter.Day);
   const { calenderDays, data, isLoading, isSuccess, isError } = useGetCalenderData(currDate);
+  const {
+    goals: weekGoals,
+    isLoading: isGoalsLoading,
+    isSuccess: isGoalsSuccess,
+    isError: isGoalsError,
+    isEmpty: isGoalsEmpty,
+  } = useGetGoals(getWeekGoalQueryStr());
+
+  const { isLoading: isAddGoalLoading, addGoal } = useAddGoal();
+  const { isLoading: isUpdateGoalLoading, updateGoal } = useUpdateGoal();
+  const isWeekGoalsEditEnabled = checkWeekGoalsEditEnabled();
+
+  function getWeekGoalQueryStr() {
+    if (!currDays.length || filterBy !== ScheduleGridFilter.Week) return "";
+    const { date: firstDayDate } = currDays[0];
+    firstDayDate.setHours(0, 0, 0, 0);
+    const { date: lastDayDate } = currDays[currDays.length - 1];
+    lastDayDate.setHours(23, 59, 59, 999);
+    const weekGoalQueryStr = `?type=weekly&date[gte]=${firstDayDate.toISOString()}&date[lte]=${lastDayDate.toISOString()}`;
+    return weekGoalQueryStr;
+  }
+
+  function checkWeekGoalsEditEnabled() {
+    if (!currDays.length || filterBy !== ScheduleGridFilter.Week) return false;
+    const firstDate = new Date(currDays[0].date);
+    firstDate.setHours(0, 0, 0, 0);
+    const lastDate = new Date(currDays[currDays.length - 1].date);
+    lastDate.setHours(23, 59, 59, 999);
+    const currDate = new Date();
+    return currDate >= firstDate && currDate <= lastDate;
+  }
 
   const moveToMonth = useCallback(
     (i: number) => {
@@ -94,6 +139,16 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     moveToMonth,
     getWeekDays,
     getMonthDays,
+    weekGoals,
+    isGoalsLoading,
+    isGoalsSuccess,
+    isGoalsError,
+    isGoalsEmpty,
+    addGoal,
+    isAddGoalLoading,
+    updateGoal,
+    isUpdateGoalLoading,
+    isWeekGoalsEditEnabled,
   };
   return <ScheduleContext.Provider value={value}>{children}</ScheduleContext.Provider>;
 }

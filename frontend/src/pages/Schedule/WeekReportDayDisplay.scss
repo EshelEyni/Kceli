@@ -7,9 +7,14 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--color-border);
   border-radius: 10px;
-  width: rem(370px);
   height: fit-content;
   padding: 0 0 rem(10px) 0;
+  width: 100%;
+
+  @include for-desktop-layout {
+    width: fit-content;
+    min-width: rem(350px);
+  }
 
   &__wrapper {
     display: flex;
@@ -93,5 +98,11 @@
     &__list {
       align-items: flex-start;
     }
+  }
+
+  &__expand-btn {
+    background-color: var(--color-primary);
+    align-self: center;
+    padding: rem(10px) rem(20px);
   }
 }

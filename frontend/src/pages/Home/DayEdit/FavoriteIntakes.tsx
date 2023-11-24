@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useDayEdit } from "./DayEditContext";
 import { IntakePreview } from "./IntakePreview";
 import {
@@ -67,6 +67,10 @@ export const FavoriteIntakes: FC = () => {
     ) as FavoriteIntake[];
     setSortedIntakes(searchedIntakes);
   }
+
+  useEffect(() => {
+    setSortedIntakes(_sortIntakes(favoriteIntakes));
+  }, [favoriteIntakes]);
 
   return (
     <section className="day-edit__favorite-intakes" data-testid="day-edit-favorite-intakes">

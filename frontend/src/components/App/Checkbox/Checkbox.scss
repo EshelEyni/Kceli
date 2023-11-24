@@ -4,7 +4,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: rem(20px);
   height: rem(20px);
   border-radius: 50%;
@@ -15,6 +14,7 @@
   transition: all 0.2s ease-in-out;
   background-color: transparent;
   position: relative;
+  cursor: pointer;
 
   &.checked {
     width: rem(24px);

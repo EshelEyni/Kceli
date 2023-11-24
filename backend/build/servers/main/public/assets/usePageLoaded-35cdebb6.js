@@ -1,1 +1,0 @@
-import{r as s,E as c,V as o}from"./index-a4812209.js";function u(e){s.useEffect(()=>{const t=document.title;return document.title=e||"Kceli",()=>{document.title=t}},[e])}function n({title:e}){const t=c();u(e),s.useEffect(()=>{t(o(!1))},[t])}export{n as u};
