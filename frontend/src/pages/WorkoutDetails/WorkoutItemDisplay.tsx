@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { CombinedWorkoutItem } from "../../../../shared/types/workout";
 import { useWorkout } from "./WorkoutContext";
 import { Button } from "../../components/App/Button/Button";
@@ -10,12 +10,26 @@ type WorkoutItemDisplayProps = {
 };
 
 export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
-  const { currItem, setCurrItem, isWorkoutStarted, onStartItem, onCompleteItem } = useWorkout();
+  const { currItem, setCurrItem, isWorkoutStarted, onCompleteItem } = useWorkout();
+  const [setNum, setSetNum] = useState<number | null>(item.type !== "aerobic" ? item.sets : null);
   const isCurrentItem = currItem?.id === item.id;
 
   function handleDisplayItemClicked() {
-    if (isCurrentItem) setCurrItem(null);
-    else setCurrItem(item);
+    if (isCurrentItem) return;
+    else {
+      setCurrItem(item);
+      if (item.type === "aerobic") return;
+      setSetNum(item.sets);
+    }
+  }
+
+  function handleSetDisplayClicked() {
+    if (item.type !== "anaerobic") return;
+
+    setSetNum(prev => {
+      if (prev === 0 || typeof prev !== "number") return prev;
+      return prev - 1;
+    });
   }
 
   function renderButtons() {
@@ -26,18 +40,18 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
         className="workout-item-display__btns-container"
         data-testid="workout-item-display-btns-container"
       >
-        {!item.isStarted && (
+        {currItem?.type !== "aerobic" && (
           <Button
-            className="workout-item-display__btn"
+            className="workout-item-display__btns-container__btn-set-num"
             isDisabled={!isWorkoutStarted}
-            onClickFn={() => onStartItem(item)}
+            onClickFn={handleSetDisplayClicked}
           >
-            start
+            <span>{setNum}</span>
           </Button>
         )}
-        {item.isStarted && !item.isCompleted && (
+        {!item.isCompleted && (
           <Button
-            className="workout-item-display__btn"
+            className="workout-item-display__btns-container__btn"
             isDisabled={!isWorkoutStarted}
             onClickFn={() => onCompleteItem(item)}
           >

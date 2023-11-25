@@ -42,14 +42,16 @@ export const WaterEdit: FC = () => {
     if (!btn) return toast.error("Please select a value");
 
     const newWaterIntake = intakeUtilService.getDefaultIntake();
+    newWaterIntake.recordedAt = new Date();
     newWaterIntake.type = "drink";
     newWaterIntake.items[0].quantity = btn.value;
     newWaterIntake.items[0].unit = MeasurementUnit.MILLILITER;
     newWaterIntake.items[0].name = "water";
+    newWaterIntake.items[0].calories = 0;
 
     const intakes = [...dailyData.intakes, newWaterIntake];
 
-    updateDailyData({ ...dailyData, intakes });
+    updateDailyData({ id: dailyData.id, data: { intakes } });
   }
 
   return (

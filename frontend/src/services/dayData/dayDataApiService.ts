@@ -30,8 +30,8 @@ async function create(dayData: DayData | object) {
   return handleServerResponseData<DayData>(respose);
 }
 
-async function update(dayData: DayData) {
-  const respose = await httpService.patch(`day/${dayData.id}`, dayData);
+async function update(id: string, dayData: Partial<DayData>) {
+  const respose = await httpService.patch(`day/${id}`, dayData);
   return handleServerResponseData<DayData>(respose);
 }
 

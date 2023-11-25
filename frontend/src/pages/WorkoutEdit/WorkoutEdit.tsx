@@ -110,7 +110,7 @@ const WorkoutEdit: FC = () => {
   }, [workout]);
 
   if (isLoading)
-    return <SpinnerLoader withContainer={true} containerSize={{ width: "100%", height: "75vh" }} />;
+    return <SpinnerLoader  containerSize={{ width: "100%", height: "75vh" }} />;
   if (isError) return <ErrorMsg msg="Something went wrong" />;
   if (!isSuccess || !workout) return null;
 

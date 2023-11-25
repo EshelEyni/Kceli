@@ -62,7 +62,7 @@ describe("Workout Preview", () => {
   it("should render workout preview without delete and edit buttons if isDayEdit is true", () => {
     const mockWorkout = testService.createWorkout({});
 
-    render(<WorkoutPreview workout={mockWorkout} isDayEdit={true} />);
+    render(<WorkoutPreview workout={mockWorkout} />);
 
     expect(screen.getByTestId("workout-preview")).toBeInTheDocument();
     expect(screen.queryByText("delete")).toBeInTheDocument();
@@ -86,7 +86,7 @@ describe("Workout Preview", () => {
     const { dailyData } = mockUseGetTodayData({});
     const { updateDailyData } = mockUseUpdateTodayData({});
 
-    render(<WorkoutPreview workout={mockWorkout} isDayEdit={true} />);
+    render(<WorkoutPreview workout={mockWorkout} />);
 
     screen.getByText("delete").click();
 

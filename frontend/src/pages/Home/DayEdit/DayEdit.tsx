@@ -15,10 +15,10 @@ import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
 import { DayWorkouts } from "./DayWorkouts";
 
 export const DayEdit: FC = () => {
-  const { dailyData, isLoading, isSuccess, isError, isLoadingUpdate, openedTab } = useDayEdit();
+  const { dailyData, isLoading, isSuccess, isError, openedTab } = useDayEdit();
   const { backgroundColor } = useGetColorByCalories();
-  const showContent = isSuccess && dailyData && !isLoadingUpdate && !isLoading;
-  const isLoaderShown = isLoading || isLoadingUpdate;
+  const showContent = isSuccess && dailyData && !isLoading;
+  const isLoaderShown = isLoading;
   const isListShown =
     openedTab === DayEditTab.IntakeList || openedTab === DayEditTab.UnRecordedIntakeList;
 

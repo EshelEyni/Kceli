@@ -6,7 +6,8 @@ export function useUpdateTodayData() {
   const queryClient = useQueryClient();
 
   const { mutate: updateDailyData, isLoading } = useMutation({
-    mutationFn: (data: DayData) => dayDataApiService.update(data),
+    mutationFn: ({ id, data }: { id: string; data: Partial<DayData> }) =>
+      dayDataApiService.update(id, data),
     onSuccess: data => {
       queryClient.setQueryData(["today"], data);
       queryClient.invalidateQueries(["userDailyStats", "userDailyStats"]);

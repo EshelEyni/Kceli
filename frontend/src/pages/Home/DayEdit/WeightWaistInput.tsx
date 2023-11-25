@@ -15,29 +15,40 @@ interface WeightWaistIFormInput {
 }
 
 export const WeightWaistInput: FC = () => {
-  const { dailyData, isLoading, updateDailyData, setOpenedTab } = useDayEdit();
+  const { dailyData, isLoading, updateDailyData, isLoadingUpdate, setOpenedTab } = useDayEdit();
   const { loggedInUser } = useAuth();
   const { userDailyStats } = useGetUserDailyStats();
 
   const { control, handleSubmit } = useForm<WeightWaistIFormInput>({
-    defaultValues: { weight: "", waist: "" },
+    defaultValues: { weight: dailyData?.weight || "", waist: dailyData?.waist || "" },
   });
 
   const [isReachedGoalWeight, setIsReachedGoalWeight] = useState(false);
+  const [isFormShown, setIsFormShown] = useState(
+    !dailyData?.weight && !dailyData?.waist && !isLoading
+  );
 
   function handleDismissBtnClick() {
     if (!dailyData) return;
-    updateDailyData({ ...dailyData, isWeightWaistIgnored: true });
+    setIsFormShown(false);
+    if (dailyData.isWeightWaistIgnored) return;
+    updateDailyData({ id: dailyData.id, data: { isWeightWaistIgnored: true } });
     setOpenedTab(DayEditTab.IntakeEdit);
   }
 
   function onSubmit(data: WeightWaistIFormInput) {
-    if (!dailyData || !loggedInUser) return;
-    const { weightGoal } = loggedInUser.weightLossGoal;
-    if (Number(data.weight) <= weightGoal) {
-      return alert("Weight can't be greater than your goal");
-    }
-    updateDailyData({ ...dailyData, weight: Number(data.weight), waist: Number(data.waist) });
+    if (!dailyData) return;
+
+    updateDailyData({
+      id: dailyData.id,
+      data: { weight: Number(data.weight), waist: Number(data.waist) },
+    });
+
+    setIsFormShown(false);
+  }
+
+  function handleToggleFormBtnClick() {
+    setIsFormShown(true);
   }
 
   useEffect(() => {
@@ -45,11 +56,9 @@ export const WeightWaistInput: FC = () => {
     setIsReachedGoalWeight(userUtilService.isReachedGoalWeight({ loggedInUser, userDailyStats }));
   }, [loggedInUser, userDailyStats]);
 
+  if (isLoading || isLoadingUpdate) return <SpinnerLoader containerSize={{ height: "75px" }} />;
+
   if (!dailyData) return null;
-  const isFormShown = !dailyData.weight && !dailyData.waist && !isLoading;
-
-  if (isLoading) return <SpinnerLoader withContainer={true} containerSize={{ height: "75px" }} />;
-
   if (isFormShown)
     return (
       <form
@@ -61,26 +70,32 @@ export const WeightWaistInput: FC = () => {
           control={control}
           name="weight"
           render={({ field }) => (
-            <input
-              {...field}
-              type="number"
-              className="weight-waist-form__input"
-              placeholder="Enter your weight"
-              required
-            />
+            <label className="weight-waist-form__label">
+              <h3>Weight</h3>
+              <input
+                {...field}
+                type="number"
+                className="weight-waist-form__input"
+                placeholder="Enter your weight"
+                required
+              />
+            </label>
           )}
         />
         <Controller
           control={control}
           name="waist"
           render={({ field }) => (
-            <input
-              {...field}
-              type="number"
-              className="weight-waist-form__input"
-              placeholder="Enter your waist size"
-              required
-            />
+            <label className="weight-waist-form__label">
+              <h3>Waist</h3>
+              <input
+                {...field}
+                type="number"
+                className="weight-waist-form__input"
+                placeholder="Enter your waist size"
+                required
+              />
+            </label>
           )}
         />
 
@@ -89,11 +104,9 @@ export const WeightWaistInput: FC = () => {
             update
           </Button>
 
-          {!dailyData.isWeightWaistIgnored && (
-            <Button className="btn" onClickFn={handleDismissBtnClick}>
-              dissmis
-            </Button>
-          )}
+          <Button className="btn" onClickFn={handleDismissBtnClick}>
+            dissmis
+          </Button>
         </div>
       </form>
     );
@@ -106,6 +119,10 @@ export const WeightWaistInput: FC = () => {
         <p className="weight-waist-details__title">waist:</p>
         <p className="weight-waist-details__text">{dailyData.waist} cm</p>
       </div>
+      <Button className="btn" onClickFn={handleToggleFormBtnClick}>
+        update
+      </Button>
+
       {isReachedGoalWeight && <GoalIndicator />}
     </>
   );

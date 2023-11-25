@@ -88,7 +88,7 @@ export const IntakeEdit: FC = () => {
     const updatedIntakes = isNewIntake
       ? [...dailyData.intakes, intake]
       : dailyData.intakes.map(i => (i.id === intake.id ? intake : i));
-    updateDailyData({ ...dailyData, intakes: updatedIntakes });
+    updateDailyData({ id: dailyData.id, data: { intakes: updatedIntakes } });
     setIntake(intakeUtilService.getDefaultIntake());
   }
 
@@ -101,9 +101,7 @@ export const IntakeEdit: FC = () => {
 
   return (
     <form className="intake-edit" onSubmit={handleSubmit} data-testid="intake-edit">
-      {isLoading && (
-        <SpinnerLoader withContainer={true} containerSize={{ height: "75px", width: "100%" }} />
-      )}
+      {isLoading && <SpinnerLoader containerSize={{ height: "75px", width: "100%" }} />}
 
       {!isLoading && (
         <>

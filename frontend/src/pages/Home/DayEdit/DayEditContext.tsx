@@ -18,7 +18,12 @@ export type DayEditContextType = {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
-  updateDailyData: UseMutateFunction<DayData, unknown, DayData, unknown>;
+  updateDailyData: UseMutateFunction<
+    DayData,
+    unknown,
+    { id: string; data: Partial<DayData> },
+    unknown
+  >;
   isLoadingUpdate: boolean;
   recordedIntakes: Intake[];
   unrecordedIntakes: Intake[];

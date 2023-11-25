@@ -7,7 +7,19 @@
   align-items: center;
   gap: rem(10px);
 
-  .weight-waist-form__input {
+  &__label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: rem(5px);
+
+    h3 {
+      color: var(--color-secondary);
+    }
+  }
+
+  &__input {
     font-size: rem(18px);
     font-weight: 600;
     text-transform: capitalize;

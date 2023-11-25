@@ -34,8 +34,8 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     if (isFavorite) return removeFavoriteIntake(intakeId);
     if (!dailyData) return;
     const dataToUpdate = { ...dailyData };
-    dataToUpdate.intakes = dailyData.intakes.filter(intake => intake.id !== intakeId);
-    updateDailyData(dataToUpdate);
+    const intakes = dailyData.intakes.filter(intake => intake.id !== intakeId);
+    updateDailyData({ id: dataToUpdate.id, data: { intakes } });
   }
 
   function handleEditBtnClick(intake: Intake) {
@@ -51,33 +51,34 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     const intakeToSave = { ...intake };
     intakeToSave.id = createId();
     intakeToSave.recordedAt = new Date();
-    updateDailyData({ ...dailyData, intakes: [...dailyData.intakes, intakeToSave] });
+    const intakes = [...dailyData.intakes, intakeToSave];
+    updateDailyData({ id: dailyData.id, data: { intakes } });
   }
 
   function handleSaveBtnClick(intakeId: string) {
     if (!dailyData) return;
     const dataToUpdate = { ...dailyData };
+    let intakes = [...dailyData.intakes];
     if (isFavorite)
-      dataToUpdate.intakes = [
+      intakes = [
         ...dailyData.intakes,
         { ...intake, id: createId(), isRecorded: true, recordedAt: new Date() },
       ];
     else {
-      dataToUpdate.intakes = dailyData.intakes.map(intake => {
+      intakes = dailyData.intakes.map(intake => {
         if (intake.id !== intakeId) return intake;
         (intake.isRecorded = true), (intake.recordedAt = new Date());
         return intake;
       });
     }
-    updateDailyData(dataToUpdate);
+    updateDailyData({ id: dataToUpdate.id, data: { intakes } });
   }
 
   function handleAddToFavBtnClick(intake: Intake) {
     addFavoriteIntake(intake);
   }
 
-  if (isLoadingAddToFav)
-    return <SpinnerLoader withContainer={true} containerSize={{ height: "50px" }} />;
+  if (isLoadingAddToFav) return <SpinnerLoader containerSize={{ height: "50px" }} />;
 
   return (
     <section className="intake-preview" data-testid="intake-preview">

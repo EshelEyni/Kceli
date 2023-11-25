@@ -163,8 +163,16 @@ describe.skip("DayEditContext", () => {
 
     const TestComponent = () => {
       const { updateDailyData } = useDayEdit();
+      const dailyData = testService.createDailyData({});
       return (
-        <button onClick={() => updateDailyData({ ...testService.createDailyData({}) })}>
+        <button
+          onClick={() =>
+            updateDailyData({
+              id: dailyData.id,
+              data: dailyData,
+            })
+          }
+        >
           Update
         </button>
       );

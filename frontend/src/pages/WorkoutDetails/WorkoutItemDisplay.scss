@@ -15,6 +15,38 @@
   width: 100%;
   max-width: rem(500px);
 
+  &__btns-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(15px);
+    width: 100%;
+
+    &__btn {
+      background-color: var(--color-primary);
+    }
+
+    &__btn-set-num {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: rem(10px);
+      height: rem(40px);
+      width: rem(100px);
+      background-color: var(--color-background);
+      border: 2px solid var(--color-border);
+      border-radius: 10px;
+      cursor: pointer;
+
+      span {
+        font-size: rem(18px);
+        font-weight: 600;
+        color: var(--color-text-gray);
+        text-transform: uppercase;
+      }
+    }
+  }
+
   &__info {
     display: flex;
     flex-direction: column;
@@ -40,9 +72,5 @@
         text-transform: capitalize;
       }
     }
-  }
-
-  &__btn {
-    background-color: var(--color-primary);
   }
 }

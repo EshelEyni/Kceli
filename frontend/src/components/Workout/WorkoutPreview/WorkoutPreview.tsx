@@ -6,17 +6,22 @@ import workoutUtilService from "../../../services/workout/workoutUtilService";
 import { useNavigate } from "react-router-dom";
 import { useDeleteWorkout } from "../../../hooks/useDeleteWorkout";
 import { useGetTodayData } from "../../../hooks/useGetTodayData";
-import { useUpdateTodayData } from "../../../hooks/useUpdateTodayData";
+import { UseMutateFunction } from "@tanstack/react-query";
+import { DayData } from "../../../../../shared/types/dayData";
 
 type WorkoutPreviewProps = {
   workout: Workout;
-  isDayEdit?: boolean;
+  updateDailyData?: UseMutateFunction<
+    DayData,
+    unknown,
+    { id: string; data: Partial<DayData> },
+    unknown
+  >;
 };
 
-export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isDayEdit = false }) => {
+export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, updateDailyData }) => {
   const { removeWorkout } = useDeleteWorkout();
   const { dailyData } = useGetTodayData();
-  const { updateDailyData } = useUpdateTodayData();
   const navigate = useNavigate();
   const duration =
     workoutUtilService.calcWorkoutDuration({ workout: workout as Workout }) ||
@@ -28,12 +33,11 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isDayEdit = f
   }
 
   function handleBtnDeleteClick(workoutId: string) {
-    if (!isDayEdit) return removeWorkout(workoutId);
+    if (!updateDailyData) return removeWorkout(workoutId);
     if (!dailyData) return;
     const updatedDailyData = { ...dailyData };
-    const updatedWorkouts = updatedDailyData.workouts.filter(w => w.id !== workoutId);
-    updatedDailyData.workouts = updatedWorkouts;
-    updateDailyData(updatedDailyData);
+    const workouts = updatedDailyData.workouts.filter(w => w.id !== workoutId);
+    updateDailyData({ id: updatedDailyData.id, data: { workouts } });
   }
 
   function handleBtnOpenClick(workoutId: string) {
@@ -56,7 +60,7 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isDayEdit = f
         >
           delete
         </Button>
-        {!isDayEdit && (
+        {!updateDailyData && (
           <Button
             className="btn workout-page__btn"
             onClickFn={() => handleBtnEditClick(workout.id)}

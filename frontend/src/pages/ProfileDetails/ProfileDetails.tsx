@@ -24,7 +24,7 @@ const ProfileDetails = () => {
     isEditing,
   } = useProfile();
 
-  if (isLoading) return <SpinnerLoader withContainer={true} containerSize={{ width: "100%" }} />;
+  if (isLoading) return <SpinnerLoader  containerSize={{ width: "100%" }} />;
   if (isError) return <ErrorMsg msg="Something went wrong" />;
   if (!isSuccess || !user) return null;
 

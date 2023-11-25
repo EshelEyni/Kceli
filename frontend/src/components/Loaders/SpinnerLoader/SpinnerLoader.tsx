@@ -11,23 +11,12 @@ type ContainerSize =
       height: string;
     };
 
-type SpinnerLoaderProps =
-  | {
-      withContainer: true;
-      containerSize: ContainerSize;
-    }
-  | {
-      withContainer?: false;
-      containerSize?: undefined;
-    };
+type SpinnerLoaderProps = {
+  containerSize?: ContainerSize;
+};
 
-export const SpinnerLoader: FC<SpinnerLoaderProps> = (
-  { withContainer, containerSize } = {
-    withContainer: false,
-    containerSize: undefined,
-  }
-) => {
-  if (withContainer)
+export const SpinnerLoader: FC<SpinnerLoaderProps> = ({ containerSize }) => {
+  if (containerSize)
     return (
       <div
         className="spinner-loader-container"

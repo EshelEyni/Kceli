@@ -55,14 +55,12 @@ export const DayWorkouts: FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, ...rest } = quickWorkout;
     const quickWorkoutToAdd = { ...rest, userId: loggedInUser.id } as Workout;
-    const updatedWorkouts = [...dailyData.workouts, quickWorkoutToAdd];
-    const updatedDailyData = { ...dailyData, workouts: updatedWorkouts };
-    updateDailyData(updatedDailyData);
+    const workouts = [...dailyData.workouts, quickWorkoutToAdd];
+    updateDailyData({ id: dailyData.id, data: { workouts } });
     setQuickWorkout(null);
   }
 
   if (!dailyData) return null;
-  if (isLoadingUpdate) return <SpinnerLoader />;
   return (
     <section className="day-edit__day-workouts" data-testid="day-workouts">
       <Button className="day-edit__day-workouts__btn" onClickFn={handleAddBtnClick}>
@@ -87,13 +85,18 @@ export const DayWorkouts: FC = () => {
           </div>
         </form>
       )}
-
-      <List
-        className="day-edit__day-workouts__workouts-list"
-        items={dailyData.workouts}
-        render={item => <WorkoutPreview workout={item} isDayEdit={true} key={item.id} />}
-        dataTestId="workouts-list"
-      />
+      {isLoadingUpdate ? (
+        <SpinnerLoader containerSize={{ height: "50px" }} />
+      ) : (
+        <List
+          className="day-edit__day-workouts__workouts-list"
+          items={dailyData.workouts}
+          render={item => (
+            <WorkoutPreview workout={item} updateDailyData={updateDailyData} key={item.id} />
+          )}
+          dataTestId="workouts-list"
+        />
+      )}
     </section>
   );
 };

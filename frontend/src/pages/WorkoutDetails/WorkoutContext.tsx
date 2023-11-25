@@ -40,6 +40,7 @@ type WorkoutContextType = {
   setTime: Dispatch<SetStateAction<number>>;
   initialTime: number;
   setInitialTime: Dispatch<SetStateAction<number>>;
+  isLoadingUpdateDailyData: boolean;
 };
 
 const WorkoutContext = createContext<WorkoutContextType | undefined>(undefined);
@@ -52,7 +53,7 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
   const { workout, isLoading, isSuccess, isError } = useGetWorkout(id);
   const { dailyData } = useGetTodayData();
   const currWorkout = dailyData?.workouts.find(w => w.id === id);
-  const { updateDailyData } = useUpdateTodayData();
+  const { updateDailyData, isLoading: isLoadingUpdateDailyData } = useUpdateTodayData();
 
   const [currItem, setCurrItem] = useState<CombinedWorkoutItem | null>(null);
   const [initialTime, setInitialTime] = useState(0);
@@ -81,8 +82,8 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
 
     if (!isWorkoutExist) {
       const dailyDataToUpdate = { ...dailyData };
-      dailyDataToUpdate.workouts = [...dailyDataToUpdate.workouts, workout as Workout];
-      updateDailyData(dailyDataToUpdate);
+      const workouts = [...dailyDataToUpdate.workouts, workout as Workout];
+      updateDailyData({ id: dailyDataToUpdate.id, data: { workouts } });
     }
 
     const isDev = process.env.NODE_ENV === "development";
@@ -129,13 +130,9 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
 
   function getDailyDataItems() {
     const defaultVal = { unCompletedItems: [], completedItems: [] };
-    if (!dailyData || !workout) return defaultVal;
-    const currWorkOut = dailyData.workouts.find(w => w.id === workout.id);
-    if (!currWorkOut) return defaultVal;
-
-    const unCompletedItems = currWorkOut.items.filter(item => !item.isCompleted);
-    const completedItems = currWorkOut.items.filter(item => item.isCompleted);
-
+    if (!dailyData || !workout || !currWorkout) return defaultVal;
+    const unCompletedItems = currWorkout.items.filter(item => !item.isCompleted);
+    const completedItems = currWorkout.items.filter(item => item.isCompleted);
     return { unCompletedItems, completedItems };
   }
 
@@ -150,29 +147,22 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     statusKey: "isStarted" | "isCompleted",
     statusValue: boolean
   ) {
-    if (!dailyData || !workout) return;
+    if (!dailyData || !workout || !currWorkout) return;
 
-    const updatedWorkout = { ...workout };
+    const updatedWorkout = { ...currWorkout };
     updatedWorkout.items = updatedWorkout.items.map(i => {
       if (i.id === item.id) i[statusKey] = statusValue;
       return i;
     });
 
     const updatedDailyData = { ...dailyData };
-    updatedDailyData.workouts = dailyData.workouts.map(w => {
+    const workouts = dailyData.workouts.map(w => {
       if (w.id === updatedWorkout.id) return updatedWorkout;
       return w;
     });
 
-    updateDailyData(updatedDailyData);
+    updateDailyData({ id: updatedDailyData.id, data: { workouts } });
   }
-
-  useEffect(() => {
-    if (!currWorkout) return;
-    const firstUncopmletedItem = currWorkout.items.find(item => !item.isCompleted);
-    if (!firstUncopmletedItem) return;
-    setCurrItem(firstUncopmletedItem);
-  }, [currWorkout]);
 
   useEffect(() => {
     if (!currItem) return;
@@ -181,18 +171,12 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     setInitialTime(time);
   }, [currItem]);
 
-  useEffect(() => {
-    if (!currWorkout) return;
-    const isStartedWorkout = currWorkout.items.some(item => item.isStarted);
-    if (!isStartedWorkout) return;
-    setIsWorkoutStarted(isStartedWorkout);
-  }, [currWorkout]);
-
   const value = {
     workout,
     isLoading,
     isSuccess,
     isError,
+    isLoadingUpdateDailyData,
     navigate,
     duration,
     completedDuration,

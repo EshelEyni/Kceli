@@ -25,8 +25,7 @@ export const GoalEdit: FC<GoalEditProps> = ({ type }) => {
     addGoal(goal);
   }
 
-  if (isAddGoalLoading)
-    return <SpinnerLoader withContainer={true} containerSize={{ height: "50px" }} />;
+  if (isAddGoalLoading) return <SpinnerLoader containerSize={{ height: "50px" }} />;
   return (
     <form className="goal-edit">
       <input
