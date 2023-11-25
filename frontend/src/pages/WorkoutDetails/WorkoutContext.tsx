@@ -162,6 +162,20 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     });
 
     updateDailyData({ id: updatedDailyData.id, data: { workouts } });
+    if (statusKey === "isCompleted") goToNextItem(item.id);
+  }
+
+  function goToNextItem(itemId: string) {
+    if (!dailyData || !workout || !currWorkout) return;
+    const currIdx = currWorkout.items.findIndex(item => item.id === itemId);
+    const currLength = currWorkout.items.filter(i => !i.isCompleted).length;
+    const nextIdx = currIdx + 1;
+    const nextItem =
+      nextIdx > currLength
+        ? currWorkout.items.find(i => !i.isCompleted)
+        : currWorkout.items[nextIdx];
+    if (!nextItem) return;
+    setCurrItem(nextItem);
   }
 
   useEffect(() => {

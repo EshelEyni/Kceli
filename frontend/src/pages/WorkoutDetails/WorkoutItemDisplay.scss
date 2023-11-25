@@ -22,8 +22,14 @@
     gap: rem(15px);
     width: 100%;
 
+    &.aerobic {
+      justify-content: flex-end;
+    }
+
     &__btn {
       background-color: var(--color-primary);
+      padding: rem(10px) rem(15px);
+      font-size: rem(14px);
     }
 
     &__btn-set-num {

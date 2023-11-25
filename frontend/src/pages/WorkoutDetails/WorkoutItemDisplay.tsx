@@ -3,6 +3,7 @@ import { CombinedWorkoutItem } from "../../../../shared/types/workout";
 import { useWorkout } from "./WorkoutContext";
 import { Button } from "../../components/App/Button/Button";
 import workoutUtilService from "../../services/workout/workoutUtilService";
+import classnames from "classnames";
 import "./WorkoutItemDisplay.scss";
 
 type WorkoutItemDisplayProps = {
@@ -15,7 +16,7 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
   const isCurrentItem = currItem?.id === item.id;
 
   function handleDisplayItemClicked() {
-    if (isCurrentItem) return;
+    if (isCurrentItem || item.isCompleted) return;
     else {
       setCurrItem(item);
       if (item.type === "aerobic") return;
@@ -33,11 +34,14 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
   }
 
   function renderButtons() {
-    if (!isCurrentItem || !isWorkoutStarted) return null;
+    if (!isCurrentItem || !isWorkoutStarted || item.isCompleted) return null;
 
     return (
       <div
-        className="workout-item-display__btns-container"
+        className={
+          "workout-item-display__btns-container " +
+          classnames({ aerobic: currItem?.type === "aerobic" })
+        }
         data-testid="workout-item-display-btns-container"
       >
         {currItem?.type !== "aerobic" && (
@@ -49,15 +53,13 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
             <span>{setNum}</span>
           </Button>
         )}
-        {!item.isCompleted && (
-          <Button
-            className="workout-item-display__btns-container__btn"
-            isDisabled={!isWorkoutStarted}
-            onClickFn={() => onCompleteItem(item)}
-          >
-            complete
-          </Button>
-        )}
+        <Button
+          className="workout-item-display__btns-container__btn"
+          isDisabled={!isWorkoutStarted}
+          onClickFn={() => onCompleteItem(item)}
+        >
+          complete
+        </Button>
       </div>
     );
   }

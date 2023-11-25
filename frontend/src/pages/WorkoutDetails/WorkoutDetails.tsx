@@ -27,7 +27,9 @@ const WorkoutDetails: FC = () => {
 
   return (
     <main className="page workout-details" data-testid="workout-details">
-      {(isLoading || isLoadingUpdateDailyData) && <SpinnerLoader />}
+      {(isLoading || isLoadingUpdateDailyData) && (
+        <SpinnerLoader containerSize={{ height: "100px" }} />
+      )}
       {isError && <ErrorMsg />}
       {isSuccess && !workout && <ErrorMsg msg="Workout not found" />}
       {isSuccess && workout && (

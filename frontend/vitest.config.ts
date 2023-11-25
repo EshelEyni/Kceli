@@ -15,7 +15,7 @@ export default defineConfig({
       exclude: ["packages/template/*"],
     },
     root,
-    include: ["Schedule.test.tsx"],
+    include: ["ScheduleContext.test.tsx"],
     exclude: [...configDefaults.exclude, "packages/template/*"],
     outputFile: "test-results.html",
     cache: {
