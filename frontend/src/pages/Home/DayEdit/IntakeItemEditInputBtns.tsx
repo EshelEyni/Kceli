@@ -44,11 +44,7 @@ export const IntakeItemEditInputBtns: FC = () => {
         <span>{isManual ? "Manual" : "Auto"}</span>
       </Button>
       <Button onClickFn={handleCalcBtnClick} className="intake-item-edit__btn calc-calories-btn">
-        {isLoadingCal ? (
-          <SpinnerLoader  containerSize={{ width: "100%" }} />
-        ) : (
-          <span>calc</span>
-        )}
+        {isLoadingCal ? <SpinnerLoader containerSize={{ width: "100%" }} /> : <span>calc</span>}
       </Button>
     </section>
   );

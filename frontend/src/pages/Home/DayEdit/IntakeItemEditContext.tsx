@@ -72,9 +72,12 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
         if (!debouncedSpellcheck.current) return;
         debouncedSpellcheck.current(value);
         break;
-      case "quantity":
-        handleChange({ ...intakeItem, quantity: Number(value) });
+      case "quantity": {
+        const item = { ...intakeItem, quantity: Number(value) };
+        if (item.caloriesPer100g) item.calories = item.caloriesPer100g * (item.quantity / 100);
+        handleChange(item);
         break;
+      }
       case "calories": {
         const item = { ...intakeItem, calories: Number(value) };
         delete item.caloriesPer100g;
@@ -104,12 +107,16 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
   function decreaseQuantity() {
     const step = intakeUtilService.getQuantityStepPerUnit(intakeItem.unit);
     if (intakeItem.quantity - step < 1) return;
-    handleChange({ ...intakeItem, quantity: intakeItem.quantity - step });
+    const item = { ...intakeItem, quantity: intakeItem.quantity - step };
+    if (item.caloriesPer100g) item.calories = item.caloriesPer100g * (item.quantity / 100);
+    handleChange(item);
   }
 
   function increaseQuantity() {
     const step = intakeUtilService.getQuantityStepPerUnit(intakeItem.unit);
-    handleChange({ ...intakeItem, quantity: intakeItem.quantity + step });
+    const item = { ...intakeItem, quantity: intakeItem.quantity + step };
+    if (item.caloriesPer100g) item.calories = item.caloriesPer100g * (item.quantity / 100);
+    handleChange(item);
   }
 
   function handleUnitBtnClick() {

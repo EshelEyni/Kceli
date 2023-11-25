@@ -1,20 +1,28 @@
 import { FC } from "react";
 import { useDayEdit } from "./DayEditContext";
 import "./PreSaveCalorieCount.scss";
+import { useAuth } from "../../../hooks/useAuth";
+import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
 
 export const PreSaveCalorieCount: FC = () => {
-  const { intake, consumedCalories, remainingCalories } = useDayEdit();
-
-  if (!intake || !intake.isRecorded) return null;
-
+  const { loggedInUser } = useAuth();
+  const { intake, dailyData } = useDayEdit();
+  if (!dailyData || !intake || !intake.isRecorded) return null;
   const intakeTotalCalorie = Math.round(
     intake.items.reduce((acc, curr) => {
       if (curr.calories === undefined) return acc;
       return acc + curr.calories;
     }, 0)
   );
-
   if (intakeTotalCalorie <= 0) return null;
+
+  const data = {
+    ...dailyData,
+    intakes: dailyData?.intakes.filter(i => i.id !== intake.id),
+  };
+
+  const consumedCalories = calorieUtilService.getTotalCalories(data);
+  const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, data);
 
   const preSaveConsumedCalories = consumedCalories + intakeTotalCalorie;
   const preSaveRemainingCalories = remainingCalories - intakeTotalCalorie;
