@@ -24,15 +24,21 @@ type ScheduleContextType = {
   getWeekDays: (currDay: CalenderDay) => CalenderDay[];
   getMonthDays: (currDay: CalenderDay) => CalenderDay[];
   weekGoals: Goal[] | undefined;
-  isGoalsLoading: boolean;
-  isGoalsSuccess: boolean;
-  isGoalsError: boolean;
-  isGoalsEmpty: boolean;
+  isWeekGoalsLoading: boolean;
+  isWeekGoalsSuccess: boolean;
+  isWeekGoalsError: boolean;
+  isWeekGoalsEmpty: boolean;
+  monthGoals: Goal[] | undefined;
+  isMonthGoalsLoading: boolean;
+  isMonthGoalsSuccess: boolean;
+  isMonthGoalsError: boolean;
+  isMonthGoalsEmpty: boolean;
   addGoal: UseMutateFunction<Goal, unknown, Partial<Goal>, unknown>;
   isAddGoalLoading: boolean;
   updateGoal: UseMutateFunction<Goal, unknown, Partial<Goal>, unknown>;
   isUpdateGoalLoading: boolean;
   isWeekGoalsEditEnabled: boolean;
+  isMonthGoalsEditEnabled: boolean;
 };
 
 const ScheduleContext = createContext<ScheduleContextType | undefined>(undefined);
@@ -45,15 +51,24 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
   const { calenderDays, data, isLoading, isSuccess, isError } = useGetCalenderData(currDate);
   const {
     goals: weekGoals,
-    isLoading: isGoalsLoading,
-    isSuccess: isGoalsSuccess,
-    isError: isGoalsError,
-    isEmpty: isGoalsEmpty,
+    isLoading: isWeekGoalsLoading,
+    isSuccess: isWeekGoalsSuccess,
+    isError: isWeekGoalsError,
+    isEmpty: isWeekGoalsEmpty,
   } = useGetGoals(getWeekGoalQueryStr());
+
+  const {
+    goals: monthGoals,
+    isLoading: isMonthGoalsLoading,
+    isSuccess: isMonthGoalsSuccess,
+    isError: isMonthGoalsError,
+    isEmpty: isMonthGoalsEmpty,
+  } = useGetGoals(getMonthGoalQueryStr());
 
   const { isLoading: isAddGoalLoading, addGoal } = useAddGoal();
   const { isLoading: isUpdateGoalLoading, updateGoal } = useUpdateGoal();
   const isWeekGoalsEditEnabled = checkWeekGoalsEditEnabled();
+  const isMonthGoalsEditEnabled = checkMonthGoalsEditEnabled();
 
   function getWeekGoalQueryStr() {
     if (!currDays.length || filterBy !== ScheduleGridFilter.Week) return "";
@@ -61,12 +76,32 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     firstDayDate.setHours(0, 0, 0, 0);
     const { date: lastDayDate } = currDays[currDays.length - 1];
     lastDayDate.setHours(23, 59, 59, 999);
-    const weekGoalQueryStr = `?type=weekly&date[gte]=${firstDayDate.toISOString()}&date[lte]=${lastDayDate.toISOString()}`;
-    return weekGoalQueryStr;
+    const queryStr = `?type=week&date[gte]=${firstDayDate.toISOString()}&date[lte]=${lastDayDate.toISOString()}`;
+    return queryStr;
+  }
+
+  function getMonthGoalQueryStr() {
+    if (!currDays.length || filterBy !== ScheduleGridFilter.Month) return "";
+    const { date: firstDayDate } = currDays[0];
+    firstDayDate.setHours(0, 0, 0, 0);
+    const { date: lastDayDate } = currDays[currDays.length - 1];
+    lastDayDate.setHours(23, 59, 59, 999);
+    const queryStr = `?type=month&date[gte]=${firstDayDate.toISOString()}&date[lte]=${lastDayDate.toISOString()}`;
+    return queryStr;
   }
 
   function checkWeekGoalsEditEnabled() {
     if (!currDays.length || filterBy !== ScheduleGridFilter.Week) return false;
+    const firstDate = new Date(currDays[0].date);
+    firstDate.setHours(0, 0, 0, 0);
+    const lastDate = new Date(currDays[currDays.length - 1].date);
+    lastDate.setHours(23, 59, 59, 999);
+    const currDate = new Date();
+    return currDate >= firstDate && currDate <= lastDate;
+  }
+
+  function checkMonthGoalsEditEnabled() {
+    if (!currDays.length || filterBy !== ScheduleGridFilter.Month) return false;
     const firstDate = new Date(currDays[0].date);
     firstDate.setHours(0, 0, 0, 0);
     const lastDate = new Date(currDays[currDays.length - 1].date);
@@ -140,15 +175,21 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     getWeekDays,
     getMonthDays,
     weekGoals,
-    isGoalsLoading,
-    isGoalsSuccess,
-    isGoalsError,
-    isGoalsEmpty,
+    isWeekGoalsLoading,
+    isWeekGoalsSuccess,
+    isWeekGoalsError,
+    isWeekGoalsEmpty,
+    monthGoals,
+    isMonthGoalsLoading,
+    isMonthGoalsSuccess,
+    isMonthGoalsError,
+    isMonthGoalsEmpty,
     addGoal,
     isAddGoalLoading,
     updateGoal,
     isUpdateGoalLoading,
     isWeekGoalsEditEnabled,
+    isMonthGoalsEditEnabled,
   };
   return <ScheduleContext.Provider value={value}>{children}</ScheduleContext.Provider>;
 }

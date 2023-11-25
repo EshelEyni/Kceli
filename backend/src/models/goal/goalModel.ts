@@ -31,7 +31,7 @@ const goalSchema = new Schema<IGoal>(
     },
     type: {
       type: String,
-      enum: ["user", "weekly", "monthly"],
+      enum: ["user", "week", "month"],
       required: [true, "Please provide a type"],
     },
     description: {

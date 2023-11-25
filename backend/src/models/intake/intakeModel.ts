@@ -51,9 +51,11 @@ intakeItemSchema.pre("validate", async function (next) {
     const existingItemData = await intakeService.getExistingIntakeItem(intakeItem);
 
     if (existingItemData && existingItemData.calories) {
-      this.calories = existingItemData.calories * (intakeItem.quantity / existingItemData.quantity);
+      this.calories = Math.round(
+        existingItemData.calories * (intakeItem.quantity / existingItemData.quantity)
+      );
     } else {
-      this.calories = await openAIService.getCaloriesForIntakeItem(intakeItem);
+      this.calories = Math.round(await openAIService.getCaloriesForIntakeItem(intakeItem));
     }
   } catch (error) {
     // eslint-disable-next-line no-console

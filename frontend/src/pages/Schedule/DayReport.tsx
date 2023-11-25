@@ -102,14 +102,17 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
 
 function getCalorieBarData(data: DayData) {
   const sortedIntakes = intakeUtilService.sortIntakesByRecordedAt(data.intakes as Intake[]);
+
   const barData = sortedIntakes.map(i => ({
-    name: i.items.reduce((acc, curr, i, arr) => {
-      if (arr.length === 1) return curr.name;
-      if (i === 0) return acc + `${curr.name}, `;
-      if (i === arr.length - 1) return acc + `and ${curr.name}`;
-      return acc + ` ${curr.name}, `;
-    }, ""),
-    calories: i.items.reduce((acc, curr) => acc + curr.calories, 0),
+    name:
+      i.name ||
+      i.items.reduce((acc, curr, i, arr) => {
+        if (arr.length === 1) return curr.name;
+        if (i === 0) return acc + `${curr.name}, `;
+        if (i === arr.length - 1) return acc + `and ${curr.name}`;
+        return acc + ` ${curr.name}, `;
+      }, ""),
+    calories: i.items.reduce((acc, curr) => acc + Math.round(curr.calories), 0),
   }));
 
   return barData;

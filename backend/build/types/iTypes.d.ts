@@ -92,7 +92,7 @@ export interface IWorkout extends Document {
 }
 export interface IGoal extends Document {
     userId: mongoose.Types.ObjectId;
-    type: "user" | "weekly" | "monthly";
+    type: "user" | "week" | "month";
     date: Date;
     description: string;
     isCompleted: boolean;

@@ -90,13 +90,13 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
               <List
                 className="week-report-day-display__workouts__list"
                 items={data.workouts}
-                render={workout => {
+                render={(workout, i) => {
                   const { items, description } = workout;
                   const completedPercantage = Math.round(
                     (items.filter(item => item.isCompleted).length / items.length) * 100
                   );
                   return (
-                    <p>
+                    <p key={i}>
                       <strong>{description}</strong> ({completedPercantage}% completed)
                     </p>
                   );

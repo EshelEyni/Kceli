@@ -14,6 +14,7 @@ import { ScheduleFilter } from "./ScheduleFilter";
 import { useSchedule } from "./ScheduleContext";
 import { Calender } from "./Calender";
 import { WeekReport } from "./WeekReport";
+import { MonthReport } from "./MonthReport";
 
 const SchedulePage: FC = () => {
   usePageLoaded({ title: "Schedule / Kceli" });
@@ -48,7 +49,7 @@ const SchedulePage: FC = () => {
         <>
           <Header className="schedule-page__header">
             <h2 className="schedule-page__header__title">
-              {currDate.toLocaleString("en-US", { month: "long" })} {currDate.getFullYear()}
+              {currDate.toLocaleString("en-GB", { month: "long" })} {currDate.getFullYear()}
             </h2>
             <div className="schedule-page__header__btns-container">
               <Button onClickFn={() => moveToMonth(-1)}>
@@ -65,6 +66,7 @@ const SchedulePage: FC = () => {
           {isDayReportShown && <DayReport day={currDay as CalenderDay} />}
           {isDaysReportShown && <DaysReport days={currDays} />}
           {filterBy === ScheduleGridFilter.Week && <WeekReport />}
+          {filterBy === ScheduleGridFilter.Month && <MonthReport />}
         </>
       )}
     </main>

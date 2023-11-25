@@ -2,12 +2,16 @@ import { FC, useState } from "react";
 import { useSchedule } from "./ScheduleContext";
 import { Goal } from "../../types/app";
 import goalUtilService from "../../services/goal/goalUtilService";
-import "./WeekGoalEdit.scss";
+import "./GoalEdit.scss";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { Button } from "../../components/App/Button/Button";
 import classnames from "classnames";
 
-export const WeekGoalEdit: FC = () => {
+type GoalEditProps = {
+  type: "week" | "month";
+};
+
+export const GoalEdit: FC<GoalEditProps> = ({ type }) => {
   const { addGoal, isAddGoalLoading } = useSchedule();
   const [goal, setGoal] = useState<Goal>(goalUtilService.getDefaultGoal());
 
@@ -17,22 +21,22 @@ export const WeekGoalEdit: FC = () => {
   }
 
   function handleAddGoal() {
-    goal.type = "weekly";
+    goal.type = type;
     addGoal(goal);
   }
 
   if (isAddGoalLoading)
     return <SpinnerLoader withContainer={true} containerSize={{ height: "50px" }} />;
   return (
-    <form className="week-goal-edit">
+    <form className="goal-edit">
       <input
         type="text"
-        className="week-goal-edit__input"
+        className="goal-edit__input"
         value={goal.description}
         onChange={handleDescInputChanged}
       />
       <Button
-        className={classnames("week-goal-edit__btn ", {
+        className={classnames("goal-edit__btn ", {
           active: goal.description,
         })}
         onClickFn={handleAddGoal}

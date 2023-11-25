@@ -21,6 +21,7 @@ export function useGetGoals(queryStr: string): useGetGoalsResult {
   } = useQuery({
     queryKey: ["goals", queryStr],
     queryFn: async () => goalApiService.getGoals(queryStr),
+    enabled: !!queryStr,
   });
 
   const isEmpty = !!goals && goals.length === 0;

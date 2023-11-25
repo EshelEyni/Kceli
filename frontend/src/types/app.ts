@@ -89,7 +89,7 @@ export interface Goal {
   id: string;
   userId: string;
   date: Date | string;
-  type: "user" | "weekly" | "monthly";
+  type: "user" | "week" | "month";
   description: string;
   isCompleted: boolean;
 }
