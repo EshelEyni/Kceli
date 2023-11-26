@@ -11,7 +11,7 @@ type WorkoutItemDisplayProps = {
 };
 
 export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
-  const { currItem, setCurrItem, isWorkoutStarted, onCompleteItem } = useWorkout();
+  const { currItem, setCurrItem, isWorkoutStarted, onCompleteItem, onResetTimer } = useWorkout();
   const [setNum, setSetNum] = useState<number | null>(item.type !== "aerobic" ? item.sets : null);
   const isCurrentItem = currItem?.id === item.id;
 
@@ -31,6 +31,11 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
       if (prev === 0 || typeof prev !== "number") return prev;
       return prev - 1;
     });
+
+    onResetTimer();
+    if (setNum !== 1) return;
+    onCompleteItem(item);
+    setSetNum(null);
   }
 
   function renderButtons() {

@@ -94,21 +94,12 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
   function onStartItem(item: CombinedWorkoutItem) {
     if (!dailyData || !workout) return;
     updateWorkoutItemStatus(item, "isStarted", true);
-    if (item.type !== "aerobic") return;
-    onSetStartTimer(item);
   }
 
   function onCompleteItem(item: CombinedWorkoutItem) {
     if (!dailyData || !workout) return;
     updateWorkoutItemStatus(item, "isCompleted", true);
     onSetCompleteTimer();
-  }
-
-  function onSetStartTimer(item: CombinedWorkoutItem) {
-    const time = getClockTimeForItem(item);
-    setTime(time);
-    setInitialTime(time);
-    setIsRunning(true);
   }
 
   function onResetTimer() {
@@ -177,6 +168,10 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
     if (!nextItem) return;
     setCurrItem(nextItem);
   }
+
+  useEffect(() => {
+    if (!currItem) return setCurrItem(unCompletedItems[0]);
+  }, [unCompletedItems, currItem]);
 
   useEffect(() => {
     if (!currItem) return;
