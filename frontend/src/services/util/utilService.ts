@@ -159,12 +159,10 @@ function isSameDay(d1: Date, d2: Date): boolean {
 }
 
 function handleServerResponseData<T>(response: JsendResponse<T>): T {
-  if (!response.data) throw new Error("Unexpected response status");
-
-  if (response.status === "success") return response.data;
+  if (response.status === "success") return response.data as T;
 
   if (response.status === "fail") {
-    const errorMessages = Object.entries(response.data)
+    const errorMessages = Object.entries(response.data as Record<string, string>)
       .map(([field, message]) => `${field}: ${message}`)
       .join(", ");
     throw new Error(errorMessages);

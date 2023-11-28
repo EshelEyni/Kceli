@@ -33,7 +33,7 @@ export const Goals: FC<GoalsProps> = ({ type }) => {
         <AsyncList
           className="goals__list"
           items={monthGoals as Goal[]}
-          render={goal => <GoalDisplay goal={goal} key={goal.id} />}
+          render={goal => <GoalDisplay goal={goal} type={type} key={goal.id} />}
           isLoading={isMonthGoalsLoading}
           isError={isMonthGoalsError}
           isSuccess={isMonthGoalsSuccess}
@@ -50,7 +50,7 @@ export const Goals: FC<GoalsProps> = ({ type }) => {
         <AsyncList
           className="goals__list"
           items={weekGoals as Goal[]}
-          render={goal => <GoalDisplay goal={goal} key={goal.id} />}
+          render={goal => <GoalDisplay goal={goal} type={type} key={goal.id} />}
           isLoading={isWeekGoalsLoading}
           isError={isWeekGoalsError}
           isSuccess={isWeekGoalsSuccess}

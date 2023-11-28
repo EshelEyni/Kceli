@@ -18,7 +18,7 @@ export function useGetUserGoal(): useGetGoalsResult {
     isSuccess,
     isError,
   } = useQuery({
-    queryKey: ["goals"],
+    queryKey: ["userGoal"],
     queryFn: goalApiService.getUserGoal,
   });
 

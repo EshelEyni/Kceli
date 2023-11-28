@@ -5,6 +5,7 @@ import { DayData } from "../../../../shared/types/dayData";
 import { useGetGoals } from "../../hooks/useGetGoals";
 import { useUpdateGoal } from "../../hooks/useUpdateGoal";
 import { UseMutateFunction } from "@tanstack/react-query";
+import { useDeleteGoal } from "../../hooks/useDeleteGoal";
 
 type ScheduleContextType = {
   currDate: Date;
@@ -36,6 +37,8 @@ type ScheduleContextType = {
   isUpdateGoalLoading: boolean;
   isWeekGoalsEditEnabled: boolean;
   isMonthGoalsEditEnabled: boolean;
+  deleteGoal: UseMutateFunction<void, unknown, string, unknown>;
+  isDeleteGoalLoading: boolean;
 };
 
 const ScheduleContext = createContext<ScheduleContextType | undefined>(undefined);
@@ -63,6 +66,7 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
   } = useGetGoals(getMonthGoalQueryStr());
 
   const { isLoading: isUpdateGoalLoading, updateGoal } = useUpdateGoal();
+  const { isLoading: isDeleteGoalLoading, deleteGoal } = useDeleteGoal();
   const isWeekGoalsEditEnabled = checkWeekGoalsEditEnabled();
   const isMonthGoalsEditEnabled = checkMonthGoalsEditEnabled();
 
@@ -184,6 +188,8 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     isUpdateGoalLoading,
     isWeekGoalsEditEnabled,
     isMonthGoalsEditEnabled,
+    deleteGoal,
+    isDeleteGoalLoading,
   };
   return <ScheduleContext.Provider value={value}>{children}</ScheduleContext.Provider>;
 }

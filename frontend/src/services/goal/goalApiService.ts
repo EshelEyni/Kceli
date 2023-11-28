@@ -31,8 +31,7 @@ async function updateGoal(goal: Partial<Goal>) {
 }
 
 async function deleteGoal(id: string) {
-  const respose = await httpService.delete(`${BASE_URL}/${id}`);
-  return handleServerResponseData<Goal>(respose);
+  await httpService.delete(`${BASE_URL}/${id}`);
 }
 
 export default { getGoals, getGoal, getUserGoal, addGoal, updateGoal, deleteGoal };

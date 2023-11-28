@@ -20,7 +20,10 @@ export function useGetGoals(queryStr: string): useGetGoalsResult {
     isError,
   } = useQuery({
     queryKey: ["goals", queryStr],
-    queryFn: async () => goalApiService.getGoals(queryStr),
+    queryFn: async () => {
+      if (!queryStr) return;
+      return goalApiService.getGoals(queryStr);
+    },
     enabled: !!queryStr,
   });
 

@@ -79,7 +79,7 @@ export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing }) => {
                 goal.userWeightLossGoal.weightGoal),
           })}
           isDisabled={
-            !!goal.description ||
+            !goal.description ||
             ("userWeightLossGoal" in goal &&
               !goal.userWeightLossGoal.startingWeight &&
               !goal.userWeightLossGoal.weightGoal)
