@@ -108,16 +108,6 @@ const userSchema: Schema<IUser> = new Schema(
     birthdate: { type: Date, required: [true, "Please provide your birthdate"] },
     totalDailyEnergyExpenditure: { type: Number, default: 0 },
     targetCaloricIntakePerDay: { type: Number, default: 0 },
-    weightLossGoal: {
-      type: {
-        startingWeight: { type: Number },
-        weightGoal: { type: Number },
-      },
-      default: {
-        startingWeight: 0,
-        weightGoal: 0,
-      },
-    },
     workoutSchedule: {
       type: [
         {

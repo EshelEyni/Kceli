@@ -12,6 +12,7 @@ import nutritionUtilService from "../../../services/nutrition/nutritionUtilServi
 import { NutritionQueryState } from "../../../types/app";
 import { useGetUserFavoriteIntakes } from "../../../hooks/useGetUserFavoriteIntakes";
 import { useSearchParams } from "react-router-dom";
+import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
 
 export type DayEditContextType = {
   dailyData: DayData | undefined;
@@ -52,6 +53,9 @@ export type DayEditContextType = {
   isErrorFavoriteIntakes: boolean;
   isEmptyFavoriteIntakes: boolean;
   setSearchParams: (params: URLSearchParams) => void;
+  backgroundColor: string;
+  color: string;
+  btnStyle: React.CSSProperties;
 };
 
 export enum DayEditTab {
@@ -71,7 +75,8 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
   const { loggedInUser } = useAuth();
   const { dailyData, isLoading, isSuccess, isError } = useGetTodayData();
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
-
+  const { backgroundColor, color } = useGetColorByCalories();
+  const btnStyle = { color, border: `1px solid ${color}` };
   const {
     favoriteIntakes,
     isLoading: isLoadingFavoriteIntakes,
@@ -161,6 +166,9 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     isErrorFavoriteIntakes,
     isEmptyFavoriteIntakes,
     setSearchParams,
+    backgroundColor,
+    color,
+    btnStyle,
   };
 
   return <DayEditContext.Provider value={value}>{children}</DayEditContext.Provider>;

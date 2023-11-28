@@ -11,12 +11,11 @@ import { WeightWaistInput } from "./WeightWaistInput";
 import { NutritionQuery } from "./NutritionQuery";
 import { WaterEdit } from "./WaterEdit";
 import { FavoriteIntakes } from "./FavoriteIntakes";
-import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
 import { DayWorkouts } from "./DayWorkouts";
 
 export const DayEdit: FC = () => {
-  const { dailyData, isLoading, isSuccess, isError, openedTab } = useDayEdit();
-  const { backgroundColor } = useGetColorByCalories();
+  const { dailyData, isLoading, isSuccess, isError, openedTab, backgroundColor, color } =
+    useDayEdit();
   const showContent = isSuccess && dailyData && !isLoading;
   const isLoaderShown = isLoading;
   const isListShown =
@@ -25,7 +24,7 @@ export const DayEdit: FC = () => {
   return (
     <section
       className="day-edit"
-      style={{ backgroundColor, border: `5px solid ${backgroundColor}` }}
+      style={{ backgroundColor, color, border: `5px solid ${backgroundColor}` }}
       data-testid="day-edit"
     >
       {isLoaderShown && <SpinnerLoader />}

@@ -4,6 +4,7 @@ import dayDataApiService from "../services/dayData/dayDataApiService";
 import { getDaysInMonth, isSameDay } from "../services/util/utilService";
 import calorieUtilService from "../services/calorieUtil/calorieUtilService";
 import { CalenderDay } from "../types/app";
+import calenderUtilService from "../services/calender/calenderUtilService";
 
 interface CalendarQueryParams {
   date: Date;
@@ -63,7 +64,7 @@ function getCalenderDays(currDate: Date): Date[] {
 }
 
 function setDataToDay({ date, data }: CalendarQueryParams) {
-  const defaultDayData = getDefaultDayData(date);
+  const defaultDayData = calenderUtilService.getDefaultDayData(date);
   if (!data) return defaultDayData;
 
   const dayData = data.find(day => isSameDay(new Date(day.date), date));
@@ -75,7 +76,7 @@ function setDataToDay({ date, data }: CalendarQueryParams) {
     currDayData: dayData,
     data,
   });
-  const backgroundColor = calorieUtilService.getBcgByCosumedCalories({
+  const { backgroundColor } = calorieUtilService.getBcgByCosumedCalories({
     consumedCalories,
     targetCalorie,
   });
@@ -88,18 +89,5 @@ function setDataToDay({ date, data }: CalendarQueryParams) {
     targetCalorie,
     backgroundColor,
     isBorder,
-  };
-}
-
-function getDefaultDayData(date: Date): CalenderDay {
-  return {
-    id: null,
-    data: null,
-    targetCalorie: 0,
-    backgroundColor: "",
-    isBorder: false,
-    date: date,
-    day: date.getDate(),
-    consumedCalories: 0,
   };
 }

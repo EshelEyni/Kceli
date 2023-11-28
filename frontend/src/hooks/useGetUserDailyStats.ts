@@ -4,6 +4,7 @@ import { UserDailyStatsResult } from "../../../shared/types/user";
 
 type useGetUserDailyStatsResult = {
   userDailyStats: UserDailyStatsResult[] | undefined;
+  count: number | undefined;
   error: unknown;
   isLoading: boolean;
   isSuccess: boolean;
@@ -11,18 +12,12 @@ type useGetUserDailyStatsResult = {
 };
 
 export function useGetUserDailyStats(): useGetUserDailyStatsResult {
-  const {
-    data: userDailyStats,
-    error,
-    isLoading,
-    isSuccess,
-    isError,
-  } = useQuery({
+  const { data, error, isLoading, isSuccess, isError } = useQuery({
     queryKey: ["userDailyStats"],
     queryFn: () => {
       return userApiService.getUserDailyStats();
     },
   });
 
-  return { userDailyStats, error, isLoading, isSuccess, isError };
+  return { userDailyStats: data?.stats, count: data?.count, error, isLoading, isSuccess, isError };
 }

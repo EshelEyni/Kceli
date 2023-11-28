@@ -1,9 +1,9 @@
 import { FC } from "react";
 import "./Goals.scss";
-import { GoalEdit } from "./GoalEdit";
+import { GoalEdit } from "../../components/GoalEdit/GoalEdit";
 import { useSchedule } from "./ScheduleContext";
 import { AsyncList } from "../../components/App/AsyncList/AsyncList";
-import { WeekGoalDisplay } from "./WeekGoalDisplay";
+import { GoalDisplay } from "./GoalDisplay";
 import { Goal } from "../../types/app";
 
 type GoalsProps = {
@@ -33,7 +33,7 @@ export const Goals: FC<GoalsProps> = ({ type }) => {
         <AsyncList
           className="goals__list"
           items={monthGoals as Goal[]}
-          render={weekGoal => <WeekGoalDisplay goal={weekGoal} key={weekGoal.id} />}
+          render={goal => <GoalDisplay goal={goal} key={goal.id} />}
           isLoading={isMonthGoalsLoading}
           isError={isMonthGoalsError}
           isSuccess={isMonthGoalsSuccess}
@@ -50,7 +50,7 @@ export const Goals: FC<GoalsProps> = ({ type }) => {
         <AsyncList
           className="goals__list"
           items={weekGoals as Goal[]}
-          render={weekGoal => <WeekGoalDisplay goal={weekGoal} key={weekGoal.id} />}
+          render={goal => <GoalDisplay goal={goal} key={goal.id} />}
           isLoading={isWeekGoalsLoading}
           isError={isWeekGoalsError}
           isSuccess={isWeekGoalsSuccess}

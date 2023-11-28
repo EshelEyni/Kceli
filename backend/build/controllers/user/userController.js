@@ -78,12 +78,13 @@ exports.removeLoggedInUser = removeLoggedInUser;
 const getUserDailyStats = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const loggedInUserId = (0, ALSService_1.getLoggedInUserIdFromReq)();
     (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
-    const docs = yield dailyDataModel_1.DailyDataModel.find({ userId: loggedInUserId, weight: { $ne: null }, waist: { $ne: null } }, { date: 1, weight: 1, waist: 1 }).sort({
+    const stats = yield dailyDataModel_1.DailyDataModel.find({ userId: loggedInUserId, weight: { $ne: null }, waist: { $ne: null } }, { date: 1, weight: 1, waist: 1 }).sort({
         date: 1,
     });
+    const count = yield dailyDataModel_1.DailyDataModel.countDocuments({ userId: loggedInUserId });
     res.send({
         status: "success",
-        data: docs,
+        data: { count, stats },
     });
 }));
 exports.getUserDailyStats = getUserDailyStats;

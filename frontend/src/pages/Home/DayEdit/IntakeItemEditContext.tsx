@@ -31,6 +31,7 @@ export type IntakeItemEditContextType = {
   handleIgnoreSuggestionClick: (original: string) => void;
   handleAddButtonClick: () => void;
   handleRemoveButtonClick: () => void;
+  btnStyle: React.CSSProperties;
 };
 
 type IntakeItemEditProviderProps = {
@@ -41,7 +42,7 @@ type IntakeItemEditProviderProps = {
 const IntakeItemEditContext = createContext<IntakeItemEditContextType | undefined>(undefined);
 
 function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProviderProps) {
-  const { intake, setIntake, currIntakeItemId, setCurrIntakeItemId } = useDayEdit();
+  const { intake, setIntake, currIntakeItemId, setCurrIntakeItemId, btnStyle } = useDayEdit();
   const isOneItem = intake.items.length === 1;
   const isCurrIntakeItem = intakeItem.id === currIntakeItemId;
   const [isManual, setIsManual] = useState(false);
@@ -235,6 +236,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
     handleIgnoreSuggestionClick,
     handleAddButtonClick,
     handleRemoveButtonClick,
+    btnStyle,
   };
 
   return <IntakeItemEditContext.Provider value={value}>{children}</IntakeItemEditContext.Provider>;

@@ -1,8 +1,8 @@
-import { User, UserDailyStatsResult } from "../../../../shared/types/user";
-import { RecommendedWeight } from "../../types/app";
+import { UserDailyStatsResult } from "../../../../shared/types/user";
+import { RecommendedWeight, UserGoal } from "../../types/app";
 
 type WeightGoalPercentageParams = {
-  loggedInUser: User;
+  userGoal: UserGoal;
   userDailyStats: UserDailyStatsResult[];
 };
 
@@ -36,22 +36,20 @@ function getUtilWeightLossGoal() {
   };
 }
 
-function calcPercentageWeightGoal({ loggedInUser, userDailyStats }: WeightGoalPercentageParams) {
-  const { weightLossGoal, weight } = loggedInUser;
-  const { startingWeight, weightGoal } = weightLossGoal;
+function calcPercentageWeightGoal({ userGoal, userDailyStats }: WeightGoalPercentageParams) {
+  if (!userGoal?.userWeightLossGoal) return 0;
+  const { startingWeight, weightGoal } = userGoal.userWeightLossGoal;
+  const goalDiff = startingWeight - weightGoal;
   const lastDailyUpdatedWeight = userDailyStats.findLast(stat => stat?.weight)?.weight;
-  const currentWeight = lastDailyUpdatedWeight || weight;
+  const currentWeight = lastDailyUpdatedWeight || 0;
   const weightDiff = startingWeight - currentWeight;
   if (weightDiff < 0) return 0;
-  const res = Math.round((weightDiff / weightGoal) * 100);
+  const res = Math.round((weightDiff / goalDiff) * 100);
   return res;
 }
 
-function isReachedGoalWeight({
-  loggedInUser,
-  userDailyStats,
-}: WeightGoalPercentageParams): boolean {
-  const percentageWeightGoal = calcPercentageWeightGoal({ loggedInUser, userDailyStats });
+function isReachedGoalWeight({ userGoal, userDailyStats }: WeightGoalPercentageParams): boolean {
+  const percentageWeightGoal = calcPercentageWeightGoal({ userGoal, userDailyStats });
   return percentageWeightGoal >= 100;
 }
 

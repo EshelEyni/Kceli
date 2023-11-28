@@ -4,7 +4,7 @@ import { Button } from "../../../components/App/Button/Button";
 import "./Filter.scss";
 
 export const DayEditFilter: FC = () => {
-  const { dailyData, setOpenedTab, setSearchParams } = useDayEdit();
+  const { dailyData, setOpenedTab, setSearchParams, color } = useDayEdit();
   if (!dailyData) return null;
 
   function handleBtnClick(value: DayEditTab) {
@@ -56,7 +56,10 @@ export const DayEditFilter: FC = () => {
         if (item.isShown === false) return null;
         return (
           <li className="filter__item" key={item.value}>
-            <Button className="btn" onClickFn={() => handleBtnClick(item.value)}>
+            <Button
+              style={{ color, border: `1px solid ${color}` }}
+              onClickFn={() => handleBtnClick(item.value)}
+            >
               {item.name}
             </Button>
           </li>

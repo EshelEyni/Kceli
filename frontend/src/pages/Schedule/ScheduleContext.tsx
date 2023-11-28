@@ -2,8 +2,7 @@ import { createContext, useContext, useState, useCallback } from "react";
 import { useGetCalenderData } from "../../hooks/useGetCalenderData";
 import { CalenderDay, Goal, ScheduleGridFilter } from "../../types/app";
 import { DayData } from "../../../../shared/types/dayData";
-import { useGetGoals } from "../../hooks/useGetWeekGoals";
-import { useAddGoal } from "../../hooks/useAddGoal";
+import { useGetGoals } from "../../hooks/useGetGoals";
 import { useUpdateGoal } from "../../hooks/useUpdateGoal";
 import { UseMutateFunction } from "@tanstack/react-query";
 
@@ -33,8 +32,6 @@ type ScheduleContextType = {
   isMonthGoalsSuccess: boolean;
   isMonthGoalsError: boolean;
   isMonthGoalsEmpty: boolean;
-  addGoal: UseMutateFunction<Goal, unknown, Partial<Goal>, unknown>;
-  isAddGoalLoading: boolean;
   updateGoal: UseMutateFunction<Goal, unknown, Partial<Goal>, unknown>;
   isUpdateGoalLoading: boolean;
   isWeekGoalsEditEnabled: boolean;
@@ -65,7 +62,6 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     isEmpty: isMonthGoalsEmpty,
   } = useGetGoals(getMonthGoalQueryStr());
 
-  const { isLoading: isAddGoalLoading, addGoal } = useAddGoal();
   const { isLoading: isUpdateGoalLoading, updateGoal } = useUpdateGoal();
   const isWeekGoalsEditEnabled = checkWeekGoalsEditEnabled();
   const isMonthGoalsEditEnabled = checkMonthGoalsEditEnabled();
@@ -184,8 +180,6 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     isMonthGoalsSuccess,
     isMonthGoalsError,
     isMonthGoalsEmpty,
-    addGoal,
-    isAddGoalLoading,
     updateGoal,
     isUpdateGoalLoading,
     isWeekGoalsEditEnabled,

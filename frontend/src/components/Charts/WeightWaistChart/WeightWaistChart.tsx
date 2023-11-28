@@ -11,13 +11,10 @@ import {
 } from "recharts";
 import { Button } from "../../App/Button/Button";
 import "./WeightWaistChart.scss";
+import { ReportDayData } from "../../../types/app";
 
 type WeightWaistChartProps = {
-  data: {
-    date: string | Date | number;
-    weight: number;
-    waist: number;
-  }[];
+  data: ReportDayData[];
 };
 
 export const WeightWaistChart: FC<WeightWaistChartProps> = ({ data }) => {

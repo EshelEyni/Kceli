@@ -9,7 +9,8 @@ const authGuardsMiddleware_1 = require("../../middlewares/authGuards/authGuardsM
 const router = express_1.default.Router();
 router.use(authGuardsMiddleware_1.checkUserAuthentication);
 router.get("/", goalController_1.getGoals);
-router.get("/:id", goalController_1.getGoalById);
+router.get("/:id([a-fA-F0-9]{24})", goalController_1.getGoalById);
+router.get("/user", goalController_1.getUserGoal);
 router.post("/", goalController_1.createGoal);
 router.patch("/:id", goalController_1.updateGoal);
 router.delete("/:id", goalController_1.deleteGoal);

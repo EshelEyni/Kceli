@@ -6,9 +6,10 @@ import { WeightWaistChart } from "../../components/Charts/WeightWaistChart/Weigh
 import calorieUtilService from "../../services/calorieUtil/calorieUtilService";
 import { WeekReportDayDisplay } from "./WeekReportDayDisplay";
 import "./WeekReport.scss";
-import { WeekCaloriesBar } from "./WeekCaloriesBar";
+import { CaloriesBar } from "./CaloriesBar";
 import { Goals } from "./Goals";
 import { Header } from "../../components/App/Header/Header";
+import { ReportDayData } from "../../types/app";
 
 export const WeekReport: FC = () => {
   const { currDays, data } = useSchedule();
@@ -42,12 +43,10 @@ export const WeekReport: FC = () => {
 
   function getWeightWaistData() {
     if (!currWeekData) return null;
-    const weightWaistData = currWeekData.map(d => ({
-      date: d.date,
-      weight: d.weight,
-      waist: d.waist,
-    }));
-
+    const weightWaistData = currWeekData.reduce((acc, curr) => {
+      if (!curr.weight || !curr.waist) return acc;
+      return [...acc, { weight: curr.weight, waist: curr.waist, date: curr.date }];
+    }, [] as ReportDayData[]);
     return weightWaistData;
   }
 
@@ -90,7 +89,7 @@ export const WeekReport: FC = () => {
       <ReportTable type="week" currData={currWeekData} prevData={prevWeekData} />
       <Goals type="week" />
       {weightWaistData && <WeightWaistChart data={weightWaistData} />}
-      {calorieData && <WeekCaloriesBar data={calorieData} />}
+      {calorieData && <CaloriesBar data={calorieData} />}
       <div className="week-report-day-display-container">
         {currDays.map((d, i) => (
           <WeekReportDayDisplay key={d.id || i} calenderDay={d} />

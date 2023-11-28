@@ -2,7 +2,6 @@ import { FC } from "react";
 import { useProfile } from "./ProfileContext";
 import { Controller, useForm } from "react-hook-form";
 import { WeightLossGoal } from "../../../../shared/types/user";
-import userUtilService from "../../services/user/userUtilService";
 import { Button } from "../../components/App/Button/Button";
 
 type FormData = {
@@ -25,7 +24,6 @@ export const UserEdit: FC = () => {
     weight: user?.weight || 0,
     totalDailyEnergyExpenditure: user?.totalDailyEnergyExpenditure || 0,
     targetCaloricIntakePerDay: user?.targetCaloricIntakePerDay || 0,
-    weightGoal: user?.weightLossGoal || userUtilService.getUtilWeightLossGoal(),
   };
 
   const { control, handleSubmit } = useForm<FormData>({ defaultValues });
@@ -94,26 +92,6 @@ export const UserEdit: FC = () => {
           name="weight"
           control={control}
           render={({ field }) => <input id="weight" type="number" {...field} />}
-        />
-      </div>
-
-      <div className="user-edit__item-container">
-        <label htmlFor="startingWeight">goal weight - current:</label>
-        <Controller
-          name="weightLossGoal.startingWeight"
-          control={control}
-          defaultValue={user.weightLossGoal?.startingWeight}
-          render={({ field }) => <input id="startingWeight" type="number" {...field} />}
-        />
-      </div>
-
-      <div className="user-edit__item-container">
-        <label htmlFor="weightGoal">goal weight - goal:</label>
-        <Controller
-          name="weightLossGoal.weightGoal"
-          control={control}
-          defaultValue={user.weightLossGoal?.weightGoal}
-          render={({ field }) => <input id="weightGoal" type="number" {...field} />}
         />
       </div>
 

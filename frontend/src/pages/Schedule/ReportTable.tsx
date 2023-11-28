@@ -163,6 +163,63 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) 
       }, 0) / prevData.length
     );
 
+    if (type === "week") return Object.values(tableData);
+
+    function calcWeightLossPerDay(data: DayData[]) {
+      if (!data.length) return 0;
+      const firstDayWeight = data.find(d => !!d.weight)?.weight || 0;
+      const lastDayWeight = data.findLast(d => !!d.weight)?.weight || 0;
+      const weightLoss = firstDayWeight - lastDayWeight;
+      const weightLossPerDay = weightLoss / data.length;
+      if (isNaN(weightLossPerDay)) return 0;
+      return weightLossPerDay >= 0 ? +weightLossPerDay.toFixed(2) : 0;
+    }
+
+    tableData.weightLossPerDay = {
+      label: "weight loss per day",
+      curr: 0,
+      prev: 0,
+      trend: {
+        value: 0,
+        positive: "up",
+      },
+    };
+
+    tableData.weightLossPerDay.curr = calcWeightLossPerDay(currData);
+    tableData.weightLossPerDay.prev = calcWeightLossPerDay(prevData);
+    tableData.weightLossPerDay.trend.value =
+      tableData.weightLossPerDay.curr - tableData.weightLossPerDay.prev;
+
+    function calculateAverageWeight(data: DayData[]) {
+      let totalWeight = 0;
+      let count = 0;
+
+      data.forEach(item => {
+        if (item.weight) {
+          totalWeight += item.weight;
+          count++;
+        }
+      });
+
+      return count > 0 ? Math.round(totalWeight / count) : 0;
+    }
+
+    tableData.averageWeight = {
+      label: "average weight",
+      curr: 0,
+      prev: 0,
+      trend: {
+        value: 0,
+        positive: "down",
+      },
+    };
+
+    tableData.averageWeight.curr = calculateAverageWeight(currData);
+    tableData.averageWeight.prev = calculateAverageWeight(prevData);
+
+    tableData.averageWeight.trend.value =
+      tableData.averageWeight.curr - tableData.averageWeight.prev;
+
     return Object.values(tableData);
   }
 

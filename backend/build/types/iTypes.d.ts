@@ -19,7 +19,6 @@ export interface IUser extends Document {
     birthdate: Date;
     totalDailyEnergyExpenditure: number;
     targetCaloricIntakePerDay: number;
-    weightLossGoal: WeightLossGoal;
     workoutSchedule: UserWorkoutSchedule;
     isAdmin: boolean;
     createdAt: Date;
@@ -95,5 +94,6 @@ export interface IGoal extends Document {
     type: "user" | "week" | "month";
     date: Date;
     description: string;
+    userWeightLossGoal: WeightLossGoal;
     isCompleted: boolean;
 }

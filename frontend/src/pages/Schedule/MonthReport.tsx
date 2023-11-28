@@ -6,6 +6,9 @@ import { ReportTable } from "./ReportTable";
 import { Header } from "../../components/App/Header/Header";
 import { WeightWaistChart } from "../../components/Charts/WeightWaistChart/WeightWaistChart";
 import { Goals } from "./Goals";
+import { CaloriesBar } from "./CaloriesBar";
+import calorieUtilService from "../../services/calorieUtil/calorieUtilService";
+import { ReportDayData } from "../../types/app";
 
 export const MonthReport: FC = () => {
   const { currDays, data } = useSchedule();
@@ -21,6 +24,7 @@ export const MonthReport: FC = () => {
   const currData = currDays.map(d => d.data).filter(d => !!d) as DayData[];
   const prevData = getPrevMonthData();
   const weightWaistData = getWeightWaistData();
+  const calorieData = getCalorieData();
 
   function getTitle() {
     const firstDayDate = currDays[0].date.toLocaleString("en-GB", {
@@ -52,13 +56,28 @@ export const MonthReport: FC = () => {
 
   function getWeightWaistData() {
     if (!currData) return null;
-    const weightWaistData = currData.map(d => ({
-      date: d.date,
-      weight: d.weight,
-      waist: d.waist,
-    }));
-
+    const weightWaistData = currData.reduce((acc, curr) => {
+      if (!curr.weight || !curr.waist) return acc;
+      return [...acc, { date: curr.date, weight: curr.weight, waist: curr.waist }];
+    }, [] as ReportDayData[]);
     return weightWaistData;
+  }
+
+  function getCalorieData() {
+    if (!currData) return null;
+    const calorieData = currData.map(d => {
+      const remainingCalories = calorieUtilService.calcRemainingCaloriesFromDayData(d);
+      const excessCalories = remainingCalories < 0 ? Math.abs(remainingCalories) : 0;
+      const calories = calorieUtilService.getTotalCalories(d);
+      const caloriesWithoutExcess = calories - excessCalories;
+
+      const name = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "2-digit" }).format(
+        new Date(d.date)
+      );
+      return { name, calories, excessCalories, caloriesWithoutExcess };
+    });
+
+    return calorieData;
   }
 
   return (
@@ -70,6 +89,7 @@ export const MonthReport: FC = () => {
       <ReportTable type="month" currData={currData} prevData={prevData} />
       <Goals type="month" />
       {weightWaistData && <WeightWaistChart data={weightWaistData} />}
+      {calorieData && <CaloriesBar data={calorieData} />}
     </section>
   );
 };

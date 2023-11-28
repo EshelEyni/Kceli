@@ -10,15 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallBack } from "./components/App/ErrorFallBack/ErrorFallBack";
 
-const FIVE_MINUTES = 5 * 60 * 1000;
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: FIVE_MINUTES,
-    },
-  },
-});
+const queryClient = new QueryClient({});
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

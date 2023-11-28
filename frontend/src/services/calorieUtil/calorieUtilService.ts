@@ -72,30 +72,37 @@ function _getTotalCaloriesFromIntake(intake: Intake): number {
 function getBcgByCosumedCalories({
   targetCalorie,
   consumedCalories,
-}: GetBcgByCosumedCaloriesParams): string {
-  if (!targetCalorie || !consumedCalories) return "#005FB3";
+}: GetBcgByCosumedCaloriesParams): {
+  backgroundColor: string;
+  color: string;
+} {
+  if (!targetCalorie || !consumedCalories)
+    return { backgroundColor: "#005FB3", color: "var( --color-secondary)" };
   const calorieColorPalette = [
-    { excessRate: 0, color: "#005FB3" },
-    { excessRate: 10, color: "#4682B4" },
-    { excessRate: 20, color: "#feef63" },
-    { excessRate: 30, color: "#ffea00" },
-    { excessRate: 40, color: "#FF7F7F" },
-    { excessRate: 50, color: "#FF0000" },
-    { excessRate: 60, color: "#8B0000" },
-    { excessRate: 70, color: "#800000" },
-    { excessRate: 80, color: "#660000" },
-    { excessRate: 90, color: "#330000" },
-    { excessRate: 100, color: "#171717" },
+    { excessRate: 0, bcg: "#005FB3", color: "var(--color-secondary)" },
+    { excessRate: 10, bcg: "#4682B4", color: "var(--color-secondary)" },
+    { excessRate: 20, bcg: "#feef63", color: "var(--color-text)" },
+    { excessRate: 30, bcg: "#ffea00", color: "var(--color-text)" },
+    { excessRate: 40, bcg: "#FF7F7F", color: "var(--color-secondary)" },
+    { excessRate: 50, bcg: "#FF0000", color: "var(--color-secondary)" },
+    { excessRate: 60, bcg: "#8B0000", color: "var(--color-secondary)" },
+    { excessRate: 70, bcg: "#800000", color: "var(--color-secondary)" },
+    { excessRate: 80, bcg: "#660000", color: "var(--color-secondary)" },
+    { excessRate: 90, bcg: "#330000", color: "var(--color-secondary)" },
+    { excessRate: 100, bcg: "#171717", color: "var(--color-secondary)" },
   ];
 
   const consumedPercentage = (consumedCalories / targetCalorie) * 100;
   const exceededPercentage = consumedPercentage - 100;
-  const bcg = calorieColorPalette.find(
+  const colors = calorieColorPalette.find(
     item =>
       item.excessRate >= exceededPercentage || (exceededPercentage > 100 && item.excessRate === 100)
   );
 
-  return bcg?.color || "#005FB3";
+  return {
+    backgroundColor: colors?.bcg ?? "#005FB3",
+    color: colors?.color ?? "var( --color-secondary)",
+  };
 }
 
 function getDailyExcessRate({

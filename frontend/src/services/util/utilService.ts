@@ -219,8 +219,8 @@ function capitializeFirstLetter(str: string): string {
 }
 
 const CHART_COLORS = [
-  "#0088FE",
   "#00C49F",
+  "#0088FE",
   "#FFBB28",
   "#FF8042",
   "#FF5733",

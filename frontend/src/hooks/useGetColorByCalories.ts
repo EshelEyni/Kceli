@@ -10,9 +10,9 @@ export function useGetColorByCalories() {
   const targetCaloricIntakePerDay =
     dailyData?.targetCaloricIntake ?? loggedInUser?.targetCaloricIntakePerDay ?? 0;
 
-  const backgroundColor = calorieUtilService.getBcgByCosumedCalories({
+  const { backgroundColor, color } = calorieUtilService.getBcgByCosumedCalories({
     consumedCalories,
     targetCalorie: targetCaloricIntakePerDay,
   });
-  return { backgroundColor };
+  return { backgroundColor, color };
 }

@@ -3,7 +3,7 @@ import { useProfile } from "./ProfileContext";
 import { Button } from "../../components/App/Button/Button";
 
 export const UserInfo: FC = () => {
-  const { user, userDailyStats, setIsEditing } = useProfile();
+  const { user, userDailyStats, count, setIsEditing } = useProfile();
   if (!user || !userDailyStats) return null;
 
   const {
@@ -14,11 +14,17 @@ export const UserInfo: FC = () => {
     weight,
     totalDailyEnergyExpenditure,
     targetCaloricIntakePerDay,
-    weightLossGoal,
   } = user;
 
   function handleBtnEditClick() {
     setIsEditing(true);
+  }
+
+  function calcWeightLossPerDay() {
+    if (!userDailyStats || !count) return 0;
+    const weightLossPerDay =
+      (userDailyStats[0].weight - userDailyStats[userDailyStats.length - 1].weight) / count;
+    return weightLossPerDay.toFixed(2);
   }
 
   return (
@@ -59,13 +65,13 @@ export const UserInfo: FC = () => {
       </div>
 
       <div className="user-info__item-container">
-        <h2>Current Weight Loss Goal:</h2>
-        <p>{`${weightLossGoal.weightGoal} kg`}</p>
+        <h2>days in process:</h2>
+        <p>{count}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>days in process:</h2>
-        <p>{userDailyStats.length}</p>
+        <h2>weight loss per day:</h2>
+        <p>{calcWeightLossPerDay()}</p>
       </div>
 
       <Button className="user-info__edit-btn" onClickFn={handleBtnEditClick}>

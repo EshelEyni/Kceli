@@ -24,9 +24,9 @@ async function update(user: User): Promise<User> {
   return handleServerResponseData<User>(respose);
 }
 
-async function getUserDailyStats(): Promise<UserDailyStatsResult[]> {
+async function getUserDailyStats(): Promise<{ stats: UserDailyStatsResult[]; count: number }> {
   const respose = await httpService.get(`user/dailyStats`);
-  return handleServerResponseData<UserDailyStatsResult[]>(respose);
+  return handleServerResponseData<{ stats: UserDailyStatsResult[]; count: number }>(respose);
 }
 
 export default { query, getById, getByUsername, update, getUserDailyStats };

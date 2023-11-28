@@ -4,10 +4,10 @@ import { Button } from "../../../components/App/Button/Button";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { Controller, useForm } from "react-hook-form";
 import "./WeightWaistInput.scss";
-import { useAuth } from "../../../hooks/useAuth";
 import { useGetUserDailyStats } from "../../../hooks/useGetUserDailyStats";
 import userUtilService from "../../../services/user/userUtilService";
 import { GoalIndicator } from "../../../components/GoalIndicator/GoalIndicator";
+import { useGetUserGoal } from "../../../hooks/useGetUserGoal";
 
 interface WeightWaistIFormInput {
   weight: number | string;
@@ -16,8 +16,8 @@ interface WeightWaistIFormInput {
 
 export const WeightWaistInput: FC = () => {
   const { dailyData, isLoading, updateDailyData, isLoadingUpdate, setOpenedTab } = useDayEdit();
-  const { loggedInUser } = useAuth();
   const { userDailyStats } = useGetUserDailyStats();
+  const { userGoal } = useGetUserGoal();
 
   const { control, handleSubmit } = useForm<WeightWaistIFormInput>({
     defaultValues: { weight: dailyData?.weight || "", waist: dailyData?.waist || "" },
@@ -52,9 +52,9 @@ export const WeightWaistInput: FC = () => {
   }
 
   useEffect(() => {
-    if (!loggedInUser || !userDailyStats) return;
-    setIsReachedGoalWeight(userUtilService.isReachedGoalWeight({ loggedInUser, userDailyStats }));
-  }, [loggedInUser, userDailyStats]);
+    if (!userGoal || !userDailyStats) return;
+    setIsReachedGoalWeight(userUtilService.isReachedGoalWeight({ userGoal, userDailyStats }));
+  }, [userGoal, userDailyStats]);
 
   if (isLoading || isLoadingUpdate) return <SpinnerLoader containerSize={{ height: "75px" }} />;
 

@@ -9,6 +9,11 @@
   padding: rem(25px) rem(20px);
   background-color: var(--color-primary);
 
+  .goal-edit {
+    padding: rem(15px);
+    max-width: rem(350px);
+  }
+
   .profile-details__user-info {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -121,7 +126,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        width: rem(120px);
+        min-width: rem(95px);
         height: rem(200px);
         background-color: var(--color-background);
 
@@ -133,8 +138,12 @@
           height: 100%;
 
           h4 {
-            font-size: rem(40px);
+            font-size: rem(30px);
             color: var(--color-text);
+
+            @include for-desktop-layout {
+              font-size: rem(40px);
+            }
           }
         }
 

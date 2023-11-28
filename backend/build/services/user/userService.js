@@ -66,7 +66,6 @@ function update(id, user) {
             "weight",
             "targetCaloricIntakePerDay",
             "totalDailyEnergyExpenditure",
-            "weightLossGoal",
             "workoutSchedule",
         ];
         const filteredUser = (0, utilService_1.filterObj)(user, ...allowedFields);

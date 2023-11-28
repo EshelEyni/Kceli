@@ -2,7 +2,7 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { store } from "../store/store";
 import { FC, LazyExoticComponent, ReactElement, ReactNode } from "react";
-import { User } from "../../../shared/types/user";
+import { User, WeightLossGoal } from "../../../shared/types/user";
 import { DayData } from "../../../shared/types/dayData";
 import { FormattedNinjaAPIResData, FormattedUSDAFoodObject } from "../../../shared/types/system";
 
@@ -30,11 +30,6 @@ export type RecommendedWeight = {
   min: number;
   max: number;
   avg: number;
-};
-
-export type CaloriesToLose = {
-  calories: string;
-  dailyIntakes: string;
 };
 
 export type TimeToWeightGoal = {
@@ -85,11 +80,27 @@ export enum ScheduleGridFilter {
   Month = "month",
 }
 
-export interface Goal {
+interface BaseGoal {
   id: string;
   userId: string;
   date: Date | string;
-  type: "user" | "week" | "month";
   description: string;
   isCompleted: boolean;
 }
+
+export interface UserGoal extends BaseGoal {
+  type: "user";
+  userWeightLossGoal: WeightLossGoal; // Mandatory for 'user' type
+}
+
+export interface TimeGoal extends BaseGoal {
+  type: "week" | "month";
+}
+
+export type Goal = UserGoal | TimeGoal;
+
+export type ReportDayData = {
+  date: string | Date | number;
+  weight: number;
+  waist: number;
+};

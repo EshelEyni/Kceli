@@ -84,10 +84,6 @@ function createUser({
   birthdate = new Date(),
   totalDailyEnergyExpenditure = 100,
   targetCaloricIntakePerDay = 100,
-  weightLossGoal = {
-    startingWeight: 100,
-    weightGoal: 100,
-  },
   workoutSchedule = createWorkSchedule(),
   gender = "female",
   createdAt = "test",
@@ -104,7 +100,6 @@ function createUser({
     birthdate,
     totalDailyEnergyExpenditure,
     targetCaloricIntakePerDay,
-    weightLossGoal,
     workoutSchedule,
     gender,
     createdAt,

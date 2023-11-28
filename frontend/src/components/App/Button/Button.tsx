@@ -9,6 +9,7 @@ type ButtonProps = {
   onClickFn?: AnyFunction;
   type?: "button" | "submit" | "reset";
   dataTestId?: string;
+  style?: React.CSSProperties;
 };
 
 export const Button: FC<ButtonProps> = ({
@@ -18,10 +19,12 @@ export const Button: FC<ButtonProps> = ({
   onClickFn,
   type = "button",
   dataTestId = "btn",
+  style = {},
 }) => {
   return (
     <button
       className={"btn " + (className || "")}
+      style={style}
       onClick={onClickFn}
       disabled={isDisabled}
       data-testid={dataTestId}

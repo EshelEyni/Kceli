@@ -7,6 +7,21 @@ import { validateIds } from "../../services/util/utilService";
 
 const getGoals = getAll(GoalModel);
 const getGoalById = getOne(GoalModel);
+const getUserGoal = asyncErrorCatcher(async (req: Request, res: Response) => {
+  const loggedInUserId = getLoggedInUserIdFromReq();
+  validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
+
+  const doc = await GoalModel.findOne({
+    userId: loggedInUserId,
+    type: "user",
+    isCompleted: false,
+  }).sort({ date: -1 });
+
+  res.status(200).send({
+    status: "success",
+    data: doc,
+  });
+});
 const createGoal = asyncErrorCatcher(async (req: Request, res: Response) => {
   const loggedInUserId = getLoggedInUserIdFromReq();
   validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
@@ -25,4 +40,4 @@ const createGoal = asyncErrorCatcher(async (req: Request, res: Response) => {
 const updateGoal = updateOne(GoalModel, ["type", "description", "isCompleted"]);
 const deleteGoal = deleteOne(GoalModel);
 
-export { getGoals, getGoalById, createGoal, updateGoal, deleteGoal };
+export { getGoals, getGoalById, getUserGoal, createGoal, updateGoal, deleteGoal };

@@ -1,0 +1,62 @@
+@import "../../styles/main.scss";
+
+.user-display-goal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: rem(10px);
+  background-color: var(--color-background);
+  padding: rem(10px) rem(25px);
+  border-radius: 5px;
+  width: 100%;
+  max-width: rem(450px) !important;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem(5px);
+
+    &__title {
+      text-transform: capitalize;
+      font-size: rem(30px);
+    }
+
+    &__date {
+      font-size: rem(18px);
+      color: var(--color-text-gray);
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+
+    &__row {
+      display: flex;
+      flex-direction: column;
+      gap: rem(5px);
+
+      &__value {
+        font-size: rem(20px);
+        font-weight: 700;
+        color: var(--color-text);
+      }
+
+      &__title {
+        text-transform: capitalize;
+        border-top: 1px solid var(--color-border);
+        font-weight: 600;
+        padding: rem(2px) 0;
+        color: var(--color-text-gray);
+      }
+    }
+  }
+
+  &__btn {
+    background-color: var(--color-primary);
+    padding: rem(10px) rem(15px);
+  }
+}

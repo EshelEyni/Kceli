@@ -6,7 +6,7 @@ import calorieUtilService from "../../../services/calorieUtil/calorieUtilService
 
 export const PreSaveCalorieCount: FC = () => {
   const { loggedInUser } = useAuth();
-  const { intake, dailyData } = useDayEdit();
+  const { intake, dailyData, color } = useDayEdit();
   if (!dailyData || !intake || !intake.isRecorded) return null;
   const intakeTotalCalorie = Math.round(
     intake.items.reduce((acc, curr) => {
@@ -28,7 +28,7 @@ export const PreSaveCalorieCount: FC = () => {
   const preSaveRemainingCalories = remainingCalories - intakeTotalCalorie;
 
   return (
-    <section className="pre-save-calorie-count">
+    <section className="pre-save-calorie-count" style={{ color }}>
       <p>
         <strong>Total:</strong> <span>{intakeTotalCalorie}</span>
       </p>

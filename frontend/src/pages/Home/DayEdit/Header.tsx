@@ -11,6 +11,7 @@ export const DayEditHeader: FC = () => {
     remainingCalories,
     consumedCalories,
     estimatedKGChange,
+    color,
   } = useDayEdit();
 
   if (!dailyData) return null;
@@ -43,7 +44,7 @@ export const DayEditHeader: FC = () => {
           <strong>{Math.abs(remainingCalories)} </strong>
           calories {calConsumedTitle}
         </p>
-        <hr />
+        <hr style={{ backgroundColor: color }} />
 
         {consumedCalories > 0 && (
           <>
@@ -53,7 +54,7 @@ export const DayEditHeader: FC = () => {
             >
               <strong>{Math.round(consumedCalories)}</strong> calories consumed
             </p>
-            <hr />
+            <hr style={{ backgroundColor: color }} />
           </>
         )}
 
@@ -73,7 +74,7 @@ export const DayEditHeader: FC = () => {
             <p className="day-edit__header__percentage__value">{calRemainingPct}%</p>
           </div>
         </div>
-        <hr />
+        <hr style={{ backgroundColor: color }} />
 
         <p
           className="day-edit__header__titles__title"
@@ -82,7 +83,7 @@ export const DayEditHeader: FC = () => {
           estimated to {estimatedKGChange > 0 ? "gain" : "lose"}
           <strong> {Math.abs(estimatedKGChange)}</strong> kg
         </p>
-        <hr />
+        <hr style={{ backgroundColor: color }} />
       </div>
     </header>
   );

@@ -6,11 +6,12 @@ import { useProfile } from "./ProfileContext";
 import "./ProfileDetails.scss";
 import { UserInfo } from "./UserInfo";
 import { RecommendedWeightDisplay } from "./RecommendedWeightDisplay";
-import { CaloriesToLoseDisplay } from "./CaloriesToLoseDisplay";
 import { GoalCalender } from "./GoalCalender";
 import { UserEdit } from "./UserEdit";
 import { GoalIndicator } from "../../components/GoalIndicator/GoalIndicator";
 import { WeightToLose } from "./WeightToLose";
+import { GoalEdit } from "../../components/GoalEdit/GoalEdit";
+import { UserGoalDisplay } from "./UserGoalDisplay";
 
 const ProfileDetails = () => {
   const {
@@ -22,6 +23,8 @@ const ProfileDetails = () => {
     timeToMaxRecommendedWeight,
     timeToCurrentWeightLossGoal,
     isEditing,
+    isGoalEditing,
+    setIsGoalEditing,
   } = useProfile();
 
   if (isLoading) return <SpinnerLoader containerSize={{ width: "100%" }} />;
@@ -32,20 +35,20 @@ const ProfileDetails = () => {
     <main className="page profile-details">
       {isEditing ? <UserEdit /> : <UserInfo />}
       {userDailyStats && <WeightWaistChart data={userDailyStats} />}
-
+      {isGoalEditing ? (
+        <GoalEdit type="user" setIsGoalEditing={setIsGoalEditing} />
+      ) : (
+        <UserGoalDisplay />
+      )}
       <GoalIndicator />
       {timeToCurrentWeightLossGoal && (
         <GoalCalender title="time to current weight loss goal" time={timeToCurrentWeightLossGoal} />
       )}
-
       <RecommendedWeightDisplay />
       <WeightToLose />
-      <CaloriesToLoseDisplay />
-
       {timeToMaxRecommendedWeight && (
         <GoalCalender title="time to max recommended weight" time={timeToMaxRecommendedWeight} />
       )}
-
       <Outlet />
     </main>
   );

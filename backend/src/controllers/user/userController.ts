@@ -74,16 +74,18 @@ const getUserDailyStats = asyncErrorCatcher(async (req: Request, res: Response) 
   const loggedInUserId = getLoggedInUserIdFromReq();
   validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
 
-  const docs = await DailyDataModel.find(
+  const stats = await DailyDataModel.find(
     { userId: loggedInUserId, weight: { $ne: null }, waist: { $ne: null } },
     { date: 1, weight: 1, waist: 1 }
   ).sort({
     date: 1,
   });
 
+  const count = await DailyDataModel.countDocuments({ userId: loggedInUserId });
+
   res.send({
     status: "success",
-    data: docs,
+    data: { count, stats },
   });
 });
 

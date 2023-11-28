@@ -14,12 +14,17 @@ import { BtnGoBack } from "../../Buttons/BtnGoBack/BtnGoBack";
 export const AppHeader: FC = () => {
   const { loggedInUser } = useAuth();
   const { isAppHeaderBtnGoBtnShown } = useSystem();
-  const { backgroundColor } = useGetColorByCalories();
+  const { backgroundColor, color } = useGetColorByCalories();
   const location = useLocation();
   const isHomePage = location.pathname.includes("/home");
 
   return (
-    <Header className="app-header" style={isHomePage ? { backgroundColor } : undefined}>
+    <Header
+      className="app-header"
+      style={
+        isHomePage ? { backgroundColor, color, borderBottom: `1px solid ${color}` } : undefined
+      }
+    >
       <div className="app-header__btn-container">
         {isAppHeaderBtnGoBtnShown ? <BtnGoBack /> : <GoalIndicator />}
       </div>

@@ -17,18 +17,22 @@
     position: relative;
     font-style: italic;
 
-    .btn {
+    .quantity-input-btn {
       display: flex;
       justify-content: center;
       align-items: center;
       border: none;
       padding: 0;
       min-width: unset;
+      width: rem(40px);
+      height: rem(40px);
+      background-color: var(--color-background);
+      border-radius: 50%;
 
       svg {
-        color: white;
-        width: rem(40px);
-        height: rem(40px);
+        color: var(--color-text-gray);
+        width: rem(22.5px);
+        height: rem(22.5px);
       }
     }
 

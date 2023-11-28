@@ -1,4 +1,4 @@
-import { Goal } from "../../types/app";
+import { Goal, UserGoal } from "../../types/app";
 import httpService from "../http/httpService";
 import { handleServerResponseData } from "../util/utilService";
 
@@ -13,6 +13,11 @@ async function getGoals(queryString: string) {
 async function getGoal(id: string) {
   const respose = await httpService.get(`${BASE_URL}/${id}`);
   return handleServerResponseData<Goal>(respose);
+}
+
+async function getUserGoal() {
+  const respose = await httpService.get(`${BASE_URL}/user`);
+  return handleServerResponseData<UserGoal>(respose);
 }
 
 async function addGoal(goal: Partial<Goal>) {
@@ -30,4 +35,4 @@ async function deleteGoal(id: string) {
   return handleServerResponseData<Goal>(respose);
 }
 
-export default { getGoals, getGoal, addGoal, updateGoal, deleteGoal };
+export default { getGoals, getGoal, getUserGoal, addGoal, updateGoal, deleteGoal };

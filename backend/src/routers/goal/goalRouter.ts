@@ -3,6 +3,7 @@ import express from "express";
 import {
   getGoals,
   getGoalById,
+  getUserGoal,
   createGoal,
   deleteGoal,
   updateGoal,
@@ -14,7 +15,8 @@ const router = express.Router();
 
 router.use(checkUserAuthentication);
 router.get("/", getGoals);
-router.get("/:id", getGoalById);
+router.get("/:id([a-fA-F0-9]{24})", getGoalById);
+router.get("/user", getUserGoal);
 router.post("/", createGoal);
 router.patch("/:id", updateGoal);
 router.delete("/:id", deleteGoal);

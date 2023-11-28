@@ -13,7 +13,6 @@ import { useAddFavoriteIntake } from "../../../hooks/useAddFavoriteIntake";
 import { useUpdateFavoriteIntake } from "../../../hooks/useUpdateFavoriteIntake";
 import { LastTimeYouAteTitle } from "./LastTimeYouAteTitle";
 import { PreSaveCalorieCount } from "./PreSaveCalorieCount";
-import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
 import "./IntakeEdit.scss";
 
 export const IntakeEdit: FC = () => {
@@ -24,10 +23,11 @@ export const IntakeEdit: FC = () => {
     intake,
     updateDailyData,
     setIntake,
+    backgroundColor,
+    btnStyle,
   } = useDayEdit();
   const { addFavoriteIntake, isLoading: isLoadingAddToFav } = useAddFavoriteIntake();
   const { updateFavoriteIntake, isLoading: isLoadingUpdateFav } = useUpdateFavoriteIntake();
-  const { backgroundColor } = useGetColorByCalories();
 
   const isLoading =
     isLoadingDailyData || isLoadingUpdate || isLoadingAddToFav || isLoadingUpdateFav;
@@ -156,10 +156,11 @@ export const IntakeEdit: FC = () => {
         data-testid="intake-edit-btns-container"
         style={{ backgroundColor }}
       >
-        <Button onClickFn={handleClearButtonClick} className="intake-edit-btn">
+        <Button style={btnStyle} onClickFn={handleClearButtonClick} className="intake-edit-btn">
           clear
         </Button>
         <Button
+          style={btnStyle}
           onClickFn={handleSaveToFavoriteButtonClick}
           className="intake-edit-btn"
           type="submit"
@@ -167,6 +168,7 @@ export const IntakeEdit: FC = () => {
           Save To Fav
         </Button>
         <Button
+          style={btnStyle}
           onClickFn={handleSaveLaterButtonClick}
           className={
             "intake-edit-btn btn-toggle-save-later " + classnames({ clicked: !intake.isRecorded })
@@ -175,7 +177,12 @@ export const IntakeEdit: FC = () => {
           Save Later
         </Button>
 
-        <Button onClickFn={e => handleSubmit(e)} className="intake-edit-btn" type="submit">
+        <Button
+          style={btnStyle}
+          onClickFn={e => handleSubmit(e)}
+          className="intake-edit-btn"
+          type="submit"
+        >
           Save Intake
         </Button>
       </div>

@@ -15,7 +15,7 @@ const Homepage = () => {
   const { loggedInUser } = useAuth();
   const { dailyData } = useGetTodayData();
   const { createDay, isLoading: isLoadingCreateDay } = useCreateDay();
-  const { backgroundColor } = useGetColorByCalories();
+  const { backgroundColor, color } = useGetColorByCalories();
 
   const isTodayDetailsShown = loggedInUser && !isLoadingCreateDay;
   const isCreateDayBtnShown = loggedInUser && dailyData && !_calcIsCurrDay(dailyData);
@@ -45,7 +45,7 @@ const Homepage = () => {
             <button
               className="home__btn"
               data-testid="create-day-open-modal-btn"
-              style={{ backgroundColor }}
+              style={{ backgroundColor, color }}
             >
               start a new day
             </button>

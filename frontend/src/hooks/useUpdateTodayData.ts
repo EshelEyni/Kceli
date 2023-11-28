@@ -10,7 +10,7 @@ export function useUpdateTodayData() {
       dayDataApiService.update(id, data),
     onSuccess: data => {
       queryClient.setQueryData(["today"], data);
-      queryClient.invalidateQueries(["userDailyStats", "userDailyStats"]);
+      queryClient.invalidateQueries(["userDailyStats", "today"]);
     },
   });
 

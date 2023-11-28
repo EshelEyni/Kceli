@@ -4,19 +4,25 @@ import { useAuth } from "../../hooks/useAuth";
 import { useGetUserDailyStats } from "../../hooks/useGetUserDailyStats";
 import "./GoalIndicator.scss";
 import userUtilService from "../../services/user/userUtilService";
+import { useGetUserGoal } from "../../hooks/useGetUserGoal";
 
 const sound = new Audio("/assets/sounds/WeAreTheChampions.mp3");
 
 export const GoalIndicator: FC = () => {
   const { loggedInUser } = useAuth();
+  const { userGoal } = useGetUserGoal();
+
   const { userDailyStats } = useGetUserDailyStats();
   const [isCircleClicked, setIsCircleClicked] = useState(false);
-  if (!loggedInUser || !userDailyStats) return null;
+  if (!loggedInUser || !userDailyStats || !userGoal) return null;
+
   const percentage = userUtilService.calcPercentageWeightGoal({
-    loggedInUser,
+    userGoal: userGoal,
     userDailyStats,
   });
+
   const background = _generateGradient(percentage);
+  const cursor = percentage < 100 ? "not-allowed" : "pointer";
 
   function handleCircleClick() {
     if (percentage < 100) return;
@@ -35,7 +41,11 @@ export const GoalIndicator: FC = () => {
   return (
     <section className="goal-indicator">
       <h2 className="goal-indicator__title">goal indicator</h2>
-      <div className="goal-indicator-circle" style={{ background }} onClick={handleCircleClick}>
+      <div
+        className="goal-indicator-circle"
+        style={{ background, cursor }}
+        onClick={handleCircleClick}
+      >
         <GiTrophyCup className="goal-indicator__icon" />
       </div>
       <strong className="goal-indicator__text">

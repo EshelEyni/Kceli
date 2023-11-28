@@ -36,7 +36,12 @@ const goalSchema = new Schema<IGoal>(
     },
     description: {
       type: String,
-      required: [true, "Please provide a description"],
+    },
+    userWeightLossGoal: {
+      type: {
+        startingWeight: { type: Number },
+        weightGoal: { type: Number },
+      },
     },
     isCompleted: {
       type: Boolean,
@@ -48,6 +53,22 @@ const goalSchema = new Schema<IGoal>(
 
 goalSchema.pre("save", async function (next) {
   this._id = new mongoose.Types.ObjectId();
+  next();
+});
+
+goalSchema.pre("validate", async function (next) {
+  if (this.type === "user") {
+    if (!this.userWeightLossGoal) {
+      next(new Error("Please provide a userWeightLossGoal"));
+    } else {
+      if (!this.userWeightLossGoal.startingWeight) {
+        next(new Error("Please provide a startingWeight"));
+      }
+      if (!this.userWeightLossGoal.weightGoal) {
+        next(new Error("Please provide a weightGoal"));
+      }
+    }
+  }
   next();
 });
 
