@@ -42,7 +42,7 @@ app.use(
 
 // cors
 if (isProdEnv) {
-  app.use(express.static(path.resolve(__dirname, "public")));
+  app.use(express.static(path.join(path.resolve(), "build", "public")));
 } else {
   const corsOptions = {
     origin: ["http://127.0.0.1:5173", "http://localhost:5173", " http://10.0.0.5:5173"],
@@ -68,7 +68,7 @@ app.use("/api/intake", intakeRouter);
 app.use("/api/goal", goalRouter);
 
 app.get("/**", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(path.resolve(), "build", "public", "index.html"));
 });
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

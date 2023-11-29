@@ -1,3 +1,4 @@
+/// <reference types="jest" />
 import mongoose from "mongoose";
 import { User, UserCredenitials } from "../../../../shared/types/user";
 import { FavoriteIntake, IntakeItem, NewIntake, NewIntakeItem } from "../../../../shared/types/intake";

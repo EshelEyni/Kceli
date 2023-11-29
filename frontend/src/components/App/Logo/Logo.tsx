@@ -1,4 +1,4 @@
-import img from "/assets/images/android-chrome-512x512.png";
+import img from "/assets/images/pwa-512x512.png";
 import { useNavigate } from "react-router-dom";
 import "./Logo.scss";
 
