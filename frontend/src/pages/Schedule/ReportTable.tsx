@@ -270,7 +270,6 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) 
         <tbody>
           {tableData.map((d, i) => {
             const isPerc = d.label === "excess percentage";
-            console.log(d);
             return (
               <tr key={i}>
                 <td>{d.label}</td>
