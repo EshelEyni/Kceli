@@ -11,23 +11,25 @@ type ReportTableProps = {
   prevData: DayData[];
 };
 
+type TableData = {
+  [key: string]: {
+    label: string;
+    curr: number;
+    prev: number;
+    trend: {
+      value: number;
+      positive: "up" | "down";
+    };
+  };
+};
+
 export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) => {
   const tableData = getTableData();
 
   function getTableData() {
     if (!currData.length || !prevData?.length) return;
 
-    const tableData: {
-      [key: string]: {
-        label: string;
-        curr: number;
-        prev: number;
-        trend: {
-          value: number;
-          positive: "up" | "down";
-        };
-      };
-    } = {
+    const tableData: TableData = {
       documentedDay: {
         label: "documented days",
         curr: 0,
@@ -84,6 +86,15 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) 
       },
       exceededDays: {
         label: "exceeded days",
+        curr: 0,
+        prev: 0,
+        trend: {
+          value: 0,
+          positive: "down",
+        },
+      },
+      excessPercentage: {
+        label: "excess percentage",
         curr: 0,
         prev: 0,
         trend: {
@@ -148,6 +159,17 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) 
     }).length;
 
     tableData.exceededDays.trend.value = tableData.exceededDays.curr - tableData.exceededDays.prev;
+
+    tableData.excessPercentage.curr = Math.round(
+      (tableData.exceededDays.curr / currData.length) * 100
+    );
+
+    tableData.excessPercentage.prev = Math.round(
+      (tableData.exceededDays.prev / prevData.length) * 100
+    );
+
+    tableData.excessPercentage.trend.value =
+      tableData.excessPercentage.curr - tableData.excessPercentage.prev;
 
     tableData.averageIntakesPerDay.curr = Math.round(
       currData.reduce((acc, curr) => {
@@ -246,14 +268,24 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) 
           </tr>
         </thead>
         <tbody>
-          {tableData.map((d, i) => (
-            <tr key={i}>
-              <td>{d.label}</td>
-              <td>{d.prev}</td>
-              <td>{d.curr}</td>
-              <td>{renderTrend({ trend: d.trend.value, positive: d.trend.positive })}</td>
-            </tr>
-          ))}
+          {tableData.map((d, i) => {
+            const isPerc = d.label === "excess percentage";
+            console.log(d);
+            return (
+              <tr key={i}>
+                <td>{d.label}</td>
+                <td>
+                  {d.prev}
+                  {isPerc ? "%" : ""}
+                </td>
+                <td>
+                  {d.curr}
+                  {isPerc ? "%" : ""}
+                </td>
+                <td>{renderTrend({ trend: d.trend.value, positive: d.trend.positive })}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

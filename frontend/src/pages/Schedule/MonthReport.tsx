@@ -83,7 +83,7 @@ export const MonthReport: FC = () => {
   return (
     <section className="report month-report">
       <Header className="month-report__header">
-        <h1>weekly report</h1>
+        <h1>monthly report</h1>
         <h3>{secondaryTitle}</h3>
       </Header>
       <ReportTable type="month" currData={currData} prevData={prevData} />
