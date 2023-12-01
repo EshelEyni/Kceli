@@ -9,11 +9,22 @@ export default defineConfig({
     react(),
     svgr(),
     VitePWA({
+      injectRegister: "auto",
       registerType: "autoUpdate",
+      strategies: "generateSW",
       devOptions: {
         enabled: true,
+        navigateFallbackAllowlist: [/^index.html$/],
       },
-      includeAssets: ["favicon.svg", "favicon.ico", "robots.txt", "apple-touch-icon.png"],
+      includeAssets: [
+        "favicon.svg",
+        "favicon.ico",
+        "robots.txt",
+        "apple-touch-icon.png",
+        "assets/sounds/*.mp3",
+        "assets/images/*.png",
+        "assets/fonts/**/*.ttf",
+      ],
       manifest: {
         name: "Kceli",
         short_name: "Kceli",
@@ -25,7 +36,6 @@ export default defineConfig({
         description: "Kceli is a web app that helps you to watch your nutrition and health",
         dir: "ltr",
         orientation: "portrait-primary",
-        publicPath: "/",
         icons: [
           {
             src: "/assets/images/pwa-48x48.png",
@@ -58,6 +68,30 @@ export default defineConfig({
             type: "image/png",
           },
         ],
+      },
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: /\/api\/.*/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24,
+              },
+              networkTimeoutSeconds: 10,
+            },
+          },
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|tiff|ttf|woff|woff2|eot)$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "static-resources",
+            },
+          },
+        ],
+        navigateFallback: "/offline.html",
       },
     }),
   ],

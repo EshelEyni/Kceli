@@ -26,6 +26,7 @@ export const Timer: FC = () => {
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
   function handleToggleIsRunningBtnClick() {
+    if (time <= 0) return;
     setIsRunning(prev => !prev);
   }
 
@@ -48,6 +49,7 @@ export const Timer: FC = () => {
         setTime(prevTime => {
           if (prevTime >= 0) return prevTime - 0.01;
           setIsRunning(false);
+          sound.volume = 0.5;
           sound.play();
           clearInterval(id);
           return 0;

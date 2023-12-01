@@ -85,7 +85,7 @@ dailyDataSchema.pre("save", async function (next) {
     "workouts.items": { $not: { $elemMatch: { isStarted: true } } },
   }).select("workouts");
 
-  if (lastUncompletedWorkout) {
+  if (lastUncompletedWorkout && lastUncompletedWorkout.workouts.length > 0) {
     const workouts =
       lastUncompletedWorkout?.workouts.map(workout => {
         workout.items = workout.items.map(item => {

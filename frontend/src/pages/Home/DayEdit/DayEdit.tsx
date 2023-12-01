@@ -16,8 +16,8 @@ import { DayWorkouts } from "./DayWorkouts";
 export const DayEdit: FC = () => {
   const { dailyData, isLoading, isSuccess, isError, openedTab, backgroundColor, color } =
     useDayEdit();
+
   const showContent = isSuccess && dailyData && !isLoading;
-  const isLoaderShown = isLoading;
   const isListShown =
     openedTab === DayEditTab.IntakeList || openedTab === DayEditTab.UnRecordedIntakeList;
 
@@ -27,7 +27,7 @@ export const DayEdit: FC = () => {
       style={{ backgroundColor, color, border: `5px solid ${backgroundColor}` }}
       data-testid="day-edit"
     >
-      {isLoaderShown && <SpinnerLoader />}
+      {isLoading && <SpinnerLoader />}
       {isError && <ErrorMsg />}
       {showContent && (
         <>

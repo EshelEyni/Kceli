@@ -15,8 +15,8 @@ export function useOutsideClick<T extends HTMLElement>(
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const currId = (e?.target as any)?.id;
-      console.log("currId", e?.target);
       if (execludedElementIds.includes(currId)) return;
       if (ref.current && !ref.current.contains(e.target as Node)) handler();
     }
