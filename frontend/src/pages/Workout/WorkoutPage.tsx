@@ -8,12 +8,25 @@ import { WorkoutSchedule } from "./WorkoutSchedule/WorkoutSchedule";
 import { WorkoutList } from "./WorkoutList/WorkoutList";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { updateLoggedInUser } from "../../store/slices/authSlice";
-import { AppDispatch } from "../../types/app";
+import { AppDispatch, Goal } from "../../types/app";
 import { useDispatch } from "react-redux";
+import { GoalEdit } from "../../components/GoalEdit/GoalEdit";
+import { AsyncList } from "../../components/App/AsyncList/AsyncList";
+import { GoalDisplay } from "../Schedule/GoalDisplay";
 
 const WorkoutPage: FC = () => {
-  const { createWorkout, isLoadingCreateWorkout, loggedInUser, workouts, setWorkoutSchedule } =
-    useWorkouts();
+  const {
+    createWorkout,
+    isLoadingCreateWorkout,
+    loggedInUser,
+    workouts,
+    setWorkoutSchedule,
+    goals,
+    isLoadingGoals,
+    isSuccessGoals,
+    isErrorGoals,
+    isEmptyGoals,
+  } = useWorkouts();
   const dispatch: AppDispatch = useDispatch();
 
   function handleCreateWorkoutBtn() {
@@ -87,6 +100,19 @@ const WorkoutPage: FC = () => {
         <Button className="btn workout-page__btn" onClickFn={handleCreateWorkoutBtn}>
           add new workout
         </Button>
+        <div className="workout-page__goals">
+          <GoalEdit type="workout" />
+          <AsyncList
+            className="workout-page__goals__list"
+            items={goals as Goal[]}
+            render={goal => <GoalDisplay goal={goal} key={goal.id} isEditEnabled={true} />}
+            isLoading={isLoadingGoals}
+            isError={isErrorGoals}
+            isSuccess={isSuccessGoals}
+            isEmpty={isEmptyGoals}
+            entityName="goal"
+          />
+        </div>
         {isLoadingCreateWorkout ? <SpinnerLoader /> : <WorkoutList />}
       </DragDropContext>
     </main>

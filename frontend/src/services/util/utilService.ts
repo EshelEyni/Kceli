@@ -77,7 +77,7 @@ function _calculateTimeDifference(dateStr: string): [number, number, number, num
   const difference = now - timestamp;
   const seconds = Math.floor(difference / 1000);
   const minutes = Math.floor(seconds / SECONDS_IN_MINUTE);
-  const hours = Math.floor(minutes / MINUTES_IN_HOUR);
+  const hours = Math.floor((minutes / MINUTES_IN_HOUR) * 10) / 10;
   const days = Math.floor(hours / HOURS_IN_DAY);
   return [seconds, minutes, hours, days];
 }
@@ -230,6 +230,17 @@ const CHART_COLORS = [
   "#33FFA1",
   "#A133FF",
 ];
+function getTimeCount(time: number) {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  const fractions = Math.floor((time % 1) * 100);
+
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = seconds.toString().padStart(2, "0");
+  const formattedFractions = fractions.toString().padStart(2, "0").slice(-2);
+
+  return `${formattedMinutes}:${formattedSeconds}.${formattedFractions}`;
+}
 
 export {
   getCleanTime,
@@ -254,4 +265,5 @@ export {
   MINUTE_IN_MS,
   capitializeFirstLetter,
   CHART_COLORS,
+  getTimeCount,
 };

@@ -12,10 +12,6 @@ export default defineConfig({
       injectRegister: "auto",
       registerType: "autoUpdate",
       strategies: "generateSW",
-      devOptions: {
-        enabled: true,
-        navigateFallbackAllowlist: [/^index.html$/],
-      },
       includeAssets: [
         "favicon.svg",
         "favicon.ico",

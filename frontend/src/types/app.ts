@@ -94,7 +94,7 @@ export interface UserGoal extends BaseGoal {
 }
 
 export interface TimeGoal extends BaseGoal {
-  type: "week" | "month";
+  type: "week" | "month" | "day" | "workout";
 }
 
 export type Goal = UserGoal | TimeGoal;

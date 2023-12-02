@@ -12,6 +12,8 @@ import { NutritionQuery } from "./NutritionQuery";
 import { WaterEdit } from "./WaterEdit";
 import { FavoriteIntakes } from "./FavoriteIntakes";
 import { DayWorkouts } from "./DayWorkouts";
+import { DayGoals } from "./DayGoals";
+import { HungerMeter } from "./HungerMeter";
 
 export const DayEdit: FC = () => {
   const { dailyData, isLoading, isSuccess, isError, openedTab, backgroundColor, color } =
@@ -40,6 +42,8 @@ export const DayEdit: FC = () => {
           {isListShown && <IntakeList />}
           {openedTab === DayEditTab.Query && <NutritionQuery />}
           {openedTab === DayEditTab.Water && <WaterEdit />}
+          {openedTab === DayEditTab.Goals && <DayGoals />}
+          {openedTab === DayEditTab.HungerMeter && <HungerMeter />}
         </>
       )}
     </section>

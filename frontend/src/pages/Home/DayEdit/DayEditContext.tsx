@@ -9,10 +9,11 @@ import intakeUtilService from "../../../services/intake/intakeUtilService";
 import { useAuth } from "../../../hooks/useAuth";
 import waterConsumptionService from "../../../services/waterConsumption/waterConsumptionService";
 import nutritionUtilService from "../../../services/nutrition/nutritionUtilService";
-import { NutritionQueryState } from "../../../types/app";
+import { Goal, NutritionQueryState } from "../../../types/app";
 import { useGetUserFavoriteIntakes } from "../../../hooks/useGetUserFavoriteIntakes";
 import { useSearchParams } from "react-router-dom";
 import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
+import { useGetGoals } from "../../../hooks/useGetGoals";
 
 export type DayEditContextType = {
   dailyData: DayData | undefined;
@@ -56,6 +57,11 @@ export type DayEditContextType = {
   backgroundColor: string;
   color: string;
   btnStyle: React.CSSProperties;
+  goals: Goal[] | undefined;
+  isLoadingGoals: boolean;
+  isSuccessGoals: boolean;
+  isErrorGoals: boolean;
+  isEmptyGoals: boolean;
 };
 
 export enum DayEditTab {
@@ -67,6 +73,8 @@ export enum DayEditTab {
   WeightWaistInput = "WeightWaistInput",
   Workouts = "Workouts",
   Query = "Query",
+  Goals = "Goals",
+  HungerMeter = "HungerMeter",
 }
 
 const DayEditContext = createContext<DayEditContextType | undefined>(undefined);
@@ -75,6 +83,13 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
   const { loggedInUser } = useAuth();
   const { dailyData, isLoading, isSuccess, isError } = useGetTodayData();
   const { updateDailyData, isLoading: isLoadingUpdate } = useUpdateTodayData();
+  const {
+    goals,
+    isLoading: isLoadingGoals,
+    isSuccess: isSuccessGoals,
+    isError: isErrorGoals,
+    isEmpty: isEmptyGoals,
+  } = useGetGoals(getDayGoalsQueryStr());
   const { backgroundColor, color } = useGetColorByCalories();
   const btnStyle = { color, border: `1px solid ${color}` };
   const {
@@ -124,6 +139,16 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     dailyData
   );
 
+  function getDayGoalsQueryStr() {
+    if (!dailyData) return "";
+    const start = new Date(dailyData.date);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(dailyData.date);
+    end.setHours(23, 59, 59, 999);
+    const queryStr = `?type=day&date[gte]=${start.toISOString()}&date[lte]=${end.toISOString()}`;
+    return queryStr;
+  }
+
   useEffect(() => {
     if (!isSuccess || !dailyData || !!dailyData?.weight || dailyData?.isWeightWaistIgnored) return;
     setOpenedTab(DayEditTab.WeightWaistInput);
@@ -169,6 +194,11 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     backgroundColor,
     color,
     btnStyle,
+    goals,
+    isLoadingGoals,
+    isSuccessGoals,
+    isErrorGoals,
+    isEmptyGoals,
   };
 
   return <DayEditContext.Provider value={value}>{children}</DayEditContext.Provider>;

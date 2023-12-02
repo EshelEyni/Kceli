@@ -48,6 +48,14 @@ export const DayEditFilter: FC = () => {
       name: "query",
       value: DayEditTab.Query,
     },
+    {
+      name: "goals",
+      value: DayEditTab.Goals,
+    },
+    {
+      name: "h-meter",
+      value: DayEditTab.HungerMeter,
+    },
   ];
 
   return (

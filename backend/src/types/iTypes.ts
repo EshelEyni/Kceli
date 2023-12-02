@@ -45,8 +45,14 @@ export interface IDailyData extends Document {
   isWeightWaistIgnored?: boolean;
   totalDailyEnergyExpenditure?: number;
   targetCaloricIntake?: number;
+  hungerEvents: IHungerEvent[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IHungerEvent {
+  date: Date;
+  level: number;
 }
 
 export interface IIntake extends Document {
@@ -100,7 +106,7 @@ export interface IWorkout extends Document {
 
 export interface IGoal extends Document {
   userId: mongoose.Types.ObjectId;
-  type: "user" | "week" | "month";
+  type: "user" | "week" | "month" | "day" | "workout";
   date: Date;
   description: string;
   userWeightLossGoal: WeightLossGoal;

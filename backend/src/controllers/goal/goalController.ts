@@ -29,7 +29,6 @@ const createGoal = asyncErrorCatcher(async (req: Request, res: Response) => {
   const doc = await GoalModel.create({
     ...req.body,
     userId: loggedInUserId,
-    date: new Date(),
   });
 
   res.status(201).send({

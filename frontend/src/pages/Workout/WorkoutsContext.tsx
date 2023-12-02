@@ -6,8 +6,9 @@ import { useGetWorkouts } from "../../hooks/useGetWorkouts";
 import { useCreateWorkout } from "../../hooks/useCreateWorkout";
 import { useDeleteWorkout } from "../../hooks/useDeleteWorkout";
 import { useAuth } from "../../hooks/useAuth";
-import { UserOrNull } from "../../types/app";
+import { Goal, UserOrNull } from "../../types/app";
 import { WorkoutDay } from "../../../../shared/types/user";
+import { useGetGoals } from "../../hooks/useGetGoals";
 
 type WorkoutsContextType = {
   loggedInUser: UserOrNull;
@@ -23,6 +24,11 @@ type WorkoutsContextType = {
   isLoadingRemove: boolean;
   workoutSchedule: WorkoutDay[] | undefined;
   setWorkoutSchedule: React.Dispatch<React.SetStateAction<WorkoutDay[] | undefined>>;
+  goals: Goal[] | undefined;
+  isLoadingGoals: boolean;
+  isSuccessGoals: boolean;
+  isErrorGoals: boolean;
+  isEmptyGoals: boolean;
 };
 
 const WorkoutsContext = createContext<WorkoutsContextType | undefined>(undefined);
@@ -32,6 +38,13 @@ function WorkoutsProvider({ children }: { children: React.ReactNode }) {
   const { workouts, isLoading, isSuccess, isError, isEmpty } = useGetWorkouts();
   const { createWorkout, isLoading: isLoadingCreateWorkout } = useCreateWorkout();
   const { removeWorkout, isLoading: isLoadingRemove } = useDeleteWorkout();
+  const {
+    goals,
+    isLoading: isLoadingGoals,
+    isSuccess: isSuccessGoals,
+    isError: isErrorGoals,
+    isEmpty: isEmptyGoals,
+  } = useGetGoals(loggedInUser ? `?type=workout&userId=${loggedInUser.id}` : "");
   const [workoutSchedule, setWorkoutSchedule] = useState<WorkoutDay[] | undefined>(
     loggedInUser?.workoutSchedule
   );
@@ -57,6 +70,11 @@ function WorkoutsProvider({ children }: { children: React.ReactNode }) {
     isLoadingRemove,
     workoutSchedule,
     setWorkoutSchedule,
+    goals,
+    isLoadingGoals,
+    isSuccessGoals,
+    isErrorGoals,
+    isEmptyGoals,
   };
   return <WorkoutsContext.Provider value={value}>{children}</WorkoutsContext.Provider>;
 }

@@ -10,11 +10,12 @@ import { useAddGoal } from "../../hooks/useAddGoal";
 type GoalEditProps = {
   type: Goal["type"];
   setIsGoalEditing?: React.Dispatch<React.SetStateAction<boolean>>;
+  date?: Date;
 };
 
-export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing }) => {
+export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing, date }) => {
   const { addGoal, isLoading } = useAddGoal();
-  const [goal, setGoal] = useState<Goal>(goalUtilService.getDefaultGoal(type));
+  const [goal, setGoal] = useState<Goal>(goalUtilService.getDefaultGoal({ type, date }));
 
   function handleDescInputChanged(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -37,7 +38,7 @@ export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing }) => {
 
   function handleAddGoal() {
     addGoal(goal);
-    setGoal(goalUtilService.getDefaultGoal(type));
+    setGoal(goalUtilService.getDefaultGoal({ type, date }));
     setIsGoalEditing?.(false);
   }
 

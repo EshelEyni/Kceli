@@ -1,10 +1,40 @@
 import { Document, Schema, model } from "mongoose";
 import { intakeSchema } from "../intake/intakeModel";
-import { IDailyData } from "../../types/iTypes";
+import { IDailyData, IHungerEvent } from "../../types/iTypes";
 import calorieService from "../../services/calorie/calorieService";
 import { UserModel } from "../user/userModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
 import { workoutSchema } from "../workout/workoutModel";
+
+const hungerEventSchema = new Schema<IHungerEvent>(
+  {
+    date: {
+      type: Date,
+      default: new Date(),
+    },
+    level: {
+      type: Number,
+      min: 1,
+      max: 5,
+    },
+  },
+  {
+    toObject: {
+      virtuals: true,
+      transform: (_: Document, ret: Record<string, unknown>) => {
+        delete ret._id;
+        return ret;
+      },
+    },
+    toJSON: {
+      virtuals: true,
+      transform: (_: Document, ret: Record<string, unknown>) => {
+        delete ret._id;
+        return ret;
+      },
+    },
+  }
+);
 
 const dailyDataSchema = new Schema<IDailyData>(
   {
@@ -40,6 +70,10 @@ const dailyDataSchema = new Schema<IDailyData>(
     },
     workouts: {
       type: [workoutSchema],
+      default: [],
+    },
+    hungerEvents: {
+      type: [hungerEventSchema],
       default: [],
     },
   },

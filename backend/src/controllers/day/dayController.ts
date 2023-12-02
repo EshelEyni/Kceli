@@ -85,6 +85,7 @@ const updateDay = updateOne(DailyDataModel, [
   "waist",
   "workouts",
   "isWeightWaistIgnored",
+  "hungerEvents",
 ]);
 
 const removeDay = deleteOne(DailyDataModel);

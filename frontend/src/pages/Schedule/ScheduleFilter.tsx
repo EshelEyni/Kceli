@@ -6,8 +6,16 @@ import "./ScheduleFilter.scss";
 import { useSchedule } from "./ScheduleContext";
 
 export const ScheduleFilter: FC = () => {
-  const { isSuccess, filterBy, setFilterBy, currDay, setCurrDays, getWeekDays, getMonthDays } =
-    useSchedule();
+  const {
+    isSuccess,
+    filterBy,
+    setFilterBy,
+    currDay,
+    setCurrDays,
+    getWeekDays,
+    getMonthDays,
+    setQueryParams,
+  } = useSchedule();
 
   function onSetFilter(filterBy: ScheduleGridFilter) {
     if (!isSuccess) return;
@@ -33,6 +41,7 @@ export const ScheduleFilter: FC = () => {
         break;
     }
     setFilterBy(filterBy);
+    setQueryParams({ key: "filterBy", value: filterBy });
   }
 
   return (

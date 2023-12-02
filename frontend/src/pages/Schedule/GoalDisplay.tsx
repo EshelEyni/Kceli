@@ -1,28 +1,24 @@
 import { FC, useState, useEffect } from "react";
 import { Goal } from "../../types/app";
 import { Checkbox } from "../../components/App/Checkbox/Checkbox";
-import { useSchedule } from "./ScheduleContext";
-import "./GoalDisplay.scss";
 import { FaXmark, FaCheck, FaTrashCan } from "react-icons/fa6";
 import { Button } from "../../components/App/Button/Button";
+import { useDeleteGoal } from "../../hooks/useDeleteGoal";
+import { useUpdateGoal } from "../../hooks/useUpdateGoal";
+import "./GoalDisplay.scss";
 
 type WeekGoalDisplayProps = {
   goal: Goal;
-  type: "week" | "month";
+  isEditEnabled: boolean;
 };
 
-export const GoalDisplay: FC<WeekGoalDisplayProps> = ({ goal, type }) => {
-  const { updateGoal, isWeekGoalsEditEnabled, isMonthGoalsEditEnabled, deleteGoal } = useSchedule();
+export const GoalDisplay: FC<WeekGoalDisplayProps> = ({ goal, isEditEnabled }) => {
+  const { updateGoal } = useUpdateGoal();
+  const { deleteGoal } = useDeleteGoal();
   const [isEdit, setIsEdit] = useState(false);
   const [desc, setDesc] = useState(goal.description);
-  const isEditEnabled = getIsEditEnabled();
   let lastTap = 0;
 
-  function getIsEditEnabled() {
-    if (type === "week") return isWeekGoalsEditEnabled;
-    if (type === "month") return isMonthGoalsEditEnabled;
-    return false;
-  }
   function handleCheckboxClicked() {
     if (!isEditEnabled) return;
     updateGoal({ ...goal, isCompleted: !goal.isCompleted });

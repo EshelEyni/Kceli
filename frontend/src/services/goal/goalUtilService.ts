@@ -1,14 +1,19 @@
 import { Goal, TimeGoal, UserGoal } from "../../types/app";
 import { createId } from "../util/utilService";
 
-function getDefaultGoal(type: Goal["type"]): Goal {
+type GetDefaultGoal = {
+  type: Goal["type"];
+  date?: Date;
+};
+
+function getDefaultGoal({ type, date = new Date() }: GetDefaultGoal): Goal {
   const basicGoal = {
     id: createId(),
     userId: "",
     description: "",
     type,
     isCompleted: false,
-    date: new Date(),
+    date,
   };
 
   if (type !== "user") return { ...basicGoal, type } as TimeGoal;

@@ -10,24 +10,22 @@ import { CaloriesBar } from "./CaloriesBar";
 import { Goals } from "./Goals";
 import { Header } from "../../components/App/Header/Header";
 import { ReportDayData } from "../../types/app";
+import { Empty } from "../../components/App/Empty/Empty";
 
 export const WeekReport: FC = () => {
-  const { currDays, data } = useSchedule();
-
-  if (currDays.every(d => !d.data) || !data)
-    return (
-      <section className="report week-report">
-        <p>No data for this week</p>
-      </section>
-    );
-
+  const { currDays, data, currDay } = useSchedule();
   const secondaryTitle = getTitle();
-  const currWeekData = currDays.map(d => d.data).filter(d => !!d) as DayData[];
+  const currWeekData = currDays.reduce((acc, curr) => {
+    if (!curr.data) return acc;
+    return [...acc, curr.data];
+  }, [] as DayData[]);
+
   const prevWeekData = getPrevWeekData();
   const weightWaistData = getWeightWaistData();
   const calorieData = getCalorieData();
 
   function getTitle() {
+    if (currDays.length === 0) return "";
     const firstDayDate = currDays[0].date.toLocaleString("en-GB", {
       year: "2-digit",
       month: "short",
@@ -42,7 +40,7 @@ export const WeekReport: FC = () => {
   }
 
   function getWeightWaistData() {
-    if (!currWeekData) return null;
+    if (!currWeekData.length) return null;
     const weightWaistData = currWeekData.reduce((acc, curr) => {
       if (!curr.weight || !curr.waist) return acc;
       return [...acc, { weight: curr.weight, waist: curr.waist, date: curr.date }];
@@ -51,7 +49,7 @@ export const WeekReport: FC = () => {
   }
 
   function getCalorieData() {
-    if (!currWeekData) return null;
+    if (!currWeekData.length) return null;
     const calorieData = currWeekData.map(d => {
       const remainingCalories = calorieUtilService.calcRemainingCaloriesFromDayData(d);
       const excessCalories = remainingCalories < 0 ? Math.abs(remainingCalories) : 0;
@@ -87,14 +85,18 @@ export const WeekReport: FC = () => {
         <h3>{secondaryTitle}</h3>
       </Header>
       <ReportTable type="week" currData={currWeekData} prevData={prevWeekData} />
-      <Goals type="week" />
+      <Goals type="week" currDate={currDay?.date} />
       {weightWaistData && <WeightWaistChart data={weightWaistData} />}
       {calorieData && <CaloriesBar data={calorieData} />}
-      <div className="week-report-day-display-container">
-        {currDays.map((d, i) => (
-          <WeekReportDayDisplay key={d.id || i} calenderDay={d} />
-        ))}
-      </div>
+      {data ? (
+        <div className="week-report-day-display-container">
+          {currDays.map((d, i) => (
+            <WeekReportDayDisplay key={d.id || i} calenderDay={d} />
+          ))}
+        </div>
+      ) : (
+        <Empty entityName="data" />
+      )}
     </section>
   );
 };

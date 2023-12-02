@@ -4,11 +4,13 @@ import workoutUtilService from "../../services/workout/workoutUtilService";
 import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
 import { DayData } from "../../../../shared/types/dayData";
 import "./ReportTable.scss";
+import { Goal } from "../../types/app";
 
 type ReportTableProps = {
   type: "week" | "month";
   currData: DayData[];
   prevData: DayData[];
+  goals?: Goal[];
 };
 
 type TableData = {
@@ -23,7 +25,7 @@ type TableData = {
   };
 };
 
-export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) => {
+export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData, goals }) => {
   const tableData = getTableData();
 
   function getTableData() {
@@ -94,7 +96,7 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) 
         },
       },
       excessPercentage: {
-        label: "excess percentage",
+        label: "excess percentage (days)",
         curr: 0,
         prev: 0,
         trend: {
@@ -242,6 +244,45 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) 
     tableData.averageWeight.trend.value =
       tableData.averageWeight.curr - tableData.averageWeight.prev;
 
+    if (!goals || !goals.length) return Object.values(tableData);
+    const prevMonth = new Date(prevData[0].date).getMonth();
+    const currMonth = new Date(currData[0].date).getMonth();
+    const prevGoals = goals.filter(g => new Date(g.date).getMonth() === prevMonth);
+    const currGoals = goals.filter(g => new Date(g.date).getMonth() === currMonth);
+    tableData.totalGoals = {
+      label: "total goals",
+      curr: 0,
+      prev: 0,
+      trend: {
+        value: 0,
+        positive: "up",
+      },
+    };
+
+    tableData.totalGoals.curr = currGoals.length;
+    tableData.totalGoals.prev = prevGoals.length;
+
+    tableData.completedGoalsPerc = {
+      label: "completed goals percentage",
+      curr: 0,
+      prev: 0,
+      trend: {
+        value: 0,
+        positive: "up",
+      },
+    };
+
+    tableData.completedGoalsPerc.curr = currGoals.length
+      ? Math.round((currGoals.filter(g => g.isCompleted).length / currGoals.length) * 100)
+      : 0;
+
+    tableData.completedGoalsPerc.prev = prevGoals.length
+      ? Math.round((prevGoals.filter(g => g.isCompleted).length / prevGoals.length) * 100)
+      : 0;
+
+    tableData.completedGoalsPerc.trend.value =
+      tableData.completedGoalsPerc.curr - tableData.completedGoalsPerc.prev;
+
     return Object.values(tableData);
   }
 
@@ -269,7 +310,8 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData }) 
         </thead>
         <tbody>
           {tableData.map((d, i) => {
-            const isPerc = d.label === "excess percentage";
+            const isPerc =
+              d.label === "excess percentage (days)" || d.label === "completed goals percentage";
             return (
               <tr key={i}>
                 <td>{d.label}</td>

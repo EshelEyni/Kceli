@@ -18,6 +18,7 @@ export const Calender: FC = () => {
     moveToMonth,
     getWeekDays,
     getMonthDays,
+    setQueryParams,
   } = useSchedule();
   const [isShiftClicked, setIsShiftClicked] = useState<boolean>(false);
 
@@ -29,6 +30,7 @@ export const Calender: FC = () => {
       case ScheduleGridFilter.Day: {
         if (!isShiftClicked) {
           setCurrDay(day);
+          setQueryParams({ key: "date", value: day.date });
           setCurrDays([]);
           return;
         }
@@ -41,6 +43,7 @@ export const Calender: FC = () => {
         for (let i = startIndex; i <= endIndex; i++) updatedCurrDays.push(calenderDays[i]);
         setCurrDays(updatedCurrDays);
         setCurrDay(day);
+        setQueryParams({ key: "date", value: day.date });
         break;
       }
       case ScheduleGridFilter.Week: {
@@ -48,6 +51,7 @@ export const Calender: FC = () => {
         if (!weekDays) return;
         setCurrDays(weekDays);
         setCurrDay(day);
+        setQueryParams({ key: "date", value: day.date });
         break;
       }
       case ScheduleGridFilter.Month: {
@@ -55,6 +59,7 @@ export const Calender: FC = () => {
         if (!monthDays) return;
         setCurrDays(monthDays);
         setCurrDay(day);
+        setQueryParams({ key: "date", value: day.date });
         break;
       }
       default:

@@ -23,12 +23,15 @@ const SchedulePage: FC = () => {
     currDay,
     setCurrDay,
     currDays,
+    setCurrDays,
     filterBy,
     calenderDays,
     isLoading,
     isSuccess,
     isError,
     moveToMonth,
+    getWeekDays,
+    getMonthDays,
   } = useSchedule();
 
   const isDayReportShown = !!currDay && filterBy === ScheduleGridFilter.Day;
@@ -36,10 +39,36 @@ const SchedulePage: FC = () => {
 
   useEffect(() => {
     if (!isSuccess || !!currDay) return;
-    const today = new Date();
+    const today = currDate;
     const todayDay = calenderDays.find(d => isSameDay(d.date, today));
-    if (todayDay) setCurrDay(todayDay);
-  }, [calenderDays, isSuccess, currDay, currDays, setCurrDay]);
+    if (!todayDay) return;
+    setCurrDay(todayDay);
+    if (filterBy === ScheduleGridFilter.Day) return;
+    if (filterBy === ScheduleGridFilter.Week) {
+      const weekDays = getWeekDays(todayDay);
+      if (!weekDays) return;
+      setCurrDays(weekDays);
+      return;
+    }
+
+    if (filterBy === ScheduleGridFilter.Month) {
+      const monthDays = getMonthDays(todayDay);
+      if (!monthDays) return;
+      setCurrDays(monthDays);
+      return;
+    }
+  }, [
+    calenderDays,
+    isSuccess,
+    currDay,
+    currDays,
+    setCurrDay,
+    currDate,
+    filterBy,
+    setCurrDays,
+    getWeekDays,
+    getMonthDays,
+  ]);
 
   return (
     <main className="page schedule-page">

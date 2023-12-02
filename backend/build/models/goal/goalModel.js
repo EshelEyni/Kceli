@@ -61,7 +61,7 @@ const goalSchema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        enum: ["user", "week", "month"],
+        enum: ["user", "week", "month", "day", "workout"],
         required: [true, "Please provide a type"],
     },
     description: {

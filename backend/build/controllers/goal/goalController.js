@@ -39,7 +39,7 @@ exports.getUserGoal = getUserGoal;
 const createGoal = (0, errorService_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const loggedInUserId = (0, ALSService_1.getLoggedInUserIdFromReq)();
     (0, utilService_1.validateIds)({ id: loggedInUserId, entityName: "loggedInUser" });
-    const doc = yield goalModel_1.default.create(Object.assign(Object.assign({}, req.body), { userId: loggedInUserId, date: new Date() }));
+    const doc = yield goalModel_1.default.create(Object.assign(Object.assign({}, req.body), { userId: loggedInUserId }));
     res.status(201).send({
         status: "success",
         data: doc,

@@ -87,6 +87,7 @@ const updateDay = (0, factoryService_1.updateOne)(dailyDataModel_1.DailyDataMode
     "waist",
     "workouts",
     "isWeightWaistIgnored",
+    "hungerEvents",
 ]);
 exports.updateDay = updateDay;
 const removeDay = (0, factoryService_1.deleteOne)(dailyDataModel_1.DailyDataModel);

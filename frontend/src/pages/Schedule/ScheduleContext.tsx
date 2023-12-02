@@ -3,9 +3,7 @@ import { useGetCalenderData } from "../../hooks/useGetCalenderData";
 import { CalenderDay, Goal, ScheduleGridFilter } from "../../types/app";
 import { DayData } from "../../../../shared/types/dayData";
 import { useGetGoals } from "../../hooks/useGetGoals";
-import { useUpdateGoal } from "../../hooks/useUpdateGoal";
-import { UseMutateFunction } from "@tanstack/react-query";
-import { useDeleteGoal } from "../../hooks/useDeleteGoal";
+import { useSearchParams } from "react-router-dom";
 
 type ScheduleContextType = {
   currDate: Date;
@@ -33,21 +31,25 @@ type ScheduleContextType = {
   isMonthGoalsSuccess: boolean;
   isMonthGoalsError: boolean;
   isMonthGoalsEmpty: boolean;
-  updateGoal: UseMutateFunction<Goal, unknown, Partial<Goal>, unknown>;
-  isUpdateGoalLoading: boolean;
   isWeekGoalsEditEnabled: boolean;
   isMonthGoalsEditEnabled: boolean;
-  deleteGoal: UseMutateFunction<void, unknown, string, unknown>;
-  isDeleteGoalLoading: boolean;
+  monthWeekGoals: Goal[] | undefined;
+  setQueryParams: ({ key, value }: SetQueryParamsParam) => void;
 };
+
+type SetQueryParamsParam = { key: string; value: Date | string };
 
 const ScheduleContext = createContext<ScheduleContextType | undefined>(undefined);
 
 function ScheduleProvider({ children }: { children: React.ReactNode }) {
-  const [currDate, setCurrDate] = useState<Date>(new Date());
+  const [searchParam, setSearchParam] = useSearchParams();
+  const params = { date: searchParam.get("date"), filterBy: searchParam.get("filterBy") };
+  const [currDate, setCurrDate] = useState<Date>(params.date ? new Date(params.date) : new Date());
   const [currDay, setCurrDay] = useState<CalenderDay | null>(null);
   const [currDays, setCurrDays] = useState<CalenderDay[]>([]);
-  const [filterBy, setFilterBy] = useState<ScheduleGridFilter>(ScheduleGridFilter.Day);
+  const [filterBy, setFilterBy] = useState<ScheduleGridFilter>(
+    params.filterBy ? (params.filterBy as ScheduleGridFilter) : ScheduleGridFilter.Day
+  );
   const { calenderDays, data, isLoading, isSuccess, isError } = useGetCalenderData(currDate);
   const {
     goals: weekGoals,
@@ -65,8 +67,8 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     isEmpty: isMonthGoalsEmpty,
   } = useGetGoals(getMonthGoalQueryStr());
 
-  const { isLoading: isUpdateGoalLoading, updateGoal } = useUpdateGoal();
-  const { isLoading: isDeleteGoalLoading, deleteGoal } = useDeleteGoal();
+  const { goals: monthWeekGoals } = useGetGoals(getMonthWeekGoalQueryStr());
+
   const isWeekGoalsEditEnabled = checkWeekGoalsEditEnabled();
   const isMonthGoalsEditEnabled = checkMonthGoalsEditEnabled();
 
@@ -90,6 +92,17 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     return queryStr;
   }
 
+  function getMonthWeekGoalQueryStr() {
+    if (!currDays.length || filterBy !== ScheduleGridFilter.Month) return "";
+    const firstDayDate = new Date(currDays[0].date);
+    firstDayDate.setHours(0, 0, 0, 0);
+    firstDayDate.setMonth(firstDayDate.getMonth() - 1);
+    const { date: lastDayDate } = currDays[currDays.length - 1];
+    lastDayDate.setHours(23, 59, 59, 999);
+    const queryStr = `?type=week&date[gte]=${firstDayDate.toISOString()}&date[lte]=${lastDayDate.toISOString()}`;
+    return queryStr;
+  }
+
   function checkWeekGoalsEditEnabled() {
     if (!currDays.length || filterBy !== ScheduleGridFilter.Week) return false;
     const firstDate = new Date(currDays[0].date);
@@ -97,7 +110,7 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     const lastDate = new Date(currDays[currDays.length - 1].date);
     lastDate.setHours(23, 59, 59, 999);
     const currDate = new Date();
-    return currDate >= firstDate && currDate <= lastDate;
+    return (currDate >= firstDate && currDate <= lastDate) || currDate < firstDate;
   }
 
   function checkMonthGoalsEditEnabled() {
@@ -158,6 +171,13 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     return monthDays;
   }
 
+  function setQueryParams({ key, value }: SetQueryParamsParam) {
+    const searchParams = new URLSearchParams(searchParam);
+    const formattedValue = value instanceof Date ? value.toDateString() : value;
+    searchParams.set(key, formattedValue);
+    setSearchParam(searchParams);
+  }
+
   const value = {
     currDate,
     currDay,
@@ -184,12 +204,10 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     isMonthGoalsSuccess,
     isMonthGoalsError,
     isMonthGoalsEmpty,
-    updateGoal,
-    isUpdateGoalLoading,
     isWeekGoalsEditEnabled,
     isMonthGoalsEditEnabled,
-    deleteGoal,
-    isDeleteGoalLoading,
+    monthWeekGoals,
+    setQueryParams,
   };
   return <ScheduleContext.Provider value={value}>{children}</ScheduleContext.Provider>;
 }

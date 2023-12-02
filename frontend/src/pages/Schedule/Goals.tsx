@@ -8,9 +8,10 @@ import { Goal } from "../../types/app";
 
 type GoalsProps = {
   type: "week" | "month";
+  currDate?: Date;
 };
 
-export const Goals: FC<GoalsProps> = ({ type }) => {
+export const Goals: FC<GoalsProps> = ({ type, currDate }) => {
   const {
     weekGoals,
     isWeekGoalsLoading,
@@ -33,7 +34,9 @@ export const Goals: FC<GoalsProps> = ({ type }) => {
         <AsyncList
           className="goals__list"
           items={monthGoals as Goal[]}
-          render={goal => <GoalDisplay goal={goal} type={type} key={goal.id} />}
+          render={goal => (
+            <GoalDisplay goal={goal} key={goal.id} isEditEnabled={isMonthGoalsEditEnabled} />
+          )}
           isLoading={isMonthGoalsLoading}
           isError={isMonthGoalsError}
           isSuccess={isMonthGoalsSuccess}
@@ -46,16 +49,18 @@ export const Goals: FC<GoalsProps> = ({ type }) => {
   if (type === "week")
     return (
       <section className="goals">
-        {isWeekGoalsEditEnabled && <GoalEdit type="week" />}
+        {isWeekGoalsEditEnabled && <GoalEdit type="week" date={currDate} />}
         <AsyncList
           className="goals__list"
           items={weekGoals as Goal[]}
-          render={goal => <GoalDisplay goal={goal} type={type} key={goal.id} />}
+          render={goal => (
+            <GoalDisplay goal={goal} key={goal.id} isEditEnabled={isWeekGoalsEditEnabled} />
+          )}
           isLoading={isWeekGoalsLoading}
           isError={isWeekGoalsError}
           isSuccess={isWeekGoalsSuccess}
           isEmpty={isWeekGoalsEmpty}
-          entityName="goal"
+          entityName="goals"
         />
       </section>
     );
