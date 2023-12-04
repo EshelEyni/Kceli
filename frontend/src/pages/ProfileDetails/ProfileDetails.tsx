@@ -23,8 +23,6 @@ const ProfileDetails = () => {
     timeToMaxRecommendedWeight,
     timeToCurrentWeightLossGoal,
     isEditing,
-    isGoalEditing,
-    setIsGoalEditing,
   } = useProfile();
 
   if (isLoading) return <SpinnerLoader containerSize={{ width: "100%" }} />;
@@ -35,12 +33,9 @@ const ProfileDetails = () => {
     <main className="page profile-details">
       {isEditing ? <UserEdit /> : <UserInfo />}
       {userDailyStats && <WeightWaistChart data={userDailyStats} />}
-      {isGoalEditing ? (
-        <GoalEdit type="user" setIsGoalEditing={setIsGoalEditing} />
-      ) : (
-        <UserGoalDisplay />
-      )}
       <GoalIndicator />
+      <UserGoalDisplay />
+      <GoalEdit type="user" />
       {timeToCurrentWeightLossGoal && (
         <GoalCalender title="time to current weight loss goal" time={timeToCurrentWeightLossGoal} />
       )}

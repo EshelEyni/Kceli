@@ -26,8 +26,6 @@ type ProfileContextType = {
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   userGoal: UserGoal | undefined;
-  isGoalEditing: boolean;
-  setIsGoalEditing: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -40,7 +38,6 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
   const { userDailyStats, count } = useGetUserDailyStats();
   const { userGoal } = useGetUserGoal();
   const [isEditing, setIsEditing] = useState(false);
-  const [isGoalEditing, setIsGoalEditing] = useState(false);
 
   const recommendedWeight = user ? userUtilService.calcRecommendedWeight(user?.height) : null;
   const currWeight = userDailyStats?.at(-1)?.weight || user?.weight || null;
@@ -98,8 +95,6 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
     timeToCurrentWeightLossGoal,
     isEditing,
     setIsEditing,
-    isGoalEditing,
-    setIsGoalEditing,
   };
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;
 }

@@ -1,11 +1,10 @@
 import { FC } from "react";
 import { useProfile } from "./ProfileContext";
-import { Button } from "../../components/App/Button/Button";
 import "./UserGoalDisplay.scss";
 import { Header } from "../../components/App/Header/Header";
 
 export const UserGoalDisplay: FC = () => {
-  const { userGoal, setIsGoalEditing } = useProfile();
+  const { userGoal } = useProfile();
 
   if (!userGoal) return null;
   const {
@@ -34,9 +33,6 @@ export const UserGoalDisplay: FC = () => {
           <span className="user-display-goal__info__row__title">goal weight</span>
         </div>
       </div>
-      <Button className="user-display-goal__btn" onClickFn={() => setIsGoalEditing(true)}>
-        edit
-      </Button>
     </section>
   );
 };

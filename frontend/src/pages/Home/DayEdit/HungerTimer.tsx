@@ -4,9 +4,10 @@ import { Button } from "../../../components/App/Button/Button";
 import { getTimeCount } from "../../../services/util/utilService";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { LuTimerReset } from "react-icons/lu";
+const sound = new Audio("/assets/sounds/SamsungRingtoneSoundEffect.mp3");
 
 export const HungerTimer: FC = () => {
-  const [time, setTime] = useState(5 * 60);
+  const [time, setTime] = useState(0.1 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -32,7 +33,8 @@ export const HungerTimer: FC = () => {
         setTime(prevTime => {
           if (prevTime >= 0) return prevTime - 0.01;
           setIsRunning(false);
-          if ("vibrate" in navigator) navigator.vibrate([200, 100, 300, 100, 500]);
+          sound.volume = 0.5;
+          sound.play();
           clearInterval(id);
           return 0;
         });

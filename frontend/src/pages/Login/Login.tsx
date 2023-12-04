@@ -38,7 +38,6 @@ const LoginPage = () => {
     <main className="page">
       <form className="login-form">
         <h1 className="login-form__title">login</h1>
-
         <div className="login-form__input-container">
           <label htmlFor="username" className="login-form__label">
             username

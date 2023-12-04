@@ -8,6 +8,7 @@ export function useAddGoal() {
     mutationFn: goalApiService.addGoal,
     onSuccess: () => {
       queryClient.invalidateQueries(["goals"]);
+      queryClient.invalidateQueries(["userGoal"]);
     },
   });
 

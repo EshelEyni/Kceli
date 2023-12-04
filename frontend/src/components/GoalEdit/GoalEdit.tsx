@@ -50,7 +50,7 @@ export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing, date }) =>
           <input
             type="number"
             className="goal-edit__input"
-            placeholder="Enter your starting waist"
+            placeholder="Enter your starting weight"
             onChange={handleStartingWeightInputChanged}
           />
           <input
@@ -80,10 +80,9 @@ export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing, date }) =>
                 goal.userWeightLossGoal.weightGoal),
           })}
           isDisabled={
-            !goal.description ||
-            ("userWeightLossGoal" in goal &&
-              !goal.userWeightLossGoal.startingWeight &&
-              !goal.userWeightLossGoal.weightGoal)
+            "userWeightLossGoal" in goal
+              ? !goal.userWeightLossGoal.startingWeight || !goal.userWeightLossGoal.weightGoal
+              : !goal.description
           }
           onClickFn={handleAddGoal}
         >
