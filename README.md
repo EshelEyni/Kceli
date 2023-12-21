@@ -12,8 +12,6 @@ Kceli is more than an app; it's a companion on your path to a healthier, fitter 
 
 You can check it out [here ](https://kceli-m8oe.onrender.com/home).
 
-![Main board image](screenshots/home-page.png)
-
 ### Table of Contents
 
 - [Application Features](#application-features)
