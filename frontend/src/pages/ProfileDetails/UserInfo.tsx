@@ -21,7 +21,7 @@ export const UserInfo: FC = () => {
   }
 
   function calcWeightLossPerDay() {
-    if (!userDailyStats || !count) return 0;
+    if (!userDailyStats || !userDailyStats.length || !count) return 0;
     const weightLossPerDay =
       (userDailyStats[0].weight - userDailyStats[userDailyStats.length - 1].weight) / count;
     return weightLossPerDay.toFixed(2);
