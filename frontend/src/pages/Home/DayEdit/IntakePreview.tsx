@@ -10,6 +10,7 @@ import { useAddFavoriteIntake } from "../../../hooks/useAddFavoriteIntake";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { List } from "../../../components/App/List/List";
 import { useDeleteFavoriteIntake } from "../../../hooks/useDeleteFavoriteIntake";
+import toast from "react-hot-toast";
 
 type IntakePreviewProps = {
   intake: Intake;
@@ -36,6 +37,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     const dataToUpdate = { ...dailyData };
     const intakes = dailyData.intakes.filter(intake => intake.id !== intakeId);
     updateDailyData({ id: dataToUpdate.id, data: { intakes } });
+    toast.success("Intake deleted successfully");
   }
 
   function handleEditBtnClick(intake: Intake) {
@@ -53,6 +55,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     intakeToSave.recordedAt = new Date();
     const intakes = [...dailyData.intakes, intakeToSave];
     updateDailyData({ id: dailyData.id, data: { intakes } });
+    toast.success("Intake duplicated successfully");
   }
 
   function handleSaveBtnClick(intakeId: string) {
@@ -72,6 +75,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
       });
     }
     updateDailyData({ id: dataToUpdate.id, data: { intakes } });
+    toast.success("Intake saved successfully");
   }
 
   function handleAddToFavBtnClick(intake: Intake) {
