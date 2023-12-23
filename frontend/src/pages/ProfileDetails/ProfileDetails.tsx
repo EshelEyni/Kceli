@@ -12,8 +12,10 @@ import { GoalIndicator } from "../../components/GoalIndicator/GoalIndicator";
 import { WeightToLose } from "./WeightToLose";
 import { GoalEdit } from "../../components/GoalEdit/GoalEdit";
 import { UserGoalDisplay } from "./UserGoalDisplay";
+import { usePageLoaded } from "../../hooks/usePageLoaded";
 
 const ProfileDetails = () => {
+  usePageLoaded({ title: "Profile / Kceli" });
   const {
     user,
     userDailyStats,

@@ -1,6 +1,9 @@
+import { usePageLoaded } from "../../hooks/usePageLoaded";
 import "./PageNotFound.scss";
 
 const PageNotFound = () => {
+  usePageLoaded({});
+
   return (
     <main>
       <div className="page-not-found-content-container">

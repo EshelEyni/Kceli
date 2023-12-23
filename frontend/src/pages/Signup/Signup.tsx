@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import reactHookFormService from "../../services/reactHookForm/reactHookFormService";
 import { Gender } from "../../../../shared/types/system";
 import { Button } from "../../components/App/Button/Button";
+import { usePageLoaded } from "../../hooks/usePageLoaded";
 const {
   lettersAndNumberPattern,
   lettersAndNumberPatternWithSpace,
@@ -42,6 +43,8 @@ interface IInputField {
 }
 
 const SignupPage = () => {
+  usePageLoaded({});
+
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const {

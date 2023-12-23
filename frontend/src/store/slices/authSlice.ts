@@ -44,8 +44,12 @@ export function login(username: string, password: string): AppThunk {
 export function loginWithToken(): AppThunk {
   return async dispatch => {
     dispatch(setIsPageLoading(true));
-    const user = await authApiService.loginWithToken();
-    dispatch(setLoggedInUser(user));
+    try {
+      const user = await authApiService.loginWithToken();
+      dispatch(setLoggedInUser(user));
+    } catch (err) {
+      dispatch(setIsPageLoading(false));
+    }
   };
 }
 

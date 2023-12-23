@@ -6,13 +6,14 @@ import "./Login.scss";
 import { AppDispatch } from "../../types/app";
 import { Button } from "../../components/App/Button/Button";
 import toast from "react-hot-toast";
+import { usePageLoaded } from "../../hooks/usePageLoaded";
 
 const LoginPage = () => {
+  usePageLoaded({ title: "Login / Kceli" });
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-
   const [user, setUser] = useState({
-    username: "eshel2",
+    username: "demoUser",
     password: "eshel123",
   });
 

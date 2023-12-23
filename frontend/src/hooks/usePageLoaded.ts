@@ -5,10 +5,10 @@ import { setIsPageLoading } from "../store/slices/systemSlice";
 import { AppDispatch } from "../types/app";
 
 type PageLoadedProps = {
-  title: string;
+  title?: string;
 };
 
-export function usePageLoaded({ title }: PageLoadedProps) {
+export function usePageLoaded({ title = "Kceli" }: PageLoadedProps) {
   const dispatch: AppDispatch = useDispatch();
   useDocumentTitle(title);
 

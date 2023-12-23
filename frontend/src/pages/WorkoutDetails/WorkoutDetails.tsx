@@ -7,8 +7,10 @@ import { List } from "../../components/App/List/List";
 import { Timer } from "./Timer/Timer";
 import { Button } from "../../components/App/Button/Button";
 import { WorkoutItemDisplay } from "./WorkoutItemDisplay";
+import { usePageLoaded } from "../../hooks/usePageLoaded";
 
 const WorkoutDetails: FC = () => {
+  usePageLoaded({ title: "Workout / Kceli" });
   const {
     workout,
     unCompletedItems,

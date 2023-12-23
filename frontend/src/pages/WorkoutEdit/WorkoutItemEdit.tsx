@@ -6,12 +6,15 @@ import { useWorkoutEdit } from "./WorkoutEditContext";
 import workoutUtilService from "../../services/workout/workoutUtilService";
 import { Select } from "../../components/App/Select/Select";
 import { FaChevronDown } from "react-icons/fa";
+import { usePageLoaded } from "../../hooks/usePageLoaded";
 
 type WorkoutItemEditProps = {
   item: CombinedWorkoutItem;
 };
 
 export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
+  usePageLoaded({ title: "Workout Edit / Kceli" });
+
   const {
     workout,
     updateWorkout,

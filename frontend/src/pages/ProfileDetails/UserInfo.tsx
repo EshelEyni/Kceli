@@ -27,6 +27,13 @@ export const UserInfo: FC = () => {
     return weightLossPerDay.toFixed(2);
   }
 
+  function calcTotalWeightLoss() {
+    if (!userDailyStats || !userDailyStats.length) return 0;
+    const totalWeightLoss =
+      userDailyStats[0].weight - userDailyStats[userDailyStats.length - 1].weight;
+    return totalWeightLoss.toFixed(2);
+  }
+
   return (
     <section className="profile-details__user-info">
       <div className="user-info__item-container">
@@ -67,6 +74,11 @@ export const UserInfo: FC = () => {
       <div className="user-info__item-container">
         <h2>days in process:</h2>
         <p>{count}</p>
+      </div>
+
+      <div className="user-info__item-container">
+        <h2>total weight loss:</h2>
+        <p>{calcTotalWeightLoss()}</p>
       </div>
 
       <div className="user-info__item-container">

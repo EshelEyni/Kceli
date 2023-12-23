@@ -13,8 +13,10 @@ import { useDispatch } from "react-redux";
 import { GoalEdit } from "../../components/GoalEdit/GoalEdit";
 import { AsyncList } from "../../components/App/AsyncList/AsyncList";
 import { GoalDisplay } from "../Schedule/GoalDisplay";
+import { usePageLoaded } from "../../hooks/usePageLoaded";
 
 const WorkoutPage: FC = () => {
+  usePageLoaded({ title: "Workouts / Kceli" });
   const {
     createWorkout,
     isLoadingCreateWorkout,
