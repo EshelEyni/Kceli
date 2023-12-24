@@ -4,13 +4,15 @@
 
 Unique to Kceli is its dynamic calendar interface: it not only vividly alters colors to reflect daily nutritional status but also serves as an insightful hub for detailed daily, weekly, and monthly nutritional reports. This feature-rich calendar allows for effective goal-setting, helping you to stay on track with both short-term and long-term weight loss objectives.
 
-The app transcends mere tracking; it's a tool for proactive health management. The workouts page facilitates the planning, modification, and tracking of exercise routines, and lets you tailor a weekly workout schedule that aligns with your goals. 
+The app transcends mere tracking; it's a tool for proactive health management. The workouts page facilitates the planning, modification, and tracking of exercise routines, and lets you tailor a weekly workout schedule that aligns with your goals.
 
 In the realm of personalization, the profile page offers a visual narrative of your weight loss journey, displaying changes over time through an interactive graph. It's not just about numbers; it's about celebrating milestones. Achieve your set goals, and Kceli rewards you with a vibrant fireworks display, turning your success into a festive moment underscored by Queen's iconic "We Are the Champions."
 
 Kceli is more than an app; it's a companion on your path to a healthier, fitter you.<p>
 
 You can check it out [here ](https://kceli-m8oe.onrender.com/home).
+
+![Homepage image](screenshots/homepage.png)
 
 ### Table of Contents
 
