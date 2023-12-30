@@ -88,3 +88,4 @@ backend/src/config/dev.ts
 frontend/src/config.ts
 backend/data
 backend/dist
+backend/build
