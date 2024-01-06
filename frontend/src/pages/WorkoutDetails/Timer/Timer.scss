@@ -21,7 +21,24 @@
     font-weight: 600;
     color: var(--color-secondary);
   }
-  
+
+  .hiit-timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(15px);
+    width: 100%;
+    border: 1px solid var(--color-secondary);
+    border-radius: 15px;
+    padding: rem(15px);
+
+    &__btn {
+      border: none;
+      padding: rem(5px);
+      font-size: rem(22px);
+    }
+  }
+
   .timer__controls {
     display: flex;
     justify-content: center;
