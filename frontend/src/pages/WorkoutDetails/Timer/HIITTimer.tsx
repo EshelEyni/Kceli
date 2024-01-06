@@ -1,100 +1,104 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { Button } from "../../../components/App/Button/Button";
 import { FaPause, FaPlay } from "react-icons/fa6";
 import { getTimeCount } from "../../../services/util/utilService";
+import { useWorkerTimer } from "../../../hooks/useWorkerTimer";
+import { IoSettingsSharp } from "react-icons/io5";
+import "./HIITTimer.scss";
+
 type HIITSettings = {
   work: number;
   rest: number;
 };
 
-type HIITState = {
-  isActive: boolean;
-  isSettingShown: boolean;
-  settings: HIITSettings;
-  time: number;
-  isRunning: boolean;
-  currTimeKey: "work" | "rest";
+const sound = new Audio("/assets/sounds/Buzzer.mp3");
+
+const defaultSettings: HIITSettings = {
+  work: 60,
+  rest: 120,
 };
 
-const buzzerSound = new Audio("/assets/sounds/Buzzer.mp3");
-
 export const HIITTimer: FC = () => {
-  const HIITIntervalIdRef = useRef<NodeJS.Timeout | null>(null);
+  const [isSettingShown, setIsSettingShown] = useState(false);
+  const [settings, setSettings] = useState<HIITSettings>(defaultSettings);
+  const [time, setTime] = useState(settings.work);
+  const [isRunning, setIsRunning] = useState(false);
+  const currTimeKeyRef = useRef<"work" | "rest">("work");
+  const settingRef = useRef<HIITSettings>(defaultSettings);
+  useWorkerTimer({
+    sound,
+    time,
+    setTime,
+    isRunning,
+    onEndTime: () => {
+      sound.volume = 0.5;
+      sound.play();
+      const nextTimeKey = currTimeKeyRef.current === "work" ? "rest" : "work";
+      currTimeKeyRef.current = nextTimeKey;
+      setTime(settingRef.current[nextTimeKey]);
 
-  const [HIITState, setHIITState] = useState<HIITState>({
-    isActive: false,
-    isSettingShown: false,
-    settings: {
-      work: 13,
-      rest: 30,
+      // this boolean is in charge of stopping the timer
+      return false;
     },
-    time: 0,
-    isRunning: false,
-    currTimeKey: "work",
   });
 
   function handleToggleHIITIsRunningBtnClick() {
-    if (HIITState.time <= 0) return;
-    setHIITState(prev => ({ ...prev, isRunning: !prev.isRunning }));
+    if (time <= 0) return;
+    setIsRunning(prev => !prev);
   }
 
-  useEffect(() => {
-    const { current: intervalId } = HIITIntervalIdRef;
-
-    if (HIITState.isRunning) {
-      const id = setInterval(() => {
-        setHIITState(prevState => {
-          if (prevState.time >= 0) return { ...prevState, time: prevState.time - 0.01 };
-          buzzerSound.volume = 0.5;
-          buzzerSound.play();
-          const currTimeKey = prevState.currTimeKey === "work" ? "rest" : "work";
-          return {
-            ...prevState,
-            time: prevState.settings[currTimeKey],
-            currTimeKey,
-          };
-        });
-      }, 10);
-
-      HIITIntervalIdRef.current = id;
-    } else if (intervalId) {
-      clearInterval(intervalId);
+  function handleToggleHIITSettingsBtnClick() {
+    setIsSettingShown(prev => !prev);
+    if (isSettingShown) {
+      setTime(settings.work);
+      settingRef.current = settings;
     }
+  }
 
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [HIITState]);
+  function handleWorkInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSettings(prev => ({ ...prev, work: +e.target.value }));
+  }
+
+  function handleRestInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSettings(prev => ({ ...prev, rest: +e.target.value }));
+  }
 
   return (
     <>
       <div className="hiit-timer">
         <Button className="hiit-timer__btn" onClickFn={handleToggleHIITIsRunningBtnClick}>
-          {HIITState.isRunning ? (
-            <FaPause data-testid="pause-icon" />
-          ) : (
-            <FaPlay data-testid="play-icon" />
-          )}
+          {isRunning ? <FaPause data-testid="pause-icon" /> : <FaPlay data-testid="play-icon" />}
         </Button>
-        <span className="timer__count">{getTimeCount(HIITState.time)}</span>
+        <span className="timer__count">{getTimeCount(time)}</span>
+        <Button className="hiit-timer__btn" onClickFn={handleToggleHIITSettingsBtnClick}>
+          <IoSettingsSharp />
+        </Button>
       </div>
 
-      {HIITState.isSettingShown && (
-        <div className="timer__hiit-settings">
-          <div className="timer__hiit-settings__work">
-            <span className="timer__hiit-settings__work__label">Work</span>
+      {isSettingShown && (
+        <div className="hiit-settings">
+          <div className="hiit-settings__input">
+            <label htmlFor="work" className="hiit-settings__input__label">
+              Work
+            </label>
             <input
-              className="timer__hiit-settings__work__input"
+              className="hiit-settings__input__input"
               type="number"
-              value={HIITState.settings.work}
+              value={settings.work}
+              onChange={handleWorkInputChange}
+              id="work"
             />
           </div>
-          <div className="timer__hiit-settings__rest">
-            <span className="timer__hiit-settings__rest__label">Rest</span>
+          <div className="hiit-settings__input">
+            <label htmlFor="rest" className="hiit-settings__input__label">
+              Rest
+            </label>
             <input
-              className="timer__hiit-settings__rest__input"
+              className="hiit-settings__input__input"
               type="number"
-              value={HIITState.settings.rest}
+              value={settings.rest}
+              onChange={handleRestInputChange}
+              id="rest"
             />
           </div>
         </div>

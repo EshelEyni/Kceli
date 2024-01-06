@@ -2,8 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { Timer, getTimeCount } from "./Timer";
+import { Timer } from "./Timer";
 import { mockUseWorkout } from "../../../../test/service/mockService";
+import { getTimeCount } from "../../../services/util/utilService";
 
 vi.mock("../WorkoutContext");
 

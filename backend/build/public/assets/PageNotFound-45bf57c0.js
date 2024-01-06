@@ -1,0 +1,1 @@
+import{j as e}from"./index-aaac39b7.js";import{u as o}from"./usePageLoaded-2032d66f.js";const a=()=>(o({}),e("main",{children:e("div",{className:"page-not-found-content-container",children:e("p",{children:"Hmm...this page doesn’t exist. Try searching for something else."})})}));export{a as default};

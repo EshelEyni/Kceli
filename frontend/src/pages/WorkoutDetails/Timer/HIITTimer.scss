@@ -1,0 +1,52 @@
+@import "../../../styles/main.scss";
+.hiit-timer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(15px);
+  width: 100%;
+  border: 1px solid var(--color-secondary);
+  border-radius: 15px;
+  padding: rem(15px);
+
+  &__btn {
+    border: none;
+    padding: rem(5px);
+    font-size: rem(22px);
+  }
+}
+
+.hiit-settings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: rem(15px);
+  width: 100%;
+  border: 1px solid var(--color-secondary);
+  border-radius: 15px;
+  padding: rem(15px);
+
+  &__input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem(10px);
+
+    &__label {
+      font-size: rem(18px);
+      font-weight: 500;
+      color: var(--color-secondary);
+    }
+
+    &__input {
+      width: rem(75px);
+      text-align: center;
+      border: 1px solid var(--color-secondary);
+      border-radius: 5px;
+      padding: rem(5px);
+      font-size: rem(18px);
+      font-weight: 500;
+      color: var(--color-text);
+    }
+  }
+}

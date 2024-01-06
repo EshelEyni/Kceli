@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useState } from "react";
 import { useWorkout } from "../WorkoutContext";
 import { Button } from "../../../components/App/Button/Button";
 import { FaPause, FaPlay } from "react-icons/fa";
@@ -11,19 +11,31 @@ import { LuTimerOff, LuTimer } from "react-icons/lu";
 import "./Timer.scss";
 import { getTimeCount } from "../../../services/util/utilService";
 import { HIITTimer } from "./HIITTimer";
-import Worker from "../../../workers/timerWorker?worker";
+import { useWorkerTimer } from "../../../hooks/useWorkerTimer";
 
 const sound = new Audio("/assets/sounds/SamsungRingtoneSoundEffect.mp3");
 
 export const Timer: FC = () => {
   const [isHIITShown, setIsHIITShown] = useState(false);
   const { time, setTime, isRunning, setIsRunning, onResetTimer, setInitialTime } = useWorkout();
-  const workerRef = useRef<Worker>();
-  const timeRef = useRef(time);
+  useWorkerTimer({
+    sound,
+    time,
+    setTime,
+    isRunning,
+    onEndTime: () => {
+      sound.volume = 0.5;
+      sound.play();
+      setIsRunning(false);
+      setTime(0);
+
+      // this boolean is in charge of stopping the timer
+      return true;
+    },
+  });
 
   function handleToggleIsRunningBtnClick() {
     if (time <= 0) return;
-    console.log("handleToggleIsRunningBtnClick", new Date().toLocaleTimeString());
     setIsRunning(prev => !prev);
   }
 
@@ -41,41 +53,6 @@ export const Timer: FC = () => {
   function handleToggleHIITModeBtnClick() {
     setIsHIITShown(prev => !prev);
   }
-
-  useEffect(() => {
-    timeRef.current = time;
-  }, [time]);
-
-  useEffect(() => {
-    // Initialize the web worker
-    workerRef.current = new Worker();
-    if (!workerRef.current) return;
-
-    workerRef.current.onmessage = e => {
-      if (e.data === "tick" && timeRef.current >= 0.01) {
-        setTime(prevTime => prevTime - 0.01);
-      } else {
-        setIsRunning(false);
-        setTime(0);
-        sound.volume = 0.5;
-        sound.play();
-        console.log("stop from inside", new Date().toLocaleTimeString());
-        if (!workerRef.current) return;
-        workerRef.current.postMessage({ action: "stop" });
-      }
-    };
-
-    return () => {
-      if (workerRef.current) workerRef.current.terminate();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (!workerRef.current) return;
-    if (isRunning) workerRef.current.postMessage({ action: "start", interval: 10 });
-    else workerRef.current.postMessage({ action: "stop" });
-  }, [isRunning]);
 
   return (
     <section className="timer" data-testid="timer">

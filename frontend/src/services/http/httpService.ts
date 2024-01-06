@@ -12,19 +12,8 @@ async function ajax(endpoint: string, method: Method = "GET", data: object | nul
       withCredentials: true,
     });
 
-    // if (res.status === 200) {
-    //   const cache = await caches.open("api-cache");
-    //   const responseToCache = new Response(JSON.stringify(res.data), {
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    //   await cache.put(`${BASE_URL}${endpoint}`, responseToCache);
-    // }
-
     return res.data;
   } catch (err) {
-    // const chache = await caches.open("api-cache");
-    // const cachedResponse = await chache.match(`${BASE_URL}${endpoint}`);
-    // if (cachedResponse) return await cachedResponse.json();
     if (isProd) return;
     if (data && "password" in data) delete data["password"];
     // eslint-disable-next-line no-console

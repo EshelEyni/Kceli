@@ -45,8 +45,9 @@ type WorkoutContextType = {
 
 const WorkoutContext = createContext<WorkoutContextType | undefined>(undefined);
 
+const sound = new Audio("/assets/sounds/LetsGetReadyToRumble.mp3");
+
 function WorkoutProvider({ children }: { children: React.ReactNode }) {
-  const sound = new Audio("/assets/sounds/LetsGetReadyToRumble.mp3");
   const navigate = useNavigate();
   const params = useParams();
   const { id } = params as { id: string };
