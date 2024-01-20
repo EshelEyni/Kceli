@@ -18,8 +18,9 @@
   background-color: var(--color-background);
   padding: rem(15px);
   border-radius: rem(5px);
-
+  
   &__list {
     min-height: 0;
+    gap: rem(5px);
   }
 }

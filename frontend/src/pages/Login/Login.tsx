@@ -13,9 +13,12 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const [user, setUser] = useState({
-    username: "demoUser",
-    password: "eshel123",
+    username: "",
+    password: "",
   });
+
+  const isDevEnv = process.env.NODE_ENV === "development";
+  if (isDevEnv) setUser({ username: "demoUser", password: "eshel123" });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setUser({
