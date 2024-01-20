@@ -1,3 +1,5 @@
+@import "../../styles/main.scss";
+
 .signup-page {
   background-color: var(--color-primary);
 
@@ -7,15 +9,50 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-  }
 
-  fieldset {
-    border-radius: 1rem;
-  }
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      text-transform: capitalize;
+      color: var(--color-secondary);
+    }
 
-  label:focus-within {
     fieldset {
-      border-color: rebeccapurple;
+      border-radius: 1rem;
+      border-color: var(--color-secondary);
+      min-width: rem(250px);
+
+      legend {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-transform: capitalize;
+        color: var(--color-secondary);
+      }
+
+      input:not([type="radio"]) {
+        width: 100%;
+        padding: 0.5rem;
+        border-bottom: 1px solid var(--color-secondary);
+        color: var(--color-primary);
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 5px;
+      }
+    }
+  }
+  .input-field-radio {
+    fieldset {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+
+      label {
+        font-size: 1rem;
+        color: var(--color-secondary);
+        font-weight: bold;
+        text-transform: capitalize;
+      }
     }
   }
 }

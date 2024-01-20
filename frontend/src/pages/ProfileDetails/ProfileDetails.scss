@@ -40,12 +40,18 @@
       }
     }
 
-    .user-info__edit-btn {
+    .user-info__btn-container {
       grid-column: 2 / 3;
       grid-row: 6 / 7;
-      background-color: var(--color-primary);
-      align-self: flex-end;
       justify-self: flex-end;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: rem(5px);
+
+      .btn {
+        background-color: var(--color-primary);
+      }
     }
   }
 

@@ -8,17 +8,17 @@ import { Button } from "../../components/App/Button/Button";
 import toast from "react-hot-toast";
 import { usePageLoaded } from "../../hooks/usePageLoaded";
 
+const isDevEnv = process.env.NODE_ENV === "development";
+
+const defaultUser = isDevEnv
+  ? { username: "demoUser", password: "eshel123" }
+  : { username: "", password: "" };
+
 const LoginPage = () => {
   usePageLoaded({ title: "Login / Kceli" });
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
-  });
-
-  const isDevEnv = process.env.NODE_ENV === "development";
-  if (isDevEnv) setUser({ username: "demoUser", password: "eshel123" });
+  const [user, setUser] = useState(defaultUser);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setUser({

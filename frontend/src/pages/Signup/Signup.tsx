@@ -69,7 +69,7 @@ const SignupPage = () => {
         maxLength: createMaxLengthValidation(20),
         pattern: lettersAndNumberPattern,
       },
-      defaultValue: "eshel2",
+      defaultValue: "",
     },
     {
       id: "fullname",
@@ -79,7 +79,7 @@ const SignupPage = () => {
         minLength: createMinLengthValidation(3),
         pattern: lettersAndNumberPatternWithSpace,
       },
-      defaultValue: "eshel eyni",
+      defaultValue: "",
     },
     {
       id: "email",
@@ -88,7 +88,7 @@ const SignupPage = () => {
         required: createRequiredValidationMsg("email"),
         pattern: emailPattern,
       },
-      defaultValue: "eshel2@email.com",
+      defaultValue: "",
     },
     {
       id: "password",
@@ -99,7 +99,7 @@ const SignupPage = () => {
         maxLength: createMaxLengthValidation(20),
         pattern: lettersAndNumberPattern,
       },
-      defaultValue: "eshel123",
+      defaultValue: "",
     },
     {
       id: "passwordConfirm",
@@ -110,7 +110,7 @@ const SignupPage = () => {
         maxLength: createMaxLengthValidation(20),
         pattern: lettersAndNumberPattern,
       },
-      defaultValue: "eshel123",
+      defaultValue: "",
     },
     {
       id: "weight",
@@ -118,7 +118,7 @@ const SignupPage = () => {
       validation: {
         required: createRequiredValidationMsg("weight"),
       },
-      defaultValue: "120",
+      defaultValue: "",
     },
     {
       id: "height",
@@ -126,7 +126,7 @@ const SignupPage = () => {
       validation: {
         required: createRequiredValidationMsg("height"),
       },
-      defaultValue: "182",
+      defaultValue: "",
     },
     {
       id: "gender",
@@ -143,7 +143,7 @@ const SignupPage = () => {
       validation: {
         required: createRequiredValidationMsg("birthdate"),
       },
-      defaultValue: "1992-01-09",
+      defaultValue: new Date().toISOString().split("T")[0],
     },
   ];
 
@@ -166,7 +166,10 @@ const SignupPage = () => {
         <h1>Signup</h1>
 
         {inputFields.map(input => (
-          <div key={input.id}>
+          <div
+            key={input.id}
+            className={input.type === "radio" ? "input-field-radio" : "input-field"}
+          >
             <label htmlFor={input.id}>
               <fieldset>
                 <legend>{input.id}</legend>

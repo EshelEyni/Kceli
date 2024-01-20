@@ -1,8 +1,12 @@
 import { FC } from "react";
 import { useProfile } from "./ProfileContext";
 import { Button } from "../../components/App/Button/Button";
+import { logout } from "../../store/slices/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../types/app";
 
 export const UserInfo: FC = () => {
+  const dispatch: AppDispatch = useDispatch();
   const { user, userDailyStats, count, setIsEditing } = useProfile();
   if (!user || !userDailyStats) return null;
 
@@ -18,6 +22,10 @@ export const UserInfo: FC = () => {
 
   function handleBtnEditClick() {
     setIsEditing(true);
+  }
+
+  function handleBtnLogoutClick() {
+    dispatch(logout());
   }
 
   function calcWeightLossPerDay() {
@@ -86,9 +94,10 @@ export const UserInfo: FC = () => {
         <p>{calcWeightLossPerDay()}</p>
       </div>
 
-      <Button className="user-info__edit-btn" onClickFn={handleBtnEditClick}>
-        Edit
-      </Button>
+      <div className="user-info__btn-container">
+        <Button onClickFn={handleBtnLogoutClick}>Logout</Button>
+        <Button onClickFn={handleBtnEditClick}>Edit</Button>
+      </div>
     </section>
   );
 };
