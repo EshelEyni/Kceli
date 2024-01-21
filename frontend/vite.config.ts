@@ -31,7 +31,7 @@ export default defineConfig({
         theme_color: "#005FB3",
         description: "Kceli is a web app that helps you to watch your nutrition and health",
         dir: "ltr",
-        orientation: "portrait-primary",
+        orientation: "any",
         icons: [
           {
             src: "/assets/images/pwa-48x48.png",
