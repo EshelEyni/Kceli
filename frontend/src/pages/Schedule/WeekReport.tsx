@@ -23,6 +23,7 @@ export const WeekReport: FC = () => {
   const prevWeekData = getPrevWeekData();
   const weightWaistData = getWeightWaistData();
   const calorieData = getCalorieData();
+  const isWeeklyDataEmpty = currDays.every(d => !d.data) || !data;
 
   function getTitle() {
     if (currDays.length === 0) return "";
@@ -88,14 +89,14 @@ export const WeekReport: FC = () => {
       <Goals type="week" currDate={currDay?.date} />
       {weightWaistData && <WeightWaistChart data={weightWaistData} />}
       {calorieData && <CaloriesBar data={calorieData} />}
-      {data ? (
+      {isWeeklyDataEmpty ? (
+        <Empty entityName="data for this week" />
+      ) : (
         <div className="week-report-day-display-container">
           {currDays.map((d, i) => (
             <WeekReportDayDisplay key={d.id || i} calenderDay={d} />
           ))}
         </div>
-      ) : (
-        <Empty entityName="data" />
       )}
     </section>
   );

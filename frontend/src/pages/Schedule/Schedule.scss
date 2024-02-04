@@ -47,6 +47,7 @@
     align-items: center;
     gap: rem(10px);
     width: 100%;
+    max-width: 800px;
     border: 1px solid var(--color-border);
     border-radius: 25px;
     background-color: var(--color-background);

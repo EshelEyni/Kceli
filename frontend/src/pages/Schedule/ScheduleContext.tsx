@@ -120,7 +120,7 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
     const lastDate = new Date(currDays[currDays.length - 1].date);
     lastDate.setHours(23, 59, 59, 999);
     const currDate = new Date();
-    return currDate >= firstDate && currDate <= lastDate;
+    return (currDate >= firstDate && currDate <= lastDate) || currDate < firstDate;
   }
 
   const moveToMonth = useCallback(

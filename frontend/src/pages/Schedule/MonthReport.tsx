@@ -10,6 +10,7 @@ import { CaloriesBar } from "./CaloriesBar";
 import calorieUtilService from "../../services/calorieUtil/calorieUtilService";
 import { CalenderDay, Goal, ReportDayData } from "../../types/app";
 import { MonthReportWeekDisplay } from "./MonthReportWeekDisplay";
+import { Empty } from "../../components/App/Empty/Empty";
 
 type WeekData = {
   weekDays: CalenderDay[];
@@ -19,18 +20,12 @@ type WeekData = {
 export const MonthReport: FC = () => {
   const { currDays, data, monthWeekGoals } = useSchedule();
 
-  if (currDays.every(d => !d.data) || !data)
-    return (
-      <section className="report month-report">
-        <p>No data for this month</p>
-      </section>
-    );
-
   const secondaryTitle = getTitle();
   const currData = currDays.map(d => d.data).filter(d => !!d) as DayData[];
   const prevData = getPrevMonthData();
   const weightWaistData = getWeightWaistData();
   const calorieData = getCalorieData();
+  const isMonthlyDataEmpty = currDays.every(d => !d.data) || !data;
 
   const weeks = currDays.reduce((acc, curr, i, arr) => {
     const dayOfWeek = new Date(curr.date).getDay();
@@ -122,11 +117,18 @@ export const MonthReport: FC = () => {
       </Header>
       <ReportTable type="month" currData={currData} prevData={prevData} goals={monthWeekGoals} />
       <Goals type="month" />
-      {weightWaistData && <WeightWaistChart data={weightWaistData} />}
-      {calorieData && <CaloriesBar data={calorieData} />}
-      {weeks.map((week, i) => (
-        <MonthReportWeekDisplay key={i} weekDays={week.weekDays} goals={week.goals} />
-      ))}
+
+      {isMonthlyDataEmpty ? (
+        <Empty entityName="data for this month" />
+      ) : (
+        <>
+          {weightWaistData && <WeightWaistChart data={weightWaistData} />}
+          {calorieData && <CaloriesBar data={calorieData} />}
+          {weeks.map((week, i) => (
+            <MonthReportWeekDisplay key={i} weekDays={week.weekDays} goals={week.goals} />
+          ))}
+        </>
+      )}
     </section>
   );
 };

@@ -26,7 +26,7 @@ export const Goals: FC<GoalsProps> = ({ type, currDate }) => {
     isMonthGoalsEmpty,
     isMonthGoalsEditEnabled,
   } = useSchedule();
-
+  console.log({ isMonthGoalsEditEnabled });
   if (type === "month")
     return (
       <section className="goals">
