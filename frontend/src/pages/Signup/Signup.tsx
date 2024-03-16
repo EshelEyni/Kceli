@@ -8,6 +8,8 @@ import reactHookFormService from "../../services/reactHookForm/reactHookFormServ
 import { Gender } from "../../../../shared/types/system";
 import { Button } from "../../components/App/Button/Button";
 import { usePageLoaded } from "../../hooks/usePageLoaded";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 const {
   lettersAndNumberPattern,
   lettersAndNumberPatternWithSpace,
@@ -95,7 +97,7 @@ const SignupPage = () => {
       type: "password",
       validation: {
         required: createRequiredValidationMsg("password"),
-        minLength: createMinLengthValidation(6),
+        minLength: createMinLengthValidation(8),
         maxLength: createMaxLengthValidation(20),
         pattern: lettersAndNumberPattern,
       },
@@ -106,7 +108,7 @@ const SignupPage = () => {
       type: "password",
       validation: {
         required: createRequiredValidationMsg("passwordConfirm"),
-        minLength: createMinLengthValidation(6),
+        minLength: createMinLengthValidation(8),
         maxLength: createMaxLengthValidation(20),
         pattern: lettersAndNumberPattern,
       },
@@ -143,21 +145,29 @@ const SignupPage = () => {
       validation: {
         required: createRequiredValidationMsg("birthdate"),
       },
-      defaultValue: new Date().toISOString().split("T")[0],
+      defaultValue: new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+        .toISOString()
+        .split("T")[0],
     },
   ];
 
   const onSignup: SubmitHandler<IFormInput> = async data => {
-    if (data.password !== data.passwordConfirm) {
-      setError("passwordConfirm", {
-        type: "manual",
-        message: "Passwords do not match",
-      });
-      return;
-    }
+    try {
+      if (data.password !== data.passwordConfirm) {
+        setError("passwordConfirm", {
+          type: "manual",
+          message: "Passwords do not match",
+        });
+        return;
+      }
 
-    await dispatch(signup(data));
-    navigate("/home");
+      await dispatch(signup(data));
+      navigate("/home");
+    } catch (err) {
+      if (err instanceof AxiosError && err?.response?.data?.message)
+        toast.error(err.response.data.message);
+      else toast.error("An unknown error occurred");
+    }
   };
 
   return (
@@ -199,7 +209,7 @@ const SignupPage = () => {
               </fieldset>
             </label>
             {(isDirty || touchedFields[input.id]) && errors[input.id] && (
-              <p>{errors[input.id]?.message}</p>
+              <p className="input-field__error-message">{errors[input.id]?.message}</p>
             )}
           </div>
         ))}
@@ -207,7 +217,6 @@ const SignupPage = () => {
         <Button type="submit" isDisabled={isDirty && Object.keys(errors).length > 0}>
           Signup
         </Button>
-        {/* <button type="submit">Signup</button> */}
       </form>
     </section>
   );

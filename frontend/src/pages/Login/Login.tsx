@@ -7,12 +7,9 @@ import { AppDispatch } from "../../types/app";
 import { Button } from "../../components/App/Button/Button";
 import toast from "react-hot-toast";
 import { usePageLoaded } from "../../hooks/usePageLoaded";
+import { AxiosError } from "axios";
 
-const isDevEnv = process.env.NODE_ENV === "development";
-
-const defaultUser = isDevEnv
-  ? { username: "demoUser", password: "eshel123" }
-  : { username: "", password: "" };
+const defaultUser = { username: "demoUser", password: "123123123" };
 
 const LoginPage = () => {
   usePageLoaded({ title: "Login / Kceli" });
@@ -33,7 +30,8 @@ const LoginPage = () => {
       await dispatch(login(username, password));
       navigate("/home");
     } catch (err) {
-      if (err instanceof Error) toast.error(err.message);
+      if (err instanceof AxiosError && err?.response?.data?.message)
+        toast.error(err.response.data.message);
       else toast.error("An unknown error occurred");
     }
   }
