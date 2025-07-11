@@ -45,8 +45,6 @@ type WorkoutContextType = {
 
 const WorkoutContext = createContext<WorkoutContextType | undefined>(undefined);
 
-const sound = new Audio("/assets/sounds/LetsGetReadyToRumble.mp3");
-
 function WorkoutProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const params = useParams();
@@ -86,10 +84,6 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
       const workouts = [...dailyDataToUpdate.workouts, workout as Workout];
       updateDailyData({ id: dailyDataToUpdate.id, data: { workouts } });
     }
-
-    const isDev = process.env.NODE_ENV === "development";
-    if (isDev) return;
-    sound.play();
   }
 
   function onStartItem(item: CombinedWorkoutItem) {
