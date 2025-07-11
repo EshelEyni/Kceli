@@ -18,7 +18,7 @@ require("dotenv").config();
 const mongoose_1 = __importDefault(require("mongoose"));
 const tokenService_1 = __importDefault(require("../token/tokenService"));
 const userModel_1 = require("../../models/user/userModel");
-const intake_1 = require("../../../../shared/types/intake");
+const intake_1 = require("../../../../shared/dist/types/intake");
 const dailyDataModel_1 = require("../../models/day/dailyDataModel");
 const ALSService_1 = require("../ALSService");
 function createManyTestUsers(numOfUsers) {

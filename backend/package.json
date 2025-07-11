@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "set NODE_ENV=development&& nodemon",
     "prod": "set NODE_ENV=production&& node build/servers/main/server.js",
-    "prod-linux": "NODE_ENV=production exec node build/server.js",
-    "build": "tsc",
+    "prod-linux": "NODE_ENV=production exec node build/servers/main/server.js",
+    "build": "tsc && npm run fix-shared-type-path",
+    "fix-shared-type-path": "node fixBuildSharedTypePath.js",
     "server:main": "set NODE_ENV=development&& nodemon --watch src --ext ts --ignore node_modules --exec \"npx ts-node --transpile-only src/servers/main/server.ts\"",
     "test": "set NODE_ENV=test&& jest --watchAll --runInBand --detectOpenHandles"
   },
