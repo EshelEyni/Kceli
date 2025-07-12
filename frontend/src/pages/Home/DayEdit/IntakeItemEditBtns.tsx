@@ -8,7 +8,11 @@ export const IntakeItemEditBtns: FC = () => {
 
   return (
     <section className="intake-edit-item__btns-container" data-testid="intake-item-edit-btns">
-      {!isOneItem && <Button onClickFn={handleRemoveButtonClick}>remove item</Button>}
+      {!isOneItem && (
+        <Button style={btnStyle} onClickFn={handleRemoveButtonClick}>
+          remove item
+        </Button>
+      )}
       <Button style={btnStyle} onClickFn={handleAddButtonClick}>
         add item
       </Button>
