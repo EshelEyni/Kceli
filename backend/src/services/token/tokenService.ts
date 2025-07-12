@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import { Request } from "express";
 import { AppError } from "../error/errorService";
 require("dotenv").config();
@@ -20,7 +20,7 @@ function signToken(id: string) {
 
   const token = jwt.sign({ id }, process.env.JWT_SECRET_CODE, {
     expiresIn: process.env.JWT_EXPIRATION_TIME,
-  });
+  } as SignOptions);
 
   if (!token) throw new AppError("Token not created", 500);
   return token;

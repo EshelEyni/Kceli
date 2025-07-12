@@ -31,19 +31,23 @@ export const WeightWaistChart: FC<WeightWaistChartProps> = ({
   const isWaistLineShown = filterBy === "all" || filterBy === "waist";
   if (!data) return null;
 
-  const formattedData = data
-    .map(item => ({
-      ...item,
-      date: new Intl.DateTimeFormat("en-GB", {
-        month: "numeric",
-        day: "numeric",
-        year: "2-digit",
-      }).format(new Date(item.date)),
-    }))
-    .slice(startIndex, endIndex + 1);
+  const formattedData = data.slice(startIndex, endIndex + 1).map(item => ({
+    ...item,
+    date: new Intl.DateTimeFormat("en-GB", {
+      month: "numeric",
+      day: "numeric",
+      year: "2-digit",
+    }).format(new Date(item.date)),
+  }));
 
-  const minWeight = data.reduce((acc, curr) => (curr.weight < acc ? curr.weight : acc), Infinity);
-  const maxWeight = data.reduce((acc, curr) => (curr.weight > acc ? curr.weight : acc), -Infinity);
+  const minWeight = formattedData.reduce(
+    (acc, curr) => (curr.weight < acc ? curr.weight : acc),
+    Infinity
+  );
+  const maxWeight = formattedData.reduce(
+    (acc, curr) => (curr.weight > acc ? curr.weight : acc),
+    -Infinity
+  );
 
   const yAxisDomain = [minWeight, maxWeight];
 
