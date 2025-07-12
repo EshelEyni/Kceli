@@ -80,15 +80,8 @@ function getBcgByCosumedCalories({
     return { backgroundColor: "#005FB3", color: "var( --color-secondary)" };
   const calorieColorPalette = [
     { excessRate: 0, bcg: "#005FB3", color: "var(--color-secondary)" },
-    { excessRate: 10, bcg: "#4682B4", color: "var(--color-secondary)" },
-    { excessRate: 20, bcg: "#feef63", color: "var(--color-text)" },
-    { excessRate: 30, bcg: "#ffea00", color: "var(--color-text)" },
-    { excessRate: 40, bcg: "#FF7F7F", color: "var(--color-secondary)" },
+    { excessRate: 25, bcg: "#ffea00", color: "var(--color-text)" },
     { excessRate: 50, bcg: "#FF0000", color: "var(--color-secondary)" },
-    { excessRate: 60, bcg: "#8B0000", color: "var(--color-secondary)" },
-    { excessRate: 70, bcg: "#800000", color: "var(--color-secondary)" },
-    { excessRate: 80, bcg: "#660000", color: "var(--color-secondary)" },
-    { excessRate: 90, bcg: "#330000", color: "var(--color-secondary)" },
     { excessRate: 100, bcg: "#171717", color: "var(--color-secondary)" },
   ];
 
