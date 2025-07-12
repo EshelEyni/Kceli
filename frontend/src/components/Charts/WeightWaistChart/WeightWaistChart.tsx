@@ -12,25 +12,35 @@ import {
 import { Button } from "../../App/Button/Button";
 import "./WeightWaistChart.scss";
 import { ReportDayData } from "../../../types/app";
+import { RangeControlBar } from "./RangeControlBar";
 
 type WeightWaistChartProps = {
   data: ReportDayData[];
+  isProgressBarShown?: boolean;
 };
 
-export const WeightWaistChart: FC<WeightWaistChartProps> = ({ data }) => {
+export const WeightWaistChart: FC<WeightWaistChartProps> = ({
+  data,
+  isProgressBarShown = false,
+}) => {
   const [filterBy, setFilterBy] = useState<"all" | "weight" | "waist">("weight");
+  const [rangeValues, setRangeValues] = useState([0, data.length - 1]);
+
+  const [startIndex, endIndex] = rangeValues;
   const isWeightLineShown = filterBy === "all" || filterBy === "weight";
   const isWaistLineShown = filterBy === "all" || filterBy === "waist";
   if (!data) return null;
 
-  const formattedData = data.map(item => ({
-    ...item,
-    date: new Intl.DateTimeFormat("en-GB", {
-      month: "numeric",
-      day: "numeric",
-      year: "2-digit",
-    }).format(new Date(item.date)),
-  }));
+  const formattedData = data
+    .map(item => ({
+      ...item,
+      date: new Intl.DateTimeFormat("en-GB", {
+        month: "numeric",
+        day: "numeric",
+        year: "2-digit",
+      }).format(new Date(item.date)),
+    }))
+    .slice(startIndex, endIndex + 1);
 
   const minWeight = data.reduce((acc, curr) => (curr.weight < acc ? curr.weight : acc), Infinity);
   const maxWeight = data.reduce((acc, curr) => (curr.weight > acc ? curr.weight : acc), -Infinity);
@@ -81,6 +91,9 @@ export const WeightWaistChart: FC<WeightWaistChartProps> = ({ data }) => {
           Waist
         </Button>
       </div>
+      {isProgressBarShown && data.length > 1 && (
+        <RangeControlBar data={data} rangeValues={rangeValues} setRangeValues={setRangeValues} />
+      )}
     </>
   );
 };

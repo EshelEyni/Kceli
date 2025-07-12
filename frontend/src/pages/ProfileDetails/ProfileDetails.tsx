@@ -34,7 +34,7 @@ const ProfileDetails = () => {
   return (
     <main className="page profile-details">
       {isEditing ? <UserEdit /> : <UserInfo />}
-      {userDailyStats && <WeightWaistChart data={userDailyStats} />}
+      {userDailyStats && <WeightWaistChart data={userDailyStats} isProgressBarShown={true} />}
       <GoalIndicator />
       <UserGoalDisplay />
       <GoalEdit type="user" />

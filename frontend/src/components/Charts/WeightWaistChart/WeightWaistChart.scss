@@ -11,3 +11,23 @@
     background-color: var(--color-primary);
   }
 }
+
+.range-control-bar-bar-container {
+  width: 100%;
+  margin: 0 auto;
+
+  .range-control-bar-bar {
+    width: 100%;
+    height: rem(12px);
+    background-color: var(--color-background);
+    border-radius: 25px;
+  }
+
+  .range-control-bar-bar-thumb {
+    height: rem(24px);
+    width: rem(24px);
+    background-color: var(--color-success);
+    border-radius: 50%;
+    outline: none;
+  }
+}
