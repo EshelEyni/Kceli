@@ -52,6 +52,7 @@ async function update(id: string, user: User): Promise<User> {
     "targetCaloricIntakePerDay",
     "totalDailyEnergyExpenditure",
     "workoutSchedule",
+    "targetCaloricDeficitPerDay",
   ];
 
   const filteredUser = filterObj(user, ...allowedFields);

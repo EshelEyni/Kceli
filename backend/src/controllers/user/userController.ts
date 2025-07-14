@@ -30,6 +30,7 @@ const updateUser = updateOne(UserModel, [
   "isApprovedLocation",
   "bio",
   "workoutSchedule",
+  "targetCaloricDeficitPerDay",
 ]);
 const removeUser = deleteOne(UserModel);
 

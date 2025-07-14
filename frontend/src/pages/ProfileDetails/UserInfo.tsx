@@ -18,6 +18,7 @@ export const UserInfo: FC = () => {
     weight,
     totalDailyEnergyExpenditure,
     targetCaloricIntakePerDay,
+    targetCaloricDeficitPerDay,
   } = user;
 
   function handleBtnEditClick() {
@@ -77,6 +78,11 @@ export const UserInfo: FC = () => {
       <div className="user-info__item-container">
         <h2>Target Caloric Intake Per Day:</h2>
         <p>{`${targetCaloricIntakePerDay} kcal`}</p>
+      </div>
+
+      <div className="user-info__item-container">
+        <h2>Target Caloric Deficit Per Day:</h2>
+        <p>{`${targetCaloricDeficitPerDay} kcal`}</p>
       </div>
 
       <div className="user-info__item-container">

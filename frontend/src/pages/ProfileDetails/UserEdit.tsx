@@ -11,6 +11,7 @@ type FormData = {
   height: number;
   weight: number;
   weightLossGoal: WeightLossGoal;
+  targetCaloricDeficitPerDay: number;
 };
 
 export const UserEdit: FC = () => {
@@ -24,6 +25,7 @@ export const UserEdit: FC = () => {
     weight: user?.weight || 0,
     totalDailyEnergyExpenditure: user?.totalDailyEnergyExpenditure || 0,
     targetCaloricIntakePerDay: user?.targetCaloricIntakePerDay || 0,
+    targetCaloricDeficitPerDay: user?.targetCaloricDeficitPerDay || 0,
   };
 
   const { control, handleSubmit } = useForm<FormData>({ defaultValues });
@@ -92,6 +94,15 @@ export const UserEdit: FC = () => {
           name="weight"
           control={control}
           render={({ field }) => <input id="weight" type="number" {...field} />}
+        />
+      </div>
+
+      <div className="user-edit__item-container">
+        <label htmlFor="targetCaloricDeficitPerDay">Target Caloric Deficit Per Day:</label>
+        <Controller
+          name="targetCaloricDeficitPerDay"
+          control={control}
+          render={({ field }) => <input id="targetCaloricDeficitPerDay" type="number" {...field} />}
         />
       </div>
 
