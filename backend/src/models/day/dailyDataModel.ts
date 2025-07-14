@@ -64,7 +64,6 @@ const dailyDataSchema = new Schema<IDailyData>(
     targetCaloricIntake: {
       type: Number,
     },
-    targetCaloricDeficit: { type: Number, default: 0 },
     intakes: {
       type: [intakeSchema],
       default: [],

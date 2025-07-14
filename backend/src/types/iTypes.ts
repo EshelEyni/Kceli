@@ -46,7 +46,6 @@ export interface IDailyData extends Document {
   isWeightWaistIgnored?: boolean;
   totalDailyEnergyExpenditure?: number;
   targetCaloricIntake?: number;
-  targetCaloricDeficit?: number;
   hungerEvents: IHungerEvent[];
   createdAt: Date;
   updatedAt: Date;
