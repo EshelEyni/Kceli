@@ -108,6 +108,7 @@ const userSchema: Schema<IUser> = new Schema(
     birthdate: { type: Date, required: [true, "Please provide your birthdate"] },
     totalDailyEnergyExpenditure: { type: Number, default: 0 },
     targetCaloricIntakePerDay: { type: Number, default: 0 },
+    targetCaloricDeficitPerDay: { type: Number, default: 0 },
     workoutSchedule: {
       type: [
         {
@@ -179,11 +180,12 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.pre("save", async function (next) {
-  const [weight, height, gender, birthdate] = [
+  const [weight, height, gender, birthdate, targetCaloricDeficitPerDay] = [
     this.weight,
     this.height,
     this.gender,
     this.birthdate,
+    this.targetCaloricDeficitPerDay,
   ];
   const age = new Date().getFullYear() - birthdate.getFullYear();
   const TDEE = calorieService.calcTotalDailyEnergyExpenditure({
@@ -193,7 +195,10 @@ userSchema.pre("save", async function (next) {
     age,
   });
   this.totalDailyEnergyExpenditure = TDEE;
-  this.targetCaloricIntakePerDay = calorieService.calcTargetCaloricIntakePerDay({ TDEE });
+  this.targetCaloricIntakePerDay = calorieService.calcTargetCaloricIntakePerDay({
+    TDEE,
+    targetCaloricDeficitPerDay,
+  });
   next();
 });
 

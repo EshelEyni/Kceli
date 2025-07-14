@@ -2,8 +2,14 @@ import { ExistingIntakeItemData, NewIntakeItem } from "../../../../shared/types/
 import { UserCaloricData } from "../../../../shared/types/system";
 import { IIntakeItem } from "../../types/iTypes";
 
-function calcTargetCaloricIntakePerDay({ TDEE }: { TDEE: number }): number {
-  const targetCaloricIntake = TDEE - 550;
+function calcTargetCaloricIntakePerDay({
+  TDEE,
+  targetCaloricDeficitPerDay,
+}: {
+  TDEE: number;
+  targetCaloricDeficitPerDay: number;
+}): number {
+  const targetCaloricIntake = TDEE - targetCaloricDeficitPerDay;
   return Math.round(targetCaloricIntake);
 }
 

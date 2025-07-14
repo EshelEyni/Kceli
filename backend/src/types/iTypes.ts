@@ -20,6 +20,7 @@ export interface IUser extends Document {
   birthdate: Date;
   totalDailyEnergyExpenditure: number;
   targetCaloricIntakePerDay: number;
+  targetCaloricDeficitPerDay: number;
   workoutSchedule: UserWorkoutSchedule;
   isAdmin: boolean;
   createdAt: Date;
@@ -45,6 +46,7 @@ export interface IDailyData extends Document {
   isWeightWaistIgnored?: boolean;
   totalDailyEnergyExpenditure?: number;
   targetCaloricIntake?: number;
+  targetCaloricDeficit?: number;
   hungerEvents: IHungerEvent[];
   createdAt: Date;
   updatedAt: Date;

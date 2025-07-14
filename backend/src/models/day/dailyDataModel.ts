@@ -64,6 +64,7 @@ const dailyDataSchema = new Schema<IDailyData>(
     targetCaloricIntake: {
       type: Number,
     },
+    targetCaloricDeficit: { type: Number, default: 0 },
     intakes: {
       type: [intakeSchema],
       default: [],
@@ -150,7 +151,7 @@ dailyDataSchema.pre("findOneAndUpdate", async function (next) {
   if (!loggedInUserId) return next();
   const user = await UserModel.findById(loggedInUserId);
   if (!user) return next();
-  const { height, gender, birthdate } = user;
+  const { height, gender, birthdate, targetCaloricDeficitPerDay } = user;
   const { weight } = update;
   const age = new Date().getFullYear() - birthdate.getFullYear();
   const TDEE = calorieService.calcTotalDailyEnergyExpenditure({
@@ -159,7 +160,10 @@ dailyDataSchema.pre("findOneAndUpdate", async function (next) {
     age,
     gender,
   });
-  const targetCaloricIntake = calorieService.calcTargetCaloricIntakePerDay({ TDEE });
+  const targetCaloricIntake = calorieService.calcTargetCaloricIntakePerDay({
+    TDEE,
+    targetCaloricDeficitPerDay,
+  });
   this.setOptions({ runValidators: true });
   this.updateOne({ totalDailyEnergyExpenditure: TDEE, targetCaloricIntake });
   next();
