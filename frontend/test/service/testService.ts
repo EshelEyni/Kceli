@@ -63,6 +63,7 @@ type MockUser = {
   height?: number;
   birthdate?: Date;
   totalDailyEnergyExpenditure?: number;
+  targetCaloricDeficitPerDay?: number;
   targetCaloricIntakePerDay?: number;
   weightLossGoal?: {
     startingWeight: number;
@@ -85,6 +86,7 @@ function createUser({
   birthdate = new Date(),
   totalDailyEnergyExpenditure = 100,
   targetCaloricIntakePerDay = 100,
+  targetCaloricDeficitPerDay = 100,
   workoutSchedule = createWorkSchedule(),
   gender = "female",
   createdAt = "test",
@@ -101,6 +103,7 @@ function createUser({
     birthdate,
     totalDailyEnergyExpenditure,
     targetCaloricIntakePerDay,
+    targetCaloricDeficitPerDay,
     workoutSchedule,
     gender,
     createdAt,

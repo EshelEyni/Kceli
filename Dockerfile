@@ -16,9 +16,12 @@ CMD ["sh"]
 FROM node:current-alpine3.19 as be-build
 WORKDIR /app
 COPY backend/package.json .
-RUN npm install
 COPY shared/ /shared/
 RUN npm install -g typescript
+WORKDIR /shared
+RUN tsc
+WORKDIR /app
+RUN npm install
 COPY backend/ .
 RUN npm run build 
 

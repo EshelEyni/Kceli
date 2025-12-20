@@ -179,6 +179,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+// TODO: run this logic also when user updates weight, height, gender, birthdate, or targetCaloricDeficitPerDay
 userSchema.pre("save", async function (next) {
   const [weight, height, gender, birthdate, targetCaloricDeficitPerDay] = [
     this.weight,
