@@ -7,6 +7,7 @@ export const IntakeItemEditInputName: FC = () => {
   return (
     <input
       type="text"
+      aria-label="Food or drink name"
       name="name"
       className="intake-item-input"
       value={intakeItem.name}

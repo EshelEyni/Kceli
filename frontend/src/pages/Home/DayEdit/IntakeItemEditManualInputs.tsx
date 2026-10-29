@@ -19,6 +19,7 @@ export const IntakeItemEditManualInputs: FC = () => {
       <input
         type="number"
         name="calories"
+        aria-label="Calories"
         className={classnames("intake-item-input", { faded: inputFaded === "calories" })}
         value={calorieInputValue}
         placeholder="Calories"
@@ -28,6 +29,7 @@ export const IntakeItemEditManualInputs: FC = () => {
       <input
         type="number"
         name="caloriesPer100g"
+        aria-label="Calories per 100g"
         className={classnames("intake-item-input", { faded: inputFaded === "caloriesPer100g" })}
         value={intakeItem.caloriesPer100g || ""}
         placeholder="Calories per 100g"

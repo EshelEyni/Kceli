@@ -26,7 +26,9 @@ describe("Water Edit", () => {
     render(<WaterEdit />);
 
     expect(
-      screen.getByText(`Recommended water intake: ${recommendedWaterIntake} ml`)
+      screen.getByText(
+        `Remaining to your estimated target: ${Math.max(0, recommendedWaterIntake)} L`
+      )
     ).toBeInTheDocument();
   });
 
@@ -75,7 +77,9 @@ describe("Water Edit", () => {
 
       expect(updateDailyData).toHaveBeenCalled();
 
-      const arg = updateDailyData.mock.calls[i][0] as DayData;
+      const request = updateDailyData.mock.calls[i][0] as { id: string; data: Partial<DayData> };
+      expect(request.id).toBe(dailyData.id);
+      const arg = request.data as DayData;
       expect(arg.intakes.length).toBe(dailyData.intakes.length + 1);
       const lastIntake = arg.intakes[arg.intakes.length - 1];
 

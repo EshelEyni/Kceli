@@ -8,9 +8,12 @@ import { useDeleteWorkout } from "../../../hooks/useDeleteWorkout";
 import { useGetTodayData } from "../../../hooks/useGetTodayData";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { DayData } from "../../../../../shared/types/dayData";
+import { FiActivity, FiArrowRight, FiClock } from "react-icons/fi";
 
 type WorkoutPreviewProps = {
   workout: Workout;
+  onSchedule?: (workout: Workout, day: string) => void;
+  isSavingSchedule?: boolean;
   updateDailyData?: UseMutateFunction<
     DayData,
     unknown,
@@ -19,7 +22,12 @@ type WorkoutPreviewProps = {
   >;
 };
 
-export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, updateDailyData }) => {
+export const WorkoutPreview: FC<WorkoutPreviewProps> = ({
+  workout,
+  updateDailyData,
+  onSchedule,
+  isSavingSchedule,
+}) => {
   const { removeWorkout } = useDeleteWorkout();
   const { dailyData } = useGetTodayData();
   const navigate = useNavigate();
@@ -46,12 +54,43 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, updateDailyDa
 
   return (
     <article className="workout-preview" data-testid="workout-preview">
+      <div
+        className={`ui-workout-cover ${workout.type === "aerobic" ? "cardio" : ""}`}
+        aria-hidden="true"
+      >
+        <FiActivity />
+      </div>
       <section className="workout-preview__info">
-        <h3>description: {workout.description}</h3>
-        {duration > 0 && <h3>duration (in min): {duration}</h3>}
-        <h3>type: {workout.type}</h3>
-        {"split" in workout && <h3>split: {workout.split}</h3>}
+        <span className="ui-badge">
+          {workout.type === "aerobic" ? "Cardio" : "Strength"}
+          {"split" in workout ? ` · Split ${workout.split}` : ""}
+        </span>
+        <h3>{workout.description || "Untitled routine"}</h3>
+        <p className="ui-subtitle">
+          <FiClock /> {duration > 0 ? `${duration} min · ` : ""}
+          {workout.items.length} exercises
+        </p>
       </section>
+      {onSchedule && (
+        <label className="ui-schedule-select">
+          Add to day
+          <select
+            value=""
+            disabled={isSavingSchedule}
+            aria-label={`Schedule ${workout.description || "routine"}`}
+            onChange={event => {
+              if (event.target.value) onSchedule(workout, event.target.value);
+            }}
+          >
+            <option value="">Choose a weekday…</option>
+            {["sun", "mon", "tue", "wed", "thu", "fri", "sat"].map(day => (
+              <option key={day} value={day}>
+                {day.toUpperCase()}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
 
       <div className="workout-preview__btns">
         <Button
@@ -69,7 +108,7 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, updateDailyDa
           </Button>
         )}
         <Button className="btn workout-page__btn" onClickFn={() => handleBtnOpenClick(workout.id)}>
-          open
+          View & start <FiArrowRight />
         </Button>
       </div>
     </article>

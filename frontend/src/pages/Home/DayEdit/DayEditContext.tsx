@@ -12,7 +12,6 @@ import nutritionUtilService from "../../../services/nutrition/nutritionUtilServi
 import { Goal, NutritionQueryState } from "../../../types/app";
 import { useGetUserFavoriteIntakes } from "../../../hooks/useGetUserFavoriteIntakes";
 import { useSearchParams } from "react-router-dom";
-import { useGetColorByCalories } from "../../../hooks/useGetColorByCalories";
 import { useGetGoals } from "../../../hooks/useGetGoals";
 
 export type DayEditContextType = {
@@ -90,8 +89,9 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     isError: isErrorGoals,
     isEmpty: isEmptyGoals,
   } = useGetGoals(getDayGoalsQueryStr());
-  const { backgroundColor, color } = useGetColorByCalories();
-  const btnStyle = { color, border: `1px solid ${color}` };
+  const backgroundColor = "transparent";
+  const color = "#254e3c";
+  const btnStyle = {};
   const {
     favoriteIntakes,
     isLoading: isLoadingFavoriteIntakes,
@@ -102,7 +102,7 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [openedTab, setOpenedTab] = useState<DayEditTab>(
-    (searchParams.get("tab") as DayEditTab) || DayEditTab.IntakeEdit
+    (searchParams.get("tab") as DayEditTab) || DayEditTab.IntakeList
   );
 
   const [intake, setIntake] = useState<CombinedIntake>(intakeUtilService.getDefaultIntake());

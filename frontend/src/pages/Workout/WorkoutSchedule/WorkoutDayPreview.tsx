@@ -6,9 +6,11 @@ import "./WorkoutDayPreview.scss";
 
 type WorkoutDayProps = {
   workoutDay: WorkoutDayType;
+  onRemove?: (day: string, index: number) => void;
+  isSaving?: boolean;
 };
 
-export const WorkoutDayPreview: FC<WorkoutDayProps> = ({ workoutDay }) => {
+export const WorkoutDayPreview: FC<WorkoutDayProps> = ({ workoutDay, onRemove, isSaving }) => {
   return (
     <StrictModeDroppable droppableId={workoutDay.name} direction="vertical">
       {(provided, snapshot) => (
@@ -25,12 +27,23 @@ export const WorkoutDayPreview: FC<WorkoutDayProps> = ({ workoutDay }) => {
                   {provided => (
                     <li
                       {...provided.draggableProps}
-                      {...provided.dragHandleProps}
                       ref={provided.innerRef}
                       style={{ ...provided.draggableProps.style }}
                       className="workout-day__list__item"
                     >
-                      <span>{workout.description}</span>
+                      <span {...provided.dragHandleProps}>{workout.description}</span>
+                      {onRemove && (
+                        <button
+                          className="ui-remove-scheduled"
+                          aria-label={`Remove ${workout.description || "routine"} from ${
+                            workoutDay.name
+                          }`}
+                          disabled={isSaving}
+                          onClick={() => onRemove(workoutDay.name, index)}
+                        >
+                          ×
+                        </button>
+                      )}
                     </li>
                   )}
                 </Draggable>

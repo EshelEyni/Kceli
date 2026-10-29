@@ -4,7 +4,7 @@ import { Button } from "../../../components/App/Button/Button";
 import "./Filter.scss";
 
 export const DayEditFilter: FC = () => {
-  const { dailyData, setOpenedTab, setSearchParams, color } = useDayEdit();
+  const { dailyData, setOpenedTab, setSearchParams, openedTab } = useDayEdit();
   if (!dailyData) return null;
 
   function handleBtnClick(value: DayEditTab) {
@@ -15,45 +15,44 @@ export const DayEditFilter: FC = () => {
 
   const filterBy = [
     {
-      name: "add",
+      name: "Log meal",
       value: DayEditTab.IntakeEdit,
     },
     {
-      name: "intakes",
+      name: "Diary",
       value: DayEditTab.IntakeList,
-      isShown: dailyData?.intakes.some(intake => intake.isRecorded === true),
     },
     {
-      name: "unrecorded",
+      name: "Drafts",
       value: DayEditTab.UnRecordedIntakeList,
       isShown: dailyData?.intakes.some(intake => intake.isRecorded === false),
     },
     {
-      name: "favorites",
+      name: "Saved meals",
       value: DayEditTab.FavoriteIntake,
     },
     {
-      name: "water",
+      name: "Water",
       value: DayEditTab.Water,
     },
     {
-      name: "weight",
+      name: "Check-in",
       value: DayEditTab.WeightWaistInput,
     },
     {
-      name: "workouts",
+      name: "Workouts",
       value: DayEditTab.Workouts,
     },
     {
-      name: "query",
+      name: "Nutrition help",
       value: DayEditTab.Query,
     },
     {
-      name: "goals",
+      name: "Goals",
       value: DayEditTab.Goals,
     },
     {
-      name: "h-meter",
+      name: "Hunger",
       value: DayEditTab.HungerMeter,
     },
   ];
@@ -65,7 +64,8 @@ export const DayEditFilter: FC = () => {
         return (
           <li className="filter__item" key={item.value}>
             <Button
-              style={{ color, border: `1px solid ${color}` }}
+              className={openedTab === item.value ? "active" : ""}
+              aria-pressed={openedTab === item.value}
               onClickFn={() => handleBtnClick(item.value)}
             >
               {item.name}

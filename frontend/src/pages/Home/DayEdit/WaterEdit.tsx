@@ -56,7 +56,10 @@ export const WaterEdit: FC = () => {
 
   return (
     <section className="water-edit" data-testid="water-edit">
-      <h2 className="water-edit__title">{`Recommended water intake: ${recommendedWaterIntake} ml`}</h2>
+      <h2 className="water-edit__title">{`Remaining to your estimated target: ${Math.max(
+        0,
+        recommendedWaterIntake
+      )} L`}</h2>
       <div className="water-edit__btns-values-container">
         {waterEditBtns.map(i => (
           <Button

@@ -8,7 +8,7 @@ import { AppDispatch } from "../../types/app";
 export const UserInfo: FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { user, userDailyStats, count, setIsEditing } = useProfile();
-  if (!user || !userDailyStats) return null;
+  if (!user) return null;
 
   const {
     username,

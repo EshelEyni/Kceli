@@ -21,17 +21,26 @@ export const IntakeItemEditInputBtns: FC = () => {
   return (
     <section className="intake-item-edit__inputs-btns" data-testid="intake-item-edit-inputs-btns">
       <div className="quantity-input-container">
-        <Button className="quantity-input-btn" onClickFn={decreaseQuantity}>
+        <Button
+          className="quantity-input-btn"
+          onClickFn={decreaseQuantity}
+          aria-label="Decrease quantity"
+        >
           <FaMinus />
         </Button>
         <input
           type="number"
           name="quantity"
+          aria-label="Quantity"
           className="intake-item-input quantity-input"
           value={intakeItem.quantity}
           onChange={handleInputChange}
         />
-        <Button className="quantity-input-btn" onClickFn={increaseQuantity}>
+        <Button
+          className="quantity-input-btn"
+          onClickFn={increaseQuantity}
+          aria-label="Increase quantity"
+        >
           <FaPlus />
         </Button>
       </div>

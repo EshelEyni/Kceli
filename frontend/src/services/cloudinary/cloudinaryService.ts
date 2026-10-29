@@ -1,5 +1,5 @@
 import axios from "axios";
-import { cloudName, uploadPreset } from "../../config";
+import { cloudName, uploadPreset } from "../../runtimeConfig";
 
 export const uploadFileToCloudinary = async (
   file: File,

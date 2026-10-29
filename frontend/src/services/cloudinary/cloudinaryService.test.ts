@@ -1,6 +1,6 @@
 // this import must be at the top
 import { mockAxios } from "./setupAxiosMock";
-import { cloudName } from "../../config";
+import { cloudName } from "../../runtimeConfig";
 import { describe, expect, it } from "vitest";
 import { uploadFileToCloudinary } from "./cloudinaryService";
 

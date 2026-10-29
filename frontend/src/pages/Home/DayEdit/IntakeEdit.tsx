@@ -109,6 +109,7 @@ export const IntakeEdit: FC = () => {
             <div className="intake-edit__header__input-name-btn-type">
               <input
                 type="text"
+                aria-label="Meal name"
                 placeholder="Name your intake"
                 autoComplete="off"
                 value={intake.name || ""}
@@ -125,6 +126,7 @@ export const IntakeEdit: FC = () => {
               <input
                 className="intake-edit__header__time-input"
                 type="time"
+                aria-label="Meal time"
                 value={toLocalTime(intake.recordedAt as string)}
                 onChange={handleTimeInputChange}
                 data-testid="intake-edit-time-input"

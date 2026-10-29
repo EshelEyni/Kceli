@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "set NODE_ENV=test&& vitest --reporter verbose",
+    "test:redesign": "vitest run --config vitest.redesign.config.ts",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc -b ../shared && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

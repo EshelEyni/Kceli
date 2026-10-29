@@ -1,5 +1,5 @@
 import { useEffect, Suspense, lazy } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { routes } from "./routes";
 import { Route as TypeOfRoute } from "./types/app";
@@ -12,11 +12,17 @@ import { AppDispatch } from "./types/app";
 import { useAuth } from "./hooks/useAuth";
 import { useSystem } from "./hooks/useSystem";
 import { AppHeader } from "./components/App/AppHeader/AppHeader";
+import "./styles/redesign.scss";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   const { loggedInUser } = useAuth();
   const { isPageLoading } = useSystem();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [pathname]);
 
   const routeElements = _getRouteElements();
 
@@ -29,13 +35,15 @@ function App() {
     <div id="app" className="app">
       <div className="app-content" id="app-content">
         <AppHeader />
-        <Suspense fallback={<PageLoader isLogoLoader={isPageLoading} />}>
-          <Routes>
-            <Route index element={<Navigate replace to="/home" />} />
-            {routeElements}
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Suspense>
+        <div id="main-content" className="ui-main-content" tabIndex={-1}>
+          <Suspense fallback={<PageLoader isLogoLoader={isPageLoading} />}>
+            <Routes>
+              <Route index element={<Navigate replace to="/home" />} />
+              {routeElements}
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </Suspense>
+        </div>
       </div>
     </div>
   );

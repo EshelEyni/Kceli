@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { ButtonHTMLAttributes, FC } from "react";
 import "./Button.scss";
 import { AnyFunction } from "../../../../../shared/types/system";
 
-type ButtonProps = {
+type ButtonProps = Pick<ButtonHTMLAttributes<HTMLButtonElement>, "aria-label" | "aria-pressed"> & {
   className?: string;
   children: React.ReactNode;
   isDisabled?: boolean;
@@ -20,9 +20,11 @@ export const Button: FC<ButtonProps> = ({
   type = "button",
   dataTestId = "btn",
   style = {},
+  ...accessibilityProps
 }) => {
   return (
     <button
+      {...accessibilityProps}
       className={"btn " + (className || "")}
       style={style}
       onClick={onClickFn}

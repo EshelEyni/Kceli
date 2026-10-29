@@ -126,8 +126,11 @@ function ScheduleProvider({ children }: { children: React.ReactNode }) {
   const moveToMonth = useCallback(
     (i: number) => {
       const newDate = new Date(currDate);
+      newDate.setDate(1);
       newDate.setMonth(currDate.getMonth() + i);
       setCurrDate(newDate);
+      setCurrDay(null);
+      setCurrDays([]);
     },
     [currDate]
   );

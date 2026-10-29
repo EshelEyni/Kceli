@@ -61,7 +61,9 @@ function WorkoutProvider({ children }: { children: React.ReactNode }) {
   const [isRunning, setIsRunning] = useState(false);
   const [isWorkoutStarted, setIsWorkoutStarted] = useState(false);
 
-  const duration = workoutUtilService.calcWorkoutDuration({ workout: currWorkout as Workout });
+  const duration = workoutUtilService.calcWorkoutDuration({
+    workout: (currWorkout || workout) as Workout,
+  });
   const completedDuration = workoutUtilService.calcWorkoutDuration({
     workout: currWorkout as Workout,
     type: "completed",

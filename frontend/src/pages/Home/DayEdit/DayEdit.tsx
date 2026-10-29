@@ -14,37 +14,44 @@ import { FavoriteIntakes } from "./FavoriteIntakes";
 import { DayWorkouts } from "./DayWorkouts";
 import { DayGoals } from "./DayGoals";
 import { HungerMeter } from "./HungerMeter";
+import { DayDashboard } from "./DayDashboard";
 
 export const DayEdit: FC = () => {
-  const { dailyData, isLoading, isSuccess, isError, openedTab, backgroundColor, color } =
-    useDayEdit();
+  const { dailyData, isLoading, isSuccess, isError, openedTab } = useDayEdit();
 
   const showContent = isSuccess && dailyData && !isLoading;
   const isListShown =
     openedTab === DayEditTab.IntakeList || openedTab === DayEditTab.UnRecordedIntakeList;
 
   return (
-    <section
-      className="day-edit"
-      style={{ backgroundColor, color, border: `5px solid ${backgroundColor}` }}
-      data-testid="day-edit"
-    >
+    <section className="day-edit" data-testid="day-edit">
       {isLoading && <SpinnerLoader />}
       {isError && <ErrorMsg />}
       {showContent && (
-        <>
-          <DayEditHeader />
+        <DayDashboard>
+          <h2>Your daily journal</h2>
           <DayEditFilter />
           {openedTab === DayEditTab.WeightWaistInput && <WeightWaistInput />}
           {openedTab === DayEditTab.IntakeEdit && <IntakeEdit />}
           {openedTab === DayEditTab.Workouts && <DayWorkouts />}
           {openedTab === DayEditTab.FavoriteIntake && <FavoriteIntakes />}
-          {isListShown && <IntakeList />}
+          {isListShown &&
+            (dailyData.intakes.some(i => i.isRecorded === (openedTab === DayEditTab.IntakeList)) ? (
+              <IntakeList />
+            ) : (
+              <p className="ui-empty">
+                Your journal has room for something good. Log your first meal to get started.
+              </p>
+            ))}
           {openedTab === DayEditTab.Query && <NutritionQuery />}
           {openedTab === DayEditTab.Water && <WaterEdit />}
           {openedTab === DayEditTab.Goals && <DayGoals />}
           {openedTab === DayEditTab.HungerMeter && <HungerMeter />}
-        </>
+          <details className="ui-details">
+            <summary>More daily insights</summary>
+            <DayEditHeader />
+          </details>
+        </DayDashboard>
       )}
     </section>
   );

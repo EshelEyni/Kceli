@@ -119,23 +119,32 @@ export const Calender: FC = () => {
         </li>
       ))}
       {calenderDays.map(d => {
-        const { backgroundColor, date } = d;
-        const color = d.backgroundColor ? "white" : "";
-        const border = d.isBorder ? "4px solid var(--color-success)" : "none";
+        const { date } = d;
+        const selected = !!(
+          (currDay && isSameDay(d.date, currDay.date)) ||
+          currDays.some(day => isSameDay(d.date, day.date))
+        );
         return (
           <li
             className={classnames("calender__item", {
-              active:
-                (currDay && isSameDay(d.date, currDay.date)) ||
-                currDays.some(day => isSameDay(d.date, day.date)),
+              active: selected,
+              "has-log": !!d.data,
+              "has-goal": d.isBorder,
+              "outside-month": d.date.getMonth() !== currDate.getMonth(),
             })}
-            onClick={() => handleDayClick(d)}
-            style={{ backgroundColor, color }}
             key={date.toISOString()}
           >
-            <div className="calender__item__wrapper" style={{ border }}>
-              <h3>{d.day}</h3>
-            </div>
+            <button
+              className="calender__item__wrapper"
+              onClick={() => handleDayClick(d)}
+              aria-pressed={selected}
+              aria-label={`${date.toLocaleDateString("en-US", { dateStyle: "full" })}${
+                d.data ? ", daily log" : ""
+              }${d.isBorder ? ", completed workout" : ""}`}
+            >
+              <span>{d.day}</span>
+              {d.data && <i className="ui-calendar-dot" aria-hidden="true" />}
+            </button>
           </li>
         );
       })}

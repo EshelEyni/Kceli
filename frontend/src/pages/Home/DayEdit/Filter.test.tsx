@@ -23,7 +23,7 @@ describe("Day Edit Filter", () => {
     mockUseDayEdit({ dailyData });
     render(<DayEditFilter />);
 
-    const expectedBtnNames = ["add", "water", "weight", "query"];
+    const expectedBtnNames = ["Log meal", "Water", "Check-in", "Nutrition help"];
 
     for (const btnName of expectedBtnNames) {
       expect(screen.getByText(btnName)).toBeInTheDocument();
@@ -40,7 +40,7 @@ describe("Day Edit Filter", () => {
     mockUseDayEdit({ dailyData });
     render(<DayEditFilter />);
 
-    expect(screen.getByText("intakes")).toBeInTheDocument();
+    expect(screen.getByText("Diary")).toBeInTheDocument();
   });
 
   it("should render unrecorded button if there are unrecorded intakes", () => {
@@ -53,7 +53,7 @@ describe("Day Edit Filter", () => {
     mockUseDayEdit({ dailyData });
     render(<DayEditFilter />);
 
-    expect(screen.getByText("unrecorded")).toBeInTheDocument();
+    expect(screen.getByText("Drafts")).toBeInTheDocument();
   });
 
   it("should render workouts button if there are workouts", () => {
@@ -66,7 +66,7 @@ describe("Day Edit Filter", () => {
     mockUseDayEdit({ dailyData });
     render(<DayEditFilter />);
 
-    expect(screen.getByText("workouts")).toBeInTheDocument();
+    expect(screen.getByText("Workouts")).toBeInTheDocument();
   });
 
   it("should call setOpenedTab with proper value on button click", () => {

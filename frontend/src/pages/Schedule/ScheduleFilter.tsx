@@ -49,6 +49,7 @@ export const ScheduleFilter: FC = () => {
       {Object.values(ScheduleGridFilter).map(filter => (
         <Button
           key={filter}
+          aria-pressed={filterBy === filter}
           onClickFn={() => onSetFilter(filter)}
           className={classnames("schedule-filter__btn", {
             active: filterBy === filter,

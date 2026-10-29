@@ -9,16 +9,14 @@ import { DayData } from "../../../../shared/types/dayData";
 import { useAuth } from "../../hooks/useAuth";
 import { Modal } from "../../components/Modal/Modal";
 import "./Home.scss";
-import { useGetColorByCalories } from "../../hooks/useGetColorByCalories";
 
 const Homepage = () => {
   const { loggedInUser } = useAuth();
-  const { dailyData } = useGetTodayData();
+  const { dailyData, isSuccess } = useGetTodayData();
   const { createDay, isLoading: isLoadingCreateDay } = useCreateDay();
-  const { backgroundColor, color } = useGetColorByCalories();
 
   const isTodayDetailsShown = loggedInUser && !isLoadingCreateDay;
-  const isCreateDayBtnShown = loggedInUser && dailyData && !_calcIsCurrDay(dailyData);
+  const isCreateDayBtnShown = loggedInUser && (dailyData ? !_calcIsCurrDay(dailyData) : isSuccess);
 
   usePageLoaded({ title: "Home / Kceli" });
 
@@ -42,11 +40,7 @@ const Homepage = () => {
       {isCreateDayBtnShown && (
         <Modal>
           <Modal.OpenBtn modalName="create-day">
-            <button
-              className="home__btn"
-              data-testid="create-day-open-modal-btn"
-              style={{ backgroundColor, color }}
-            >
+            <button className="home__btn" data-testid="create-day-open-modal-btn">
               start a new day
             </button>
           </Modal.OpenBtn>
