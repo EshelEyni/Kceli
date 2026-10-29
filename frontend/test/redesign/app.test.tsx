@@ -110,7 +110,7 @@ describe("Approved redesign with real providers and mocked transport", () => {
       </DayEditProvider>
     );
     await screen.findByText(/Viewing your saved day:/);
-    expect(screen.getByRole("button", { name: "Log a meal", exact: true })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: "Log a meal", exact: true })).not.toBeInTheDocument();
     expect(api.mock.history.patch).toHaveLength(0);
   });
 

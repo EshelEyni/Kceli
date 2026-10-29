@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { FiActivity, FiArrowRight, FiFeather, FiPlus } from "react-icons/fi";
+import { FiActivity, FiArrowRight, FiFeather } from "react-icons/fi";
 import { useAuth } from "../../../hooks/useAuth";
 import { MetricCard, PageIntro } from "../../../components/App/PageIntro/PageIntro";
 import { DayEditTab, useDayEdit } from "./DayEditContext";
@@ -43,16 +43,6 @@ export function DayDashboard({ children }: { children: ReactNode }) {
           isToday
             ? "Small steps today. A healthier you tomorrow."
             : `Viewing your saved day: ${savedDate}. Start a new day below to log today's activities.`
-        }
-        action={
-          <button
-            className="ui-button"
-            disabled={!isToday}
-            onClick={() => openTool(DayEditTab.IntakeEdit)}
-          >
-            <FiPlus />
-            Log a meal
-          </button>
         }
       />
       <div className="ui-metrics">
