@@ -525,39 +525,7 @@ body {
     color: #49623d;
     font-size: 25px;
   }
-  .ui-water-card {
-    background: #f0f4f7;
-    border-color: #e6ecf0;
-  }
-  .ui-cups {
-    display: flex;
-    gap: 9px;
-    margin: 25px 0;
-    span {
-      flex: 1;
-      max-width: 27px;
-      height: 32px;
-      border: 2px solid #b5cbd7;
-      border-radius: 3px 3px 9px 9px;
-      &.filled {
-        background: #b9d2dd;
-        border-color: #8fbbcc;
-      }
-    }
-  }
-  .ui-water-total {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    align-items: center;
-    strong {
-      font-size: 26px;
-    }
-    small {
-      font-size: 12px;
-      color: var(--ui-muted);
-    }
-  }
+
   .ui-intention {
     background: #edf2e4;
     > svg {
@@ -731,20 +699,6 @@ body {
       font-weight: 600;
       min-height: 44px;
     }
-    .day-edit__header {
-      margin-top: 20px;
-      text-align: left;
-      .day-edit__header__date {
-        font-size: 13px;
-      }
-      .day-edit__header__titles__title {
-        font-size: 12px;
-        text-transform: none;
-        strong {
-          font-size: 16px;
-        }
-      }
-    }
   }
   .intake-list__header {
     width: 100%;
@@ -821,7 +775,6 @@ body {
   }
   .weight-waist-form,
   .intake-edit,
-  .water-edit,
   .nutrition-query,
   .favorite-intakes {
     width: 100%;
@@ -835,9 +788,7 @@ body {
       text-transform: none;
     }
   }
-  .water-edit__btns-values-container {
-    flex-wrap: wrap;
-  }
+
   .ui-tabs,
   .schedule-filter {
     display: flex;

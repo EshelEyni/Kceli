@@ -8,7 +8,6 @@ export interface DayData extends BasicDayData {
     readonly id: string;
     intakes: CombinedIntake[];
     workouts: Workout[];
-    hungerEvents: HungerEvent[];
     weight: number;
     waist: number;
     isWeightWaistIgnored: boolean;
@@ -17,7 +16,3 @@ export interface DayData extends BasicDayData {
     createdAt: Date;
     updatedAt: Date;
 }
-export type HungerEvent = {
-    date: Date;
-    level: number;
-};

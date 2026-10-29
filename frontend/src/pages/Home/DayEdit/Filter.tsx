@@ -32,16 +32,8 @@ export const DayEditFilter: FC = () => {
       value: DayEditTab.FavoriteIntake,
     },
     {
-      name: "Water",
-      value: DayEditTab.Water,
-    },
-    {
       name: "Check-in",
       value: DayEditTab.WeightWaistInput,
-    },
-    {
-      name: "Workouts",
-      value: DayEditTab.Workouts,
     },
     {
       name: "Nutrition help",
@@ -50,10 +42,6 @@ export const DayEditFilter: FC = () => {
     {
       name: "Goals",
       value: DayEditTab.Goals,
-    },
-    {
-      name: "Hunger",
-      value: DayEditTab.HungerMeter,
     },
   ];
 

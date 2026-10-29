@@ -80,7 +80,6 @@ export function createFixtures() {
     isWeightWaistIgnored: false,
     totalDailyEnergyExpenditure: 2600,
     targetCaloricIntake: 2100,
-    hungerEvents: [],
     workouts: [],
     intakes: [
       ...[

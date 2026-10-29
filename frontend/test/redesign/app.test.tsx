@@ -8,6 +8,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import auth from "../../src/store/slices/authSlice";
 import system from "../../src/store/slices/systemSlice";
 import { DayDashboard } from "../../src/pages/Home/DayEdit/DayDashboard";
+import { DayEdit } from "../../src/pages/Home/DayEdit/DayEdit";
+import { DayEditFilter } from "../../src/pages/Home/DayEdit/Filter";
 import { DayEditProvider } from "../../src/pages/Home/DayEdit/DayEditContext";
 import { WorkoutsProvider } from "../../src/pages/Workout/WorkoutsContext";
 import WorkoutPage from "../../src/pages/Workout/WorkoutPage";
@@ -61,34 +63,40 @@ function mount(element: React.ReactNode, path = "/home", loggedIn = true) {
 }
 
 describe("Approved redesign with real providers and mocked transport", () => {
-  it("logs 250 ml without losing existing intakes and refreshes the hydration summary", async () => {
-    client.setQueryDefaults(["userDailyStats"], { cacheTime: Infinity });
-    client.setQueryDefaults(["calenderData"], { cacheTime: Infinity });
-    client.setQueryData(["userDailyStats"], []);
-    const calendarKey = ["calenderData", new Date().toDateString()];
-    client.setQueryData(calendarKey, []);
+  it("keeps the daily journal without the removed insights section", async () => {
     mount(
       <DayEditProvider>
-        <DayDashboard>
-          <p>Daily tools</p>
-        </DayDashboard>
+        <DayEdit />
       </DayEditProvider>
     );
-    await screen.findByRole("heading", { name: "Good to see you, Alex." });
-    expect(screen.getByText("1.5")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "+ 250 ml" }));
-    await screen.findByText("1.75");
-    const request = api.mock.history.patch.find(r => r.url?.endsWith("day/today"));
-    const intakes = JSON.parse(request!.data).intakes;
-    expect(intakes).toHaveLength(5);
-    expect(intakes.at(-1)).toMatchObject({
-      type: "drink",
-      isRecorded: true,
-      items: [expect.objectContaining({ name: "water", quantity: 250, unit: "ml", calories: 0 })],
-    });
-    expect(client.getQueryState(["userDailyStats"])?.isInvalidated).toBe(true);
-    expect(client.getQueryState(calendarKey)?.isInvalidated).toBe(true);
+    await screen.findByRole("heading", { name: "Your daily journal", exact: true });
+    expect(screen.queryByText("More daily insights")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("day-edit-header")).not.toBeInTheDocument();
+    expect(screen.getByText(/Greek yogurt & berry bowl -/)).toBeInTheDocument();
   });
+  it.each(["Water", "Workouts", "HungerMeter"])(
+    "falls back to the diary for the retired %s Home tab",
+    async tab => {
+      mount(
+        <DayEditProvider>
+          <DayDashboard>
+            <DayEditFilter />
+          </DayDashboard>
+        </DayEditProvider>,
+        `/home?tab=${tab}`
+      );
+      await screen.findByRole("heading", { name: "Good to see you, Alex." });
+      expect(screen.getByRole("button", { name: "Diary", exact: true })).toHaveAttribute(
+        "aria-pressed",
+        "true"
+      );
+      expect(screen.queryByRole("heading", { name: "Stay hydrated" })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /water|hunger|workouts/i })
+      ).not.toBeInTheDocument();
+      expect(api.mock.history.patch).toHaveLength(0);
+    }
+  );
 
   it("does not quick-log today's activities into an older saved day", async () => {
     const yesterday = new Date();
@@ -102,10 +110,7 @@ describe("Approved redesign with real providers and mocked transport", () => {
       </DayEditProvider>
     );
     await screen.findByText(/Viewing your saved day:/);
-    const waterButton = screen.getByRole("button", { name: "+ 250 ml" });
-    expect(waterButton).toBeDisabled();
     expect(screen.getByRole("button", { name: "Log a meal", exact: true })).toBeDisabled();
-    fireEvent.click(waterButton);
     expect(api.mock.history.patch).toHaveLength(0);
   });
 

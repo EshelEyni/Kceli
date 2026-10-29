@@ -2,6 +2,10 @@
 
 Branch: `codex/modern-responsive-ui`.
 
+## Subsequent feature removals
+
+Hunger-event tracking is removed from the UI, backend schema, update fields and shared types. No compatibility middleware, legacy serialization rules or data migration is retained, since the app has no users. The Home water card/check-in, its calculation service, the Home Workouts tab/quick-workout editor and “More daily insights” section are removed, together with their unused components and calculations. The dedicated Workouts page, dashboard plan summary, workout history and ordinary drink entries remain available. The sections below and `redesign-demo/` record the earlier design milestone; their original feature inventory is historical.
+
 The approved prototype remains in `redesign-demo/`. The actual React application now uses its forest-green, lime and neutral visual direction, with live values from the existing hooks and API services. This is the first implementation pass; detailed legacy editors retain their original behavior and some of their internal layouts.
 
 ## Implemented

@@ -43,7 +43,9 @@ describe("Day Edit", () => {
 
     render(<DayEdit />);
 
-    expect(screen.getByTestId("day-edit-header")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Your daily journal" })
+    ).toBeInTheDocument();
   });
 
   it("should render weight waist input when openedTab is WeightWaistInput", () => {
@@ -70,21 +72,6 @@ describe("Day Edit", () => {
     render(<DayEdit />);
 
     expect(screen.getByTestId("intake-edit")).toBeInTheDocument();
-  });
-
-  it("should render workout list when openedTab is Workouts", () => {
-    mockUseDeleteWorkout({});
-    mockUseNavigate();
-    mockUseDayEdit({
-      isSuccess: true,
-      dailyData: testService.createDailyData({}),
-      isLoadingUpdate: false,
-      openedTab: "Workouts",
-    });
-
-    render(<DayEdit />);
-    const workoutPreviews = screen.getAllByTestId("workout-preview");
-    expect(workoutPreviews.length).toBeGreaterThan(0);
   });
 
   it("should render intake list when openedTab is IntakeList", () => {
@@ -137,18 +124,5 @@ describe("Day Edit", () => {
     render(<DayEdit />);
 
     expect(screen.getByTestId("nutrition-query")).toBeInTheDocument();
-  });
-
-  it("should render water edit when openedTab is Water", () => {
-    mockUseDayEdit({
-      isSuccess: true,
-      dailyData: testService.createDailyData({}),
-      isLoadingUpdate: false,
-      openedTab: "Water",
-    });
-
-    render(<DayEdit />);
-
-    expect(screen.getByTestId("water-edit")).toBeInTheDocument();
   });
 });

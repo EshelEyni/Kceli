@@ -1,5 +1,5 @@
 import { User, UserWorkoutSchedule, WorkoutDay } from "../../../shared/types/user";
-import { DayData, HungerEvent } from "../../../shared/types/dayData";
+import { DayData } from "../../../shared/types/dayData";
 import { act } from "@testing-library/react";
 import { CombinedIntake, IntakeItem, MeasurementUnit } from "../../../shared/types/intake";
 import {
@@ -41,7 +41,6 @@ type MockDayData = {
   targetCaloricIntake?: number;
   createdAt?: Date;
   updatedAt?: Date;
-  hungerEvents?: HungerEvent[];
 };
 
 type MockIntakeItem = {
@@ -165,7 +164,6 @@ function createDailyData({
   targetCaloricIntake = 100,
   createdAt = new Date(),
   updatedAt = new Date(),
-  hungerEvents = [],
 }: MockDayData): DayData {
   return {
     id,
@@ -180,7 +178,6 @@ function createDailyData({
     targetCaloricIntake,
     createdAt,
     updatedAt,
-    hungerEvents,
   };
 }
 

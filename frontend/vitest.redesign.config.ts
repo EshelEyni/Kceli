@@ -9,7 +9,6 @@ export default defineConfig({
     include: [
       "test/redesign/**/*.test.tsx",
       "src/pages/Home/DayEdit/Filter.test.tsx",
-      "src/pages/Home/DayEdit/WaterEdit.test.tsx",
       "src/components/App/Button/Button.test.tsx",
     ],
     threads: false,

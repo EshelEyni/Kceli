@@ -7,7 +7,6 @@ import { UseMutateFunction } from "@tanstack/react-query";
 import { CombinedIntake, FavoriteIntake, Intake } from "../../../../../shared/types/intake";
 import intakeUtilService from "../../../services/intake/intakeUtilService";
 import { useAuth } from "../../../hooks/useAuth";
-import waterConsumptionService from "../../../services/waterConsumption/waterConsumptionService";
 import nutritionUtilService from "../../../services/nutrition/nutritionUtilService";
 import { Goal, NutritionQueryState } from "../../../types/app";
 import { useGetUserFavoriteIntakes } from "../../../hooks/useGetUserFavoriteIntakes";
@@ -29,16 +28,12 @@ export type DayEditContextType = {
   recordedIntakes: Intake[];
   unrecordedIntakes: Intake[];
   remainingCalories: number;
-  estimatedKGChange: number;
   consumedCalories: number;
   targetCaloricIntakePerDay: number;
   openedTab: DayEditTab;
   setOpenedTab: (element: DayEditTab) => void;
-  recommendedWaterIntake: number;
   intake: CombinedIntake;
   setIntake: Dispatch<SetStateAction<CombinedIntake>>;
-  calConsumedPct: number;
-  calRemainingPct: number;
   chatGPTQuery: NutritionQueryState;
   setChatGPTQuery: Dispatch<SetStateAction<NutritionQueryState>>;
   ninjaAPIQuery: NutritionQueryState;
@@ -68,12 +63,9 @@ export enum DayEditTab {
   IntakeList = "IntakeList",
   UnRecordedIntakeList = "UnRecordedIntakeList",
   FavoriteIntake = "FavoriteIntake",
-  Water = "Water",
   WeightWaistInput = "WeightWaistInput",
-  Workouts = "Workouts",
   Query = "Query",
   Goals = "Goals",
-  HungerMeter = "HungerMeter",
 }
 
 const DayEditContext = createContext<DayEditContextType | undefined>(undefined);
@@ -102,7 +94,9 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [openedTab, setOpenedTab] = useState<DayEditTab>(
-    (searchParams.get("tab") as DayEditTab) || DayEditTab.IntakeList
+    Object.values(DayEditTab).includes(searchParams.get("tab") as DayEditTab)
+      ? (searchParams.get("tab") as DayEditTab)
+      : DayEditTab.IntakeList
   );
 
   const [intake, setIntake] = useState<CombinedIntake>(intakeUtilService.getDefaultIntake());
@@ -124,20 +118,6 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
 
   const targetCaloricIntakePerDay =
     dailyData?.targetCaloricIntake ?? loggedInUser?.targetCaloricIntakePerDay ?? 0;
-
-  const estimatedKGChange = calorieUtilService.calcEstimatedBodyFatStatusPerDay(
-    loggedInUser,
-    dailyData
-  );
-
-  const calConsumedPct = Math.round((consumedCalories / targetCaloricIntakePerDay) * 100);
-
-  const calRemainingPct = Math.round((remainingCalories / targetCaloricIntakePerDay) * 100);
-
-  const recommendedWaterIntake = waterConsumptionService.calcRecommendedWaterIntake(
-    loggedInUser,
-    dailyData
-  );
 
   function getDayGoalsQueryStr() {
     if (!dailyData) return "";
@@ -169,14 +149,10 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     remainingCalories,
     consumedCalories,
     targetCaloricIntakePerDay,
-    estimatedKGChange,
     openedTab,
     setOpenedTab,
-    recommendedWaterIntake,
     intake,
     setIntake,
-    calConsumedPct,
-    calRemainingPct,
     chatGPTQuery,
     setChatGPTQuery,
     ninjaAPIQuery,

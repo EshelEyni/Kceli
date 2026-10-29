@@ -19,32 +19,6 @@ const calorieService_1 = __importDefault(require("../../services/calorie/calorie
 const userModel_1 = require("../user/userModel");
 const ALSService_1 = require("../../services/ALSService");
 const workoutModel_1 = require("../workout/workoutModel");
-const hungerEventSchema = new mongoose_1.Schema({
-    date: {
-        type: Date,
-        default: new Date(),
-    },
-    level: {
-        type: Number,
-        min: 1,
-        max: 5,
-    },
-}, {
-    toObject: {
-        virtuals: true,
-        transform: (_, ret) => {
-            delete ret._id;
-            return ret;
-        },
-    },
-    toJSON: {
-        virtuals: true,
-        transform: (_, ret) => {
-            delete ret._id;
-            return ret;
-        },
-    },
-});
 const dailyDataSchema = new mongoose_1.Schema({
     date: {
         type: Date,
@@ -78,10 +52,6 @@ const dailyDataSchema = new mongoose_1.Schema({
     },
     workouts: {
         type: [workoutModel_1.workoutSchema],
-        default: [],
-    },
-    hungerEvents: {
-        type: [hungerEventSchema],
         default: [],
     },
 }, {
@@ -157,7 +127,7 @@ dailyDataSchema.pre("findOneAndUpdate", function (next) {
         const user = yield userModel_1.UserModel.findById(loggedInUserId);
         if (!user)
             return next();
-        const { height, gender, birthdate } = user;
+        const { height, gender, birthdate, targetCaloricDeficitPerDay } = user;
         const { weight } = update;
         const age = new Date().getFullYear() - birthdate.getFullYear();
         const TDEE = calorieService_1.default.calcTotalDailyEnergyExpenditure({
@@ -166,7 +136,10 @@ dailyDataSchema.pre("findOneAndUpdate", function (next) {
             age,
             gender,
         });
-        const targetCaloricIntake = calorieService_1.default.calcTargetCaloricIntakePerDay({ TDEE });
+        const targetCaloricIntake = calorieService_1.default.calcTargetCaloricIntakePerDay({
+            TDEE,
+            targetCaloricDeficitPerDay,
+        });
         this.setOptions({ runValidators: true });
         this.updateOne({ totalDailyEnergyExpenditure: TDEE, targetCaloricIntake });
         next();

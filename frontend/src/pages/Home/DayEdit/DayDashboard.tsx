@@ -1,11 +1,9 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { FiActivity, FiArrowRight, FiDroplet, FiFeather, FiPlus } from "react-icons/fi";
+import { FiActivity, FiArrowRight, FiFeather, FiPlus } from "react-icons/fi";
 import { useAuth } from "../../../hooks/useAuth";
 import { MetricCard, PageIntro } from "../../../components/App/PageIntro/PageIntro";
 import { DayEditTab, useDayEdit } from "./DayEditContext";
-import intakeUtilService from "../../../services/intake/intakeUtilService";
-import { MeasurementUnit } from "../../../../../shared/types/intake";
 
 export function DayDashboard({ children }: { children: ReactNode }) {
   const { loggedInUser } = useAuth();
@@ -16,8 +14,6 @@ export function DayDashboard({ children }: { children: ReactNode }) {
     targetCaloricIntakePerDay,
     setOpenedTab,
     setSearchParams,
-    updateDailyData,
-    isLoadingUpdate,
   } = useDayEdit();
   if (!dailyData) return null;
   const isToday = new Date(dailyData.date).toDateString() === new Date().toDateString();
@@ -33,40 +29,11 @@ export function DayDashboard({ children }: { children: ReactNode }) {
   const scheduled =
     loggedInUser?.workoutSchedule?.find(day => day.value === new Date(dailyData.date).getDay())
       ?.workouts || [];
-  const waterMl = dailyData.intakes
-    .filter(i => i.isRecorded)
-    .reduce(
-      (sum, intake) =>
-        sum +
-        intake.items.reduce((total, item) => {
-          if (item.name.toLowerCase() !== "water") return total;
-          return (
-            total + Number(item.quantity) * (item.unit === "cup" ? 250 : item.unit === "ml" ? 1 : 0)
-          );
-        }, 0),
-      0
-    );
-  const waterTarget = Math.round((weight || 0) * 33);
   const openTool = (tab: DayEditTab) => {
     setOpenedTab(tab);
     setSearchParams(new URLSearchParams({ tab }));
     document.getElementById("daily-tools")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  function addWater() {
-    if (!dailyData || isLoadingUpdate || !isToday) return;
-    const intake = intakeUtilService.getDefaultIntake();
-    intake.type = "drink";
-    intake.name = "Water";
-    intake.recordedAt = new Date();
-    intake.items[0] = {
-      ...intake.items[0],
-      name: "water",
-      quantity: 250,
-      unit: MeasurementUnit.MILLILITER,
-      calories: 0,
-    };
-    updateDailyData({ id: dailyData.id, data: { intakes: [...dailyData.intakes, intake] } });
-  }
   return (
     <>
       <PageIntro
@@ -197,46 +164,12 @@ export function DayDashboard({ children }: { children: ReactNode }) {
               </div>
             )}
           </section>
-          <section className="ui-card ui-water-card">
-            <div className="ui-card-heading">
-              <h2>Stay hydrated</h2>
-              <FiDroplet />
-            </div>
-            <p className="ui-subtitle">A little refresh goes a long way.</p>
-            <div className="ui-cups" aria-hidden="true">
-              {Array.from({ length: 8 }, (_, i) => (
-                <span
-                  className={waterTarget > 0 && i < (waterMl / waterTarget) * 8 ? "filled" : ""}
-                  key={i}
-                />
-              ))}
-            </div>
-            <div className="ui-water-total">
-              <div>
-                <strong>{Number((waterMl / 1000).toFixed(2))}</strong>
-                <small> / {Number((waterTarget / 1000).toFixed(2))} L</small>
-              </div>
-              <button
-                className="ui-button ui-button-secondary"
-                onClick={addWater}
-                disabled={isLoadingUpdate || !isToday}
-              >
-                + 250 ml
-              </button>
-            </div>
-            <button className="ui-text-link" onClick={() => openTool(DayEditTab.Water)}>
-              More water options ↗
-            </button>
-          </section>
           <section className="ui-card ui-intention">
             <FiFeather />
             <h2>Your everyday intentions</h2>
             <p>Check in with your goals, make time for movement, and notice how you feel.</p>
             <button className="ui-text-link" onClick={() => openTool(DayEditTab.Goals)}>
               View daily goals ↗
-            </button>
-            <button className="ui-text-link" onClick={() => openTool(DayEditTab.HungerMeter)}>
-              Log a hunger check-in ↗
             </button>
           </section>
         </aside>

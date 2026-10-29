@@ -3,8 +3,6 @@ import { DayData } from "../../../../shared/types/dayData";
 import { User } from "../../../../shared/types/user";
 import { Intake } from "../../../../shared/types/intake";
 
-export const CALORIES_PER_KG_BODY_FAT = 7700;
-
 function calcRemainingCalories(loggedInUser: User | null, dailyData: DayData | undefined): number {
   if (!loggedInUser || !dailyData) return 0;
   const targetCaloricIntakePerDay =
@@ -20,20 +18,6 @@ function calcRemainingCaloriesFromDayData(dailyData: DayData | undefined): numbe
   const remainingCalories = Math.round(targetCaloricIntakePerDay - getTotalCalories(dailyData));
 
   return remainingCalories;
-}
-
-function calcEstimatedBodyFatStatusPerDay(
-  loggedInUser: User | null,
-  dailyData: DayData | undefined
-): number {
-  if (!loggedInUser || !dailyData) return 0;
-  const totalDailyEnergyExpenditure =
-    dailyData.totalDailyEnergyExpenditure || loggedInUser.totalDailyEnergyExpenditure;
-  const caloricDifference = getTotalCalories(dailyData) - totalDailyEnergyExpenditure;
-  const ONE_KG_OF_BODY_FAT_CALORIES = 7700;
-  const estimatedBodyFatChangePerDay = caloricDifference / ONE_KG_OF_BODY_FAT_CALORIES;
-
-  return Number(estimatedBodyFatChangePerDay.toFixed(2));
 }
 
 function getTotalCalories(entity: DayData[] | DayData | Intake | undefined): number {
@@ -141,7 +125,6 @@ export default {
   calcRemainingCalories,
   getBcgByCosumedCalories,
   getTotalCalories,
-  calcEstimatedBodyFatStatusPerDay,
   getTotalCaloriesFromDailyData,
   calcRemainingCaloriesFromDayData,
   getDailyExcessRate,

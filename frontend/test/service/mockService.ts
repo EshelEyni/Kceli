@@ -36,17 +36,13 @@ export type MockUseDayEdit = {
   recordedIntakes?: any;
   unrecordedIntakes?: any;
   remainingCalories?: any;
-  estimatedKGChange?: any;
   consumedCalories?: any;
   targetCaloricIntakePerDay?: any;
   backgroundColor?: any;
   openedTab?: any;
   setOpenedTab?: any;
-  recommendedWaterIntake?: any;
   intake?: any;
   setIntake?: any;
-  calConsumedPct?: any;
-  calRemainingPct?: any;
   currIntakeItemId?: any;
   setCurrIntakeItemId?: any;
   chatGPTQuery?: NutritionQueryState;
@@ -226,17 +222,13 @@ function mockUseDayEdit({
   recordedIntakes = [],
   unrecordedIntakes = [],
   remainingCalories = 0,
-  estimatedKGChange = 0,
   consumedCalories = 0,
   targetCaloricIntakePerDay = 0,
   backgroundColor = "white",
   openedTab = DayEditTab.IntakeEdit,
   setOpenedTab = vi.fn(),
-  recommendedWaterIntake = 0,
   intake = testService.createIntake({}),
   setIntake = vi.fn(),
-  calConsumedPct = 0,
-  calRemainingPct = 0,
   currIntakeItemId = "",
   setCurrIntakeItemId = vi.fn(),
   chatGPTQuery = testService.createNutritionQuery({ type: "chatGPT" }),
@@ -262,17 +254,13 @@ function mockUseDayEdit({
     recordedIntakes,
     unrecordedIntakes,
     remainingCalories,
-    estimatedKGChange,
     consumedCalories,
     targetCaloricIntakePerDay,
     backgroundColor,
     openedTab,
     setOpenedTab,
-    recommendedWaterIntake,
     intake,
     setIntake,
-    calConsumedPct,
-    calRemainingPct,
     currIntakeItemId: currIntakeItemId ?? intake.items[0].id,
     setCurrIntakeItemId,
     chatGPTQuery,
