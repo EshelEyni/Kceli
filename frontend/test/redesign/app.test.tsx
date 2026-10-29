@@ -114,74 +114,22 @@ describe("Approved redesign with real providers and mocked transport", () => {
     expect(api.mock.history.patch).toHaveLength(0);
   });
 
-  it("offers mobile scheduling, persists once and avoids duplicate routines", async () => {
-    const store = mount(
-      <WorkoutsProvider>
-        <WorkoutPage />
-      </WorkoutsProvider>,
+  it("shows and filters the library without weekly planning controls", async () => {
+    mount(
+      <WorkoutsProvider><WorkoutPage /></WorkoutsProvider>,
       "/workouts"
     );
-    const select = await screen.findByLabelText("Schedule Easy outdoor run");
-    fireEvent.change(select, { target: { value: "mon" } });
-    await waitFor(() =>
-      expect(
-        store
-          .getState()
-          .auth.loggedInUser?.workoutSchedule.find(d => d.name === "mon")
-          ?.workouts.some(w => w.id === "cardio-a")
-      ).toBe(true)
-    );
-    expect(api.mock.history.patch.filter(r => r.url?.endsWith("user/loggedInUser"))).toHaveLength(
-      1
-    );
-    fireEvent.change(select, { target: { value: "mon" } });
-    expect(api.mock.history.patch.filter(r => r.url?.endsWith("user/loggedInUser"))).toHaveLength(
-      1
-    );
-    expect(
-      api.fixtures.user.workoutSchedule
-        .find(d => d.name === "mon")
-        ?.workouts.filter(w => w.id === "cardio-a")
-    ).toHaveLength(1);
+    await screen.findByRole("heading", { name: "Easy outdoor run" });
+    expect(screen.queryByRole("heading", { name: "Your weekly rhythm" })).not.toBeInTheDocument();
+    expect(screen.queryByTestId("workout-schedule")).not.toBeInTheDocument();
+    expect(screen.queryByText("Add to day")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Drag .* to a weekday/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Cardio", exact: true }));
-    expect(screen.queryByLabelText("Schedule Full body strength")).not.toBeInTheDocument();
-    expect(screen.getByLabelText("Schedule Easy outdoor run")).toBeInTheDocument();
-    fireEvent.click(
-      screen.getByRole("button", { name: "Remove Easy outdoor run from mon", exact: true })
-    );
-    await waitFor(() =>
-      expect(
-        store
-          .getState()
-          .auth.loggedInUser?.workoutSchedule.find(d => d.name === "mon")
-          ?.workouts.some(w => w.id === "cardio-a")
-      ).toBe(false)
-    );
-  });
-
-  it("keeps the saved weekly plan when a schedule request fails", async () => {
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.spyOn(console, "log").mockImplementation(() => {});
-    api.mock.onPatch(/user\/loggedInUser$/).reply(503, { status: "error" });
-    const store = mount(
-      <WorkoutsProvider>
-        <WorkoutPage />
-      </WorkoutsProvider>,
-      "/workouts"
-    );
-    fireEvent.change(await screen.findByLabelText("Schedule Easy outdoor run"), {
-      target: { value: "mon" },
-    });
-    await waitFor(() => expect(api.mock.history.patch).toHaveLength(1));
-    await waitFor(() =>
-      expect(screen.getByLabelText("Schedule Easy outdoor run")).not.toBeDisabled()
-    );
-    expect(
-      store
-        .getState()
-        .auth.loggedInUser?.workoutSchedule.find(d => d.name === "mon")
-        ?.workouts.some(w => w.id === "cardio-a")
-    ).toBe(false);
+    expect(screen.queryByRole("heading", { name: "Full body strength" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Easy outdoor run" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "All workouts", exact: true }));
+    expect(screen.getByRole("heading", { name: "Full body strength" })).toBeInTheDocument();
+    expect(api.mock.history.patch).toHaveLength(0);
   });
 
   it("edits the profile through the existing API and updates the shared account state", async () => {
