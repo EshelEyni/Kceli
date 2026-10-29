@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC, useState } from "react";
 import { Goal } from "../../types/app";
 import goalUtilService from "../../services/goal/goalUtilService";
@@ -50,13 +51,13 @@ export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing, date }) =>
           <input
             type="number"
             className="goal-edit__input"
-            placeholder="Enter your starting weight"
+            placeholder={t("Enter your starting weight")}
             onChange={handleStartingWeightInputChanged}
           />
           <input
             type="number"
             className="goal-edit__input"
-            placeholder="Enter your goal weight"
+            placeholder={t("Enter your goal weight")}
             onChange={handleWeightGoalInputChanged}
           />
         </>
@@ -64,7 +65,7 @@ export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing, date }) =>
         <input
           type="text"
           className="goal-edit__input"
-          placeholder="Enter your goal description"
+          placeholder={t("Enter your goal description")}
           value={goal.description}
           onChange={handleDescInputChanged}
         />
@@ -86,11 +87,13 @@ export const GoalEdit: FC<GoalEditProps> = ({ type, setIsGoalEditing, date }) =>
           }
           onClickFn={handleAddGoal}
         >
-          Add Goal
+          {" "}
+          {t("Add Goal")}{" "}
         </Button>
         {setIsGoalEditing && (
           <Button className="dismiss" onClickFn={() => setIsGoalEditing(false)}>
-            dismiss
+            {" "}
+            {t("dismiss")}{" "}
           </Button>
         )}
       </div>

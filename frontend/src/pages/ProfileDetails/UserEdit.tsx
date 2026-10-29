@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import { useProfile } from "./ProfileContext";
 import { Controller, useForm } from "react-hook-form";
@@ -46,7 +47,7 @@ export const UserEdit: FC = () => {
   return (
     <form className="user-edit-form" onSubmit={handleSubmit(onSubmit)}>
       <div className="user-edit__item-container">
-        <label htmlFor="username">user name:</label>
+        <label htmlFor="username">{t("user name:")}</label>
         <Controller
           name="username"
           control={control}
@@ -55,7 +56,7 @@ export const UserEdit: FC = () => {
       </div>
 
       <div className="user-edit__item-container">
-        <label htmlFor="fullname">full name:</label>
+        <label htmlFor="fullname">{t("full name:")}</label>
         <Controller
           name="fullname"
           control={control}
@@ -64,7 +65,7 @@ export const UserEdit: FC = () => {
       </div>
 
       <div className="user-edit__item-container">
-        <label htmlFor="birthdate">birthdate:</label>
+        <label htmlFor="birthdate">{t("birthdate:")}</label>
         <Controller
           name="birthdate"
           control={control}
@@ -80,7 +81,7 @@ export const UserEdit: FC = () => {
       </div>
 
       <div className="user-edit__item-container">
-        <label htmlFor="height">height:</label>
+        <label htmlFor="height">{t("height:")}</label>
         <Controller
           name="height"
           control={control}
@@ -89,7 +90,7 @@ export const UserEdit: FC = () => {
       </div>
 
       <div className="user-edit__item-container">
-        <label htmlFor="weight">weight:</label>
+        <label htmlFor="weight">{t("weight:")}</label>
         <Controller
           name="weight"
           control={control}
@@ -98,7 +99,7 @@ export const UserEdit: FC = () => {
       </div>
 
       <div className="user-edit__item-container">
-        <label htmlFor="targetCaloricDeficitPerDay">Target Caloric Deficit Per Day:</label>
+        <label htmlFor="targetCaloricDeficitPerDay">{t("Target Caloric Deficit Per Day:")}</label>
         <Controller
           name="targetCaloricDeficitPerDay"
           control={control}
@@ -107,8 +108,8 @@ export const UserEdit: FC = () => {
       </div>
 
       <div className="user-edit__btns-container">
-        <Button onClickFn={handleBtnCancelClick}>cancel</Button>
-        <Button type="submit">update</Button>
+        <Button onClickFn={handleBtnCancelClick}>{t("cancel")}</Button>
+        <Button type="submit">{t("update")}</Button>
       </div>
     </form>
   );

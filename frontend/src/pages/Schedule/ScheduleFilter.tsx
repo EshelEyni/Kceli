@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import { ScheduleGridFilter } from "../../types/app";
 import { Button } from "../../components/App/Button/Button";
@@ -55,7 +56,7 @@ export const ScheduleFilter: FC = () => {
             active: filterBy === filter,
           })}
         >
-          <span>{filter}</span>
+          <span>{t(filter)}</span>
         </Button>
       ))}
     </section>

@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC, useState, useEffect } from "react";
 import { DayEditTab, useDayEdit } from "./DayEditContext";
 import { Button } from "../../../components/App/Button/Button";
@@ -71,12 +72,12 @@ export const WeightWaistInput: FC = () => {
           name="weight"
           render={({ field }) => (
             <label className="weight-waist-form__label">
-              <h3>Weight</h3>
+              <h3>{t("Weight")}</h3>
               <input
                 {...field}
                 type="number"
                 className="weight-waist-form__input"
-                placeholder="Enter your weight"
+                placeholder={t("Enter your weight")}
                 required
               />
             </label>
@@ -87,12 +88,12 @@ export const WeightWaistInput: FC = () => {
           name="waist"
           render={({ field }) => (
             <label className="weight-waist-form__label">
-              <h3>Waist</h3>
+              <h3>{t("Waist")}</h3>
               <input
                 {...field}
                 type="number"
                 className="weight-waist-form__input"
-                placeholder="Enter your waist size"
+                placeholder={t("Enter your waist size")}
                 required
               />
             </label>
@@ -101,11 +102,13 @@ export const WeightWaistInput: FC = () => {
 
         <div className="weight-waist-form__btns-container">
           <Button className="btn" type="submit">
-            update
+            {" "}
+            {t("update")}{" "}
           </Button>
 
           <Button className="btn" onClickFn={handleDismissBtnClick}>
-            dissmis
+            {" "}
+            {t("dissmis")}{" "}
           </Button>
         </div>
       </form>
@@ -114,13 +117,18 @@ export const WeightWaistInput: FC = () => {
   return (
     <>
       <div className="weight-waist-details" data-testid="weight-waist-details">
-        <p className="weight-waist-details__title">weight:</p>
-        <p className="weight-waist-details__text">{dailyData.weight} kg</p>
-        <p className="weight-waist-details__title">waist:</p>
-        <p className="weight-waist-details__text">{dailyData.waist} cm</p>
+        <p className="weight-waist-details__title">{t("weight:")}</p>
+        <p className="weight-waist-details__text">
+          {dailyData.weight} {t("kg")}
+        </p>
+        <p className="weight-waist-details__title">{t("waist:")}</p>
+        <p className="weight-waist-details__text">
+          {dailyData.waist} {t("cm")}
+        </p>
       </div>
       <Button className="btn" onClickFn={handleToggleFormBtnClick}>
-        update
+        {" "}
+        {t("update")}{" "}
       </Button>
 
       {isReachedGoalWeight && <GoalIndicator />}

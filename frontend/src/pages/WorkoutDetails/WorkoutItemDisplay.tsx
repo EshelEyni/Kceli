@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC, useState } from "react";
 import { CombinedWorkoutItem } from "../../../../shared/types/workout";
 import { useWorkout } from "./WorkoutContext";
@@ -63,7 +64,8 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
           isDisabled={!isWorkoutStarted}
           onClickFn={() => onCompleteItem(item)}
         >
-          complete
+          {" "}
+          {t("complete")}{" "}
         </Button>
       </div>
     );
@@ -80,12 +82,12 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
         {item.items.map((subItem, index) => {
           const isWeightShown = subItem.weightUnit === "kg" || subItem.weightUnit === "lbs";
           const weightStr = isWeightShown
-            ? `${subItem.weight} ${subItem.weightUnit}`
+            ? `${subItem.weight} ${t(subItem.weightUnit)}`
             : subItem.weightUnit;
 
           return (
             <li className="workout-item-display__info__superset-set-list__item" key={index}>
-              {`${subItem.name} - ${subItem.reps} reps - ${weightStr}`}
+              {`${subItem.name} - ${subItem.reps} ${t("Reps")} - ${weightStr}`}
             </li>
           );
         })}
@@ -94,16 +96,22 @@ export const WorkoutItemDisplay: FC<WorkoutItemDisplayProps> = ({ item }) => {
   }
 
   function getItemTitle() {
-    const basicTitle = `${item.name} - ${workoutUtilService.calcItemDuration(item)} min`;
+    const basicTitle = `${item.name} - ${workoutUtilService.calcItemDuration(item)} ${t("min")}`;
 
     switch (item.type) {
       case "anaerobic": {
         const isWeightShown = item.weightUnit === "kg" || item.weightUnit === "lbs";
-        const weightStr = isWeightShown ? `${item.weight} ${item.weightUnit}` : item.weightUnit;
-        return `${basicTitle} - ${item.sets} * ${item.reps} - ${weightStr} - ${item.restInSec}s rest`;
+        const weightStr = isWeightShown
+          ? `${item.weight} ${t(item.weightUnit)}`
+          : t(item.weightUnit);
+        return `${basicTitle} - ${item.sets} * ${item.reps} - ${weightStr} - ${item.restInSec} ${t(
+          "seconds rest"
+        )}`;
       }
       case "superset":
-        return `${basicTitle} - ${item.sets} sets - ${item.items.length} items - ${item.restInSec}s rest`;
+        return `${basicTitle} - ${item.sets} ${t("Sets")} - ${item.items.length} ${t("items")} - ${
+          item.restInSec
+        }s rest`;
       default:
         return basicTitle;
     }

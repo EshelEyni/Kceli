@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import { useProfile } from "./ProfileContext";
 import { Button } from "../../components/App/Button/Button";
@@ -46,63 +47,63 @@ export const UserInfo: FC = () => {
   return (
     <section className="profile-details__user-info">
       <div className="user-info__item-container">
-        <h2>User name:</h2>
+        <h2>{t("User name:")}</h2>
         <p>{username}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>Full name:</h2>
+        <h2>{t("Full name:")}</h2>
         <p>{fullname}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>Birth date:</h2>
+        <h2>{t("Birth date:")}</h2>
         <p>{new Date(birthdate).toLocaleDateString()}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>Height:</h2>
-        <p>{`${height} cm`}</p>
+        <h2>{t("Height:")}</h2>
+        <p>{`${height} ${t("cm")}`}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>Weight:</h2>
-        <p>{`${weight} kg`}</p>
+        <h2>{t("Weight:")}</h2>
+        <p>{`${weight} ${t("kg")}`}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>Total Daily Energy Expenditure:</h2>
-        <p>{`${totalDailyEnergyExpenditure} kcal`}</p>
+        <h2>{t("Total Daily Energy Expenditure:")}</h2>
+        <p>{`${totalDailyEnergyExpenditure} ${t("kcal")}`}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>Target Caloric Intake Per Day:</h2>
-        <p>{`${targetCaloricIntakePerDay} kcal`}</p>
+        <h2>{t("Target Caloric Intake Per Day:")}</h2>
+        <p>{`${targetCaloricIntakePerDay} ${t("kcal")}`}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>Target Caloric Deficit Per Day:</h2>
-        <p>{`${targetCaloricDeficitPerDay} kcal`}</p>
+        <h2>{t("Target Caloric Deficit Per Day:")}</h2>
+        <p>{`${targetCaloricDeficitPerDay} ${t("kcal")}`}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>days in process:</h2>
+        <h2>{t("days in process:")}</h2>
         <p>{count}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>total weight loss:</h2>
+        <h2>{t("total weight loss:")}</h2>
         <p>{calcTotalWeightLoss()}</p>
       </div>
 
       <div className="user-info__item-container">
-        <h2>weight loss per day:</h2>
+        <h2>{t("weight loss per day:")}</h2>
         <p>{calcWeightLossPerDay()}</p>
       </div>
 
       <div className="user-info__btn-container">
-        <Button onClickFn={handleBtnLogoutClick}>Logout</Button>
-        <Button onClickFn={handleBtnEditClick}>Edit</Button>
+        <Button onClickFn={handleBtnLogoutClick}>{t("Logout")}</Button>
+        <Button onClickFn={handleBtnEditClick}>{t("Edit")}</Button>
       </div>
     </section>
   );

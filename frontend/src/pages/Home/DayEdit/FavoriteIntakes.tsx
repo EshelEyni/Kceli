@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC, useEffect, useState } from "react";
 import { useDayEdit } from "./DayEditContext";
 import { IntakePreview } from "./IntakePreview";
@@ -78,7 +79,7 @@ export const FavoriteIntakes: FC = () => {
         type="text"
         className="day-edit__favorite-intakes__input"
         autoComplete="off"
-        placeholder="Search..."
+        placeholder={t("Search...")}
         onChange={handleInputChange}
       />
 
@@ -113,9 +114,9 @@ export const FavoriteIntakes: FC = () => {
           </StrictModeDroppable>
         </DragDropContext>
       )}
-      {isSuccess && isEmpty && <Empty entityName={"favorite intake"} />}
+      {isSuccess && isEmpty && <Empty entityName={t("favorite intake")} />}
 
-      {isError && <ErrorMsg msg="Couldn't get favorite intake. Please try again later." />}
+      {isError && <ErrorMsg msg={t("Couldn't get favorite intake. Please try again later.")} />}
     </section>
   );
 };

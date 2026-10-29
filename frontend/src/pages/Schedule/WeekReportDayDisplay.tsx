@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { FC, useState } from "react";
 import "./WeekReportDayDisplay.scss";
 import { Header } from "../../components/App/Header/Header";
@@ -20,7 +22,7 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
   const [isExpanded, setIsExpanded] = useState(!isSmallScreen);
   const [isIntakesExpanded, setIsIntakesExpanded] = useState(false);
   if (!data) return null;
-  const dayName = new Date(date).toLocaleDateString("en-US", { weekday: "short" });
+  const dayName = new Date(date).toLocaleDateString(getLocale(), { weekday: "short" });
 
   const consumedCalories = calorieUtilService.getTotalCalories(data);
   const remainingCalories = calorieUtilService.calcRemainingCaloriesFromDayData(data);
@@ -29,7 +31,7 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
     remainingCalories,
     targetCaloricIntake: data.targetCaloricIntake,
   });
-  const calConsumedTitle = ` calories ${calConsumedSufix}`;
+  const calConsumedTitle = t("calories {{status}}", { status: t(calConsumedSufix) });
   const numOfIntakes = data.intakes.length;
 
   function handleExpandBtnClick() {
@@ -47,7 +49,7 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
             <table>
               <tbody>
                 <tr>
-                  <th>Consumed Calories</th>
+                  <th>{t("Consumed Calories")}</th>
                   <td>{consumedCalories}</td>
                 </tr>
                 <tr>
@@ -55,15 +57,15 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
                   <td>{Math.abs(remainingCalories)}</td>
                 </tr>
                 <tr>
-                  <th>Target Caloric Intake</th>
+                  <th>{t("Target Caloric Intake")}</th>
                   <td>{data.targetCaloricIntake}</td>
                 </tr>
                 <tr>
-                  <th>Exceeded By</th>
+                  <th>{t("Exceeded By")}</th>
                   <td>{exceededPerc}%</td>
                 </tr>
                 <tr>
-                  <th>workouts</th>
+                  <th>{t("workouts")}</th>
                   <td>{data.workouts.length}</td>
                 </tr>
               </tbody>
@@ -73,7 +75,9 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
             className="week-report-day-display__show-intakes-btn"
             onClickFn={() => setIsIntakesExpanded(!isIntakesExpanded)}
           >
-            <span>{numOfIntakes} Intakes</span>
+            <span>
+              {numOfIntakes} {t("Intakes")}
+            </span>
             {isIntakesExpanded ? <FaChevronUp /> : <FaChevronDown />}
           </Button>
           {isIntakesExpanded && (
@@ -86,7 +90,7 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
 
           {data.workouts.length > 0 && (
             <div className="week-report-day-display__workouts">
-              <h3>Workouts:</h3>
+              <h3>{t("Workouts:")}</h3>
               <List
                 className="week-report-day-display__workouts__list"
                 items={data.workouts}
@@ -97,7 +101,8 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
                   );
                   return (
                     <p key={i}>
-                      <strong>{description}</strong> ({completedPercantage}% completed)
+                      <strong>{description}</strong> ({completedPercantage}
+                      {t("% completed)")}{" "}
                     </p>
                   );
                 }}
@@ -108,7 +113,7 @@ export const WeekReportDayDisplay: FC<WeekReportDayDisplayProps> = ({ calenderDa
       )}
       {isSmallScreen && (
         <Button className="week-report-day-display__expand-btn" onClickFn={handleExpandBtnClick}>
-          {isExpanded ? "Hide" : "Show"}
+          {isExpanded ? t("Hide") : t("Show")}
         </Button>
       )}
     </article>

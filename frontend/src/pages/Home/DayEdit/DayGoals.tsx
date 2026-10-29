@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import "./DayGoals.scss";
 import { GoalEdit } from "../../../components/GoalEdit/GoalEdit";
@@ -23,7 +24,7 @@ export const DayGoals: FC = () => {
         isError={isErrorGoals}
         isSuccess={isSuccessGoals}
         isEmpty={isEmptyGoals}
-        entityName="goal"
+        entityName={t("goal")}
       />
     </section>
   );

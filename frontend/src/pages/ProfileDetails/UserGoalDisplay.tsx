@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { FC } from "react";
 import { useProfile } from "./ProfileContext";
 import "./UserGoalDisplay.scss";
@@ -11,7 +13,7 @@ export const UserGoalDisplay: FC = () => {
     userWeightLossGoal: { startingWeight, weightGoal },
     date,
   } = userGoal;
-  const dateTitle = new Intl.DateTimeFormat("en-GB", {
+  const dateTitle = new Intl.DateTimeFormat(getLocale(), {
     year: "numeric",
     month: "numeric",
     day: "numeric",
@@ -20,17 +22,21 @@ export const UserGoalDisplay: FC = () => {
   return (
     <section className="user-display-goal">
       <Header className="user-display-goal__header">
-        <h1 className="user-display-goal__header__title">your goal</h1>
+        <h1 className="user-display-goal__header__title">{t("your goal")}</h1>
         <div className="user-display-goal__header__date">{dateTitle}</div>
       </Header>
       <div className="user-display-goal__info">
         <div className="user-display-goal__info__row">
-          <span className="user-display-goal__info__row__value">{startingWeight} kg</span>
-          <span className="user-display-goal__info__row__title">starting weight</span>
+          <span className="user-display-goal__info__row__value">
+            {startingWeight} {t("kg")}
+          </span>
+          <span className="user-display-goal__info__row__title">{t("starting weight")}</span>
         </div>
         <div className="user-display-goal__info__row">
-          <span className="user-display-goal__info__row__value">{weightGoal} kg</span>
-          <span className="user-display-goal__info__row__title">goal weight</span>
+          <span className="user-display-goal__info__row__value">
+            {weightGoal} {t("kg")}
+          </span>
+          <span className="user-display-goal__info__row__title">{t("goal weight")}</span>
         </div>
       </div>
     </section>

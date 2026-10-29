@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { FC } from "react";
 import { useSchedule } from "./ScheduleContext";
 import { DayData } from "../../../../shared/types/dayData";
@@ -27,12 +29,12 @@ export const WeekReport: FC = () => {
 
   function getTitle() {
     if (currDays.length === 0) return "";
-    const firstDayDate = currDays[0].date.toLocaleString("en-GB", {
+    const firstDayDate = currDays[0].date.toLocaleString(getLocale(), {
       year: "2-digit",
       month: "short",
       day: "numeric",
     });
-    const lastDayDate = currDays[currDays.length - 1].date.toLocaleString("en-GB", {
+    const lastDayDate = currDays[currDays.length - 1].date.toLocaleString(getLocale(), {
       year: "2-digit",
       month: "short",
       day: "numeric",
@@ -57,7 +59,9 @@ export const WeekReport: FC = () => {
       const calories = calorieUtilService.getTotalCalories(d);
       const caloriesWithoutExcess = calories - excessCalories;
 
-      const name = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(new Date(d.date));
+      const name = new Intl.DateTimeFormat(getLocale(), { weekday: "short" }).format(
+        new Date(d.date)
+      );
       return { name, calories, excessCalories, caloriesWithoutExcess };
     });
 
@@ -82,7 +86,7 @@ export const WeekReport: FC = () => {
   return (
     <section className="report week-report">
       <Header className="week-report__header">
-        <h1>weekly report</h1>
+        <h1>{t("weekly report")}</h1>
         <h3>{secondaryTitle}</h3>
       </Header>
       <ReportTable type="week" currData={currWeekData} prevData={prevWeekData} />
@@ -90,7 +94,7 @@ export const WeekReport: FC = () => {
       {weightWaistData && <WeightWaistChart data={weightWaistData} />}
       {calorieData && <CaloriesBar data={calorieData} />}
       {isWeeklyDataEmpty ? (
-        <Empty entityName="data for this week" />
+        <Empty entityName={t("data for this week")} />
       ) : (
         <div className="week-report-day-display-container">
           {currDays.map((d, i) => (

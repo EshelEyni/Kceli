@@ -1,0 +1,78 @@
+.app .ui-language-selector {
+  min-height: 36px;
+  max-width: 110px;
+  padding: 5px 8px;
+  border: 1px solid var(--ui-line);
+  border-radius: 8px;
+  color: var(--ui-ink);
+  background: white;
+  cursor: pointer;
+}
+
+html[dir="rtl"] .app {
+  .app-content {
+    margin-left: 0;
+    margin-right: 236px;
+  }
+  .ui-sidebar {
+    inset: 0 0 0 auto;
+    border-right: 0;
+    border-left: 1px solid var(--ui-line);
+  }
+  .ui-brand {
+    direction: ltr;
+  }
+  .ui-eyebrow,
+  .ui-tagline {
+    letter-spacing: normal;
+  }
+  .ui-skip-link {
+    left: auto;
+    right: 20px;
+  }
+  input,
+  textarea {
+    text-align: start;
+  }
+  input[type="email"],
+  input[type="password"],
+  input[name="username"] {
+    direction: ltr;
+  }
+  th,
+  td {
+    text-align: start;
+  }
+  .ui-text-link svg,
+  .ui-button > svg:last-child,
+  .schedule-page__header__btns-container svg,
+  .btn-go-back svg {
+    transform: scaleX(-1);
+  }
+  .ui-calorie-ring,
+  .timer {
+    direction: ltr;
+  }
+  @media (max-width: 1200px) {
+    .app-content {
+      margin-right: 200px;
+    }
+  }
+  @media (max-width: 720px) {
+    .app-content {
+      margin-right: 0;
+    }
+    .ui-sidebar {
+      inset: auto 0 0;
+      border-left: 0;
+    }
+  }
+}
+@media (max-width: 420px) {
+  .app .ui-topbar-account {
+    gap: 8px;
+  }
+  .app .ui-topbar-account time {
+    display: none;
+  }
+}

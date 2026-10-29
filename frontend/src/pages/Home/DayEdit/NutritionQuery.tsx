@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../../components/App/Button/Button";
@@ -79,17 +80,17 @@ export const NutritionQuery: FC = () => {
   return (
     <section className="nutrition-query" data-testid="nutrition-query">
       <section className="nutrition-query__desc">
-        <p>{"This tab let's you query the APIs used by the app."}</p>
+        <p>{t("This tab let's you query the APIs used by the app.")}</p>
         <ul>
-          <li>The first one is a chatbot that generates a response based on the input</li>
-          <li>The second one is a food database.</li>
-          <li>The third one is a nutrition database.</li>
+          <li>{t("The first one is a chatbot that generates a response based on the input")}</li>
+          <li>{t("The second one is a food database.")}</li>
+          <li>{t("The third one is a nutrition database.")}</li>
         </ul>
       </section>
 
       <form className="nutrition-query__form" autoComplete="off" data-testid="nutrition-query-form">
         <label htmlFor="chatGPTQuery">
-          <span>Chat GPT</span>
+          <span>{t("Chat GPT")}</span>
           <RiOpenaiFill />
         </label>
         <Controller
@@ -99,7 +100,7 @@ export const NutritionQuery: FC = () => {
         />
 
         <label htmlFor="ninjaAPIQuery">
-          <span>Ninja API</span>
+          <span>{t("Ninja API")}</span>
           <GiNinjaHead />
         </label>
         <Controller
@@ -109,7 +110,7 @@ export const NutritionQuery: FC = () => {
         />
 
         <label htmlFor="USDAAPIQuery">
-          <span>USDA API</span>
+          <span>{t("USDA API")}</span>
           <RiGovernmentFill />
         </label>
         <Controller
@@ -118,27 +119,27 @@ export const NutritionQuery: FC = () => {
           render={({ field }) => <input id="USDAAPIQuery" {...field} />}
         />
 
-        <Button onClickFn={handleSubmit(onSubmit)}>query</Button>
+        <Button onClickFn={handleSubmit(onSubmit)}>{t("query")}</Button>
       </form>
 
       <div className="nutrition-query__results">
         {chatGPTQuery.status !== "idle" && (
           <div className="nutrition-query__results__item">
-            <h1>Chat GPT Response:</h1>
+            <h1>{t("Chat GPT Response:")}</h1>
             <NutritionQueryResponseHandler queryState={chatGPTQuery} />
           </div>
         )}
 
         {ninjaAPIQuery.status !== "idle" && (
           <div className="nutrition-query__results__item">
-            <h1>Ninja API Response:</h1>
+            <h1>{t("Ninja API Response:")}</h1>
             <NutritionQueryResponseHandler queryState={ninjaAPIQuery} />
           </div>
         )}
 
         {USDAAPIQuery.status !== "idle" && (
           <div className="nutrition-query__results__item">
-            <h1>USDA API Response:</h1>
+            <h1>{t("USDA API Response:")}</h1>
             <NutritionQueryResponseHandler queryState={USDAAPIQuery} />
           </div>
         )}

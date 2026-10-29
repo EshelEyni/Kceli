@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { CSSProperties, FC } from "react";
 import {
   BarChart,
@@ -46,7 +47,7 @@ export const CalorieBar: FC<CalorieBarProps> = ({ data }) => {
             labelStyle={{ fontSize: 14, fontWeight: "bold", whiteSpace: "pre-wrap" }}
             position={isSmallScreen ? position : undefined}
           />
-          <Bar dataKey="calories" barSize={25}>
+          <Bar dataKey="calories" name={t("Calories")} barSize={25}>
             {data.map((_, index) => (
               <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
             ))}

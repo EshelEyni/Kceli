@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { Button } from "../../App/Button/Button";
 import { FaChevronCircleLeft } from "react-icons/fa";
@@ -13,7 +14,7 @@ export const BtnGoBack: FC = () => {
 
   return (
     <Button className="btn btn-go-back" onClickFn={handleBtnClick}>
-      <span>go back</span>
+      <span>{t("go back")}</span>
       <FaChevronCircleLeft className="btn-go-back__icon" />
     </Button>
   );

@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { Link, Outlet } from "react-router-dom";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
@@ -30,7 +32,7 @@ const ProfileDetails = () => {
   } = useProfile();
 
   if (isLoading) return <SpinnerLoader containerSize={{ width: "100%" }} />;
-  if (isError) return <ErrorMsg msg="Something went wrong" />;
+  if (isError) return <ErrorMsg msg={t("Something went wrong")} />;
   if (!isSuccess || !user) return null;
   const measurements = userDailyStats?.filter(day => day.weight > 0) || [];
   const currentWeight = measurements.at(-1)?.weight || user.weight;
@@ -46,12 +48,13 @@ const ProfileDetails = () => {
   return (
     <main className="page profile-details">
       <PageIntro
-        eyebrow="Your journey, your pace"
-        title="Look how far you’ve come."
-        description="A place for your progress, goals and personal details."
+        eyebrow={t("Your journey, your pace")}
+        title={t("Look how far you’ve come.")}
+        description={t("A place for your progress, goals and personal details.")}
         action={
           <Link className="ui-button" to="/home?tab=WeightWaistInput">
-            Log a check-in ↗
+            {" "}
+            {t("Log a check-in ↗")}{" "}
           </Link>
         }
       />
@@ -60,8 +63,9 @@ const ProfileDetails = () => {
         <div>
           <h2>{user.fullname || user.username}</h2>
           <p className="ui-subtitle">
-            Building better habits since{" "}
-            {new Date(user.createdAt).toLocaleDateString("en-US", {
+            {" "}
+            {t("Building better habits since")}{" "}
+            {new Date(user.createdAt).toLocaleDateString(getLocale(), {
               month: "long",
               year: "numeric",
             })}
@@ -69,21 +73,21 @@ const ProfileDetails = () => {
           <div className="ui-profile-metrics">
             <div>
               <strong>
-                {startingWeight} <small>kg</small>
+                {startingWeight} <small>{t("kg")}</small>
               </strong>
-              <span>Starting weight</span>
+              <span>{t("Starting weight")}</span>
             </div>
             <div>
               <strong>
-                {currentWeight} <small>kg</small>
+                {currentWeight} <small>{t("kg")}</small>
               </strong>
-              <span>Current weight</span>
+              <span>{t("Current weight")}</span>
             </div>
             <div>
               <strong>
-                {Math.abs(Number(weightChange.toFixed(2)))} <small>kg</small>
+                {Math.abs(Number(weightChange.toFixed(2)))} <small>{t("kg")}</small>
               </strong>
-              <span>{weightChange >= 0 ? "Weight lost" : "Weight gained"}</span>
+              <span>{weightChange >= 0 ? t("Weight lost") : t("Weight gained")}</span>
             </div>
           </div>
         </div>
@@ -92,65 +96,77 @@ const ProfileDetails = () => {
         <div className="ui-stack">
           <section className="ui-card">
             <div className="ui-card-heading">
-              <h2>Every check-in tells a story</h2>
-              <span className="ui-badge">Your progress</span>
+              <h2>{t("Every check-in tells a story")}</h2>
+              <span className="ui-badge">{t("Your progress")}</span>
             </div>
             {measurements.length ? (
               <WeightWaistChart data={measurements} isProgressBarShown={true} />
             ) : (
               <div className="ui-empty">
                 <p>
-                  Your story starts with one check-in. Record your weight and waist to see your
-                  progress here.
+                  {" "}
+                  {t(
+                    "Your story starts with one check-in. Record your weight and waist to see your progress here."
+                  )}{" "}
                 </p>
                 <Link to="/home?tab=WeightWaistInput" className="ui-text-link">
-                  Record a check-in ↗
+                  {" "}
+                  {t("Record a check-in ↗")}{" "}
                 </Link>
               </div>
             )}
           </section>
           <section className="ui-card ui-personal-details">
-            <h2>Personal details</h2>
+            <h2>{t("Personal details")}</h2>
             {isEditing ? <UserEdit /> : <UserInfo />}
           </section>
         </div>
         <aside className="ui-stack">
           <section className="ui-card ui-intention">
             <FiFeather />
-            <h2>Your personal milestone</h2>
-            <p>Your chosen goal, at your own pace.</p>
+            <h2>{t("Your personal milestone")}</h2>
+            <p>{t("Your chosen goal, at your own pace.")}</p>
             <UserGoalDisplay />
             <GoalEdit type="user" />
             <GoalIndicator />
           </section>
           <section className="ui-card">
-            <h2>Your daily targets</h2>
+            <h2>{t("Your daily targets")}</h2>
             <dl className="ui-targets">
               <div>
-                <dt>Estimated TDEE</dt>
-                <dd>{user.totalDailyEnergyExpenditure.toLocaleString()} kcal</dd>
+                <dt>{t("Estimated TDEE")}</dt>
+                <dd>
+                  {user.totalDailyEnergyExpenditure.toLocaleString()} {t("kcal")}
+                </dd>
               </div>
               <div>
-                <dt>Calorie target</dt>
-                <dd>{user.targetCaloricIntakePerDay.toLocaleString()} kcal</dd>
+                <dt>{t("Calorie target")}</dt>
+                <dd>
+                  {user.targetCaloricIntakePerDay.toLocaleString()} {t("kcal")}
+                </dd>
               </div>
               <div>
-                <dt>Planned deficit</dt>
-                <dd>{user.targetCaloricDeficitPerDay.toLocaleString()} kcal</dd>
+                <dt>{t("Planned deficit")}</dt>
+                <dd>
+                  {user.targetCaloricDeficitPerDay.toLocaleString()} {t("kcal")}
+                </dd>
               </div>
             </dl>
             <p className="ui-subtitle">
-              Estimates from your profile. Adjust your personal details as your needs change.
+              {" "}
+              {t(
+                "Estimates from your profile. Adjust your personal details as your needs change."
+              )}{" "}
             </p>
           </section>
         </aside>
       </div>
       <details className="ui-card ui-details ui-legacy-insights">
-        <summary>Additional weight and goal insights</summary>
+        <summary>{t("Additional weight and goal insights")}</summary>
         <div className="ui-insights-grid">
           {timeToCurrentWeightLossGoal && (
             <GoalCalender
-              title="time to current weight loss goal"
+              title={t("time to current weight loss goal")}
               time={timeToCurrentWeightLossGoal}
             />
           )}
@@ -158,7 +174,7 @@ const ProfileDetails = () => {
           <WeightToLose />
           {timeToMaxRecommendedWeight && (
             <GoalCalender
-              title="time to max recommended weight"
+              title={t("time to max recommended weight")}
               time={timeToMaxRecommendedWeight}
             />
           )}

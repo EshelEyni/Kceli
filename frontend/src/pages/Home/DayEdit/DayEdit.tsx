@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { IntakeEdit } from "./IntakeEdit";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
@@ -25,7 +26,7 @@ export const DayEdit: FC = () => {
       {isError && <ErrorMsg />}
       {showContent && (
         <DayDashboard>
-          <h2>Your daily journal</h2>
+          <h2>{t("Your daily journal")}</h2>
           <DayEditFilter />
           {openedTab === DayEditTab.WeightWaistInput && <WeightWaistInput />}
           {openedTab === DayEditTab.IntakeEdit && <IntakeEdit />}
@@ -35,7 +36,10 @@ export const DayEdit: FC = () => {
               <IntakeList />
             ) : (
               <p className="ui-empty">
-                Your journal has room for something good. Log your first meal to get started.
+                {" "}
+                {t(
+                  "Your journal has room for something good. Log your first meal to get started."
+                )}{" "}
               </p>
             ))}
           {openedTab === DayEditTab.Query && <NutritionQuery />}

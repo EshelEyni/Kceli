@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import { TimeToWeightGoal } from "../../types/app";
 import { Footer } from "../../components/App/Footer/Footer";
@@ -21,7 +22,7 @@ export const GoalCalender: FC<GoalCalenderProps> = ({ title, time }) => {
               <h4>{value}</h4>
             </div>
             <Footer className="profile-details__goal-calender__list__item__footer">
-              <h4>{key}</h4>
+              <h4>{t(key)}</h4>
             </Footer>
           </div>
         ))}

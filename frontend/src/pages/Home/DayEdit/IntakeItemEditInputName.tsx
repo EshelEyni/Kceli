@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { useIntakeItemEdit } from "./IntakeItemEditContext";
 
@@ -7,14 +8,14 @@ export const IntakeItemEditInputName: FC = () => {
   return (
     <input
       type="text"
-      aria-label="Food or drink name"
+      aria-label={t("Food or drink name")}
       name="name"
       className="intake-item-input"
       value={intakeItem.name}
       onChange={handleInputChange}
       spellCheck={true}
       autoComplete="off"
-      placeholder="Enter food name"
+      placeholder={t("Enter food name")}
       onClick={() => handleNameInputClick(intakeItem.id)}
     />
   );

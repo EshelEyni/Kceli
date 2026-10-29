@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { FC, useState } from "react";
 import { Intake } from "../../../../shared/types/intake";
 import calorieUtilService from "../../services/calorieUtil/calorieUtilService";
@@ -15,7 +17,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
   const title = intake.name || intake.items.map(item => item.name).join(", ");
   const totalCalories = calorieUtilService.getTotalCalories(intake);
   const time = intake.recordedAt
-    ? new Date(intake.recordedAt).toLocaleTimeString("en-US", {
+    ? new Date(intake.recordedAt).toLocaleTimeString(getLocale(), {
         hour: "2-digit",
         minute: "2-digit",
       })
@@ -31,7 +33,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     >
       <Header className="day-report__intake-preview__header" onClickFn={handleHeaderClick}>
         <h3 className="day-report__intake-preview__header__title">
-          {title} - {totalCalories} kcal - {time}
+          {title} - {totalCalories} {t("kcal -")} {time}
         </h3>
         <div>{isTableShown ? <FaChevronUp /> : <FaChevronDown />}</div>
       </Header>
@@ -40,9 +42,9 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
           <table className="day-report__intake-preview__table">
             <thead className="day-report__intake-preview__table__head">
               <tr>
-                <th>Item</th>
-                <th>Calories</th>
-                <th>Weight</th>
+                <th>{t("Item")}</th>
+                <th>{t("Calories")}</th>
+                <th>{t("Weight")}</th>
               </tr>
             </thead>
             <tbody className="day-report__intake-preview__table__body">
@@ -51,14 +53,14 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
                   <td>{item.name}</td>
                   <td>{item.calories}</td>
                   <td>
-                    {item.quantity} {item.unit}
+                    {item.quantity} {t(item.unit)}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
           {!intake.isRecorded && (
-            <h4 className="day-report__intake-preview__unrecorded">unrecorded</h4>
+            <h4 className="day-report__intake-preview__unrecorded">{t("unrecorded")}</h4>
           )}
         </>
       )}

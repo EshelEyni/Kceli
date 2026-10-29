@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import { CombinedWorkoutItem, WeightUnit, Workout } from "../../../../shared/types/workout";
 import { debounce } from "../../services/util/utilService";
@@ -137,7 +138,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
   return (
     <section className="workout-edit__form" data-testid="workout-item-edit">
       <div className="workout-edit__form__input-container name-input">
-        <label htmlFor="item-name-input">Name:</label>
+        <label htmlFor="item-name-input">{t("Name:")}</label>
         <input
           id="item-name-input"
           data-testid="workout-item-name-input"
@@ -149,7 +150,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
 
       {item.type === "aerobic" && (
         <div className="workout-edit__form__input-container">
-          <label htmlFor="item-duration-input">Duration (in min):</label>
+          <label htmlFor="item-duration-input">{t("Duration (in min):")}</label>
           <input
             id="item-duration-input"
             data-testid="workout-item-duration-input"
@@ -163,7 +164,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
       {item.type !== "aerobic" && (
         <>
           <div className="workout-edit__form__input-container">
-            <label htmlFor="item-sets-input">Sets:</label>
+            <label htmlFor="item-sets-input">{t("Sets:")}</label>
             <input
               id="item-sets-input"
               type="number"
@@ -174,7 +175,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
           </div>
 
           <div className="workout-edit__form__input-container">
-            <label htmlFor="item-rest-input">Rest (in sec):</label>
+            <label htmlFor="item-rest-input">{t("Rest (in sec):")}</label>
             <input
               id="item-rest-input"
               type="number"
@@ -189,7 +190,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
       {item.type === "anaerobic" && (
         <>
           <div className="workout-edit__form__input-container">
-            <label htmlFor="item-reps-input">reps:</label>
+            <label htmlFor="item-reps-input">{t("reps:")}</label>
             <input
               id="item-reps-input"
               type="number"
@@ -201,7 +202,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
 
           {(item.weightUnit === "kg" || item.weightUnit === "lbs") && (
             <div className="workout-edit__form__input-container">
-              <label htmlFor="item-weight-input">weight:</label>
+              <label htmlFor="item-weight-input">{t("weight:")}</label>
               <input
                 id="item-weight-input"
                 type="number"
@@ -213,12 +214,12 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
           )}
 
           <div className="workout-edit__form__input-container">
-            <label>weight unit:</label>
+            <label>{t("weight unit:")}</label>
 
             <Select onChange={handleWeightUnitSelectChange} listHeight={250}>
               <Select.SelectTrigger>
                 <div>
-                  <span>{item.weightUnit}</span>
+                  <span>{t(item.weightUnit)}</span>
                   <FaChevronDown />
                 </div>
               </Select.SelectTrigger>
@@ -238,9 +239,11 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
         <div className="workout-edit__form__superset-item-list" data-testid="superset-item-list">
           {item.items.map((supersetItem, i) => (
             <div className="workout-edit__form__superset-item-container" key={i}>
-              <h3>Item {i + 1}</h3>
+              <h3>
+                {t("Item")} {i + 1}
+              </h3>
               <div className="workout-edit__form__input-container">
-                <label>name:</label>
+                <label>{t("name:")}</label>
                 <input
                   id={supersetItem.id}
                   type="text"
@@ -250,7 +253,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
                 />
               </div>
               <div className="workout-edit__form__input-container">
-                <label>reps:</label>
+                <label>{t("reps:")}</label>
                 <input
                   id={supersetItem.id}
                   type="number"
@@ -262,7 +265,7 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
 
               {(supersetItem.weightUnit === "kg" || supersetItem.weightUnit === "lbs") && (
                 <div className="workout-edit__form__input-container">
-                  <label>weight:</label>
+                  <label>{t("weight:")}</label>
                   <input
                     id={supersetItem.id}
                     type="number"
@@ -273,12 +276,12 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
                 </div>
               )}
               <div className="workout-edit__form__input-container">
-                <label>weight unit:</label>
+                <label>{t("weight unit:")}</label>
 
                 <Select onChange={handleSelectItemWeightUnitChange} listHeight={250}>
                   <Select.SelectTrigger>
                     <div>
-                      <span>{supersetItem.weightUnit}</span>
+                      <span>{t(supersetItem.weightUnit)}</span>
                       <FaChevronDown />
                     </div>
                   </Select.SelectTrigger>
@@ -300,7 +303,8 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
                   onClickFn={() => removeWorkoutItemFromSuperset(item.id, supersetItem.id)}
                   dataTestId="delete-superset-item-btn"
                 >
-                  delete
+                  {" "}
+                  {t("delete")}{" "}
                 </Button>
               </div>
             </div>
@@ -314,7 +318,8 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
           onClickFn={handleRemoveBtnClick}
           dataTestId="delete-workout-item-btn"
         >
-          delete
+          {" "}
+          {t("delete")}{" "}
         </Button>
 
         {item.type === "superset" && (
@@ -323,7 +328,8 @@ export const WorkoutItemEdit: FC<WorkoutItemEditProps> = ({ item }) => {
             onClickFn={() => addWorkoutItemToSuperset(item)}
             dataTestId="add-superset-item-btn"
           >
-            add item
+            {" "}
+            {t("add item")}{" "}
           </Button>
         )}
       </div>

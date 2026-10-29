@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { useNavigate } from "react-router-dom";
 import "./LoginSignupMsg.scss";
 
@@ -20,7 +21,7 @@ export const LoginSignupMsg = () => {
   return (
     <div className="login-signup-msg" data-testid="login-signup-msg">
       <div className="login-signup-msg-text-container">
-        <h1>Start Your Journey Now!</h1>
+        <h1>{t("Start Your Journey Now!")}</h1>
       </div>
       <div className="login-signup-msg-btn-container">
         {btns.map(btn => (

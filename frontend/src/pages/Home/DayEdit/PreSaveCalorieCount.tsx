@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { useDayEdit } from "./DayEditContext";
 import "./PreSaveCalorieCount.scss";
@@ -30,13 +31,13 @@ export const PreSaveCalorieCount: FC = () => {
   return (
     <section className="pre-save-calorie-count" style={{ color }}>
       <p>
-        <strong>Total:</strong> <span>{intakeTotalCalorie}</span>
+        <strong>{t("Total:")}</strong> <span>{intakeTotalCalorie}</span>
       </p>
       <p>
-        <strong>Consumed:</strong> <span>{preSaveConsumedCalories}</span>
+        <strong>{t("Consumed:")}</strong> <span>{preSaveConsumedCalories}</span>
       </p>
       <p>
-        <strong>Remaining:</strong> <span>{preSaveRemainingCalories}</span>
+        <strong>{t("Remaining:")}</strong> <span>{preSaveRemainingCalories}</span>
       </p>
     </section>
   );

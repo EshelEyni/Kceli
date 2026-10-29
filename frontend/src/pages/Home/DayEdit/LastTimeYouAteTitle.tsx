@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { useDayEdit } from "./DayEditContext";
 import { formatDateToRelativeTime } from "../../../services/util/utilService";
@@ -15,7 +16,8 @@ export const LastTimeYouAteTitle: FC = () => {
 
   return (
     <h5 className="last-time-you-ate-title" style={{ color }}>
-      Last time you ate: {lastMealTime}
+      {" "}
+      {t("Last time you ate:")} {lastMealTime}
     </h5>
   );
 };

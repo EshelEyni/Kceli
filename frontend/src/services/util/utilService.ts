@@ -1,4 +1,5 @@
 import { AnyFunction, JsendResponse, UserMsg } from "../../../../shared/types/system";
+import { getLocale } from "../../i18n";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
@@ -45,6 +46,8 @@ function isValidDate(dateStr: string) {
 function getCleanTime(dateStr: string): string {
   if (!dateStr || !isValidDate(dateStr)) return "";
   const date = new Date(dateStr);
+  if (getLocale() === "he-IL")
+    return date.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" });
   let hours = date.getHours();
   const minutes = date.getMinutes();
 
@@ -58,6 +61,13 @@ function getCleanTime(dateStr: string): string {
 function formatDateToRelativeTime(dateStr: string): string {
   if (!dateStr || !isValidDate(dateStr)) return "";
   const [seconds, minutes, hours, days] = _calculateTimeDifference(dateStr);
+  if (getLocale() === "he-IL") {
+    if (days > 0) return new Date(dateStr).toLocaleDateString("he-IL");
+    const relative = new Intl.RelativeTimeFormat("he-IL", { numeric: "auto" });
+    if (hours > 0) return relative.format(-Math.floor(hours), "hour");
+    if (minutes > 0) return relative.format(-minutes, "minute");
+    return relative.format(-seconds, "second");
+  }
 
   const date = new Date(dateStr);
   const year = date.getFullYear();
@@ -85,6 +95,8 @@ function _calculateTimeDifference(dateStr: string): [number, number, number, num
 function formatDateToCleanString(dateStr: string): string {
   if (!dateStr || !isValidDate(dateStr)) return "";
   const date = new Date(dateStr);
+  if (getLocale() === "he-IL")
+    return date.toLocaleString("he-IL", { dateStyle: "medium", timeStyle: "short" });
   let hours = date.getHours();
   const minutes = date.getMinutes();
 

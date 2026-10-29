@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { useIntakeItemEdit } from "./IntakeItemEditContext";
 import classnames from "classnames";
@@ -19,20 +20,20 @@ export const IntakeItemEditManualInputs: FC = () => {
       <input
         type="number"
         name="calories"
-        aria-label="Calories"
+        aria-label={t("Calories")}
         className={classnames("intake-item-input", { faded: inputFaded === "calories" })}
         value={calorieInputValue}
-        placeholder="Calories"
+        placeholder={t("Calories")}
         onChange={handleInputChange}
         onClick={() => handleInputClick("calories")}
       />
       <input
         type="number"
         name="caloriesPer100g"
-        aria-label="Calories per 100g"
+        aria-label={t("Calories per 100g")}
         className={classnames("intake-item-input", { faded: inputFaded === "caloriesPer100g" })}
         value={intakeItem.caloriesPer100g || ""}
-        placeholder="Calories per 100g"
+        placeholder={t("Calories per 100g")}
         onChange={handleInputChange}
         onClick={() => handleInputClick("caloriesPer100g")}
       />

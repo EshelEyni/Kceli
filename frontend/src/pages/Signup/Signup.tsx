@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signup } from "../../store/slices/authSlice";
@@ -156,7 +157,7 @@ const SignupPage = () => {
       if (data.password !== data.passwordConfirm) {
         setError("passwordConfirm", {
           type: "manual",
-          message: "Passwords do not match",
+          message: t("Passwords do not match"),
         });
         return;
       }
@@ -166,14 +167,14 @@ const SignupPage = () => {
     } catch (err) {
       if (err instanceof AxiosError && err?.response?.data?.message)
         toast.error(err.response.data.message);
-      else toast.error("An unknown error occurred");
+      else toast.error(t("An unknown error occurred"));
     }
   };
 
   return (
     <section className="page signup-page">
       <form onSubmit={handleSubmit(onSignup)}>
-        <h1>Signup</h1>
+        <h1>{t("Signup")}</h1>
 
         {inputFields.map(input => (
           <div
@@ -182,7 +183,7 @@ const SignupPage = () => {
           >
             <label htmlFor={input.id}>
               <fieldset>
-                <legend>{input.id}</legend>
+                <legend>{t(input.id)}</legend>
                 {input.type === "radio" ? (
                   input.options?.map(option => (
                     <label key={option}>
@@ -193,7 +194,7 @@ const SignupPage = () => {
                         defaultChecked={input.defaultValue === option}
                         onBlur={() => validateField(input.id)}
                       />
-                      {option}
+                      {t(option)}
                     </label>
                   ))
                 ) : (
@@ -215,7 +216,8 @@ const SignupPage = () => {
         ))}
 
         <Button type="submit" isDisabled={isDirty && Object.keys(errors).length > 0}>
-          Signup
+          {" "}
+          {t("Signup")}{" "}
         </Button>
       </form>
     </section>

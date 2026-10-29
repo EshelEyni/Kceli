@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { FC } from "react";
 import { CalenderDay } from "../../types/app";
 import calorieUtilService from "../../services/calorieUtil/calorieUtilService";
@@ -23,15 +25,15 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
   if (!data)
     return (
       <section className="report day-report empty">
-        <p>No data for this day</p>
+        <p>{t("No data for this day")}</p>
       </section>
     );
 
   const consumedCalories = calorieUtilService.getTotalCalories(data);
   const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, data);
   const calConsumedSufix = remainingCalories > 0 ? "remaining" : "over your limit";
-  const calConsumedTitle = ` calories ${calConsumedSufix}`;
-  const dateStr = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(day.date);
+  const calConsumedTitle = t("calories {{status}}", { status: t(calConsumedSufix) });
+  const dateStr = new Intl.DateTimeFormat(getLocale(), { dateStyle: "full" }).format(day.date);
   const averageTimeBetweenMeals = dayDataUtilService.calcAverageTimeBetweenMeals(data);
   const barData = getCalorieBarData(data);
   return (
@@ -43,22 +45,22 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
       <div className="day-report__weight">
         {data.weight && (
           <p>
-            <strong>Weight: </strong>
+            <strong>{t("Weight:")} </strong>
             {data.weight}
           </p>
         )}
 
         {data.waist && (
           <p>
-            <strong>Waist: </strong>
+            <strong>{t("Waist:")} </strong>
             {data.waist}
           </p>
         )}
       </div>
       <div className="day-report__calories">
-        <h3 className="day-report__calories__title">calories</h3>
+        <h3 className="day-report__calories__title">{t("calories")}</h3>
         <p>
-          <strong>consumed Calories: </strong>
+          <strong>{t("consumed Calories:")} </strong>
           {consumedCalories}
         </p>
         <p>
@@ -66,15 +68,19 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
           {Math.abs(remainingCalories)}
         </p>
         <p>
-          <strong>target caloric intake: </strong>
+          <strong>{t("target caloric intake:")} </strong>
           {day.targetCalorie}
         </p>
       </div>
       {data.intakes.length > 0 && (
         <div className="day-report__intakes">
-          <h2 className="day-report__intakes__title">Intakes</h2>
-          <h4>Number of Intakes: {data.intakes.length}</h4>
-          <h4>Average time between meals: {averageTimeBetweenMeals}</h4>
+          <h2 className="day-report__intakes__title">{t("Intakes")}</h2>
+          <h4>
+            {t("Number of Intakes:")} {data.intakes.length}
+          </h4>
+          <h4>
+            {t("Average time between meals:")} {averageTimeBetweenMeals}
+          </h4>
           <List
             className="day-report__intakes__list"
             items={data.intakes as Intake[]}
@@ -86,7 +92,7 @@ export const DayReport: FC<DayReportProps> = ({ day }) => {
       )}
       {data.workouts.length > 0 && (
         <div className="day-report__workouts">
-          <h1 className="day-report__workouts__title">Workouts</h1>
+          <h1 className="day-report__workouts__title">{t("Workouts")}</h1>
           <ul>
             {data.workouts.map((workout, index) => (
               <li key={index}>

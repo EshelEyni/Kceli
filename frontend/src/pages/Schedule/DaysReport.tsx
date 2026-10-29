@@ -1,3 +1,4 @@
+import { getLocale } from "../../i18n";
 import { FC } from "react";
 import { CalenderDay } from "../../types/app";
 import "./DaysReport.scss";
@@ -13,7 +14,7 @@ export const DaysReport: FC<DaysReportProps> = ({ days }) => {
         return (
           <div className="day-report" key={day.date.toISOString()}>
             <h3 className="day-report__date">
-              {day.date.toLocaleDateString("en-US", {
+              {day.date.toLocaleDateString(getLocale(), {
                 weekday: "long",
                 month: "long",
                 day: "numeric",

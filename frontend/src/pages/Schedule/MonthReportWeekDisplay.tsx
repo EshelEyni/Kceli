@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { FC } from "react";
 import { CalenderDay, Goal } from "../../types/app";
 import { Header } from "../../components/App/Header/Header";
@@ -23,10 +25,10 @@ export const MonthReportWeekDisplay: FC<MonthReportWeekDisplayProps> = ({ weekDa
   const tableData = getTableData();
 
   function getTitle() {
-    const firstDayDate = weekDays[0].date.toLocaleString("en-GB", {
+    const firstDayDate = weekDays[0].date.toLocaleString(getLocale(), {
       day: "numeric",
     });
-    const lastDayDate = weekDays[weekDays.length - 1].date.toLocaleString("en-GB", {
+    const lastDayDate = weekDays[weekDays.length - 1].date.toLocaleString(getLocale(), {
       year: "2-digit",
       month: "short",
       day: "numeric",
@@ -114,8 +116,8 @@ export const MonthReportWeekDisplay: FC<MonthReportWeekDisplayProps> = ({ weekDa
           <table>
             <thead>
               <tr>
-                <th>label</th>
-                <th>value</th>
+                <th>{t("label")}</th>
+                <th>{t("value")}</th>
               </tr>
             </thead>
             <tbody>
@@ -123,7 +125,7 @@ export const MonthReportWeekDisplay: FC<MonthReportWeekDisplayProps> = ({ weekDa
                 const isPerc = d.label === "excess percentage (days)";
                 return (
                   <tr key={i}>
-                    <td>{d.label}</td>
+                    <td>{t(d.label)}</td>
                     <td>
                       {d.value}
                       {isPerc ? "%" : ""}
@@ -135,9 +137,9 @@ export const MonthReportWeekDisplay: FC<MonthReportWeekDisplayProps> = ({ weekDa
           </table>
         </div>
         <section className="month-report-week-display__goals-container">
-          <h3>goals</h3>
+          <h3>{t("goals")}</h3>
           {goals.length === 0 ? (
-            <Empty entityName="week goals" />
+            <Empty entityName={t("week goals")} />
           ) : (
             <ul>
               {goals.map((g, i) => (

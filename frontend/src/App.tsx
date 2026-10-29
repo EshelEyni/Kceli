@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+import "./i18n";
 import { useEffect, Suspense, lazy } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -13,8 +15,10 @@ import { useAuth } from "./hooks/useAuth";
 import { useSystem } from "./hooks/useSystem";
 import { AppHeader } from "./components/App/AppHeader/AppHeader";
 import "./styles/redesign.scss";
+import "./styles/localization.scss";
 
 function App() {
+  useTranslation();
   const dispatch: AppDispatch = useDispatch();
   const { loggedInUser } = useAuth();
   const { isPageLoading } = useSystem();

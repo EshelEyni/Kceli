@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import "./Goals.scss";
 import { GoalEdit } from "../../components/GoalEdit/GoalEdit";
@@ -41,7 +42,7 @@ export const Goals: FC<GoalsProps> = ({ type, currDate }) => {
           isError={isMonthGoalsError}
           isSuccess={isMonthGoalsSuccess}
           isEmpty={isMonthGoalsEmpty}
-          entityName="goal"
+          entityName={t("goal")}
         />
       </section>
     );
@@ -60,7 +61,7 @@ export const Goals: FC<GoalsProps> = ({ type, currDate }) => {
           isError={isWeekGoalsError}
           isSuccess={isWeekGoalsSuccess}
           isEmpty={isWeekGoalsEmpty}
-          entityName="goals"
+          entityName={t("goals")}
         />
       </section>
     );

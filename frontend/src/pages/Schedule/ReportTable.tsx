@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import calorieUtilService from "../../services/calorieUtil/calorieUtilService";
 import workoutUtilService from "../../services/workout/workoutUtilService";
@@ -302,10 +303,14 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData, go
       <table>
         <thead>
           <tr>
-            <th>value</th>
-            <th>previous {type}</th>
-            <th>current {type}</th>
-            <th>trend</th>
+            <th>{t("value")}</th>
+            <th>
+              {t("previous")} {t(type)}
+            </th>
+            <th>
+              {t("current")} {type}
+            </th>
+            <th>{t("trend")}</th>
           </tr>
         </thead>
         <tbody>
@@ -314,7 +319,7 @@ export const ReportTable: FC<ReportTableProps> = ({ type, currData, prevData, go
               d.label === "excess percentage (days)" || d.label === "completed goals percentage";
             return (
               <tr key={i}>
-                <td>{d.label}</td>
+                <td>{t(d.label)}</td>
                 <td>
                   {d.prev}
                   {isPerc ? "%" : ""}

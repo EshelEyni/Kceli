@@ -1,3 +1,4 @@
+import { t } from "../i18n";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { User } from "../../../shared/types/user";
 import userApiService from "../services/user/userApiService";
@@ -16,7 +17,7 @@ export function useUpdateUser() {
       queryClient.setQueryData([`user/${data.id}`], data);
       queryClient.invalidateQueries([`user/${data.username}`]);
     },
-    onError: () => toast.error("Couldn't save your changes. Please try again."),
+    onError: () => toast.error(t("Couldn't save your changes. Please try again.")),
   });
 
   return { updateUser, isLoading };

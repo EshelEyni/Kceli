@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC, useRef, useState } from "react";
 import { Button } from "../../../components/App/Button/Button";
 import { FaPause, FaPlay } from "react-icons/fa6";
@@ -79,7 +80,8 @@ export const HIITTimer: FC = () => {
         <div className="hiit-settings">
           <div className="hiit-settings__input">
             <label htmlFor="work" className="hiit-settings__input__label">
-              Work
+              {" "}
+              {t("Work")}{" "}
             </label>
             <input
               className="hiit-settings__input__input"
@@ -91,7 +93,8 @@ export const HIITTimer: FC = () => {
           </div>
           <div className="hiit-settings__input">
             <label htmlFor="rest" className="hiit-settings__input__label">
-              Rest
+              {" "}
+              {t("Rest")}{" "}
             </label>
             <input
               className="hiit-settings__input__input"

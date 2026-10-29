@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { createContext, useContext, useState, useRef, useEffect } from "react";
 import NSpell from "nspell";
 import { SpellingSuggestion } from "../../../types/app";
@@ -139,7 +140,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
   }
 
   async function handleCalcBtnClick() {
-    if (!intakeItem.name.length) return toast.error("Please enter a food name!");
+    if (!intakeItem.name.length) return toast.error(t("Please enter a food name!"));
     try {
       setIsLoadingCal(true);
       const calories = await calorieApiService.getCaloriesForItem(intakeItem);
@@ -148,7 +149,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
     } catch (error) {
       const isTestEnv = process.env.NODE_ENV === "test";
       if (!isTestEnv) console.error(error);
-      toast.error("Failed to calculate calories!");
+      toast.error(t("Failed to calculate calories!"));
     } finally {
       setIsLoadingCal(false);
     }
@@ -203,7 +204,9 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
       if (!spellChecker) return;
       const filteredWordSet = new Set(["nes", "ness"]);
       const words = text.split(" ");
-      const filteredWords = words.filter(word => !filteredWordSet.has(word) && word.length > 3);
+      const filteredWords = words.filter(
+        word => !filteredWordSet.has(word) && word.length > 3 && /^[a-zA-Z]+$/.test(word)
+      );
       const suggestions = filteredWords.map(word => ({
         original: word,
         suggestions: spellChecker.suggest(word),

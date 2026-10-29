@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -32,17 +33,18 @@ const LoginPage = () => {
     } catch (err) {
       if (err instanceof AxiosError && err?.response?.data?.message)
         toast.error(err.response.data.message);
-      else toast.error("An unknown error occurred");
+      else toast.error(t("An unknown error occurred"));
     }
   }
 
   return (
     <main className="page">
       <form className="login-form">
-        <h1 className="login-form__title">login</h1>
+        <h1 className="login-form__title">{t("login")}</h1>
         <div className="login-form__input-container">
           <label htmlFor="username" className="login-form__label">
-            username
+            {" "}
+            {t("username")}{" "}
           </label>
           <input
             id="username"
@@ -57,7 +59,8 @@ const LoginPage = () => {
 
         <div className="login-form__input-container">
           <label htmlFor="password" className="login-form__label">
-            password
+            {" "}
+            {t("password")}{" "}
           </label>
           <input
             id="password"
@@ -70,7 +73,7 @@ const LoginPage = () => {
           />
         </div>
 
-        <Button onClickFn={onLogin}>login</Button>
+        <Button onClickFn={onLogin}>{t("login")}</Button>
       </form>
     </main>
   );

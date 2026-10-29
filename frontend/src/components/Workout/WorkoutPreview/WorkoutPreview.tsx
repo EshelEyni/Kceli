@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { Workout } from "../../../../../shared/types/workout";
 import { Button } from "../../App/Button/Button";
@@ -62,30 +63,31 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({
       </div>
       <section className="workout-preview__info">
         <span className="ui-badge">
-          {workout.type === "aerobic" ? "Cardio" : "Strength"}
-          {"split" in workout ? ` · Split ${workout.split}` : ""}
+          {workout.type === "aerobic" ? t("Cardio") : t("Strength")}
+          {"split" in workout ? ` · ${t("Split {{split}}", { split: workout.split })}` : ""}
         </span>
-        <h3>{workout.description || "Untitled routine"}</h3>
+        <h3>{workout.description || t("Untitled routine")}</h3>
         <p className="ui-subtitle">
-          <FiClock /> {duration > 0 ? `${duration} min · ` : ""}
-          {workout.items.length} exercises
+          <FiClock /> {duration > 0 ? `${duration} ${t("min")} · ` : ""}
+          {workout.items.length} {t("exercises")}{" "}
         </p>
       </section>
       {onSchedule && (
         <label className="ui-schedule-select">
-          Add to day
+          {" "}
+          {t("Add to day")}{" "}
           <select
             value=""
             disabled={isSavingSchedule}
-            aria-label={`Schedule ${workout.description || "routine"}`}
+            aria-label={t("Schedule {{name}}", { name: workout.description || t("Your routine") })}
             onChange={event => {
               if (event.target.value) onSchedule(workout, event.target.value);
             }}
           >
-            <option value="">Choose a weekday…</option>
+            <option value="">{t("Choose a weekday…")}</option>
             {["sun", "mon", "tue", "wed", "thu", "fri", "sat"].map(day => (
               <option key={day} value={day}>
-                {day.toUpperCase()}
+                {t(day)}
               </option>
             ))}
           </select>
@@ -97,18 +99,21 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({
           className="btn workout-page__btn"
           onClickFn={() => handleBtnDeleteClick(workout.id)}
         >
-          delete
+          {" "}
+          {t("delete")}{" "}
         </Button>
         {!updateDailyData && (
           <Button
             className="btn workout-page__btn"
             onClickFn={() => handleBtnEditClick(workout.id)}
           >
-            edit
+            {" "}
+            {t("edit")}{" "}
           </Button>
         )}
         <Button className="btn workout-page__btn" onClickFn={() => handleBtnOpenClick(workout.id)}>
-          View & start <FiArrowRight />
+          {" "}
+          {t("View & start")} <FiArrowRight />
         </Button>
       </div>
     </article>

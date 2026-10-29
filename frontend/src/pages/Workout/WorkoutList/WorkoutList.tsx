@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { useWorkouts } from "../WorkoutsContext";
 import { SpinnerLoader } from "../../../components/Loaders/SpinnerLoader/SpinnerLoader";
@@ -26,17 +27,18 @@ export const WorkoutList: FC<{
             ))}
         </ul>
       )}
-      {isSuccess && isEmpty && <Empty entityName="workouts" />}
+      {isSuccess && isEmpty && <Empty entityName={t("workouts")} />}
       {isSuccess &&
         !isEmpty &&
         filter !== "all" &&
         !workouts?.some(workout => workout.type === filter) && (
           <p className="ui-empty">
-            No {filter === "aerobic" ? "cardio" : "strength"} routines yet. Create one to get
-            started.
+            {" "}
+            {t("No")} {filter === "aerobic" ? t("cardio") : t("strength")}{" "}
+            {t("routines yet. Create one to get started.")}{" "}
           </p>
         )}
-      {isError && <ErrorMsg msg="Couldn't get workouts. Please try again later" />}
+      {isError && <ErrorMsg msg={t("Couldn't get workouts. Please try again later")} />}
     </div>
   );
 };

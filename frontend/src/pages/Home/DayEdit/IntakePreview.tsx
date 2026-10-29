@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { Intake } from "../../../../../shared/types/intake";
 import calorieUtilService from "../../../services/calorieUtil/calorieUtilService";
@@ -37,7 +38,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     const dataToUpdate = { ...dailyData };
     const intakes = dailyData.intakes.filter(intake => intake.id !== intakeId);
     updateDailyData({ id: dataToUpdate.id, data: { intakes } });
-    toast.success("Intake deleted successfully");
+    toast.success(t("Intake deleted successfully"));
   }
 
   function handleEditBtnClick(intake: Intake) {
@@ -55,7 +56,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
     intakeToSave.recordedAt = new Date();
     const intakes = [...dailyData.intakes, intakeToSave];
     updateDailyData({ id: dailyData.id, data: { intakes } });
-    toast.success("Intake duplicated successfully");
+    toast.success(t("Intake duplicated successfully"));
   }
 
   function handleSaveBtnClick(intakeId: string) {
@@ -75,7 +76,7 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
       });
     }
     updateDailyData({ id: dataToUpdate.id, data: { intakes } });
-    toast.success("Intake saved successfully");
+    toast.success(t("Intake saved successfully"));
   }
 
   function handleAddToFavBtnClick(intake: Intake) {
@@ -100,56 +101,62 @@ export const IntakePreview: FC<IntakePreviewProps> = ({ intake }) => {
             data-testid="intake-preview-item"
             key={item.id}
           >
-            {`${item.name} - ${item.quantity} ${item.unit} - calories: ${Math.round(
+            {`${item.name} - ${item.quantity} ${t(item.unit)} - ${t("calories")}: ${Math.round(
               item.calories
             )}`}
           </li>
         )}
       />
 
-      <p className="intake-preview__total-calories">total calories: {totalCalories}</p>
+      <p className="intake-preview__total-calories">
+        {t("total calories:")} {totalCalories}
+      </p>
 
       <div id="intake-preview-btns-container" className="intake-preview__btns-container">
         <Modal>
           <Modal.OpenBtn modalName="delete-intake">
-            <button className="btn">Delete</button>
+            <button className="btn">{t("Delete")}</button>
           </Modal.OpenBtn>
           <Modal.Window
             name="delete-intake"
             elementId="intake-preview-btns-container"
             className="delete-intake-modal"
           >
-            <h2>Are you sure you want to delete this intake?</h2>
+            <h2>{t("Are you sure you want to delete this intake?")}</h2>
             <Modal.CloseBtn onClickFn={() => handleDeleteBtnClick(intake.id)}>
-              <button className="btn delete-btn">Delete</button>
+              <button className="btn delete-btn">{t("Delete")}</button>
             </Modal.CloseBtn>
             <Modal.CloseBtn>
-              <button className="btn">Cancel</button>
+              <button className="btn">{t("Cancel")}</button>
             </Modal.CloseBtn>
           </Modal.Window>
         </Modal>
 
         {(isFavorite || isRecordedIntakeShown) && (
           <Button className="btn" onClickFn={() => handleEditBtnClick(intake)}>
-            Edit
+            {" "}
+            {t("Edit")}{" "}
           </Button>
         )}
 
         {isRecordedIntakeShown && (
           <Button className="btn" onClickFn={() => handleDuplicateBtnClick(intake)}>
-            duplicate
+            {" "}
+            {t("duplicate")}{" "}
           </Button>
         )}
 
         {isSaveBtnShown && (
           <Button className="btn" onClickFn={() => handleSaveBtnClick(intake.id)}>
-            Save
+            {" "}
+            {t("Save")}{" "}
           </Button>
         )}
 
         {!isFavorite && (
           <Button className="btn" onClickFn={() => handleAddToFavBtnClick(intake)}>
-            add to fav
+            {" "}
+            {t("add to fav")}{" "}
           </Button>
         )}
       </div>

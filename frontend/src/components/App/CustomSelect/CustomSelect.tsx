@@ -1,4 +1,5 @@
 import { MouseEvent } from "react";
+import { t } from "../../../i18n";
 import { IoChevronDownSharp } from "react-icons/io5";
 import "./CustomSelect.scss";
 
@@ -44,8 +45,10 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
     >
       <div className="custom-select">
         <div className="custom-select-data-text">
-          <span className="custom-select-label">{`${input.label}`}</span>
-          <span className="custom-select-value">{input.value}</span>
+          <span className="custom-select-label">{t(input.label)}</span>
+          <span className="custom-select-value">
+            {typeof input.value === "string" ? t(input.value) : input.value}
+          </span>
         </div>
         <IoChevronDownSharp className="custom-select-icon" />
       </div>
@@ -57,7 +60,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
               key={value}
               onClick={e => onSelected(e, value, input.type)}
             >
-              {value}
+              {typeof value === "string" ? t(value) : value}
             </div>
           ))}
         </div>

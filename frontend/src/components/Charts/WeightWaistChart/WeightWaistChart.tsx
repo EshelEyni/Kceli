@@ -1,3 +1,5 @@
+import { getLocale } from "../../../i18n";
+import { t } from "../../../i18n";
 import { FC, useEffect, useState } from "react";
 import {
   LineChart,
@@ -33,11 +35,11 @@ export const WeightWaistChart: FC<WeightWaistChartProps> = ({
   const isWeightLineShown = filterBy === "all" || filterBy === "weight";
   const isWaistLineShown = filterBy === "all" || filterBy === "waist";
   if (!data?.length)
-    return <p className="ui-subtitle">Record a check-in to start your progress chart.</p>;
+    return <p className="ui-subtitle">{t("Record a check-in to start your progress chart.")}</p>;
 
   const formattedData = data.slice(startIndex, endIndex + 1).map(item => ({
     ...item,
-    date: new Intl.DateTimeFormat("en-GB", {
+    date: new Intl.DateTimeFormat(getLocale(), {
       month: "numeric",
       day: "numeric",
       year: "2-digit",
@@ -80,29 +82,46 @@ export const WeightWaistChart: FC<WeightWaistChartProps> = ({
             <Tooltip />
             <Legend />
             {isWeightLineShown && (
-              <Line type="monotone" dataKey="weight" stroke="#6f9152" strokeWidth={3} dot={false} />
+              <Line
+                type="monotone"
+                dataKey="weight"
+                name={t("Weight")}
+                stroke="#6f9152"
+                strokeWidth={3}
+                dot={false}
+              />
             )}
             {isWaistLineShown && (
-              <Line type="monotone" dataKey="waist" stroke="#7399a5" strokeWidth={3} dot={false} />
+              <Line
+                type="monotone"
+                dataKey="waist"
+                name={t("Waist")}
+                stroke="#7399a5"
+                strokeWidth={3}
+                dot={false}
+              />
             )}
           </LineChart>
         </ResponsiveContainer>
       </div>
       <div className="weight-waist-btn-container">
         <Button onClickFn={() => setFilterBy("all")} className={filterBy === "all" ? "active" : ""}>
-          All
+          {" "}
+          {t("All")}{" "}
         </Button>
         <Button
           onClickFn={() => setFilterBy("weight")}
           className={filterBy === "weight" ? "active" : ""}
         >
-          Weight
+          {" "}
+          {t("Weight")}{" "}
         </Button>
         <Button
           onClickFn={() => setFilterBy("waist")}
           className={filterBy === "waist" ? "active" : ""}
         >
-          Waist
+          {" "}
+          {t("Waist")}{" "}
         </Button>
       </div>
       {isProgressBarShown && data.length > 1 && (

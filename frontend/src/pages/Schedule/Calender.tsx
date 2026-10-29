@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { FC, useRef, useEffect, useState } from "react";
 import { days as dayNames, isSameDay } from "../../services/util/utilService";
 import classnames from "classnames";
@@ -115,7 +117,7 @@ export const Calender: FC = () => {
     <ul className="calender" ref={gridRef}>
       {dayNames.map(day => (
         <li className="calender__item weekday-item" key={day.short}>
-          <h3 className="calender__item__title">{day.short}</h3>
+          <h3 className="calender__item__title">{t(day.short)}</h3>
         </li>
       ))}
       {calenderDays.map(d => {
@@ -138,9 +140,9 @@ export const Calender: FC = () => {
               className="calender__item__wrapper"
               onClick={() => handleDayClick(d)}
               aria-pressed={selected}
-              aria-label={`${date.toLocaleDateString("en-US", { dateStyle: "full" })}${
-                d.data ? ", daily log" : ""
-              }${d.isBorder ? ", completed workout" : ""}`}
+              aria-label={`${date.toLocaleDateString(getLocale(), { dateStyle: "full" })}${
+                d.data ? t(", daily log") : ""
+              }${d.isBorder ? t(", completed workout") : ""}`}
             >
               <span>{d.day}</span>
               {d.data && <i className="ui-calendar-dot" aria-hidden="true" />}

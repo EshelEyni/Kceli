@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { List } from "../../../components/App/List/List";
 import { DayEditTab, useDayEdit } from "./DayEditContext";
@@ -29,9 +30,11 @@ export const IntakeList: FC = () => {
     <>
       <header className="intake-list__header" data-testid="intake-list-header">
         <h3 className="intake-list__header__title">
-          {isRecordedIntakesShown ? "Recorded" : "Unrecorded"} Intakes
+          {t(isRecordedIntakesShown ? "Recorded Intakes" : "Unrecorded Intakes")}
         </h3>
-        <h4 className="intake-list__header__total-calories">total calories: {totalCalories}</h4>
+        <h4 className="intake-list__header__total-calories">
+          {t("total calories:")} {totalCalories}
+        </h4>
       </header>
 
       {isLoadingUpdate && <SpinnerLoader />}
@@ -47,7 +50,8 @@ export const IntakeList: FC = () => {
             return (
               <li className="intake-list-item" key={item.id}>
                 <h5 className="intake-list-item__title">
-                  Intake {i + 1}# {recordedStr}
+                  {" "}
+                  {t("Intake")} {i + 1}# {recordedStr}
                 </h5>
                 <IntakePreview intake={item} />
               </li>

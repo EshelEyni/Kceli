@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { Button } from "../../../components/App/Button/Button";
 import { FaPlus, FaMinus } from "react-icons/fa6";
@@ -24,14 +25,14 @@ export const IntakeItemEditInputBtns: FC = () => {
         <Button
           className="quantity-input-btn"
           onClickFn={decreaseQuantity}
-          aria-label="Decrease quantity"
+          aria-label={t("Decrease quantity")}
         >
           <FaMinus />
         </Button>
         <input
           type="number"
           name="quantity"
-          aria-label="Quantity"
+          aria-label={t("Quantity")}
           className="intake-item-input quantity-input"
           value={intakeItem.quantity}
           onChange={handleInputChange}
@@ -39,21 +40,25 @@ export const IntakeItemEditInputBtns: FC = () => {
         <Button
           className="quantity-input-btn"
           onClickFn={increaseQuantity}
-          aria-label="Increase quantity"
+          aria-label={t("Increase quantity")}
         >
           <FaPlus />
         </Button>
       </div>
 
       <Button onClickFn={handleUnitBtnClick} className="intake-item-edit__btn">
-        <span>{intakeItem.unit}</span>
+        <span>{t(intakeItem.unit)}</span>
       </Button>
 
       <Button onClickFn={handleToggleManual} className="intake-item-edit__btn">
-        <span>{isManual ? "Manual" : "Auto"}</span>
+        <span>{isManual ? t("Manual") : t("Auto")}</span>
       </Button>
       <Button onClickFn={handleCalcBtnClick} className="intake-item-edit__btn calc-calories-btn">
-        {isLoadingCal ? <SpinnerLoader containerSize={{ width: "100%" }} /> : <span>calc</span>}
+        {isLoadingCal ? (
+          <SpinnerLoader containerSize={{ width: "100%" }} />
+        ) : (
+          <span>{t("calc")}</span>
+        )}
       </Button>
     </section>
   );

@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC, useState } from "react";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import "./WorkoutPage.scss";
@@ -33,42 +34,41 @@ const WorkoutPage: FC = () => {
   return (
     <main className="page workout-page">
       <PageIntro
-        eyebrow="Move with purpose"
-        title="Your space to get stronger."
-        description="Simple routines. A plan that works for you."
+        eyebrow={t("Move with purpose")}
+        title={t("Your space to get stronger.")}
+        description={t("Simple routines. A plan that works for you.")}
         action={
           <button
             className="ui-button"
             disabled={isLoadingCreateWorkout}
             onClick={handleCreateWorkoutBtn}
           >
-            <FiPlus />
-            Create workout
+            <FiPlus /> {t("Create workout")}{" "}
           </button>
         }
       />
       <div className="ui-metrics">
         <MetricCard
-          label="Your library"
+          label={t("Your library")}
           value={workouts?.length ?? "—"}
-          unit="routines"
-          description="Built around your own exercises"
+          unit={t("routines")}
+          description={t("Built around your own exercises")}
         />
         <MetricCard
-          label="Strength routines"
+          label={t("Strength routines")}
           value={workouts?.filter(w => w.type === "anaerobic").length ?? "—"}
-          description="Sets, reps, weights and supersets"
+          description={t("Sets, reps, weights and supersets")}
         />
         <MetricCard
-          label="Cardio routines"
+          label={t("Cardio routines")}
           value={workouts?.filter(w => w.type === "aerobic").length ?? "—"}
-          description="Make time for movement"
+          description={t("Make time for movement")}
         />
       </div>
       <section className="ui-workout-library">
         <div className="ui-card-heading">
-          <h2>Your workout library</h2>
-          <div className="ui-tabs" aria-label="Filter workouts">
+          <h2>{t("Your workout library")}</h2>
+          <div className="ui-tabs" aria-label={t("Filter workouts")}>
             {(
               [
                 { value: "all", label: "All workouts" },
@@ -82,7 +82,7 @@ const WorkoutPage: FC = () => {
                 aria-pressed={filter === item.value}
                 onClick={() => setFilter(item.value)}
               >
-                {item.label}
+                {t(item.label)}
               </button>
             ))}
           </div>
@@ -94,7 +94,7 @@ const WorkoutPage: FC = () => {
         )}
       </section>
       <div className="ui-card workout-page__goals">
-        <h2>A goal worth showing up for</h2>
+        <h2>{t("A goal worth showing up for")}</h2>
         <GoalEdit type="workout" />
         <AsyncList
           className="workout-page__goals__list"
@@ -104,7 +104,7 @@ const WorkoutPage: FC = () => {
           isError={isErrorGoals}
           isSuccess={isSuccessGoals}
           isEmpty={isEmptyGoals}
-          entityName="goal"
+          entityName={t("goal")}
         />
       </div>
     </main>

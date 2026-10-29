@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { Button } from "../../../components/App/Button/Button";
 import { useIntakeItemEdit } from "./IntakeItemEditContext";
@@ -25,7 +26,7 @@ export const SpellingSuggestionList: FC = () => {
             dataTestId="ignore-suggestion-btn"
             onClickFn={() => handleIgnoreSuggestionClick(s.original)}
           >
-            <span>ignore</span>
+            <span>{t("ignore")}</span>
           </Button>
         </li>
       ))}

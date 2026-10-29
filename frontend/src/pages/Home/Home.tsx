@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { usePageLoaded } from "../../hooks/usePageLoaded";
 import { DayEdit } from "./DayEdit/DayEdit";
@@ -41,23 +42,26 @@ const Homepage = () => {
         <Modal>
           <Modal.OpenBtn modalName="create-day">
             <button className="home__btn" data-testid="create-day-open-modal-btn">
-              start a new day
+              {" "}
+              {t("start a new day")}{" "}
             </button>
           </Modal.OpenBtn>
 
           <Modal.Window name="create-day" className="create-day-modal">
             <h2 className="create-day-modal__title">
-              Are you sure you want to start a new day? <br />
+              {" "}
+              {t("Are you sure you want to start a new day?")} <br />
             </h2>
 
             <Modal.CloseBtn onClickFn={handleCreateDay}>
               <button className="btn create-day-modal__btn" data-testid="create-day-modal-btn">
-                start a new day
+                {" "}
+                {t("start a new day")}{" "}
               </button>
             </Modal.CloseBtn>
 
             <Modal.CloseBtn>
-              <button className="btn create-day-modal__btn">cancel</button>
+              <button className="btn create-day-modal__btn">{t("cancel")}</button>
             </Modal.CloseBtn>
           </Modal.Window>
         </Modal>

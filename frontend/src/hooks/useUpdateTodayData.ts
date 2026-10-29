@@ -1,3 +1,4 @@
+import { t } from "../i18n";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayDataApiService from "../services/dayData/dayDataApiService";
 import { DayData } from "../../../shared/types/dayData";
@@ -14,7 +15,7 @@ export function useUpdateTodayData() {
       queryClient.invalidateQueries(["userDailyStats"]);
       queryClient.invalidateQueries(["calenderData"]);
     },
-    onError: () => toast.error("Couldn't save your daily log. Please try again."),
+    onError: () => toast.error(t("Couldn't save your daily log. Please try again.")),
   });
 
   return { updateDailyData, isLoading };

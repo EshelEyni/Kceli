@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import { useWorkout } from "./WorkoutContext";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
@@ -33,34 +34,36 @@ const WorkoutDetails: FC = () => {
         <SpinnerLoader containerSize={{ height: "100px" }} />
       )}
       {isError && <ErrorMsg />}
-      {isSuccess && !workout && <ErrorMsg msg="Workout not found" />}
+      {isSuccess && !workout && <ErrorMsg msg={t("Workout not found")} />}
       {isSuccess && workout && (
         <div className="workout-details__wrapper">
           <section className="workout-details__info">
             <div className="workout-details__info__item">
-              <h2>description:</h2>
+              <h2>{t("description:")}</h2>
               <h3> {workout.description}</h3>
             </div>
             <div className="workout-details__info__item">
-              <h2>duration: </h2>
-              <h3>{duration} min</h3>
+              <h2>{t("duration:")} </h2>
+              <h3>
+                {duration} {t("min")}
+              </h3>
             </div>
             <div className="workout-details__info__item">
-              <h2>type: </h2>
+              <h2>{t("type:")} </h2>
               <h3>{workout.type}</h3>
             </div>
             {"split" in workout && (
               <div className="workout-details__info__item">
-                <h2>split: </h2> <h3>{workout.split}</h3>
+                <h2>{t("split:")} </h2> <h3>{workout.split}</h3>
               </div>
             )}
 
-            {!isWorkoutStarted && <Button onClickFn={onStart}>Start</Button>}
+            {!isWorkoutStarted && <Button onClickFn={onStart}>{t("Start")}</Button>}
           </section>
 
           {!isWorkoutStarted && (
             <>
-              <h2 className="workout-details__title">items:</h2>
+              <h2 className="workout-details__title">{t("items:")}</h2>
               <List
                 items={workout.items}
                 className="workout-details__list"
@@ -82,7 +85,8 @@ const WorkoutDetails: FC = () => {
               {completedItems.length > 0 && (
                 <div className="workout-details__completed-list-container">
                   <h2 className="workout-details__completed-list-container__title">
-                    Completed Items:
+                    {" "}
+                    {t("Completed Items:")}{" "}
                   </h2>
                   <hr className="workout-details__completed-list-container__hr" />
                   <List

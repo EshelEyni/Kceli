@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC, useState } from "react";
 import { GiTrophyCup } from "react-icons/gi";
 import { useAuth } from "../../hooks/useAuth";
@@ -40,7 +41,7 @@ export const GoalIndicator: FC = () => {
 
   return (
     <section className="goal-indicator">
-      <h2 className="goal-indicator__title">goal indicator</h2>
+      <h2 className="goal-indicator__title">{t("goal indicator")}</h2>
       <div
         className="goal-indicator-circle"
         style={{ background, cursor }}
@@ -49,7 +50,8 @@ export const GoalIndicator: FC = () => {
         <GiTrophyCup className="goal-indicator__icon" />
       </div>
       <strong className="goal-indicator__text">
-        You achieved <span>{percentage}%</span> of your goal
+        {" "}
+        {t("You achieved")} <span>{percentage}%</span> {t("of your goal")}{" "}
       </strong>
 
       {isCircleClicked && (

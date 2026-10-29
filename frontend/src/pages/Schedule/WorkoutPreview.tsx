@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC, Fragment } from "react";
 import { Workout } from "../../../../shared/types/workout";
 import workoutUtilService from "../../services/workout/workoutUtilService";
@@ -21,19 +22,22 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isTableShown 
     <article className="day-report__workout-preview">
       <Header className="day-report__workout-preview__header">
         <h3>
-          {description} - {type} - {duration} - {completedPercantage}% completed
+          {description} - {type} - {duration} - {completedPercantage}
+          {t("% completed")}{" "}
         </h3>
       </Header>
       {isTableShown && (
         <table className="day-report__workout-preview__table">
           <thead className="day-report__workout-preview__table__header">
             <tr>
-              <th>Exercise</th>
-              <th>Duration</th>
-              <th>Reps</th>
-              <th>Sets</th>
-              <th>Weight</th>
-              <th className="day-report__workout-preview__table__header__completed">Completed</th>
+              <th>{t("Exercise")}</th>
+              <th>{t("Duration")}</th>
+              <th>{t("Reps")}</th>
+              <th>{t("Sets")}</th>
+              <th>{t("Weight")}</th>
+              <th className="day-report__workout-preview__table__header__completed">
+                {t("Completed")}
+              </th>
             </tr>
           </thead>
           <tbody className="day-report__workout-preview__table__body">
@@ -60,7 +64,7 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isTableShown 
                           <td>{subItem.reps}</td>
                           <td />
                           <td>
-                            {subItem.weight} {subItem.weightUnit}
+                            {subItem.weight} {t(subItem.weightUnit)}
                           </td>
                           <td className="completed" />
                         </tr>
@@ -77,7 +81,7 @@ export const WorkoutPreview: FC<WorkoutPreviewProps> = ({ workout, isTableShown 
                     <td>{item.reps}</td>
                     <td>{item.sets}</td>
                     <td>
-                      {item.weight} {item.weightUnit}
+                      {item.weight} {t(item.weightUnit)}
                     </td>
                     <td className="completed">{item.isCompleted ? <FaCheck /> : ""}</td>
                   </tr>

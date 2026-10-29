@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { WorkoutDay as WorkoutDayType } from "../../../../../shared/types/user";
 import { StrictModeDroppable } from "../../../components/App/StrictModeDroppable/StrictModeDroppable";
@@ -18,7 +19,7 @@ export const WorkoutDayPreview: FC<WorkoutDayProps> = ({ workoutDay, onRemove, i
           className="workout-day"
           style={{ backgroundColor: snapshot.draggingOverWith ? "var(--color-success)" : "" }}
         >
-          <h2 className="workout-day__name">{workoutDay.name}</h2>
+          <h2 className="workout-day__name">{t(workoutDay.name)}</h2>
           <ul {...provided.droppableProps} ref={provided.innerRef} className="workout-day__list">
             {workoutDay.workouts.map((workout, index) => {
               const draggableId = `workday-${workoutDay.name}-workout-${workout.id}`;
@@ -35,9 +36,10 @@ export const WorkoutDayPreview: FC<WorkoutDayProps> = ({ workoutDay, onRemove, i
                       {onRemove && (
                         <button
                           className="ui-remove-scheduled"
-                          aria-label={`Remove ${workout.description || "routine"} from ${
-                            workoutDay.name
-                          }`}
+                          aria-label={t("Remove {{name}} from {{day}}", {
+                            name: workout.description || t("Your routine"),
+                            day: t(workoutDay.name),
+                          })}
                           disabled={isSaving}
                           onClick={() => onRemove(workoutDay.name, index)}
                         >

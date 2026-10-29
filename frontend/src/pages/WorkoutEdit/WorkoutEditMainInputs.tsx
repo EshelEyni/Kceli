@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC } from "react";
 import workoutUtilService from "../../services/workout/workoutUtilService";
 import { Select } from "../../components/App/Select/Select";
@@ -27,7 +28,7 @@ export const WorkoutEditMainInputs: FC<WorkoutEditMainInputsProps> = ({
   return (
     <>
       <div className="workout-edit__form__input-container name-input">
-        <label htmlFor="description-input">description:</label>
+        <label htmlFor="description-input">{t("description:")}</label>
         <input
           id="description-input"
           type="text"
@@ -37,7 +38,7 @@ export const WorkoutEditMainInputs: FC<WorkoutEditMainInputsProps> = ({
       </div>
       {handleDurationInputChange && (
         <div className="workout-edit__form__input-container name-input">
-          <label htmlFor="duration-input">duration:</label>
+          <label htmlFor="duration-input">{t("duration:")}</label>
           <input
             id="duration-input"
             type="number"
@@ -47,29 +48,29 @@ export const WorkoutEditMainInputs: FC<WorkoutEditMainInputsProps> = ({
         </div>
       )}
       <div className="workout-edit__form__input-container">
-        <label>workout type:</label>
+        <label>{t("workout type:")}</label>
         <Select onChange={handleTypeSelectChange} listHeight={250}>
           <Select.SelectTrigger>
             <div>
-              <span data-testid="workout-type">{workout.type}</span>
+              <span data-testid="workout-type">{t(workout.type)}</span>
               <FaChevronDown />
             </div>
           </Select.SelectTrigger>
           <Select.SelectList>
-            <Select.SelectItem value="anaerobic">anaerobic</Select.SelectItem>
-            <Select.SelectItem value="aerobic">aerobic</Select.SelectItem>
+            <Select.SelectItem value="anaerobic">{t("anaerobic")}</Select.SelectItem>
+            <Select.SelectItem value="aerobic">{t("aerobic")}</Select.SelectItem>
           </Select.SelectList>
         </Select>
       </div>
 
       {isAnaerobic && (
         <div className="workout-edit__form__input-container">
-          <label>split:</label>
+          <label>{t("split:")}</label>
 
           <Select onChange={handleSplitSelectChange} listHeight={250}>
             <Select.SelectTrigger>
               <div>
-                <span>{workout.split}</span>
+                <span>{t(workout.split)}</span>
                 <FaChevronDown />
               </div>
             </Select.SelectTrigger>

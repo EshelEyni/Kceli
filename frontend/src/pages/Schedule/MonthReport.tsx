@@ -1,3 +1,5 @@
+import { getLocale } from "../../i18n";
+import { t } from "../../i18n";
 import { FC } from "react";
 import "./MonthReport.scss";
 import { useSchedule } from "./ScheduleContext";
@@ -56,12 +58,12 @@ export const MonthReport: FC = () => {
   }, [] as WeekData[]);
 
   function getTitle() {
-    const firstDayDate = currDays[0].date.toLocaleString("en-GB", {
+    const firstDayDate = currDays[0].date.toLocaleString(getLocale(), {
       year: "2-digit",
       month: "short",
       day: "numeric",
     });
-    const lastDayDate = currDays[currDays.length - 1].date.toLocaleString("en-GB", {
+    const lastDayDate = currDays[currDays.length - 1].date.toLocaleString(getLocale(), {
       year: "2-digit",
       month: "short",
       day: "numeric",
@@ -100,9 +102,10 @@ export const MonthReport: FC = () => {
       const calories = calorieUtilService.getTotalCalories(d);
       const caloriesWithoutExcess = calories - excessCalories;
 
-      const name = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "2-digit" }).format(
-        new Date(d.date)
-      );
+      const name = new Intl.DateTimeFormat(getLocale(), {
+        day: "2-digit",
+        month: "2-digit",
+      }).format(new Date(d.date));
       return { name, calories, excessCalories, caloriesWithoutExcess };
     });
 
@@ -112,14 +115,14 @@ export const MonthReport: FC = () => {
   return (
     <section className="report month-report">
       <Header className="month-report__header">
-        <h1>monthly report</h1>
+        <h1>{t("monthly report")}</h1>
         <h3>{secondaryTitle}</h3>
       </Header>
       <ReportTable type="month" currData={currData} prevData={prevData} goals={monthWeekGoals} />
       <Goals type="month" />
 
       {isMonthlyDataEmpty ? (
-        <Empty entityName="data for this month" />
+        <Empty entityName={t("data for this month")} />
       ) : (
         <>
           {weightWaistData && <WeightWaistChart data={weightWaistData} />}

@@ -1,3 +1,4 @@
+import { t } from "../../i18n";
 import { FC, useEffect, useState } from "react";
 import { SpinnerLoader } from "../../components/Loaders/SpinnerLoader/SpinnerLoader";
 import { ErrorMsg } from "../../components/Msg/ErrorMsg/ErrorMsg";
@@ -109,9 +110,8 @@ const WorkoutEdit: FC = () => {
     setWorkoutItems(workout.items);
   }, [workout]);
 
-  if (isLoading)
-    return <SpinnerLoader  containerSize={{ width: "100%", height: "75vh" }} />;
-  if (isError) return <ErrorMsg msg="Something went wrong" />;
+  if (isLoading) return <SpinnerLoader containerSize={{ width: "100%", height: "75vh" }} />;
+  if (isError) return <ErrorMsg msg={t("Something went wrong")} />;
   if (!isSuccess || !workout) return null;
 
   return (
@@ -125,23 +125,28 @@ const WorkoutEdit: FC = () => {
         />
 
         <div className="workout-edit-page__duration-container">
-          <h3>duration:</h3>
-          <h4>{duration} minutes</h4>
+          <h3>{t("duration:")}</h3>
+          <h4>
+            {duration} {t("minutes")}
+          </h4>
         </div>
 
         <div className="workout-edit__form__btns">
           <Button className="btn workout-edit__btn" onClickFn={() => addWorkoutItem("aerobic")}>
-            add cardio
+            {" "}
+            {t("add cardio")}{" "}
           </Button>
           <Button className="btn workout-edit__btn" onClickFn={() => addWorkoutItem("anaerobic")}>
-            add set
+            {" "}
+            {t("add set")}{" "}
           </Button>
           <Button className="btn workout-edit__btn" onClickFn={() => addWorkoutItem("superset")}>
-            add superset
+            {" "}
+            {t("add superset")}{" "}
           </Button>
         </div>
 
-        {isItemsEmpty && <Empty entityName="exercises" />}
+        {isItemsEmpty && <Empty entityName={t("exercises")} />}
         {isItemsListShown && (
           <div
             className="workout-edit__items-list-container"
@@ -180,7 +185,8 @@ const WorkoutEdit: FC = () => {
 
         <Footer className="workout-edit__form__footer">
           <Button className="btn  workout-edit__btn-open" onClickFn={handleOpenBtnClick}>
-            open
+            {" "}
+            {t("open")}{" "}
           </Button>
         </Footer>
       </form>

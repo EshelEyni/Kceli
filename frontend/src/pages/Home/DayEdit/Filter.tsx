@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import { DayEditTab, useDayEdit } from "./DayEditContext";
 import { Button } from "../../../components/App/Button/Button";
@@ -56,7 +57,7 @@ export const DayEditFilter: FC = () => {
               aria-pressed={openedTab === item.value}
               onClickFn={() => handleBtnClick(item.value)}
             >
-              {item.name}
+              {t(item.name)}
             </Button>
           </li>
         );

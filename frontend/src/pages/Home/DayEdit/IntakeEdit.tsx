@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import toast from "react-hot-toast";
 import classnames from "classnames";
@@ -62,7 +63,7 @@ export const IntakeEdit: FC = () => {
   function handleSaveToFavoriteButtonClick(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
-    if (!iValidIntake) return toast.error("Please fill all intake items");
+    if (!iValidIntake) return toast.error(t("Please fill all intake items"));
 
     (intake.recordedAt = null), (intake.isRecorded = false);
     if ("userId" in intake) updateFavoriteIntake(intake as FavoriteIntake);
@@ -82,7 +83,7 @@ export const IntakeEdit: FC = () => {
     e.preventDefault();
     if (!dailyData) return;
     const iValidIntake = intake.items.every(item => item.name.length && item.quantity > 0);
-    if (!iValidIntake) return toast.error("Please fill all intake items");
+    if (!iValidIntake) return toast.error(t("Please fill all intake items"));
     if (intake.isRecorded && !intake.recordedAt) intake.recordedAt = new Date();
     const isNewIntake = !dailyData.intakes.some(i => i.id === intake.id);
     const updatedIntakes = isNewIntake
@@ -109,8 +110,8 @@ export const IntakeEdit: FC = () => {
             <div className="intake-edit__header__input-name-btn-type">
               <input
                 type="text"
-                aria-label="Meal name"
-                placeholder="Name your intake"
+                aria-label={t("Meal name")}
+                placeholder={t("Name your intake")}
                 autoComplete="off"
                 value={intake.name || ""}
                 onChange={handleIntakeNameInputChange}
@@ -126,7 +127,7 @@ export const IntakeEdit: FC = () => {
               <input
                 className="intake-edit__header__time-input"
                 type="time"
-                aria-label="Meal time"
+                aria-label={t("Meal time")}
                 value={toLocalTime(intake.recordedAt as string)}
                 onChange={handleTimeInputChange}
                 data-testid="intake-edit-time-input"
@@ -159,7 +160,8 @@ export const IntakeEdit: FC = () => {
         style={{ backgroundColor }}
       >
         <Button style={btnStyle} onClickFn={handleClearButtonClick} className="intake-edit-btn">
-          clear
+          {" "}
+          {t("clear")}{" "}
         </Button>
         <Button
           style={btnStyle}
@@ -167,7 +169,8 @@ export const IntakeEdit: FC = () => {
           className="intake-edit-btn"
           type="submit"
         >
-          Save To Fav
+          {" "}
+          {t("Save To Fav")}{" "}
         </Button>
         <Button
           style={btnStyle}
@@ -176,7 +179,8 @@ export const IntakeEdit: FC = () => {
             "intake-edit-btn btn-toggle-save-later " + classnames({ clicked: !intake.isRecorded })
           }
         >
-          Save Later
+          {" "}
+          {t("Save Later")}{" "}
         </Button>
 
         <Button
@@ -185,7 +189,8 @@ export const IntakeEdit: FC = () => {
           className="intake-edit-btn"
           type="submit"
         >
-          Save Intake
+          {" "}
+          {t("Save Intake")}{" "}
         </Button>
       </div>
     </form>

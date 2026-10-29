@@ -1,3 +1,4 @@
+import { t } from "../../../i18n";
 import { FC } from "react";
 import "./ErrorFallBack.scss";
 
@@ -11,15 +12,17 @@ export const ErrorFallBack: FC<ErrorFallBackProps> = ({ error, resetErrorBoundar
   return (
     <main className="error-fallback">
       <div className="error-fallback-msg">
-        <h1>Oops! Something went wrong.</h1>
+        <h1>{t("Oops! Something went wrong.")}</h1>
         <p>
-          We apologize for the inconvenience. You can either try reloading the page or go back to
-          the home page.
+          {" "}
+          {t(
+            "We apologize for the inconvenience. You can either try reloading the page or go back to the home page."
+          )}{" "}
         </p>
 
         {isDevEnv && (
           <details>
-            <summary>Details</summary>
+            <summary>{t("Details")}</summary>
             <p>{error.message}</p>
             <pre>{error.stack}</pre>
           </details>
@@ -27,10 +30,10 @@ export const ErrorFallBack: FC<ErrorFallBackProps> = ({ error, resetErrorBoundar
 
         <div className="error-actions">
           <button onClick={() => window.location.reload()}>
-            <span>Reload</span>
+            <span>{t("Reload")}</span>
           </button>
           <button onClick={resetErrorBoundary}>
-            <span>Home</span>
+            <span>{t("Home")}</span>
           </button>
         </div>
       </div>
