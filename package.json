@@ -8,8 +8,8 @@
     "dev:frontend": "cd frontend && npm run dev",
     "deploy:watch": "gh run watch --repo EshelEyni/Kceli",
     "deploy:kceli": "gh workflow run deploy-kceli.yml --repo EshelEyni/Kceli --ref main",
-    "deploy:all": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy/publish-and-deploy.ps1",
-    "docker:publish": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy/publish-image.ps1"
+    "docker:publish": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy/publish-image.ps1",
+    "deploy:all": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy/publish-and-deploy.ps1"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
