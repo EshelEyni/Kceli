@@ -1,4 +1,4 @@
-import { t } from "../../i18n";
+import i18n, { t } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signup } from "../../store/slices/authSlice";
@@ -162,7 +162,7 @@ const SignupPage = () => {
         return;
       }
 
-      await dispatch(signup(data));
+      await dispatch(signup({ ...data, language: i18n.resolvedLanguage === "he" ? "he" : "en" }));
       navigate("/home");
     } catch (err) {
       if (err instanceof AxiosError && err?.response?.data?.message)

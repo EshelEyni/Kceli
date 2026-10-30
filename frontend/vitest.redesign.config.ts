@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react({ fastRefresh: false }), svgr()],
   test: {
     environment: "jsdom",
+    setupFiles: ["test/redesign/setup.ts"],
     include: [
       "test/redesign/**/*.test.tsx",
       "src/pages/Home/DayEdit/Filter.test.tsx",

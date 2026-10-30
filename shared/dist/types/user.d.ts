@@ -7,6 +7,7 @@ export type WorkoutDay = {
 };
 export type UserWorkoutSchedule = WorkoutDay[];
 export interface UserCredenitials {
+    language?: "en" | "he";
     username: string;
     fullname: string;
     password: string;

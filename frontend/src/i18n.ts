@@ -2,12 +2,13 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "../public/locales/en/translation.json";
 import he from "../public/locales/he/translation.json";
+import { getGuestLanguage } from "./services/language/guestLanguage";
 
 // Bundle dictionaries so the interface can switch languages offline, too.
 i18n.use(initReactI18next).init({
   resources: { en: { translation: en }, he: { translation: he } },
   supportedLngs: ["en", "he"],
-  lng: "en",
+  lng: getGuestLanguage(),
   fallbackLng: "en",
   load: "languageOnly",
   keySeparator: false,

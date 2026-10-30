@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import "./i18n";
+import { getGuestLanguage } from "./services/language/guestLanguage";
 import { useEffect, Suspense, lazy } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -25,7 +26,12 @@ function App() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    void i18n.changeLanguage(loggedInUser?.language === "he" ? "he" : "en");
+    const language = loggedInUser
+      ? loggedInUser.language === "he"
+        ? "he"
+        : "en"
+      : getGuestLanguage();
+    void i18n.changeLanguage(language);
   }, [i18n, loggedInUser?.id, loggedInUser?.language]);
 
   useEffect(() => {

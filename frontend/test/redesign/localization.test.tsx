@@ -13,6 +13,7 @@ import validation from "../../src/services/reactHookForm/reactHookFormService";
 import { installReviewApi } from "./mockApi";
 import en from "../../public/locales/en/translation.json";
 import he from "../../public/locales/he/translation.json";
+import { getGuestLanguage } from "../../src/services/language/guestLanguage";
 
 vi.mock("nspell", () => ({
   default: class {
@@ -46,6 +47,7 @@ afterEach(async () => {
   api.mock.restore();
   await i18n.changeLanguage("en");
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 function mount(path: string, loggedIn = true) {
   const store = configureStore({
@@ -65,6 +67,68 @@ function mount(path: string, loggedIn = true) {
 }
 
 describe("Hebrew localization", () => {
+  it.each([
+    ["Asia/Jerusalem", "he"],
+    ["Europe/London", "en"],
+  ])(
+    "uses the %s visitor default before signup and saves it with the account",
+    async (timeZone, language) => {
+      const options = Intl.DateTimeFormat().resolvedOptions();
+      vi.spyOn(Intl.DateTimeFormat.prototype, "resolvedOptions").mockReturnValue({
+        ...options,
+        timeZone,
+      });
+      api.mock.onPost(/auth\/login\/with-token$/).reply(401, { status: "fail" });
+      api.mock.onPost(/auth\/signup$/).reply(config => {
+        api.fixtures.user.language = JSON.parse(config.data).language;
+        return [201, { status: "success", data: api.fixtures.user }];
+      });
+      const store = mount("/signup", false);
+      await waitFor(() => expect(document.querySelector('input[name="username"]')).toBeInTheDocument());
+      expect(document.documentElement).toHaveAttribute("lang", language);
+      const fields = {
+        username: "newuser",
+        fullname: "אריק ישראלי",
+        email: "alex@example.com",
+        password: "123123123",
+        passwordConfirm: "123123123",
+        weight: "80",
+        height: "175",
+      };
+      for (const [name, value] of Object.entries(fields)) {
+        fireEvent.change(document.querySelector(`input[name="${name}"]`)!, { target: { value } });
+      }
+      fireEvent.click(document.querySelector('form button[type="submit"]')!);
+      await waitFor(() =>
+        expect(api.mock.history.post.some(request => request.url?.endsWith("auth/signup"))).toBe(
+          true
+        )
+      );
+      const request = api.mock.history.post.find(request => request.url?.endsWith("auth/signup"))!;
+      expect(JSON.parse(request.data).language).toBe(language);
+      await waitFor(() => expect(store.getState().auth.loggedInUser?.language).toBe(language));
+    }
+  );
+
+  it("honors a saved English preference even with an Israeli browser time zone", async () => {
+    const options = Intl.DateTimeFormat().resolvedOptions();
+    vi.spyOn(Intl.DateTimeFormat.prototype, "resolvedOptions").mockReturnValue({
+      ...options,
+      timeZone: "Asia/Jerusalem",
+    });
+    api.fixtures.user.language = "en";
+    mount("/home");
+    await screen.findByRole("heading", { name: "Good to see you, Alex." });
+    expect(document.documentElement).toHaveAttribute("lang", "en");
+  });
+
+  it("falls back to English when the browser cannot provide its time zone", () => {
+    vi.spyOn(Intl.DateTimeFormat.prototype, "resolvedOptions").mockImplementation(() => {
+      throw new Error("Unavailable");
+    });
+    expect(getGuestLanguage()).toBe("en");
+  });
+
   it("saves language from the profile and reloads it from the saved user", async () => {
     const store = mount("/profile/review-user");
     await screen.findByRole("heading", { name: "Interface language" });
@@ -160,7 +224,7 @@ describe("Hebrew localization", () => {
   it("translates signup labels while retaining form field IDs and gender values", async () => {
     api.fixtures.user.language = "he";
     mount("/signup");
-    await screen.findByRole("heading", { name: "הרשמה" });
+    await waitFor(() => expect(document.querySelector('input[name="fullname"]')).toBeInTheDocument());
     expect(document.querySelector('input[name="fullname"]')).toHaveAttribute("id", "fullname");
     expect(screen.getByRole("radio", { name: "זכר" })).toHaveAttribute("value", "male");
     expect(screen.getByRole("radio", { name: "נקבה" })).toHaveAttribute("value", "female");
