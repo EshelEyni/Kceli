@@ -24,14 +24,9 @@ async function update(user: User): Promise<User> {
   return handleServerResponseData<User>(respose);
 }
 
-async function updateLanguage(language: "en" | "he"): Promise<User> {
-  const response = await httpService.patch(`${BASE_URL}/loggedInUser`, { language });
-  return handleServerResponseData<User>(response);
-}
-
 async function getUserDailyStats(): Promise<{ stats: UserDailyStatsResult[]; count: number }> {
   const respose = await httpService.get(`user/dailyStats`);
   return handleServerResponseData<{ stats: UserDailyStatsResult[]; count: number }>(respose);
 }
 
-export default { query, getById, getByUsername, update, updateLanguage, getUserDailyStats };
+export default { query, getById, getByUsername, update, getUserDailyStats };

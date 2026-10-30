@@ -67,12 +67,21 @@ function mount(path: string, loggedIn = true) {
 describe("Hebrew localization", () => {
   it("saves language from the profile and reloads it from the saved user", async () => {
     const store = mount("/profile/review-user");
+    await screen.findByRole("heading", { name: "Interface language" });
+    expect(screen.queryByRole("combobox", { name: "Interface language" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Edit", exact: true }));
     const selector = await screen.findByRole("combobox", { name: "Interface language" });
+    expect(selector.closest("form")).toHaveClass("user-edit-form");
     expect(document.querySelector(".ui-topbar select")).toBeNull();
     fireEvent.change(selector, { target: { value: "he" } });
-    await screen.findByRole("combobox", { name: "שפת הממשק" });
+    expect(api.mock.history.patch).toHaveLength(0);
+    fireEvent.click(screen.getByRole("button", { name: "update", exact: true }));
+    await screen.findByRole("heading", { name: "שפת הממשק" });
     expect(api.mock.history.patch).toHaveLength(1);
-    expect(JSON.parse(api.mock.history.patch[0].data)).toEqual({ language: "he" });
+    expect(JSON.parse(api.mock.history.patch[0].data)).toMatchObject({
+      language: "he",
+      fullname: "Alex Morgan",
+    });
     expect(store.getState().auth.loggedInUser?.language).toBe("he");
     expect(api.fixtures.user.language).toBe("he");
     expect(document.documentElement).toHaveAttribute("dir", "rtl");
@@ -90,13 +99,29 @@ describe("Hebrew localization", () => {
   it("keeps the saved preference when saving fails", async () => {
     api.mock.onPatch(/user\/loggedInUser$/).reply(500, { status: "error" });
     const store = mount("/profile/review-user");
+    fireEvent.click(await screen.findByRole("button", { name: "Edit", exact: true }));
     const selector = await screen.findByRole("combobox", { name: "Interface language" });
     fireEvent.change(selector, { target: { value: "he" } });
+    fireEvent.click(screen.getByRole("button", { name: "update", exact: true }));
     await waitFor(() => expect(api.mock.history.patch).toHaveLength(1));
     await waitFor(() => expect(selector).not.toBeDisabled());
-    expect(selector).toHaveValue("en");
+    expect(selector).toHaveValue("he");
     expect(store.getState().auth.loggedInUser?.language).not.toBe("he");
     expect(document.documentElement).toHaveAttribute("dir", "ltr");
+  });
+
+  it("discards an unsaved language change when profile editing is cancelled", async () => {
+    mount("/profile/review-user");
+    fireEvent.click(await screen.findByRole("button", { name: "Edit", exact: true }));
+    fireEvent.change(screen.getByRole("combobox", { name: "Interface language" }), {
+      target: { value: "he" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "cancel", exact: true }));
+    await screen.findByRole("heading", { name: "Interface language" });
+    expect(api.mock.history.patch).toHaveLength(0);
+    expect(document.documentElement).toHaveAttribute("dir", "ltr");
+    fireEvent.click(screen.getByRole("button", { name: "Edit", exact: true }));
+    expect(screen.getByRole("combobox", { name: "Interface language" })).toHaveValue("en");
   });
 
   it("ignores a stale browser preference for accounts without a saved language", async () => {

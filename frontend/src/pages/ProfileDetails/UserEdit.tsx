@@ -6,6 +6,7 @@ import { WeightLossGoal } from "../../../../shared/types/user";
 import { Button } from "../../components/App/Button/Button";
 
 type FormData = {
+  language: "en" | "he";
   username: string;
   fullname: string;
   birthdate: Date;
@@ -16,9 +17,10 @@ type FormData = {
 };
 
 export const UserEdit: FC = () => {
-  const { user, updateUser, setIsEditing } = useProfile();
+  const { user, updateUser, setIsEditing, isLoadingUpdateUser } = useProfile();
 
   const defaultValues = {
+    language: user?.language || "en",
     username: user?.username || "",
     fullname: user?.fullname || "",
     birthdate: user?.birthdate || new Date(),
@@ -40,8 +42,7 @@ export const UserEdit: FC = () => {
   function onSubmit(data: FormData) {
     if (!user) return;
     const userToUpdate = { ...user, ...data };
-    updateUser(userToUpdate);
-    setIsEditing(false);
+    updateUser(userToUpdate, { onSuccess: () => setIsEditing(false) });
   }
 
   return (
@@ -61,6 +62,24 @@ export const UserEdit: FC = () => {
           name="fullname"
           control={control}
           render={({ field }) => <input id="fullname" {...field} />}
+        />
+      </div>
+
+      <div className="user-edit__item-container">
+        <label htmlFor="profile-language">{t("Interface language")}</label>
+        <Controller
+          name="language"
+          control={control}
+          render={({ field }) => (
+            <select id="profile-language" {...field} disabled={isLoadingUpdateUser}>
+              <option value="en" lang="en">
+                English
+              </option>
+              <option value="he" lang="he">
+                עברית
+              </option>
+            </select>
+          )}
         />
       </div>
 
@@ -108,8 +127,12 @@ export const UserEdit: FC = () => {
       </div>
 
       <div className="user-edit__btns-container">
-        <Button onClickFn={handleBtnCancelClick}>{t("cancel")}</Button>
-        <Button type="submit">{t("update")}</Button>
+        <Button onClickFn={handleBtnCancelClick} isDisabled={isLoadingUpdateUser}>
+          {t("cancel")}
+        </Button>
+        <Button type="submit" isDisabled={isLoadingUpdateUser}>
+          {t("update")}
+        </Button>
       </div>
     </form>
   );

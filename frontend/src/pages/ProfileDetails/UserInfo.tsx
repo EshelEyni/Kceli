@@ -57,6 +57,11 @@ export const UserInfo: FC = () => {
       </div>
 
       <div className="user-info__item-container">
+        <h2>{t("Interface language")}</h2>
+        <p>{user.language === "he" ? "עברית" : "English"}</p>
+      </div>
+
+      <div className="user-info__item-container">
         <h2>{t("Birth date:")}</h2>
         <p>{new Date(birthdate).toLocaleDateString()}</p>
       </div>

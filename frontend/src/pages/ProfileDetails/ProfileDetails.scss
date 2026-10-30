@@ -208,7 +208,8 @@
         text-transform: capitalize;
       }
 
-      input {
+      input,
+      select {
         width: 100%;
         height: rem(50px);
         padding: rem(20px);

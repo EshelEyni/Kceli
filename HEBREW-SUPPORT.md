@@ -4,7 +4,7 @@ Branch: `codex/hebrew-support`, based on redesign commit `f953e0e`.
 
 Integrated into `main` in `dev`, preserving the subsequent Home feature removals and removal of the weekly workout planner.
 
-The language selector appears in the signed-in user's profile under Personal details. It sends a language-only patch to `user/loggedInUser`, stores `language: "en" | "he"` in the MongoDB user document, and applies the server's returned user after a successful save. The control is disabled while saving; failure retains the current language and shows an error.
+Language is an ordinary profile field: `UserInfo` displays the saved language, and `UserEdit` edits it alongside the other personal details. Update saves all edited profile fields together to `user/loggedInUser`, including `language: "en" | "he"` in the MongoDB user document. The interface switches after the save succeeds. Cancel discards the draft; a failed save keeps the edit form open for retry without changing the active language.
 
 This follows Roza's i18next/react-i18next setup, English/Hebrew dictionaries, and document `lang`/`dir` synchronization. Dictionaries are bundled rather than fetched so switching also works offline. Resources are in `frontend/public/locales/{en,he}/translation.json`; string keys are literal English text, with complete interpolated sentences for dynamic messages.
 
