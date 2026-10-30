@@ -100,16 +100,19 @@
       font-size: rem(16px);
       white-space: nowrap;
       letter-spacing: 1px;
-      transition: all 0.2s ease-in-out;
+      transition: background-color 0.2s ease-in-out;
 
-      &:hover {
-        background-color: var(--color-background-light);
+      &:hover:not(:disabled),
+      &:focus-visible {
+        background-color: #365d48;
+        color: #fff;
       }
     }
 
     .btn-toggle-save-later {
       &.clicked {
-        background-color: var(--color-background-light);
+        background-color: #365d48;
+        color: #fff;
       }
     }
   }
