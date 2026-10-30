@@ -1,5 +1,5 @@
 import i18n, { t } from "../../i18n";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signup } from "../../store/slices/authSlice";
 import "./Signup.scss";
@@ -55,7 +55,7 @@ const SignupPage = () => {
     handleSubmit,
     setError,
     trigger,
-    formState: { errors, isDirty, touchedFields },
+    formState: { errors, isSubmitting },
   } = useForm<IFormInput>();
 
   const validateField = async (fieldName: keyof IFormInput) => {
@@ -86,7 +86,7 @@ const SignupPage = () => {
     },
     {
       id: "email",
-      type: "text",
+      type: "email",
       validation: {
         required: createRequiredValidationMsg("email"),
         pattern: emailPattern,
@@ -171,57 +171,54 @@ const SignupPage = () => {
     }
   };
 
+  const labels: Record<string, string> = { username: "Username", fullname: "Full name", email: "Email address", password: "Password", passwordConfirm: "Confirm password", weight: "Weight", height: "Height", gender: "Gender", birthdate: "Date of birth" };
+  const autocomplete: Record<string, string> = { username: "username", fullname: "name", email: "email", password: "new-password", passwordConfirm: "new-password", birthdate: "bday" };
+  const renderField = (input: IInputField) => (
+    <div key={input.id} className={"signup-field signup-field--" + input.id}>
+      {input.type === "radio" ? (
+        <fieldset className="signup-gender">
+          <legend>{t(labels[input.id])}</legend>
+          <div className="signup-gender__options">{input.options?.map(option => (
+            <label key={option}><input {...register(input.id, input.validation)} type="radio" value={option} defaultChecked={input.defaultValue === option} /><span>{t(option)}</span></label>
+          ))}</div>
+        </fieldset>
+      ) : (
+        <>
+          <label htmlFor={input.id}>{t(labels[input.id])}{input.id === "weight" ? " (kg)" : input.id === "height" ? " (cm)" : ""}</label>
+          <input id={input.id} {...register(input.id, input.validation)} type={input.type}
+            autoComplete={autocomplete[input.id] || "off"} defaultValue={input.defaultValue}
+            onBlur={() => validateField(input.id)} aria-invalid={!!errors[input.id]}
+            aria-describedby={errors[input.id] ? input.id + "-error" : undefined}
+            step={input.type === "number" ? "any" : undefined} min={input.type === "number" ? "0.1" : undefined} />
+        </>
+      )}
+      {errors[input.id] && <p id={input.id + "-error"} className="signup-error" role="alert">{errors[input.id]?.message}</p>}
+    </div>
+  );
   return (
-    <section className="page signup-page">
-      <form onSubmit={handleSubmit(onSignup)}>
-        <h1>{t("Signup")}</h1>
-
-        {inputFields.map(input => (
-          <div
-            key={input.id}
-            className={input.type === "radio" ? "input-field-radio" : "input-field"}
-          >
-            <label htmlFor={input.id}>
-              <fieldset>
-                <legend>{t(input.id)}</legend>
-                {input.type === "radio" ? (
-                  input.options?.map(option => (
-                    <label key={option}>
-                      <input
-                        {...register(input.id, input.validation)}
-                        type={input.type}
-                        value={option}
-                        defaultChecked={input.defaultValue === option}
-                        onBlur={() => validateField(input.id)}
-                      />
-                      {t(option)}
-                    </label>
-                  ))
-                ) : (
-                  <input
-                    id={input.id}
-                    {...register(input.id, input.validation)}
-                    type={input.type}
-                    autoComplete="off"
-                    defaultValue={input.defaultValue}
-                    onBlur={() => validateField(input.id)}
-                  />
-                )}
-              </fieldset>
-            </label>
-            {(isDirty || touchedFields[input.id]) && errors[input.id] && (
-              <p className="input-field__error-message">{errors[input.id]?.message}</p>
-            )}
-          </div>
-        ))}
-
-        <Button type="submit" isDisabled={isDirty && Object.keys(errors).length > 0}>
-          {" "}
-          {t("Signup")}{" "}
-        </Button>
-      </form>
+    <section className="page signup-page" aria-labelledby="signup-title">
+      <div className="signup-card">
+        <header className="signup-header">
+          <span className="signup-eyebrow">{t("A little better, every day")}</span>
+          <h1 id="signup-title">{t("Create your account")}</h1>
+          <p>{t("Build healthy habits. Make room for progress.")}</p>
+        </header>
+        <form onSubmit={handleSubmit(onSignup)}>
+          <fieldset className="signup-section">
+            <legend>{t("Account details")}</legend>
+            <div className="signup-grid">{inputFields.slice(0, 5).map(renderField)}</div>
+            <p className="signup-hint">{t("Username: 3–20 English letters or numbers. Password: 8–20 English letters or numbers.")}</p>
+          </fieldset>
+          <fieldset className="signup-section">
+            <legend>{t("A little about you")}</legend>
+            <p className="signup-description">{t("Your details help personalize your daily goals.")}</p>
+            <div className="signup-grid">{inputFields.slice(5).map(renderField)}</div>
+          </fieldset>
+          <Button className="signup-submit" type="submit" isDisabled={isSubmitting}>{t(isSubmitting ? "Creating your account…" : "Create account")}</Button>
+          <p className="signup-login">{t("Already have an account?")} <Link to="/login">{t("Log in")}</Link></p>
+        </form>
+      </div>
     </section>
   );
 };
-
 export default SignupPage;

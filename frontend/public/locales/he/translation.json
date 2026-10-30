@@ -440,5 +440,22 @@
   "items": "פריטים",
   "Recorded Intakes": "ארוחות מתועדות",
   "Unrecorded Intakes": "ארוחות שלא תועדו",
-  "Interface language": "שפת הממשק"
+  "Interface language": "שפת הממשק",
+  "Username": "שם משתמש",
+  "Full name": "שם מלא",
+  "Email address": "כתובת אימייל",
+  "Password": "סיסמה",
+  "Confirm password": "אימות סיסמה",
+  "Height": "גובה",
+  "Gender": "מגדר",
+  "Date of birth": "תאריך לידה",
+  "Create your account": "יצירת חשבון",
+  "Build healthy habits. Make room for progress.": "בונים הרגלים בריאים. מפנים מקום להתקדמות.",
+  "Account details": "פרטי החשבון",
+  "A little about you": "קצת עליך",
+  "Your details help personalize your daily goals.": "הפרטים שלך עוזרים להתאים את היעדים היומיים שלך.",
+  "Username: 3–20 English letters or numbers. Password: 8–20 English letters or numbers.": "שם משתמש: 3–20 אותיות באנגלית או ספרות. סיסמה: 8–20 אותיות באנגלית או ספרות.",
+  "Creating your account…": "החשבון שלך נוצר…",
+  "Create account": "יצירת חשבון",
+  "Already have an account?": "כבר יש לך חשבון?"
 }

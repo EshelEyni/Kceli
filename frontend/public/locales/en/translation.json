@@ -440,5 +440,22 @@
   "items": "items",
   "Recorded Intakes": "Recorded Intakes",
   "Unrecorded Intakes": "Unrecorded Intakes",
-  "Interface language": "Interface language"
+  "Interface language": "Interface language",
+  "Username": "Username",
+  "Full name": "Full name",
+  "Email address": "Email address",
+  "Password": "Password",
+  "Confirm password": "Confirm password",
+  "Height": "Height",
+  "Gender": "Gender",
+  "Date of birth": "Date of birth",
+  "Create your account": "Create your account",
+  "Build healthy habits. Make room for progress.": "Build healthy habits. Make room for progress.",
+  "Account details": "Account details",
+  "A little about you": "A little about you",
+  "Your details help personalize your daily goals.": "Your details help personalize your daily goals.",
+  "Username: 3–20 English letters or numbers. Password: 8–20 English letters or numbers.": "Username: 3–20 English letters or numbers. Password: 8–20 English letters or numbers.",
+  "Creating your account…": "Creating your account…",
+  "Create account": "Create account",
+  "Already have an account?": "Already have an account?"
 }
