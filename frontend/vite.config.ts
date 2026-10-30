@@ -99,7 +99,9 @@ export default defineConfig({
             },
           },
         ],
-        navigateFallback: "/offline.html",
+        // Serve the precached React shell for client-side navigation, including offline.
+        navigateFallback: "/index.html",
+        navigateFallbackDenylist: [/^\/api(?:\/|$)/],
       },
     }),
   ],

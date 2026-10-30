@@ -27,7 +27,14 @@ const isProdEnv = process.env.NODE_ENV === "production";
 const app = express();
 app.use(compression());
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      // Uploaded photos are decoded via temporary object URLs before re-encoding.
+      imgSrc: ["'self'", "data:", "blob:"],
+    },
+  },
+}));
 app.use(cookieParser());
 const jsonParser = express.json({ limit: "15kb" });
 // Authenticate image requests before the scan route parses its bounded payload.
