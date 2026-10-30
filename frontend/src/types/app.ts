@@ -4,7 +4,6 @@ import { store } from "../store/store";
 import { FC, LazyExoticComponent, ReactElement, ReactNode } from "react";
 import { User, WeightLossGoal } from "../../../shared/types/user";
 import { DayData } from "../../../shared/types/dayData";
-import { FormattedNinjaAPIResData, FormattedUSDAFoodObject } from "../../../shared/types/system";
 
 export type ReduxStore = typeof store;
 export type RootState = ReturnType<typeof store.getState>;
@@ -68,8 +67,8 @@ export type CalenderDay = {
 export type QueryStatus = "idle" | "loading" | "success" | "error";
 
 export type NutritionQueryState = {
-  type: "chatGPT" | "ninjaAPI" | "usdaAPI";
-  response: string | FormattedNinjaAPIResData | FormattedUSDAFoodObject[] | null;
+  type: "chatGPT";
+  response: string | null;
   status: QueryStatus;
   error: string | null;
 };

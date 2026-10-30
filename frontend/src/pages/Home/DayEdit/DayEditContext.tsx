@@ -36,10 +36,6 @@ export type DayEditContextType = {
   setIntake: Dispatch<SetStateAction<CombinedIntake>>;
   chatGPTQuery: NutritionQueryState;
   setChatGPTQuery: Dispatch<SetStateAction<NutritionQueryState>>;
-  ninjaAPIQuery: NutritionQueryState;
-  setNinjaAPIQuery: Dispatch<SetStateAction<NutritionQueryState>>;
-  USDAAPIQuery: NutritionQueryState;
-  setUSDAAPIQuery: Dispatch<SetStateAction<NutritionQueryState>>;
   currIntakeItemId: string;
   setCurrIntakeItemId: Dispatch<SetStateAction<string>>;
   favoriteIntakes: FavoriteIntake[] | undefined;
@@ -104,12 +100,6 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
   const [chatGPTQuery, setChatGPTQuery] = useState<NutritionQueryState>(
     nutritionUtilService.getDefaultNutritionQuery("chatGPT")
   );
-  const [ninjaAPIQuery, setNinjaAPIQuery] = useState<NutritionQueryState>(
-    nutritionUtilService.getDefaultNutritionQuery("ninjaAPI")
-  );
-  const [USDAAPIQuery, setUSDAAPIQuery] = useState<NutritionQueryState>(
-    nutritionUtilService.getDefaultNutritionQuery("usdaAPI")
-  );
   const recordedIntakes = (dailyData?.intakes.filter(i => i.isRecorded) as Intake[]) || [];
   const unrecordedIntakes = (dailyData?.intakes.filter(i => !i.isRecorded) as Intake[]) || [];
 
@@ -155,10 +145,6 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
     setIntake,
     chatGPTQuery,
     setChatGPTQuery,
-    ninjaAPIQuery,
-    setNinjaAPIQuery,
-    USDAAPIQuery,
-    setUSDAAPIQuery,
     currIntakeItemId,
     setCurrIntakeItemId,
     favoriteIntakes,

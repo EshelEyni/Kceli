@@ -1,149 +1,65 @@
 import { t } from "../../../i18n";
-import { FC } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Button } from "../../../components/App/Button/Button";
+import { FC, useRef, useState } from "react";
+import { RiOpenaiFill, RiArrowRightUpLine } from "react-icons/ri";
 import nutritionApiService from "../../../services/nutrition/nutritionApiService";
-import { RiGovernmentFill, RiOpenaiFill } from "react-icons/ri";
-import { GiNinjaHead } from "react-icons/gi";
 import { useDayEdit } from "./DayEditContext";
 import { NutritionQueryResponseHandler } from "./NutritionQueryResponseHandler";
 import "./NutritionQuery.scss";
 
-type NutritionQueryIFormInput = {
-  chatGPTQuery: string;
-  ninjaAPIQuery: string;
-  USDAAPIQuery: string;
-};
-
 export const NutritionQuery: FC = () => {
-  const {
-    chatGPTQuery,
-    setChatGPTQuery,
-    ninjaAPIQuery,
-    setNinjaAPIQuery,
-    USDAAPIQuery,
-    setUSDAAPIQuery,
-  } = useDayEdit();
+  const { chatGPTQuery, setChatGPTQuery } = useDayEdit();
+  const [prompt, setPrompt] = useState("");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const pending = useRef(false);
+  const isLoading = chatGPTQuery.status === "loading";
+  const suggestions = ["Estimate the nutrition in my meal", "Suggest a high-protein lunch", "Help me plan a balanced day"];
 
-  const { control, handleSubmit } = useForm<NutritionQueryIFormInput>({
-    defaultValues: {
-      chatGPTQuery: "",
-      ninjaAPIQuery: "",
-      USDAAPIQuery: "",
-    },
-  });
-
-  async function onSubmit(data: NutritionQueryIFormInput) {
-    if (data.chatGPTQuery) {
-      try {
-        setChatGPTQuery({ ...chatGPTQuery, status: "loading" });
-        const response = await nutritionApiService.queryChatGPT(data.chatGPTQuery);
-        setChatGPTQuery({ ...chatGPTQuery, status: "success", response });
-      } catch (e) {
-        setChatGPTQuery({
-          ...chatGPTQuery,
-          status: "error",
-          error: e instanceof Error ? e.message : "An unknown error occurred.",
-        });
-      }
-    }
-
-    if (data.ninjaAPIQuery) {
-      try {
-        setNinjaAPIQuery({ ...ninjaAPIQuery, status: "loading" });
-        const ninjaAPIResponse = await nutritionApiService.queryNinja(data.ninjaAPIQuery);
-        setNinjaAPIQuery({ ...ninjaAPIQuery, status: "success", response: ninjaAPIResponse });
-      } catch (e) {
-        setNinjaAPIQuery({
-          ...ninjaAPIQuery,
-          status: "error",
-          error: e instanceof Error ? e.message : "An unknown error occurred.",
-        });
-      }
-    }
-
-    if (data.USDAAPIQuery) {
-      try {
-        setUSDAAPIQuery({ ...USDAAPIQuery, status: "loading" });
-        const USDAAPIResponse = await nutritionApiService.queryUSDA(data.USDAAPIQuery);
-        setUSDAAPIQuery({ ...USDAAPIQuery, status: "success", response: USDAAPIResponse });
-      } catch (e) {
-        setUSDAAPIQuery({
-          ...USDAAPIQuery,
-          status: "error",
-          error: e instanceof Error ? e.message : "An unknown error occurred.",
-        });
-      }
+  async function onSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    const query = prompt.trim();
+    if (!query || isLoading || pending.current) return;
+    pending.current = true;
+    setChatGPTQuery({ ...chatGPTQuery, status: "loading", error: null, response: null });
+    try {
+      const response = await nutritionApiService.queryChatGPT(query);
+      setChatGPTQuery({ ...chatGPTQuery, status: "success", error: null, response });
+    } catch (error) {
+      setChatGPTQuery({ ...chatGPTQuery, status: "error", response: null,
+        error: error instanceof Error ? error.message : t("Something went wrong. Please try again.") });
+    } finally {
+      pending.current = false;
     }
   }
 
   return (
     <section className="nutrition-query" data-testid="nutrition-query">
-      <section className="nutrition-query__desc">
-        <p>{t("This tab let's you query the APIs used by the app.")}</p>
-        <ul>
-          <li>{t("The first one is a chatbot that generates a response based on the input")}</li>
-          <li>{t("The second one is a food database.")}</li>
-          <li>{t("The third one is a nutrition database.")}</li>
-        </ul>
-      </section>
-
-      <form className="nutrition-query__form" autoComplete="off" data-testid="nutrition-query-form">
-        <label htmlFor="chatGPTQuery">
-          <span>{t("Chat GPT")}</span>
-          <RiOpenaiFill />
-        </label>
-        <Controller
-          name="chatGPTQuery"
-          control={control}
-          render={({ field }) => <textarea id="chatGPTQuery" {...field} />}
-        />
-
-        <label htmlFor="ninjaAPIQuery">
-          <span>{t("Ninja API")}</span>
-          <GiNinjaHead />
-        </label>
-        <Controller
-          name="ninjaAPIQuery"
-          control={control}
-          render={({ field }) => <input id="ninjaAPIQuery" {...field} />}
-        />
-
-        <label htmlFor="USDAAPIQuery">
-          <span>{t("USDA API")}</span>
-          <RiGovernmentFill />
-        </label>
-        <Controller
-          name="USDAAPIQuery"
-          control={control}
-          render={({ field }) => <input id="USDAAPIQuery" {...field} />}
-        />
-
-        <Button onClickFn={handleSubmit(onSubmit)}>{t("query")}</Button>
+      <header className="nutrition-query__intro">
+        <span className="nutrition-query__badge"><RiOpenaiFill aria-hidden="true" /> {t("Powered by OpenAI")}</span>
+        <h2>{t("A little guidance for your next meal.")}</h2>
+        <p>{t("Explore meal ideas, nutrition estimates, and everyday food questions.")}</p>
+      </header>
+      <form className="nutrition-query__form" onSubmit={onSubmit} data-testid="nutrition-query-form">
+        <label htmlFor="chatGPTQuery">{t("What would you like to know?")}</label>
+        <textarea ref={inputRef} id="chatGPTQuery" value={prompt} onChange={event => setPrompt(event.target.value)}
+          placeholder={t("Describe a meal, include portions, or ask a nutrition question…")}
+          rows={5} dir="auto" disabled={isLoading} aria-describedby="nutrition-query-hint" />
+        <div className="nutrition-query__footer">
+          <p id="nutrition-query-hint">{t("Add ingredients and portions for a more useful answer.")}</p>
+          <button className="nutrition-query__submit" type="submit" disabled={isLoading || !prompt.trim()}>
+            {t(isLoading ? "Thinking…" : "Ask OpenAI")} <RiArrowRightUpLine aria-hidden="true" />
+          </button>
+        </div>
       </form>
-
-      <div className="nutrition-query__results">
-        {chatGPTQuery.status !== "idle" && (
-          <div className="nutrition-query__results__item">
-            <h1>{t("Chat GPT Response:")}</h1>
-            <NutritionQueryResponseHandler queryState={chatGPTQuery} />
-          </div>
-        )}
-
-        {ninjaAPIQuery.status !== "idle" && (
-          <div className="nutrition-query__results__item">
-            <h1>{t("Ninja API Response:")}</h1>
-            <NutritionQueryResponseHandler queryState={ninjaAPIQuery} />
-          </div>
-        )}
-
-        {USDAAPIQuery.status !== "idle" && (
-          <div className="nutrition-query__results__item">
-            <h1>{t("USDA API Response:")}</h1>
-            <NutritionQueryResponseHandler queryState={USDAAPIQuery} />
-          </div>
-        )}
+      <div className="nutrition-query__suggestions" aria-label={t("Suggested questions")}>
+        {suggestions.map(suggestion => <button type="button" key={suggestion} disabled={isLoading}
+          onClick={() => { setPrompt(t(suggestion)); inputRef.current?.focus(); }}>{t(suggestion)}</button>)}
       </div>
+      {chatGPTQuery.status !== "idle" && (
+        <section className="nutrition-query__answer" aria-live="polite" aria-busy={isLoading}>
+          <h3><RiOpenaiFill aria-hidden="true" /> {t(isLoading ? "Putting your answer together" : "Your answer")}</h3>
+          <NutritionQueryResponseHandler queryState={chatGPTQuery} />
+        </section>
+      )}
     </section>
   );
 };

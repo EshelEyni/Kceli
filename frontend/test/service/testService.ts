@@ -1,3 +1,4 @@
+import { Gender } from "../../../shared/types/system";
 import { User, UserWorkoutSchedule, WorkoutDay } from "../../../shared/types/user";
 import { DayData } from "../../../shared/types/dayData";
 import { act } from "@testing-library/react";
@@ -15,15 +16,10 @@ import {
 } from "../../../shared/types/workout";
 import { NutritionQueryState, SpellingSuggestion } from "../../src/types/app";
 import { createId } from "../../src/services/util/utilService";
-import {
-  FormattedNinjaAPIResData,
-  FormattedUSDAFoodObject,
-  Gender,
-} from "../../../shared/types/system";
 
 type CreateTestNutritionQueryParams = {
   type: NutritionQueryState["type"];
-  response?: string | FormattedNinjaAPIResData | FormattedUSDAFoodObject[] | null;
+  response?: string | null;
   status?: NutritionQueryState["status"];
   error?: NutritionQueryState["error"];
 };
@@ -365,67 +361,8 @@ function createNutritionQuery({
   };
 }
 
-function createNutritionQueryResponse(
-  type: NutritionQueryState["type"]
-): string | FormattedNinjaAPIResData | FormattedUSDAFoodObject[] {
-  switch (type) {
-    case "chatGPT":
-      return "test response from chatGPT";
-    case "ninjaAPI":
-      return [
-        {
-          name: "banana",
-          calories: "89.4",
-          "serving size": "100G",
-          fat: "0.3 Total Gram",
-          "fat saturated": "0.1G",
-          protein: "1.1G",
-          sodium: "1MG",
-          potassium: "22MG",
-          carbohydrates: "23.2 Total Gram",
-          fiber: "2.6G",
-          sugar: "12.3G",
-        },
-      ];
-    case "usdaAPI":
-      return [
-        {
-          description: "Banana, raw",
-          Energy: "97 KCAL",
-          "Carbohydrate, by difference": "22.7 G",
-          Water: "75.6 G",
-          "Sugars, total including NLEA": "15.8 G",
-          "Fiber, total dietary": "1.7 G",
-          "Calcium, Ca": "5 MG",
-          "Magnesium, Mg": "28 MG",
-          "Folate, DFE": "15 UG",
-        },
-        {
-          description: "Bananas, raw",
-          Energy: "371 kJ",
-          "Vitamin A, IU": "64 IU",
-          "Vitamin A, RAE": "3 UG",
-          "Folate, food": "20 UG",
-          "Fluoride, F": "2.2 UG",
-          "Potassium, K": "358 MG",
-          Sucrose: "2.39 G",
-          Glucose: "4.98 G",
-          Water: "74.9 G",
-          "Lutein + zeaxanthin": "22 UG",
-          "Selenium, Se": "1 UG",
-        },
-        {
-          description: "Bananas, overripe, raw",
-          Energy: "85 KCAL",
-          "Carotene, alpha": "8 UG",
-          "cis-beta-Carotene": "1 UG",
-          "Carotene, beta": "10 UG",
-          "trans-beta-Carotene": "9 UG",
-          "Folate, total": "25 UG",
-          Water: "78.3 G",
-        },
-      ];
-  }
+function createNutritionQueryResponse(_type: NutritionQueryState["type"]): string {
+  return "test response from chatGPT";
 }
 
 async function waitForTick() {

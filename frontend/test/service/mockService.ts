@@ -47,10 +47,6 @@ export type MockUseDayEdit = {
   setCurrIntakeItemId?: any;
   chatGPTQuery?: NutritionQueryState;
   setChatGPTQuery?: any;
-  ninjaAPIQuery?: NutritionQueryState;
-  setNinjaAPIQuery?: any;
-  USDAAPIQuery?: NutritionQueryState;
-  setUSDAAPIQuery?: any;
   favoriteIntakes?: Intake[] | undefined;
   isLoadingFavoriteIntakes?: boolean;
   isSuccessFavoriteIntakes?: boolean;
@@ -233,10 +229,6 @@ function mockUseDayEdit({
   setCurrIntakeItemId = vi.fn(),
   chatGPTQuery = testService.createNutritionQuery({ type: "chatGPT" }),
   setChatGPTQuery = vi.fn(),
-  ninjaAPIQuery = testService.createNutritionQuery({ type: "ninjaAPI" }),
-  setNinjaAPIQuery = vi.fn(),
-  USDAAPIQuery = testService.createNutritionQuery({ type: "usdaAPI" }),
-  setUSDAAPIQuery = vi.fn(),
   favoriteIntakes = [testService.createIntake({}), testService.createIntake({})] as Intake[],
   isLoadingFavoriteIntakes = false,
   isSuccessFavoriteIntakes = false,
@@ -265,10 +257,6 @@ function mockUseDayEdit({
     setCurrIntakeItemId,
     chatGPTQuery,
     setChatGPTQuery,
-    ninjaAPIQuery,
-    setNinjaAPIQuery,
-    USDAAPIQuery,
-    setUSDAAPIQuery,
     favoriteIntakes,
     isLoadingFavoriteIntakes,
     isSuccessFavoriteIntakes,

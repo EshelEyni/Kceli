@@ -1,313 +1,50 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { it, describe, expect, afterEach, vi, Mock } from "vitest";
+import { describe, it, expect, afterEach, vi, Mock } from "vitest";
 import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { NutritionQuery } from "./NutritionQuery";
 import { mockUseDayEdit } from "../../../../test/service/mockService";
 import nutritionApiService from "../../../services/nutrition/nutritionApiService";
-import testService from "../../../../test/service/testService";
-
 vi.mock("./DayEditContext");
 vi.mock("../../../services/nutrition/nutritionApiService");
-
-describe("Nutrition Query", () => {
-  afterEach(() => {
-    cleanup();
-    vi.resetAllMocks();
+describe("OpenAI nutrition query", () => {
+  afterEach(() => { cleanup(); vi.resetAllMocks(); });
+  it("shows a single prompt and rejects empty submissions", () => {
+    mockUseDayEdit({}); render(<NutritionQuery />);
+    expect(screen.getAllByRole("textbox")).toHaveLength(1);
+    expect(screen.getByRole("button", { name: "Ask OpenAI" })).toBeDisabled();
+    fireEvent.submit(screen.getByTestId("nutrition-query-form"));
+    expect(nutritionApiService.queryChatGPT).not.toHaveBeenCalled();
   });
-
-  it("should render nutrition query", () => {
-    mockUseDayEdit({});
+  it("sends a trimmed prompt and stores the answer", async () => {
+    const { setChatGPTQuery } = mockUseDayEdit({});
+    (nutritionApiService.queryChatGPT as Mock).mockResolvedValue("Meal estimate");
     render(<NutritionQuery />);
-    expect(screen.getByTestId("nutrition-query")).toBeInTheDocument();
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "  rice & beans  " } });
+    fireEvent.submit(screen.getByTestId("nutrition-query-form"));
+    await waitFor(() => expect(setChatGPTQuery).toHaveBeenLastCalledWith(expect.objectContaining({ status: "success", response: "Meal estimate", error: null })));
+    expect(nutritionApiService.queryChatGPT).toHaveBeenCalledWith("rice & beans");
   });
-
-  it("should render nutrition query description", () => {
-    mockUseDayEdit({});
-    render(<NutritionQuery />);
-
-    const descriptionText = [
-      "This tab let's you query the APIs used by the app.",
-      "The first one is a chatbot that generates a response based on the input",
-      "The second one is a food database.",
-      "The third one is a nutrition database.",
-    ];
-
-    descriptionText.forEach(text => {
-      expect(screen.getByText(text)).toBeInTheDocument();
-    });
+  it("prefills a suggestion without sending it", () => {
+    mockUseDayEdit({}); render(<NutritionQuery />);
+    fireEvent.click(screen.getByRole("button", { name: "Suggest a high-protein lunch" }));
+    expect(screen.getByRole("textbox")).toHaveValue("Suggest a high-protein lunch");
+    expect(screen.getByRole("textbox")).toHaveFocus();
+    expect(nutritionApiService.queryChatGPT).not.toHaveBeenCalled();
   });
-
-  it("should render chatGPT query form", () => {
-    mockUseDayEdit({});
+  it("blocks duplicate requests while waiting", () => {
+    mockUseDayEdit({}); (nutritionApiService.queryChatGPT as Mock).mockReturnValue(new Promise(() => {}));
     render(<NutritionQuery />);
-
-    const NutritionQueryForm = screen.getByTestId("nutrition-query-form");
-    expect(NutritionQueryForm).toBeInTheDocument();
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "Lunch" } });
+    fireEvent.submit(screen.getByTestId("nutrition-query-form"));
+    fireEvent.submit(screen.getByTestId("nutrition-query-form"));
+    expect(nutritionApiService.queryChatGPT).toHaveBeenCalledTimes(1);
   });
-
-  it("should render all form fields", () => {
-    mockUseDayEdit({});
+  it("records request errors for retry", async () => {
+    const { setChatGPTQuery } = mockUseDayEdit({});
+    (nutritionApiService.queryChatGPT as Mock).mockRejectedValue(new Error("Try again"));
     render(<NutritionQuery />);
-
-    const chatGPTQueryField = screen.getByLabelText("Chat GPT");
-    expect(chatGPTQueryField).toBeInTheDocument();
-
-    const ninjaAPIQueryField = screen.getByLabelText("Ninja API");
-    expect(ninjaAPIQueryField).toBeInTheDocument();
-
-    const USDAAPIQueryField = screen.getByLabelText("USDA API");
-    expect(USDAAPIQueryField).toBeInTheDocument();
-  });
-
-  it("should call onSubmit with form data on submit", async () => {
-    const {
-      chatGPTQuery,
-      setChatGPTQuery,
-      ninjaAPIQuery,
-      setNinjaAPIQuery,
-      USDAAPIQuery,
-      setUSDAAPIQuery,
-    } = mockUseDayEdit({});
-    render(<NutritionQuery />);
-
-    fireEvent.change(screen.getByLabelText("Chat GPT"), { target: { value: "test" } });
-    fireEvent.change(screen.getByLabelText("Ninja API"), { target: { value: "test" } });
-    fireEvent.change(screen.getByLabelText("USDA API"), { target: { value: "test" } });
-
-    const resChatGPT = mockNutritionQueryChatGPT();
-    const resNinjaAPI = mockNutritionQueryNinja();
-    const resUSDAAPI = mockNutritionQueryUSDA();
-
-    fireEvent.click(screen.getByText("query"));
-
-    await waitFor(() => {
-      expect(setChatGPTQuery).toHaveBeenNthCalledWith(1, {
-        ...chatGPTQuery,
-        status: "loading",
-      });
-
-      expect(setNinjaAPIQuery).toHaveBeenNthCalledWith(1, {
-        ...ninjaAPIQuery,
-        status: "loading",
-      });
-
-      expect(setUSDAAPIQuery).toHaveBeenNthCalledWith(1, {
-        ...USDAAPIQuery,
-        status: "loading",
-      });
-
-      expect(setChatGPTQuery).toHaveBeenNthCalledWith(2, {
-        ...chatGPTQuery,
-        status: "success",
-        response: resChatGPT,
-      });
-
-      expect(setNinjaAPIQuery).toHaveBeenNthCalledWith(2, {
-        ...ninjaAPIQuery,
-        status: "success",
-        response: resNinjaAPI,
-      });
-
-      expect(setUSDAAPIQuery).toHaveBeenNthCalledWith(2, {
-        ...USDAAPIQuery,
-        status: "success",
-        response: resUSDAAPI,
-      });
-    });
-
-    it("should only set query state when query is not empty", async () => {
-      const {
-        chatGPTQuery,
-        setChatGPTQuery,
-        ninjaAPIQuery,
-        setNinjaAPIQuery,
-        USDAAPIQuery,
-        setUSDAAPIQuery,
-      } = mockUseDayEdit({});
-      render(<NutritionQuery />);
-
-      fireEvent.change(screen.getByLabelText("Chat GPT"), { target: { value: "test" } });
-
-      const resChatGPT = mockNutritionQueryChatGPT();
-      const resNinjaAPI = mockNutritionQueryNinja();
-      const resUSDAAPI = mockNutritionQueryUSDA();
-
-      fireEvent.click(screen.getByText("query"));
-
-      await waitFor(() => {
-        expect(setChatGPTQuery).toHaveBeenNthCalledWith(1, {
-          ...chatGPTQuery,
-          status: "loading",
-        });
-
-        expect(setChatGPTQuery).toHaveBeenNthCalledWith(2, {
-          ...chatGPTQuery,
-          status: "success",
-          response: resChatGPT,
-        });
-
-        expect(setNinjaAPIQuery).not.toHaveBeenCalled();
-        expect(setUSDAAPIQuery).not.toHaveBeenCalled();
-      });
-
-      fireEvent.change(screen.getByLabelText("Chat GPT"), { target: { value: "" } });
-      fireEvent.change(screen.getByLabelText("Ninja API"), { target: { value: "test" } });
-
-      fireEvent.click(screen.getByText("query"));
-
-      await waitFor(() => {
-        expect(setNinjaAPIQuery).toHaveBeenNthCalledWith(1, {
-          ...ninjaAPIQuery,
-          status: "loading",
-        });
-
-        expect(setNinjaAPIQuery).toHaveBeenNthCalledWith(2, {
-          ...ninjaAPIQuery,
-          status: "success",
-          response: resNinjaAPI,
-        });
-
-        expect(setChatGPTQuery).not.toHaveBeenCalled();
-        expect(setUSDAAPIQuery).not.toHaveBeenCalled();
-      });
-
-      fireEvent.change(screen.getByLabelText("Ninja API"), { target: { value: "" } });
-      fireEvent.change(screen.getByLabelText("USDA API"), { target: { value: "test" } });
-
-      fireEvent.click(screen.getByText("query"));
-
-      await waitFor(() => {
-        expect(setUSDAAPIQuery).toHaveBeenNthCalledWith(1, {
-          ...USDAAPIQuery,
-          status: "loading",
-        });
-
-        expect(setUSDAAPIQuery).toHaveBeenNthCalledWith(2, {
-          ...USDAAPIQuery,
-          status: "success",
-          response: resUSDAAPI,
-        });
-
-        expect(setChatGPTQuery).not.toHaveBeenCalled();
-        expect(setNinjaAPIQuery).not.toHaveBeenCalled();
-      });
-    });
-
-    it("should handle errors in submit", async () => {
-      const {
-        chatGPTQuery,
-        setChatGPTQuery,
-        ninjaAPIQuery,
-        setNinjaAPIQuery,
-        USDAAPIQuery,
-        setUSDAAPIQuery,
-      } = mockUseDayEdit({});
-      render(<NutritionQuery />);
-
-      fireEvent.change(screen.getByLabelText("Chat GPT"), { target: { value: "test" } });
-      fireEvent.change(screen.getByLabelText("Ninja API"), { target: { value: "test" } });
-      fireEvent.change(screen.getByLabelText("USDA API"), { target: { value: "test" } });
-
-      const error = new Error("test error");
-
-      (nutritionApiService.queryChatGPT as Mock).mockRejectedValueOnce(error);
-      (nutritionApiService.queryNinja as Mock).mockRejectedValueOnce(error);
-      (nutritionApiService.queryUSDA as Mock).mockRejectedValueOnce(error);
-
-      fireEvent.click(screen.getByText("query"));
-
-      await waitFor(() => {
-        expect(setChatGPTQuery).toHaveBeenNthCalledWith(1, {
-          ...chatGPTQuery,
-          status: "loading",
-        });
-
-        expect(setNinjaAPIQuery).toHaveBeenNthCalledWith(1, {
-          ...ninjaAPIQuery,
-          status: "loading",
-        });
-
-        expect(setUSDAAPIQuery).toHaveBeenNthCalledWith(1, {
-          ...USDAAPIQuery,
-          status: "loading",
-        });
-
-        expect(setChatGPTQuery).toHaveBeenNthCalledWith(2, {
-          ...chatGPTQuery,
-          status: "error",
-          error: error.message,
-        });
-
-        expect(setNinjaAPIQuery).toHaveBeenNthCalledWith(2, {
-          ...ninjaAPIQuery,
-          status: "error",
-          error: error.message,
-        });
-
-        expect(setUSDAAPIQuery).toHaveBeenNthCalledWith(2, {
-          ...USDAAPIQuery,
-          status: "error",
-          error: error.message,
-        });
-      });
-    });
-  });
-
-  it("should render chatGPT query response where status is not 'idle'", () => {
-    mockUseDayEdit({
-      chatGPTQuery: testService.createNutritionQuery({
-        type: "chatGPT",
-        status: "success",
-        response: testService.createNutritionQueryResponse("chatGPT"),
-      }),
-    });
-    render(<NutritionQuery />);
-
-    expect(screen.getByText("Chat GPT Response:")).toBeInTheDocument();
-  });
-
-  it("should render ninjaAPI query response where status is not 'idle'", () => {
-    mockUseDayEdit({
-      ninjaAPIQuery: testService.createNutritionQuery({
-        type: "ninjaAPI",
-        status: "success",
-        response: testService.createNutritionQueryResponse("ninjaAPI"),
-      }),
-    });
-    render(<NutritionQuery />);
-
-    expect(screen.getByText("Ninja API Response:")).toBeInTheDocument();
-  });
-
-  it("should render USDAAPI query response where status is not 'idle'", () => {
-    mockUseDayEdit({
-      USDAAPIQuery: testService.createNutritionQuery({
-        type: "usdaAPI",
-        status: "success",
-        response: testService.createNutritionQueryResponse("usdaAPI"),
-      }),
-    });
-    render(<NutritionQuery />);
-
-    expect(screen.getByText("USDA API Response:")).toBeInTheDocument();
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "Lunch" } });
+    fireEvent.submit(screen.getByTestId("nutrition-query-form"));
+    await waitFor(() => expect(setChatGPTQuery).toHaveBeenLastCalledWith(expect.objectContaining({ status: "error", error: "Try again", response: null })));
   });
 });
-
-function mockNutritionQueryChatGPT(value?: any) {
-  const defaultValue = testService.createNutritionQueryResponse("chatGPT");
-  (nutritionApiService.queryChatGPT as Mock).mockResolvedValue(value || defaultValue);
-  return value || defaultValue;
-}
-
-function mockNutritionQueryNinja(value?: any) {
-  const defaultValue = testService.createNutritionQueryResponse("ninjaAPI");
-  (nutritionApiService.queryNinja as Mock).mockResolvedValue(value || defaultValue);
-  return value || defaultValue;
-}
-
-function mockNutritionQueryUSDA(value?: any) {
-  const defaultValue = testService.createNutritionQueryResponse("usdaAPI");
-  (nutritionApiService.queryUSDA as Mock).mockResolvedValue(value || defaultValue);
-  return value || defaultValue;
-}
