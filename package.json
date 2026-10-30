@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
-    "dev:backend": "cd backend && code . && npm run dev",
-    "dev:frontend": "cd frontend && code . && npm run dev"
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
