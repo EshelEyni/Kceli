@@ -60,11 +60,11 @@ sudo nano /etc/kceli-deploy.conf
 
 For a private GitHub repository, transfer the reviewed script over your existing authenticated SSH connection instead of using the public raw URL.
 
-Add these two lines, using the actual path and host port from step 1 (replace `YOUR_EXISTING_HOST_PORT` with a number):
+Your existing Docker command maps host port `3060` to container port `3030` and uses `~/kceli/dotenv`. Add these two lines, replacing the dotenv path if `realpath ~/kceli/dotenv` reports a different home directory:
 
 ```bash
 KCELI_ENV_FILE=/home/ubuntu/kceli/dotenv
-KCELI_HOST_PORT=YOUR_EXISTING_HOST_PORT
+KCELI_HOST_PORT=3060
 ```
 
 Save, then run:
