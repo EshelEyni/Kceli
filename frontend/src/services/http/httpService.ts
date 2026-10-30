@@ -1,6 +1,7 @@
 import axios, { Method } from "axios";
 const isProd = process.env.NODE_ENV === "production";
-const BASE_URL = isProd ? "/api/" : "http://localhost:3030/api/";
+// Vite forwards same-origin API requests to the backend in development.
+const BASE_URL = "/api/";
 
 async function ajax(endpoint: string, method: Method = "GET", data: object | null = null) {
   try {

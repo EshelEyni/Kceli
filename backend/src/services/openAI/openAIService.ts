@@ -8,7 +8,6 @@ import { CombinedWorkoutItem } from "../../../../shared/types/workout";
 require("dotenv").config();
 
 const configuration = new Configuration({
-  organization: process.env.OPEN_AI_ORGANIZATION,
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);

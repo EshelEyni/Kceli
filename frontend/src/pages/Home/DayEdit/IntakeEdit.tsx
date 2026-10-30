@@ -15,6 +15,7 @@ import { useUpdateFavoriteIntake } from "../../../hooks/useUpdateFavoriteIntake"
 import { LastTimeYouAteTitle } from "./LastTimeYouAteTitle";
 import { PreSaveCalorieCount } from "./PreSaveCalorieCount";
 import "./IntakeEdit.scss";
+import { FoodScanner } from "./FoodScanner";
 
 export const IntakeEdit: FC = () => {
   const {
@@ -134,6 +135,7 @@ export const IntakeEdit: FC = () => {
               />
             )}
           </header>
+          <FoodScanner />
           <List
             items={intake.items}
             render={(item: NewIntakeItem) => {

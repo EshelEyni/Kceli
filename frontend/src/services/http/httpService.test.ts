@@ -9,7 +9,7 @@ describe("HTTP Service Tests", () => {
     const res = await httpService.get("test");
     expect(mockAxios).toHaveBeenCalled();
     expect(mockAxios).toHaveBeenCalledWith({
-      url: "http://localhost:3030/api/test",
+      url: "/api/test",
       method: "GET",
       data: null,
       params: null,
@@ -22,7 +22,7 @@ describe("HTTP Service Tests", () => {
     const res = await httpService.post("test", { data: "data" });
     expect(mockAxios).toHaveBeenCalled();
     expect(mockAxios).toHaveBeenCalledWith({
-      url: "http://localhost:3030/api/test",
+      url: "/api/test",
       method: "POST",
       data: { data: "data" },
       params: null,
@@ -35,7 +35,7 @@ describe("HTTP Service Tests", () => {
     const res = await httpService.put("test", { data: "data" });
     expect(mockAxios).toHaveBeenCalled();
     expect(mockAxios).toHaveBeenCalledWith({
-      url: "http://localhost:3030/api/test",
+      url: "/api/test",
       method: "PUT",
       data: { data: "data" },
       params: null,
@@ -48,7 +48,7 @@ describe("HTTP Service Tests", () => {
     const res = await httpService.patch("test", { data: "data" });
     expect(mockAxios).toHaveBeenCalled();
     expect(mockAxios).toHaveBeenCalledWith({
-      url: "http://localhost:3030/api/test",
+      url: "/api/test",
       method: "PATCH",
       data: { data: "data" },
       params: null,
@@ -61,7 +61,7 @@ describe("HTTP Service Tests", () => {
     const res = await httpService.delete("test");
     expect(mockAxios).toHaveBeenCalled();
     expect(mockAxios).toHaveBeenCalledWith({
-      url: "http://localhost:3030/api/test",
+      url: "/api/test",
       method: "DELETE",
       data: null,
       params: null,

@@ -29,7 +29,12 @@ app.use(compression());
 
 app.use(helmet());
 app.use(cookieParser());
-app.use(express.json({ limit: "15kb" }));
+const jsonParser = express.json({ limit: "15kb" });
+// Authenticate image requests before the scan route parses its bounded payload.
+app.use((req, res, next) => {
+  if (req.method === "POST" && req.path.replace(/\/$/, "").toLowerCase() === "/api/nutrition/scan-food") return next();
+  jsonParser(req, res, next);
+});
 
 app.use(requestLimiter);
 app.use(ExpressMongoSanitize());

@@ -5,6 +5,17 @@ import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: "0.0.0.0",
+    port: 5173,
+    strictPort: true,
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:3030",
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     react(),
     svgr(),
@@ -67,6 +78,7 @@ export default defineConfig({
       },
       workbox: {
         runtimeCaching: [
+          { urlPattern: /\/api\/nutrition\/scan-food(?:\?|$)/, handler: "NetworkOnly", method: "POST" },
           {
             urlPattern: /\/api\/.*/,
             handler: "NetworkFirst",

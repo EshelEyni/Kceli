@@ -1,0 +1,21 @@
+.food-scan-trigger { margin-block: 12px; min-height: 44px; width: 100%; }
+.food-scanner {
+  box-sizing: border-box; width: min(100%, 560px); max-height: 100dvh;
+  border: 0; border-radius: 16px; padding: 20px; color: #18392e; background: #fff;
+  overflow-y: auto;
+  &::backdrop { background: #10251ed9; }
+  header, &__actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  header h2 { margin: 0; }
+  p { margin-block: 12px; line-height: 1.5; }
+  video, img { width: 100%; max-height: 45dvh; object-fit: contain; border-radius: 10px; background: #12251e; }
+  video { min-height: 180px; }
+  button { min-height: 44px; padding: 10px 16px; border: 1px solid #254e3c; border-radius: 8px; background: #edf4ef; color: #18392e; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  label { display: block; margin-block: 10px; }
+  input, textarea { box-sizing: border-box; display: block; width: 100%; min-height: 44px; padding: 10px; font-size: 16px; border: 1px solid #93a99c; border-radius: 6px; color: #18392e; background: white; }
+  input[hidden] { display: none; }
+  fieldset { min-width: 0; margin-block: 12px; border: 1px solid #b6c9bc; border-radius: 10px; padding: 12px; }
+  [role="alert"] { color: #9b2424; }
+  &__actions { flex-wrap: wrap; margin-block: 12px; }
+  @media (max-width: 600px) { width: 100%; height: 100dvh; max-width: none; margin: 0; border-radius: 0; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); }
+}

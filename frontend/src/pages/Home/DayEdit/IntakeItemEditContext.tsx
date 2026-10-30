@@ -46,7 +46,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
   const { intake, setIntake, currIntakeItemId, setCurrIntakeItemId, btnStyle } = useDayEdit();
   const isOneItem = intake.items.length === 1;
   const isCurrIntakeItem = intakeItem.id === currIntakeItemId;
-  const [isManual, setIsManual] = useState(false);
+  const [isManual, setIsManual] = useState(intakeItem.calories !== undefined);
   const [inputFaded, setInputFaded] = useState("");
   const [isLoadingCal, setIsLoadingCal] = useState(false);
   const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([]);
