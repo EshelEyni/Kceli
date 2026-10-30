@@ -5,6 +5,7 @@ import { UserWorkoutSchedule, WeightLossGoal } from "../../../shared/types/user"
 import { CombinedWorkoutItem, WeightUnit } from "../../../shared/types/workout";
 
 export interface IUser extends Document {
+  language: "en" | "he";
   username: string;
   password: string;
   passwordConfirm: string;

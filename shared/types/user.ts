@@ -26,6 +26,7 @@ export interface UserCredenitialsWithId extends UserCredenitials {
 }
 
 export interface User {
+  language?: "en" | "he";
   readonly id: string;
   username: string;
   fullname: string;

@@ -18,11 +18,15 @@ import "./styles/redesign.scss";
 import "./styles/localization.scss";
 
 function App() {
-  useTranslation();
+  const { i18n } = useTranslation();
   const dispatch: AppDispatch = useDispatch();
   const { loggedInUser } = useAuth();
   const { isPageLoading } = useSystem();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    void i18n.changeLanguage(loggedInUser?.language === "he" ? "he" : "en");
+  }, [i18n, loggedInUser?.id, loggedInUser?.language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });

@@ -42,6 +42,7 @@ async function add(user: User): Promise<IUser> {
 
 async function update(id: string, user: User): Promise<User> {
   const allowedFields: Array<keyof User> = [
+    "language",
     "username",
     "email",
     "fullname",

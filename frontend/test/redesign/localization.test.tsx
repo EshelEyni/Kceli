@@ -30,6 +30,14 @@ beforeEach(async () => {
   api = installReviewApi();
   client = new QueryClient({ defaultOptions: { queries: { retry: false, cacheTime: 0 } } });
   vi.stubGlobal("scrollTo", vi.fn());
+  vi.stubGlobal(
+    "ResizeObserver",
+    class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    }
+  );
   Element.prototype.scrollIntoView = vi.fn();
 });
 afterEach(async () => {
@@ -39,10 +47,10 @@ afterEach(async () => {
   await i18n.changeLanguage("en");
   vi.unstubAllGlobals();
 });
-function mount(path: string) {
+function mount(path: string, loggedIn = true) {
   const store = configureStore({
     reducer: { auth, system },
-    preloadedState: { auth: { loggedInUser: api.fixtures.user } },
+    preloadedState: { auth: { loggedInUser: loggedIn ? api.fixtures.user : null } },
   });
   render(
     <Provider store={store}>
@@ -53,36 +61,55 @@ function mount(path: string) {
       </QueryClientProvider>
     </Provider>
   );
+  return store;
 }
 
 describe("Hebrew localization", () => {
-  it("switches a live page without losing the meal draft, persists preference and restores English", async () => {
+  it("saves language from the profile and reloads it from the saved user", async () => {
+    const store = mount("/profile/review-user");
+    const selector = await screen.findByRole("combobox", { name: "Interface language" });
+    expect(document.querySelector(".ui-topbar select")).toBeNull();
+    fireEvent.change(selector, { target: { value: "he" } });
+    await screen.findByRole("combobox", { name: "שפת הממשק" });
+    expect(api.mock.history.patch).toHaveLength(1);
+    expect(JSON.parse(api.mock.history.patch[0].data)).toEqual({ language: "he" });
+    expect(store.getState().auth.loggedInUser?.language).toBe("he");
+    expect(api.fixtures.user.language).toBe("he");
+    expect(document.documentElement).toHaveAttribute("dir", "rtl");
+    expect(getLocale()).toBe("he-IL");
+    cleanup();
+    await i18n.changeLanguage("en");
+    mount("/home", false);
+    await screen.findByRole("heading", { name: "טוב לראות אותך, Alex." });
+    expect(
+      api.mock.history.post.some(request => request.url?.endsWith("auth/login/with-token"))
+    ).toBe(true);
+    expect(screen.queryByRole("combobox", { name: "שפת הממשק" })).not.toBeInTheDocument();
+  });
+
+  it("keeps the saved preference when saving fails", async () => {
+    api.mock.onPatch(/user\/loggedInUser$/).reply(500, { status: "error" });
+    const store = mount("/profile/review-user");
+    const selector = await screen.findByRole("combobox", { name: "Interface language" });
+    fireEvent.change(selector, { target: { value: "he" } });
+    await waitFor(() => expect(api.mock.history.patch).toHaveLength(1));
+    await waitFor(() => expect(selector).not.toBeDisabled());
+    expect(selector).toHaveValue("en");
+    expect(store.getState().auth.loggedInUser?.language).not.toBe("he");
+    expect(document.documentElement).toHaveAttribute("dir", "ltr");
+  });
+
+  it("ignores a stale browser preference for accounts without a saved language", async () => {
+    localStorage.setItem("i18nextLng", "he");
+    document.cookie = "i18next=he";
+    await i18n.changeLanguage("he");
     mount("/home");
     await screen.findByRole("heading", { name: "Good to see you, Alex." });
-    fireEvent.click(screen.getByRole("button", { name: "Log meal", exact: true }));
-    const nameInput = await screen.findByLabelText("Food or drink name");
-    fireEvent.change(nameInput, { target: { value: "סלט ישראלי" } });
-    fireEvent.change(screen.getByRole("combobox", { name: "Interface language" }), {
-      target: { value: "he" },
-    });
-    await screen.findByRole("heading", { name: "טוב לראות אותך, Alex." });
-    expect(document.documentElement).toHaveAttribute("dir", "rtl");
-    expect(document.documentElement).toHaveAttribute("lang", "he");
-    expect(screen.getByLabelText("שם המזון או המשקה")).toHaveValue("סלט ישראלי");
-    expect(localStorage.getItem("i18nextLng")).toBe("he");
-    expect(document.cookie).toContain("i18next=he");
-    expect(getLocale()).toBe("he-IL");
-    expect(screen.getByRole("navigation", { name: "ניווט ראשי" })).toBeInTheDocument();
-    fireEvent.change(screen.getByRole("combobox", { name: "שפת הממשק" }), {
-      target: { value: "en" },
-    });
-    await screen.findByRole("heading", { name: "Good to see you, Alex." });
     expect(document.documentElement).toHaveAttribute("dir", "ltr");
-    expect(screen.getByLabelText("Food or drink name")).toHaveValue("סלט ישראלי");
   });
 
   it("localizes workout filters while keeping the removed weekly planner absent", async () => {
-    await i18n.changeLanguage("he");
+    api.fixtures.user.language = "he";
     mount("/workouts");
     await screen.findByRole("heading", { name: "המקום שלך להתחזק." });
     fireEvent.click(screen.getByRole("button", { name: "אירובי", exact: true }));
@@ -106,7 +133,7 @@ describe("Hebrew localization", () => {
   });
 
   it("translates signup labels while retaining form field IDs and gender values", async () => {
-    await i18n.changeLanguage("he");
+    api.fixtures.user.language = "he";
     mount("/signup");
     await screen.findByRole("heading", { name: "הרשמה" });
     expect(document.querySelector('input[name="fullname"]')).toHaveAttribute("id", "fullname");

@@ -17,8 +17,11 @@ import { UserGoalDisplay } from "./UserGoalDisplay";
 import { usePageLoaded } from "../../hooks/usePageLoaded";
 import { PageIntro } from "../../components/App/PageIntro/PageIntro";
 import { FiFeather } from "react-icons/fi";
+import { LanguageSelector } from "../../components/App/LanguageSelector/LanguageSelector";
+import { useAuth } from "../../hooks/useAuth";
 
 const ProfileDetails = () => {
+  const { loggedInUser } = useAuth();
   usePageLoaded({ title: "Profile / Kceli" });
   const {
     user,
@@ -119,6 +122,12 @@ const ProfileDetails = () => {
           <section className="ui-card ui-personal-details">
             <h2>{t("Personal details")}</h2>
             {isEditing ? <UserEdit /> : <UserInfo />}
+            {loggedInUser?.id === user.id && (
+              <div className="ui-card-heading">
+                <label htmlFor="profile-language">{t("Interface language")}</label>
+                <LanguageSelector />
+              </div>
+            )}
           </section>
         </div>
         <aside className="ui-stack">

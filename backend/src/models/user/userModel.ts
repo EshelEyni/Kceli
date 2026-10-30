@@ -79,6 +79,7 @@ const userSchema: Schema<IUser> = new Schema(
       },
     },
     fullname: { type: String, required: [true, "Please provide your full name"] },
+    language: { type: String, enum: ["en", "he"], default: "en", required: true },
     email: {
       type: String,
       required: [true, "Please provide your email"],

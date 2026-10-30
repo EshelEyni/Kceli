@@ -1,5 +1,4 @@
 import { getLocale } from "../../../i18n";
-import { LanguageSelector } from "../LanguageSelector/LanguageSelector";
 import { t } from "../../../i18n";
 import { FC } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
@@ -92,7 +91,6 @@ export const AppHeader: FC = () => {
           <b>{t(section)}</b>
         </div>
         <div className="ui-topbar-account">
-          <LanguageSelector />
           <time dateTime={new Date().toISOString()}>
             {new Date().toLocaleDateString(getLocale(), {
               weekday: "short",

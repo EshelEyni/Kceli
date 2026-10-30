@@ -22,6 +22,7 @@ const getUsers = getAll(UserModel);
 const getUserById = getOne(UserModel);
 const addUser = createOne(UserModel);
 const updateUser = updateOne(UserModel, [
+  "language",
   "username",
   "email",
   "fullname",
