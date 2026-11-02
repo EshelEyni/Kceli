@@ -26,6 +26,7 @@ export type IntakeItemEditContextType = {
   decreaseQuantity: () => void;
   increaseQuantity: () => void;
   handleUnitBtnClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  handleUnitChange: (unit: NewIntakeItem["unit"]) => void;
   handleToggleManual: () => void;
   handleCalcBtnClick: () => void;
   handleSuggestionClick: (original: string, suggestion: string) => void;
@@ -128,6 +129,10 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
         ? intakeUtilService.units[0]
         : intakeUtilService.units[currentUnitIdx + 1];
 
+    handleUnitChange(unit);
+  }
+
+  function handleUnitChange(unit: NewIntakeItem["unit"]) {
     const quantity = intakeUtilService.getUnitDefaultQuantity(unit);
     handleChange({ ...intakeItem, unit, quantity });
   }
@@ -233,6 +238,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
     decreaseQuantity,
     increaseQuantity,
     handleUnitBtnClick,
+    handleUnitChange,
     handleToggleManual,
     handleCalcBtnClick,
     handleSuggestionClick,

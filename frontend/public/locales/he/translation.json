@@ -497,5 +497,16 @@
   "Food scanning is unavailable. Check the server API configuration.": "סריקת אוכל אינה זמינה. יש לבדוק את הגדרות השירות בשרת.",
   "Too many food scans. Please try again later.": "בוצעו יותר מדי סריקות אוכל. יש לנסות מאוחר יותר.",
   "Camera access requires HTTPS. Open a secure address or choose a photo.": "גישה למצלמה דורשת HTTPS. יש לפתוח כתובת מאובטחת או לבחור תמונה.",
-  "Camera unavailable. Check camera permissions for this app or browser, or choose a photo.": "המצלמה אינה זמינה. יש לבדוק את הרשאות המצלמה לאפליקציה או לדפדפן, או לבחור תמונה."
+  "Camera unavailable. Check camera permissions for this app or browser, or choose a photo.": "המצלמה אינה זמינה. יש לבדוק את הרשאות המצלמה לאפליקציה או לדפדפן, או לבחור תמונה.",
+  "What did you eat?": "מה אכלת?",
+  "Add your food and portion below.": "מוסיפים מזון וכמות ושומרים ביומן.",
+  "Unit": "יחידת מידה",
+  "Estimate calories": "הערכת קלוריות",
+  "Calculating…": "מחשב…",
+  "Enter calories manually": "הזנת קלוריות ידנית",
+  "Add another food": "הוספת מזון נוסף",
+  "Save meal": "שמירה ביומן",
+  "Save draft": "שמירת טיוטה",
+  "Save as draft": "שמירה כטיוטה",
+  "More options": "אפשרויות נוספות"
 }

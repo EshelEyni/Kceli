@@ -8,7 +8,7 @@ export const IntakeItemEditBtns: FC = () => {
     useIntakeItemEdit();
 
   return (
-    <section className="intake-edit-item__btns-container" data-testid="intake-item-edit-btns">
+    <section className="intake-edit-item__btns-container meal-item-actions" data-testid="intake-item-edit-btns">
       {!isOneItem && (
         <Button style={btnStyle} onClickFn={handleRemoveButtonClick}>
           {" "}
@@ -17,7 +17,7 @@ export const IntakeItemEditBtns: FC = () => {
       )}
       <Button style={btnStyle} onClickFn={handleAddButtonClick}>
         {" "}
-        {t("add item")}{" "}
+        {t("Add another food")}{" "}
       </Button>
     </section>
   );

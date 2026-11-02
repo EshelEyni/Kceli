@@ -6,17 +6,20 @@ export const IntakeItemEditInputName: FC = () => {
   const { intakeItem, handleNameInputClick, handleInputChange } = useIntakeItemEdit();
 
   return (
-    <input
-      type="text"
-      aria-label={t("Food or drink name")}
-      name="name"
-      className="intake-item-input"
-      value={intakeItem.name}
-      onChange={handleInputChange}
-      spellCheck={true}
-      autoComplete="off"
-      placeholder={t("Enter food name")}
-      onClick={() => handleNameInputClick(intakeItem.id)}
-    />
+    <label className="meal-field">
+      <span>{t("Food or drink name")}</span>
+      <input
+        type="text"
+        aria-label={t("Food or drink name")}
+        name="name"
+        className="intake-item-input"
+        value={intakeItem.name}
+        onChange={handleInputChange}
+        spellCheck={true}
+        autoComplete="off"
+        placeholder={t("Enter food name")}
+        onClick={() => handleNameInputClick(intakeItem.id)}
+      />
+    </label>
   );
 };

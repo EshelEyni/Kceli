@@ -1,7 +1,6 @@
 import { t } from "../../../i18n";
 import { FC } from "react";
 import toast from "react-hot-toast";
-import classnames from "classnames";
 import { FavoriteIntake, NewIntakeItem } from "../../../../../shared/types/intake";
 import intakeUtilService from "../../../services/intake/intakeUtilService";
 import { List } from "../../../components/App/List/List";
@@ -15,6 +14,7 @@ import { useUpdateFavoriteIntake } from "../../../hooks/useUpdateFavoriteIntake"
 import { LastTimeYouAteTitle } from "./LastTimeYouAteTitle";
 import { PreSaveCalorieCount } from "./PreSaveCalorieCount";
 import "./IntakeEdit.scss";
+import "./MealEntry.scss";
 import { FoodScanner } from "./FoodScanner";
 
 export const IntakeEdit: FC = () => {
@@ -25,8 +25,6 @@ export const IntakeEdit: FC = () => {
     intake,
     updateDailyData,
     setIntake,
-    backgroundColor,
-    btnStyle,
   } = useDayEdit();
   const { addFavoriteIntake, isLoading: isLoadingAddToFav } = useAddFavoriteIntake();
   const { updateFavoriteIntake, isLoading: isLoadingUpdateFav } = useUpdateFavoriteIntake();
@@ -108,7 +106,13 @@ export const IntakeEdit: FC = () => {
               />
             </header>
           )}
-          <FoodScanner />
+          <div className="meal-entry-heading">
+            <div>
+              <h3>{t("What did you eat?")}</h3>
+              <p>{t("Add your food and portion below.")}</p>
+            </div>
+            <FoodScanner />
+          </div>
           <List
             items={intake.items}
             render={(item: NewIntakeItem) => {
@@ -130,43 +134,32 @@ export const IntakeEdit: FC = () => {
       </div>
 
       <div
-        className="intake-edit-btns-container"
+        className="intake-edit-btns-container meal-save-actions"
         data-testid="intake-edit-btns-container"
-        style={{ backgroundColor }}
       >
-        <Button style={btnStyle} onClickFn={handleClearButtonClick} className="intake-edit-btn">
-          {" "}
-          {t("clear")}{" "}
+        <Button className="intake-edit-btn meal-save-primary" type="submit" isDisabled={isLoading}>
+          {intake.isRecorded ? t("Save meal") : t("Save draft")}
         </Button>
-        <Button
-          style={btnStyle}
-          onClickFn={handleSaveToFavoriteButtonClick}
-          className="intake-edit-btn"
-          type="submit"
-        >
-          {" "}
-          {t("Save To Fav")}{" "}
-        </Button>
-        <Button
-          style={btnStyle}
-          onClickFn={handleSaveLaterButtonClick}
-          className={
-            "intake-edit-btn btn-toggle-save-later " + classnames({ clicked: !intake.isRecorded })
-          }
-        >
-          {" "}
-          {t("Save Later")}{" "}
-        </Button>
-
-        <Button
-          style={btnStyle}
-          onClickFn={e => handleSubmit(e)}
-          className="intake-edit-btn"
-          type="submit"
-        >
-          {" "}
-          {t("Save Intake")}{" "}
-        </Button>
+        <details className="meal-more-options">
+          <summary>{t("More options")}</summary>
+          <div className="meal-secondary-actions">
+            <label className="meal-manual-toggle">
+              <input
+                type="checkbox"
+                checked={!intake.isRecorded}
+                onChange={handleSaveLaterButtonClick}
+                disabled={isLoading}
+              />
+              {t("Save as draft")}
+            </label>
+            <Button onClickFn={handleSaveToFavoriteButtonClick} isDisabled={isLoading}>
+              {t("Save To Fav")}
+            </Button>
+            <Button onClickFn={handleClearButtonClick} isDisabled={isLoading}>
+              {t("clear")}
+            </Button>
+          </div>
+        </details>
       </div>
     </form>
   );

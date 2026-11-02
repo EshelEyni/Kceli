@@ -497,5 +497,16 @@
   "Food scanning is unavailable. Check the server API configuration.": "Food scanning is unavailable. Check the server API configuration.",
   "Too many food scans. Please try again later.": "Too many food scans. Please try again later.",
   "Camera access requires HTTPS. Open a secure address or choose a photo.": "Camera access requires HTTPS. Open a secure address or choose a photo.",
-  "Camera unavailable. Check camera permissions for this app or browser, or choose a photo.": "Camera unavailable. Check camera permissions for this app or browser, or choose a photo."
+  "Camera unavailable. Check camera permissions for this app or browser, or choose a photo.": "Camera unavailable. Check camera permissions for this app or browser, or choose a photo.",
+  "What did you eat?": "What did you eat?",
+  "Add your food and portion below.": "Add your food and portion below.",
+  "Unit": "Unit",
+  "Estimate calories": "Estimate calories",
+  "Calculating…": "Calculating…",
+  "Enter calories manually": "Enter calories manually",
+  "Add another food": "Add another food",
+  "Save meal": "Save meal",
+  "Save draft": "Save draft",
+  "Save as draft": "Save as draft",
+  "More options": "More options"
 }

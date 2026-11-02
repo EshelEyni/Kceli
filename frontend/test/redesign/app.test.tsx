@@ -21,6 +21,8 @@ import { AppHeader } from "../../src/components/App/AppHeader/AppHeader";
 import { Routes, Route } from "react-router-dom";
 import { installReviewApi } from "./mockApi";
 
+vi.mock("nspell", () => ({ default: class { correct() { return true; } suggest() { return []; } } }));
+
 let api: ReturnType<typeof installReviewApi>;
 let client: QueryClient;
 beforeEach(() => {
@@ -63,6 +65,25 @@ function mount(element: React.ReactNode, path = "/home", loggedIn = true) {
 }
 
 describe("Approved redesign with real providers and mocked transport", () => {
+  it.each([false, true])("saves the redesigned meal form with draft=%s", async draft => {
+    mount(<DayEditProvider><DayEdit /></DayEditProvider>, "/home?tab=IntakeEdit");
+    const name = await screen.findByRole("textbox", { name: "Food or drink name" });
+    fireEvent.change(name, { target: { value: "Apple" } });
+    fireEvent.change(screen.getByRole("combobox", { name: "Unit" }), { target: { value: "g" } });
+    expect(screen.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(100);
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Quantity" }), { target: { value: "150" } });
+    fireEvent.click(screen.getByRole("checkbox", { name: "Enter calories manually" }));
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Calories", exact: true }), { target: { value: "78" } });
+    if (draft) {
+      fireEvent.click(screen.getByText("More options"));
+      fireEvent.click(screen.getByRole("checkbox", { name: "Save as draft" }));
+    }
+    fireEvent.click(screen.getByRole("button", { name: draft ? "Save draft" : "Save meal", exact: true }));
+    await waitFor(() => expect(api.mock.history.patch.some(r => r.url?.endsWith("day/today"))).toBe(true));
+    const request = api.mock.history.patch.find(r => r.url?.endsWith("day/today"));
+    expect(JSON.parse(request!.data).intakes.at(-1)).toMatchObject({ isRecorded: !draft,
+      items: [expect.objectContaining({ name: "Apple", unit: "g", quantity: 150, calories: 78 })] });
+  });
   it("keeps the daily journal without the removed insights section", async () => {
     mount(
       <DayEditProvider>
