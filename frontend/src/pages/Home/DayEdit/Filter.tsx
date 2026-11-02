@@ -40,10 +40,6 @@ export const DayEditFilter: FC = () => {
       name: "Nutrition help",
       value: DayEditTab.Query,
     },
-    {
-      name: "Goals",
-      value: DayEditTab.Goals,
-    },
   ];
 
   return (

@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { FiActivity, FiArrowRight, FiFeather } from "react-icons/fi";
 import { useAuth } from "../../../hooks/useAuth";
 import { MetricCard, PageIntro } from "../../../components/App/PageIntro/PageIntro";
-import { DayEditTab, useDayEdit } from "./DayEditContext";
+import { useDayEdit } from "./DayEditContext";
+import { DayGoals } from "./DayGoals";
 
 export function DayDashboard({ children }: { children: ReactNode }) {
   const { loggedInUser } = useAuth();
@@ -14,8 +15,6 @@ export function DayDashboard({ children }: { children: ReactNode }) {
     consumedCalories,
     remainingCalories,
     targetCaloricIntakePerDay,
-    setOpenedTab,
-    setSearchParams,
   } = useDayEdit();
   if (!dailyData) return null;
   const isToday = new Date(dailyData.date).toDateString() === new Date().toDateString();
@@ -31,11 +30,6 @@ export function DayDashboard({ children }: { children: ReactNode }) {
   const scheduled =
     loggedInUser?.workoutSchedule?.find(day => day.value === new Date(dailyData.date).getDay())
       ?.workouts || [];
-  const openTool = (tab: DayEditTab) => {
-    setOpenedTab(tab);
-    setSearchParams(new URLSearchParams({ tab }));
-    document.getElementById("daily-tools")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
   return (
     <>
       <PageIntro
@@ -82,6 +76,13 @@ export function DayDashboard({ children }: { children: ReactNode }) {
       </div>
       <div className="ui-dashboard-grid">
         <div className="ui-stack">
+          <section
+            className="ui-card ui-daily-tools"
+            id="daily-tools"
+            aria-label={t("Daily logging tools")}
+          >
+            {children}
+          </section>
           <section className="ui-card ui-hero">
             <div>
               <p className="ui-eyebrow">{t("A little consistency goes a long way")}</p>
@@ -115,13 +116,6 @@ export function DayDashboard({ children }: { children: ReactNode }) {
                 </small>
               </div>
             </div>
-          </section>
-          <section
-            className="ui-card ui-daily-tools"
-            id="daily-tools"
-            aria-label={t("Daily logging tools")}
-          >
-            {children}
           </section>
         </div>
         <aside className="ui-stack">
@@ -173,10 +167,7 @@ export function DayDashboard({ children }: { children: ReactNode }) {
             <FiFeather />
             <h2>{t("Your everyday intentions")}</h2>
             <p>{t("Check in with your goals, make time for movement, and notice how you feel.")}</p>
-            <button className="ui-text-link" onClick={() => openTool(DayEditTab.Goals)}>
-              {" "}
-              {t("View daily goals ↗")}{" "}
-            </button>
+            <DayGoals />
           </section>
         </aside>
       </div>

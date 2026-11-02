@@ -10,7 +10,6 @@ import { IntakeList } from "./IntakeList";
 import { WeightWaistInput } from "./WeightWaistInput";
 import { NutritionQuery } from "./NutritionQuery";
 import { FavoriteIntakes } from "./FavoriteIntakes";
-import { DayGoals } from "./DayGoals";
 import { DayDashboard } from "./DayDashboard";
 
 export const DayEdit: FC = () => {
@@ -43,7 +42,6 @@ export const DayEdit: FC = () => {
               </p>
             ))}
           {openedTab === DayEditTab.Query && <NutritionQuery />}
-          {openedTab === DayEditTab.Goals && <DayGoals />}
         </DayDashboard>
       )}
     </section>

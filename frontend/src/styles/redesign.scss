@@ -1820,3 +1820,9 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+@media (max-width: 720px) {
+  .app .home .ui-metrics {
+    display: none;
+  }
+}

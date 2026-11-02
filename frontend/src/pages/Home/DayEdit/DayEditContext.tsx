@@ -61,7 +61,6 @@ export enum DayEditTab {
   FavoriteIntake = "FavoriteIntake",
   WeightWaistInput = "WeightWaistInput",
   Query = "Query",
-  Goals = "Goals",
 }
 
 const DayEditContext = createContext<DayEditContextType | undefined>(undefined);

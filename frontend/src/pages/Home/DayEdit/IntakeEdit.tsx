@@ -36,17 +36,6 @@ export const IntakeEdit: FC = () => {
 
   const isTimeInputShown = intake.recordedAt && intake.isRecorded;
 
-  function handleIntakeNameInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    e.preventDefault();
-    const { value: name } = e.target;
-    setIntake(prev => ({ ...prev, name }));
-  }
-
-  function handleToggleIntakeType() {
-    const newType = intake.type === "food" ? "drink" : "food";
-    setIntake(prev => ({ ...prev, type: newType }));
-  }
-
   function handleTimeInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     const { value: time } = e.target;
@@ -107,24 +96,8 @@ export const IntakeEdit: FC = () => {
 
       {!isLoading && (
         <>
-          <header className="intake-edit__header" data-testid="intake-edit-header">
-            <div className="intake-edit__header__input-name-btn-type">
-              <input
-                type="text"
-                aria-label={t("Meal name")}
-                placeholder={t("Name your intake")}
-                autoComplete="off"
-                value={intake.name || ""}
-                onChange={handleIntakeNameInputChange}
-                className="intake-edit__header__name-input"
-                data-testid="intake-edit-name-input"
-              />
-              <Button onClickFn={handleToggleIntakeType} className="intake-edit-btn">
-                <span>{intake.type}</span>
-              </Button>
-            </div>
-
-            {isTimeInputShown && (
+          {isTimeInputShown && (
+            <header className="intake-edit__header" data-testid="intake-edit-header">
               <input
                 className="intake-edit__header__time-input"
                 type="time"
@@ -133,8 +106,8 @@ export const IntakeEdit: FC = () => {
                 onChange={handleTimeInputChange}
                 data-testid="intake-edit-time-input"
               />
-            )}
-          </header>
+            </header>
+          )}
           <FoodScanner />
           <List
             items={intake.items}

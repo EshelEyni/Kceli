@@ -74,7 +74,7 @@ describe("Approved redesign with real providers and mocked transport", () => {
     expect(screen.queryByTestId("day-edit-header")).not.toBeInTheDocument();
     expect(screen.getByText(/Greek yogurt & berry bowl -/)).toBeInTheDocument();
   });
-  it.each(["Water", "Workouts", "HungerMeter"])(
+  it.each(["Water", "Workouts", "HungerMeter", "Goals"])(
     "falls back to the diary for the retired %s Home tab",
     async tab => {
       mount(
