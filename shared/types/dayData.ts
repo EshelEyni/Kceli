@@ -2,6 +2,8 @@ import { CombinedIntake } from "./intake";
 import { Workout } from "./workout";
 
 export interface BasicDayData {
+  localDate?: string;
+  timeZone?: string;
   date: Date;
 }
 

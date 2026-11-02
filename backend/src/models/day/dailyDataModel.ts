@@ -8,9 +8,11 @@ import { workoutSchema } from "../workout/workoutModel";
 
 const dailyDataSchema = new Schema<IDailyData>(
   {
+    localDate: { type: String },
+    timeZone: { type: String },
     date: {
       type: Date,
-      default: new Date(),
+      default: Date.now,
     },
     userId: {
       type: Schema.Types.ObjectId,
@@ -62,6 +64,16 @@ const dailyDataSchema = new Schema<IDailyData>(
   }
 );
 
+// Legacy records remain untouched; only keyed records participate in uniqueness.
+dailyDataSchema.index(
+  { userId: 1, localDate: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { localDate: { $type: "string" } },
+    name: "unique_user_local_date",
+  }
+);
+
 dailyDataSchema.pre("save", async function (next) {
   const userId = this.get("userId");
   const prevDayTargetCaloricIntake = await DailyDataModel.findOne({
@@ -78,7 +90,9 @@ dailyDataSchema.pre("save", async function (next) {
 });
 
 dailyDataSchema.pre("save", async function (next) {
-  const day = new Date(this.get("date")).getDay();
+  const day = this.localDate
+    ? new Date(`${this.localDate}T12:00:00Z`).getUTCDay()
+    : new Date(this.get("date")).getDay();
   const userId = this.get("userId");
   const lastUncompletedWorkout = await DailyDataModel.findOne({
     userId,
@@ -104,6 +118,7 @@ dailyDataSchema.pre("save", async function (next) {
   const { workoutSchedule } = user;
   const workoutFromSchedule = workoutSchedule.find(workout => workout.value === day);
   this.set("workouts", workoutFromSchedule?.workouts ?? []);
+  next();
 });
 
 dailyDataSchema.pre("findOneAndUpdate", async function (next) {

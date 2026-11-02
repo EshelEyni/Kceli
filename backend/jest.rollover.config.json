@@ -1,0 +1,9 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "testMatch": [
+    "<rootDir>/src/services/dayRolloverService.test.ts",
+    "<rootDir>/src/controllers/day/dayController.test.ts",
+    "<rootDir>/src/controllers/day/dayCalendarController.test.ts"
+  ]
+}

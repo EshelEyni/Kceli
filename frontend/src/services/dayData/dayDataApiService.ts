@@ -21,7 +21,7 @@ async function getById(dayId: string) {
 }
 
 async function getToday() {
-  const respose = await httpService.get(`day/today`);
+  const respose = await httpService.get(`day/today`, { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
   return handleServerResponseData<DayData>(respose);
 }
 

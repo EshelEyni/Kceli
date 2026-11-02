@@ -3,8 +3,10 @@ import { DailyDataModel } from "../../models/day/dailyDataModel";
 import { getLoggedInUserIdFromReq } from "../../services/ALSService";
 import { AppError, asyncErrorCatcher } from "../../services/error/errorService";
 import { deleteOne, getAll, getOne, updateOne } from "../../services/factory/factoryService";
-import { getIsraeliDate, validateIds } from "../../services/util/utilService";
+import { validateIds } from "../../services/util/utilService";
 import { addMonths, endOfMonth, startOfMonth, subMonths } from "date-fns";
+
+import { ensureToday } from "../../services/dayRolloverService";
 
 const getAllDays = getAll(DailyDataModel);
 
@@ -37,47 +39,18 @@ const getCalenderData = asyncErrorCatcher(async (req: Request, res: Response) =>
 
 const getDay = getOne(DailyDataModel);
 
-const createDay = asyncErrorCatcher(async (req: Request, res: Response) => {
-  const loggedInUserId = getLoggedInUserIdFromReq();
-  validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
-  const { date } = req.body;
-  if (!date) throw new AppError("Please provide date", 400);
-
-  const doc = await DailyDataModel.create({
-    ...req.body,
-    date: new Date(date),
-    userId: loggedInUserId,
-  });
-
-  res.status(201).send({
-    status: "success",
-    data: doc,
-  });
-});
-
 const getToday = asyncErrorCatcher(async (req: Request, res: Response) => {
-  const loggedInUserId = getLoggedInUserIdFromReq();
-  validateIds({ id: loggedInUserId, entityName: "loggedInUser" });
-
-  const doc = await DailyDataModel.findOne({ userId: loggedInUserId }).sort({ date: -1 }).limit(1);
-  if (!doc) {
-    const date = getIsraeliDate();
-    const doc = await DailyDataModel.create({
-      date,
-      userId: loggedInUserId,
-    });
-
-    res.status(201).send({
-      status: "success",
-      data: doc,
-    });
-  } else {
-    res.send({
-      status: "success",
-      data: doc,
-    });
-  }
+  const userId = getLoggedInUserIdFromReq();
+  validateIds({ id: userId, entityName: "loggedInUser" });
+  const timeZone = req.query.timeZone ?? req.body?.timeZone ?? "Asia/Jerusalem";
+  if (typeof timeZone !== "string")
+    throw new AppError("Please provide a valid IANA time zone", 400);
+  const { doc, created } = await ensureToday(userId!, timeZone);
+  res.status(created ? 201 : 200).send({ status: "success", data: doc });
 });
+
+// Compatibility for older clients: starting a day can only get/create today.
+const createDay = getToday;
 
 const updateDay = updateOne(DailyDataModel, [
   "intakes",

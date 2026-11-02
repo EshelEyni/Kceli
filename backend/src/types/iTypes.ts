@@ -38,6 +38,8 @@ export interface IUser extends Document {
 }
 
 export interface IDailyData extends Document {
+  localDate?: string;
+  timeZone?: string;
   date: Date;
   userId: mongoose.Types.ObjectId;
   intakes: IIntake[];

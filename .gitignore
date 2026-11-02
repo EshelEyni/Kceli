@@ -92,3 +92,6 @@ backend/dist
 # Generated build output
 /backend/build/
 /shared/dist/
+
+# Local test transformation caches
+/frontend/.cache/
