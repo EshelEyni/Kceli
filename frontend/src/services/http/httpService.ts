@@ -15,7 +15,7 @@ async function ajax(endpoint: string, method: Method = "GET", data: object | nul
 
     return res.data;
   } catch (err) {
-    if (isProd) return;
+    if (isProd) throw err;
     if (data && "password" in data) delete data["password"];
     // eslint-disable-next-line no-console
     console.log(`Had issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data);

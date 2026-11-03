@@ -50,6 +50,9 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
   const [isManual, setIsManual] = useState(intakeItem.calories !== undefined);
   const [inputFaded, setInputFaded] = useState("");
   const [isLoadingCal, setIsLoadingCal] = useState(false);
+  const editVersion = useRef(0);
+  const calculating = useRef(false);
+  useEffect(() => () => { editVersion.current++; }, []);
   const [suggestions, setSuggestions] = useState<SpellingSuggestion[]>([]);
   const [spellChecker, setSpellChecker] = useState<NSpell | null>(null);
   const debouncedSpellcheck = useRef<AnyFunction | null>(null);
@@ -100,10 +103,18 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
     }
   }
 
-  function handleChange(intakeItem: NewIntakeItem) {
+  function handleChange(nextItem: NewIntakeItem) {
+    editVersion.current++;
+    if (nextItem.name !== intakeItem.name || nextItem.unit !== intakeItem.unit) {
+      delete nextItem.calories;
+      delete nextItem.caloriesPer100g;
+    } else if (nextItem.quantity !== intakeItem.quantity && intakeItem.quantity > 0 &&
+               intakeItem.calories !== undefined) {
+      nextItem.calories = Math.round(intakeItem.calories * nextItem.quantity / intakeItem.quantity);
+    }
     setIntake(prev => ({
       ...prev,
-      items: prev.items.map(item => (item.id === intakeItem.id ? intakeItem : item)),
+      items: prev.items.map(item => (item.id === nextItem.id ? nextItem : item)),
     }));
   }
 
@@ -145,10 +156,14 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
   }
 
   async function handleCalcBtnClick() {
-    if (!intakeItem.name.length) return toast.error(t("Please enter a food name!"));
+    if (!intakeItem.name.trim()) return toast.error(t("Please enter a food name!"));
+    if (calculating.current) return;
+    calculating.current = true;
+    const version = editVersion.current;
     try {
       setIsLoadingCal(true);
       const calories = await calorieApiService.getCaloriesForItem(intakeItem);
+      if (version !== editVersion.current) return;
       handleChange({ ...intakeItem, calories });
       setIsManual(true);
     } catch (error) {
@@ -156,6 +171,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
       if (!isTestEnv) console.error(error);
       toast.error(t("Failed to calculate calories!"));
     } finally {
+      calculating.current = false;
       setIsLoadingCal(false);
     }
   }

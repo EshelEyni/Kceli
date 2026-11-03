@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { MeasurementUnit } from "../../../../shared/types/intake";
 import openAIService from "../../services/openAI/openAIService";
-import intakeService from "../../services/intake/intakeService";
 import { IFavoriteIntake, IIntake, IIntakeItem } from "../../types/iTypes";
 
 const schemaOptions = {
@@ -38,31 +37,15 @@ const intakeItemSchema = new Schema<IIntakeItem>(
     },
     calories: {
       type: Number,
-      default: 0,
+      min: 0,
     },
   },
   schemaOptions
 );
 
-intakeItemSchema.pre("validate", async function (next) {
-  try {
-    const intakeItem = this.toObject() as IIntakeItem;
-    if (intakeItem.calories || (this.isModified("calories") && intakeItem.calories === 0) || intakeItem.name.toLowerCase() === "water") return next();
-    const existingItemData = await intakeService.getExistingIntakeItem(intakeItem);
-
-    if (existingItemData && existingItemData.calories) {
-      this.calories = Math.round(
-        existingItemData.calories * (intakeItem.quantity / existingItemData.quantity)
-      );
-    } else {
-      this.calories = Math.round(await openAIService.getCaloriesForIntakeItem(intakeItem));
-    }
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-  } finally {
-    next();
-  }
+intakeItemSchema.pre("validate", async function () {
+  if (this.calories !== undefined && this.calories !== null) return;
+  this.calories = await openAIService.getCaloriesForIntakeItem(this.toObject() as IIntakeItem);
 });
 
 const intakeSchema = new Schema<IIntake>(
@@ -99,7 +82,7 @@ const favoriteIntakeSchema = new Schema<IFavoriteIntake>(
     },
     sortOrder: {
       type: Number,
-      default: 0,
+      min: 0,
     },
   },
   schemaOptions

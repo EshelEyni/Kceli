@@ -1,3 +1,4 @@
+import { estimateFood, validateFoodItem, requestFoodResponse, validateFoodDescription } from "./foodEstimateService";
 import { Configuration, OpenAIApi } from "openai";
 import { AppError } from "../error/errorService";
 import { IIntakeItem } from "../../types/iTypes";
@@ -13,32 +14,25 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 async function getText(prompt: string): Promise<string> {
-  const completion = await openai.createChatCompletion({
-    model: "gpt-4",
-    messages: [{ role: "user", content: prompt }],
+  validateFoodDescription(prompt);
+  const data = await requestFoodResponse({
+    instructions: "Answer everyday food and nutrition questions. Clearly label calorie values as estimates and state portion assumptions. Use the user's language.",
+    input: prompt,
   });
-  const { message } = completion.data.choices[0];
-  if (!message) throw new AppError("message is falsey", 500);
-  return message.content as string;
+  const content = Array.isArray(data.output) ? data.output.filter((o: any) => o.type === "message")
+    .flatMap((o: any) => Array.isArray(o.content) ? o.content : []) : [];
+  const answer = content.filter((c: any) => c.type === "output_text" && typeof c.text === "string")
+    .map((c: any) => c.text).join("");
+  if (!answer.trim() || content.some((c: any) => c.type === "refusal"))
+    throw new AppError("Could not read the calorie estimate. Please try again or enter calories.", 502);
+  return answer;
 }
 
 async function getCaloriesForIntakeItem(intakeItem: IIntakeItem | IntakeItem): Promise<number> {
+  validateFoodItem(intakeItem);
   const { name, quantity, unit } = intakeItem;
-  const prompt = `
-  Calculate calories for ${quantity} ${unit} of ${name}.
-  NOTE: Return the number of calories as an integer.
-  `;
-
-  const completion = await openai.createChatCompletion({
-    model: "gpt-4",
-    messages: [{ role: "user", content: prompt }],
-  });
-  const { message } = completion.data.choices[0];
-  if (!message) throw new AppError("message is falsey", 500);
-  const text = message.content as string;
-  const calories = parseInt(text);
-  if (isNaN(calories)) throw new AppError("calories is NaN", 500);
-  return Math.round(calories);
+  const result = await estimateFood(JSON.stringify({ food: name, quantity, unit }));
+  return result.calories;
 }
 
 type getCalBurnParams = {

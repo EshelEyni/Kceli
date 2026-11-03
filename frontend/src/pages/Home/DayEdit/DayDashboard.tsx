@@ -7,6 +7,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import { MetricCard, PageIntro } from "../../../components/App/PageIntro/PageIntro";
 import { useDayEdit } from "./DayEditContext";
 import { DayGoals } from "./DayGoals";
+import { QuickFoodLog } from "./QuickFoodLog";
 
 export function DayDashboard({ children }: { children: ReactNode }) {
   const { loggedInUser } = useAuth();
@@ -44,6 +45,7 @@ export function DayDashboard({ children }: { children: ReactNode }) {
               )
         }
       />
+      <QuickFoodLog key={dailyData.id} />
       <div className="ui-metrics">
         <MetricCard
           label={t("Calories eaten")}

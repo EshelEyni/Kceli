@@ -6,10 +6,15 @@ import { AppError } from "../../services/error/errorService";
 import { checkUserAuthentication } from "../../middlewares/authGuards/authGuardsMiddleware";
 import { queryChatGPT } from "../../controllers/nutrition/nutritionController";
 
+import { estimateMeal } from "../../controllers/nutrition/foodEstimateController";
+
 const router = express.Router();
 
 router.use(checkUserAuthentication);
 router.get("/chatGPT", queryChatGPT);
+router.post("/estimate-food", (_req, res, next) => { res.set("Cache-Control", "no-store"); next(); },
+  rateLimit({ windowMs: 15 * 60 * 1000, max: 40,
+    message: { message: "Calorie estimation is busy. Try later or enter calories." } }), estimateMeal);
 router.post("/scan-food", (_req, res, next) => {
   res.set("Cache-Control", "no-store");
   next();

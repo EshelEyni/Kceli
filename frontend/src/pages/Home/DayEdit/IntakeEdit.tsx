@@ -77,8 +77,12 @@ export const IntakeEdit: FC = () => {
     const updatedIntakes = isNewIntake
       ? [...dailyData.intakes, intake]
       : dailyData.intakes.map(i => (i.id === intake.id ? intake : i));
-    updateDailyData({ id: dailyData.id, data: { intakes: updatedIntakes } });
-    setIntake(intakeUtilService.getDefaultIntake());
+    updateDailyData({ id: dailyData.id, data: { intakes: updatedIntakes } }, {
+      onSuccess: () => {
+        setIntake(intakeUtilService.getDefaultIntake());
+        toast.success(t("Meal saved"));
+      },
+    });
   }
 
   function toLocalTime(isoString: string) {

@@ -508,5 +508,19 @@
   "Save meal": "שמירה ביומן",
   "Save draft": "שמירת טיוטה",
   "Save as draft": "שמירה כטיוטה",
-  "More options": "אפשרויות נוספות"
+  "More options": "אפשרויות נוספות",
+  "Describe your meal": "מה אכלת?",
+  "e.g. 2 eggs, a slice of toast and coffee with milk": "למשל: 2 ביצים, פרוסת לחם ונס קפה עם חלב",
+  "Include portions if you can. You can adjust the estimate before saving.": "כדאי לציין כמויות. אפשר לתקן את ההערכה לפני השמירה.",
+  "Meal saved": "הארוחה נשמרה",
+  "Estimating calories…": "מחשב קלוריות…",
+  "Enter calories myself": "הזנת קלוריות ידנית",
+  "Detailed entry / photo": "הזנה מפורטת / צילום",
+  "Describe your meal in 1–1000 characters.": "יש לתאר את הארוחה ב־1–1000 תווים.",
+  "Please describe a food or drink and its portion.": "יש לתאר מאכל או משקה ואת הכמות.",
+  "Could not read the calorie estimate. Please try again or enter calories.": "לא ניתן לקרוא את ההערכה. אפשר לנסות שוב או להזין קלוריות ידנית.",
+  "Calorie estimation is unavailable. Check the server API configuration.": "הערכת הקלוריות אינה זמינה. יש לבדוק את הגדרות השירות בשרת.",
+  "Calorie estimation timed out. Try again or enter calories.": "החישוב ארך יותר מדי זמן. אפשר לנסות שוב או להזין קלוריות ידנית.",
+  "Calorie estimation is busy. Try later or enter calories.": "שירות ההערכה עמוס. אפשר לנסות מאוחר יותר או להזין קלוריות ידנית.",
+  "Could not estimate calories. Try again or enter calories.": "לא ניתן להעריך קלוריות. אפשר לנסות שוב או להזין קלוריות ידנית."
 }

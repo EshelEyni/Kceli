@@ -5,7 +5,7 @@ import classnames from "classnames";
 
 export const IntakeItemEditManualInputs: FC = () => {
   const { intakeItem, inputFaded, setInputFaded, handleInputChange } = useIntakeItemEdit();
-  const calorieInputValue = intakeItem.calories ? Math.round(intakeItem.calories) : "";
+  const calorieInputValue = intakeItem.calories !== undefined ? Math.round(intakeItem.calories) : "";
 
   function handleInputClick(inputName: string) {
     if (inputFaded !== inputName) return;
