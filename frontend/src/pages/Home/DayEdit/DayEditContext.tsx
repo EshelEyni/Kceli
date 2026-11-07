@@ -1,3 +1,4 @@
+import { getBudgetTarget } from "./calorieBudgetModel";
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 import { useGetTodayData } from "../../../hooks/useGetTodayData";
 import { useUpdateTodayData } from "../../../hooks/useUpdateTodayData";
@@ -103,10 +104,15 @@ function DayEditProvider({ children }: { children: React.ReactNode }) {
   const unrecordedIntakes = (dailyData?.intakes.filter(i => !i.isRecorded) as Intake[]) || [];
 
   const consumedCalories = calorieUtilService.getTotalCalories(dailyData);
-  const remainingCalories = calorieUtilService.calcRemainingCalories(loggedInUser, dailyData);
-
-  const targetCaloricIntakePerDay =
-    dailyData?.targetCaloricIntake ?? loggedInUser?.targetCaloricIntakePerDay ?? 0;
+  const targetCaloricIntakePerDay = getBudgetTarget(
+    dailyData?.date,
+    dailyData?.targetCaloricIntake,
+    loggedInUser?.targetCaloricIntakePerDay
+  );
+  const remainingCalories =
+    Number.isFinite(targetCaloricIntakePerDay) && targetCaloricIntakePerDay > 0
+      ? Math.round(targetCaloricIntakePerDay - consumedCalories)
+      : 0;
 
   function getDayGoalsQueryStr() {
     if (!dailyData) return "";

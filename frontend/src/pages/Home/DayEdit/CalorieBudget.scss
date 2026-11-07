@@ -1,0 +1,91 @@
+.app .ui-hero .calorie-budget {
+  --budget-color: #7ee2a8;
+  flex: 0 1 190px;
+  min-width: 140px;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  &--yellow {
+    --budget-color: #f5d568;
+  }
+  &--red {
+    --budget-color: #ffaaa5;
+  }
+  &--unavailable {
+    --budget-color: #d3ded7;
+  }
+  &__ring {
+    width: 150px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    position: relative;
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    circle {
+      fill: none;
+      stroke-width: 8;
+    }
+    > div {
+      position: absolute;
+      inset: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    strong {
+      font-size: clamp(22px, 2.5vw, 30px);
+      font-weight: 650;
+      color: white;
+    }
+    small {
+      font-size: 11px;
+      color: #e0e9e3;
+    }
+  }
+  &__track {
+    stroke: #ffffff33;
+  }
+  &__fill {
+    stroke: var(--budget-color);
+    transition: stroke-dashoffset 350ms ease, stroke 250ms ease;
+  }
+  &__status {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.5;
+    svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--budget-color);
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+@media (max-width: 640px) {
+  .app .ui-hero {
+    flex-wrap: wrap;
+  }
+  .app .ui-hero .calorie-budget {
+    flex-basis: 150px;
+    margin-inline: auto;
+  }
+  .app .ui-hero .calorie-budget__ring {
+    width: 130px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app .ui-hero .calorie-budget__fill {
+    transition: none;
+  }
+}

@@ -532,5 +532,12 @@
   "Warm and encouraging": "Warm and encouraging",
   "Direct and motivating": "Direct and motivating",
   "Calm and practical": "Calm and practical",
-  "Language and tone changes apply to your next daily message.": "Language and tone changes apply to your next daily message."
+  "Language and tone changes apply to your next daily message.": "Language and tone changes apply to your next daily message.",
+  "Set a daily calorie target to see your remaining budget.": "Set a daily calorie target to see your remaining budget.",
+  "{{count}} calories above the daily target": "{{count}} calories above the daily target",
+  "You’ve reached your daily calorie target": "You’ve reached your daily calorie target",
+  "Approaching the daily target — {{count}} calories remaining": "Approaching the daily target — {{count}} calories remaining",
+  "{{count}} calories remaining for this day": "{{count}} calories remaining for this day",
+  "Daily calorie budget": "Daily calorie budget",
+  "No daily target": "No daily target"
 }

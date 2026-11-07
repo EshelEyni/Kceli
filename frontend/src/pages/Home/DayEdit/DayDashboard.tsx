@@ -1,3 +1,5 @@
+import { CalorieBudget } from "./CalorieBudget";
+import { getCalorieBudget } from "./calorieBudgetModel";
 import { getLocale } from "../../../i18n";
 import { t } from "../../../i18n";
 import { ReactNode } from "react";
@@ -15,7 +17,6 @@ export function DayDashboard({ children }: { children: ReactNode }) {
   const {
     dailyData,
     consumedCalories,
-    remainingCalories,
     targetCaloricIntakePerDay,
   } = useDayEdit();
   const isToday = !!dailyData && new Date(dailyData.date).toDateString() === new Date().toDateString();
@@ -27,7 +28,7 @@ export function DayDashboard({ children }: { children: ReactNode }) {
     year: "numeric",
   });
   const target = targetCaloricIntakePerDay || 0;
-  const percentage = target > 0 ? Math.min(100, Math.max(0, (consumedCalories / target) * 100)) : 0;
+  const { remaining } = getCalorieBudget(consumedCalories, target);
   const weight = dailyData.weight || loggedInUser?.weight;
   const firstName = loggedInUser?.fullname?.split(" ")[0] || loggedInUser?.username || t("there");
   const scheduled =
@@ -52,11 +53,17 @@ export function DayDashboard({ children }: { children: ReactNode }) {
         <MetricCard
           label={t("Calories eaten")}
           value={Math.round(consumedCalories).toLocaleString()}
-          unit={`/ ${target.toLocaleString(getLocale())} ${t("kcal")}`}
-          description={t("{{count}} kcal {{status}}", {
-            count: Math.round(Math.abs(remainingCalories)),
-            status: t(remainingCalories >= 0 ? "remaining" : "above target"),
-          })}
+          unit={
+            remaining === null ? t("kcal") : `/ ${target.toLocaleString(getLocale())} ${t("kcal")}`
+          }
+          description={
+            remaining === null
+              ? t("No daily target")
+              : t("{{count}} kcal {{status}}", {
+                  count: Math.round(Math.abs(remaining)),
+                  status: t(remaining >= 0 ? "remaining" : "above target"),
+                })
+          }
         />
         <MetricCard
           label={t("Current weight")}
@@ -104,22 +111,7 @@ export function DayDashboard({ children }: { children: ReactNode }) {
                 {t("See your progress")} <FiArrowRight />
               </Link>
             </div>
-            <div
-              className="ui-calorie-ring"
-              style={{ background: `conic-gradient(var(--ui-lime) ${percentage}%, #ffffff22 0)` }}
-              role="img"
-              aria-label={t("{{count}} of {{target}} calories consumed", {
-                count: Math.round(consumedCalories),
-                target,
-              })}
-            >
-              <div>
-                <strong>{Math.round(Math.abs(remainingCalories)).toLocaleString()}</strong>
-                <small>
-                  {t("kcal")} {remainingCalories >= 0 ? t("remaining") : t("above target")}
-                </small>
-              </div>
-            </div>
+            <CalorieBudget consumed={consumedCalories} target={target} />
           </section>
         </div>
         <aside className="ui-stack">

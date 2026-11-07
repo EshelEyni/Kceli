@@ -532,5 +532,12 @@
   "Warm and encouraging": "חם ומעודד",
   "Direct and motivating": "ישיר ומדרבן",
   "Calm and practical": "רגוע ומעשי",
-  "Language and tone changes apply to your next daily message.": "שינויי השפה והסגנון יחולו על המסר היומי הבא."
+  "Language and tone changes apply to your next daily message.": "שינויי השפה והסגנון יחולו על המסר היומי הבא.",
+  "Set a daily calorie target to see your remaining budget.": "אפשר להגדיר יעד קלוריות יומי כדי לראות כמה נותרו.",
+  "{{count}} calories above the daily target": "{{count}} קלוריות מעל היעד היומי",
+  "You’ve reached your daily calorie target": "הגעת ליעד הקלוריות היומי",
+  "Approaching the daily target — {{count}} calories remaining": "מתקרבים ליעד היומי — נותרו {{count}} קלוריות",
+  "{{count}} calories remaining for this day": "נותרו לך {{count}} קלוריות ליום זה",
+  "Daily calorie budget": "תקציב קלוריות יומי",
+  "No daily target": "לא הוגדר יעד יומי"
 }
