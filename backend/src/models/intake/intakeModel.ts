@@ -1,6 +1,9 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { MeasurementUnit } from "../../../../shared/types/intake";
 import openAIService from "../../services/openAI/openAIService";
+import { findFoodInHistory } from "../../services/intake/foodEstimateHistoryService";
+import { getLoggedInUserIdFromReq } from "../../services/ALSService";
+import { validateFoodItem } from "../../services/openAI/foodEstimateService";
 import { IFavoriteIntake, IIntake, IIntakeItem } from "../../types/iTypes";
 
 const schemaOptions = {
@@ -45,7 +48,10 @@ const intakeItemSchema = new Schema<IIntakeItem>(
 
 intakeItemSchema.pre("validate", async function () {
   if (this.calories !== undefined && this.calories !== null) return;
-  this.calories = await openAIService.getCaloriesForIntakeItem(this.toObject() as IIntakeItem);
+  const item = this.toObject() as IIntakeItem;
+  validateFoodItem(item);
+  const saved = await findFoodInHistory(item.name, getLoggedInUserIdFromReq(), item);
+  this.calories = saved?.calories ?? await openAIService.getCaloriesForIntakeItem(item);
 });
 
 const intakeSchema = new Schema<IIntake>(

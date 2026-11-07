@@ -64,6 +64,8 @@ const dailyDataSchema = new Schema<IDailyData>(
   }
 );
 
+dailyDataSchema.index({ userId: 1, date: -1 }, { name: "user_recent_food_history" });
+
 // Legacy records remain untouched; only keyed records participate in uniqueness.
 dailyDataSchema.index(
   { userId: 1, localDate: 1 },
