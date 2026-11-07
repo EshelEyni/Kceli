@@ -29,10 +29,6 @@ export const DayEditFilter: FC = () => {
       isShown: dailyData?.intakes.some(intake => intake.isRecorded === false),
     },
     {
-      name: "Saved meals",
-      value: DayEditTab.FavoriteIntake,
-    },
-    {
       name: "Check-in",
       value: DayEditTab.WeightWaistInput,
     },

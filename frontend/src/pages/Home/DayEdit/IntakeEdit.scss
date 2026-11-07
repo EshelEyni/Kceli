@@ -1,119 +1,22 @@
-@import "../../../styles/main.scss";
-
 .intake-edit {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: rem(10px);
+  gap: 12px;
   width: 100%;
-  position: relative;
-  flex-grow: 1;
-
-  &__header {
-    display: flex;
-    flex-direction: column;
-    gap: rem(10px);
+  min-width: 0;
+  &__manual-link {
+    background: transparent;
+    color: var(--color-text-gray);
+    text-decoration: underline;
+    padding: 12px;
+    min-height: 44px;
+    cursor: pointer;
+    align-self: center;
+  }
+  &__manual-form {
     width: 100%;
-    margin-bottom: rem(8px);
-
-    &__input-name-btn-type {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    &__name-input {
-      padding: rem(12px);
-      border-radius: 5px;
-      font-size: rem(20px);
-      text-transform: capitalize;
-      height: rem(40px);
-      min-width: 0;
-      margin-right: rem(10px);
-    }
-
-    .btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: rem(10px);
-      height: rem(40px);
-      width: rem(100px);
-      background-color: white;
-      border-radius: 10px;
-      cursor: pointer;
-
-      span {
-        font-size: rem(18px);
-        font-weight: 600;
-        color: var(--color-text-gray);
-        text-transform: uppercase;
-      }
-    }
-
-    &__time-input {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 25%;
-      height: rem(40px);
-      padding: rem(12px);
-      border-radius: 5px;
-    }
-  }
-
-  &__info-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-
-  .intake-edit-item-list {
-    display: flex;
-    flex-direction: column;
-    gap: rem(10px);
-  }
-
-  .intake-edit-item__btns-container {
-    width: 100%;
-    justify-content: flex-end;
-    display: flex;
-    gap: rem(10px);
-    margin-top: rem(20px);
-  }
-
-  .intake-edit-btns-container {
-    z-index: 1000;
-    align-self: flex-end;
-    display: flex;
-    flex-wrap: wrap-reverse;
-    align-items: center;
-    justify-content: flex-end;
-    margin: rem(50px) 0 0 0;
-    gap: rem(10px);
-
-    .intake-edit-btn {
-      max-width: rem(320px);
-      padding: rem(15px) rem(20px);
-      font-size: rem(16px);
-      white-space: nowrap;
-      letter-spacing: 1px;
-      transition: background-color 0.2s ease-in-out;
-
-      &:hover:not(:disabled),
-      &:focus-visible {
-        background-color: #365d48;
-        color: #fff;
-      }
-    }
-
-    .btn-toggle-save-later {
-      &.clicked {
-        background-color: #365d48;
-        color: #fff;
-      }
-    }
+    display: grid;
+    gap: 12px;
+    .btn { width: 100%; min-height: 44px; }
   }
 }

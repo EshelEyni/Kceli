@@ -1,22 +1,14 @@
-import { FC } from "react";
-import { SpellingSuggestionList } from "./SpellingSuggestionList";
+import { t } from "../../../i18n";
 import { useIntakeItemEdit } from "./IntakeItemEditContext";
-import "./IntakeItemEdit.scss";
 import { IntakeItemEditManualInputs } from "./IntakeItemEditManualInputs";
-import { IntakeItemEditInputBtns } from "./IntakeItemEditInputBtns";
-import { IntakeItemEditBtns } from "./IntakeItemEditBtns";
 import { IntakeItemEditInputName } from "./IntakeItemEditInputName";
+import "./IntakeItemEdit.scss";
 
-export const IntakeItemEdit: FC = () => {
-  const { isCurrIntakeItem, isManual, isSuggestionListShown } = useIntakeItemEdit();
-
-  return (
-    <section className="intake-item-edit" data-testid="intake-item-edit">
-      <IntakeItemEditInputName />
-      {isSuggestionListShown && <SpellingSuggestionList />}
-      <IntakeItemEditInputBtns />
-      {isManual && <IntakeItemEditManualInputs />}
-      {isCurrIntakeItem && <IntakeItemEditBtns />}
-    </section>
-  );
+export const IntakeItemEdit = () => {
+  const { isOneItem, handleRemoveButtonClick } = useIntakeItemEdit();
+  return <section className="intake-item-edit" data-testid="intake-item-edit">
+    <label>{t("Food name")}<IntakeItemEditInputName /></label>
+    <IntakeItemEditManualInputs />
+    {!isOneItem && <button type="button" className="intake-edit__manual-link" onClick={handleRemoveButtonClick}>{t("Remove")}</button>}
+  </section>;
 };

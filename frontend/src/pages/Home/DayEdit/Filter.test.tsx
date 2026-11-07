@@ -71,7 +71,7 @@ describe("Day Edit Filter", () => {
 
     const filterEl = screen.getByTestId("day-edit-filter");
     const btns = filterEl.getElementsByTagName("button");
-    const toggledElementValues = Object.values(DayEditTab);
+    const toggledElementValues = [DayEditTab.IntakeEdit, DayEditTab.IntakeList, DayEditTab.UnRecordedIntakeList, DayEditTab.WeightWaistInput, DayEditTab.Query];
 
     for (let i = 0; i < btns.length; i++) {
       const btn = btns[i];

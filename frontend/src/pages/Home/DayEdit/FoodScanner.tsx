@@ -8,7 +8,7 @@ import { t } from "../../../i18n";
 import { useDayEdit } from "./DayEditContext";
 import "./FoodScanner.scss";
 
-export function FoodScanner() {
+export function FoodScanner({ onManualEntry }: { onManualEntry?: () => void }) {
   const { setIntake, setCurrIntakeItemId } = useDayEdit();
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState("");
@@ -159,6 +159,7 @@ export function FoodScanner() {
       <header><h2 id="food-scan-title">{t("Scan food")}</h2><button type="button" onClick={close} aria-label={t("Close")}>×</button></header>
       <p>{t("Kceli does not save your photo. It is sent to OpenAI to estimate calories.")}</p>
       {error && <p role="alert">{error}</p>}
+      {(error || result?.items.length === 0) && onManualEntry && <button type="button" onClick={() => { close(); onManualEntry(); }}>{t("Enter manually")}</button>}
       {!result && <>
         {!image && <video ref={element => {
           video.current = element;

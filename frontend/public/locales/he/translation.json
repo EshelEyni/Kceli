@@ -522,5 +522,7 @@
   "Calorie estimation is unavailable. Check the server API configuration.": "הערכת הקלוריות אינה זמינה. יש לבדוק את הגדרות השירות בשרת.",
   "Calorie estimation timed out. Try again or enter calories.": "החישוב ארך יותר מדי זמן. אפשר לנסות שוב או להזין קלוריות ידנית.",
   "Calorie estimation is busy. Try later or enter calories.": "שירות ההערכה עמוס. אפשר לנסות מאוחר יותר או להזין קלוריות ידנית.",
-  "Could not estimate calories. Try again or enter calories.": "לא ניתן להעריך קלוריות. אפשר לנסות שוב או להזין קלוריות ידנית."
+  "Could not estimate calories. Try again or enter calories.": "לא ניתן להעריך קלוריות. אפשר לנסות שוב או להזין קלוריות ידנית.",
+  "Enter manually": "הזנה ידנית",
+  "Enter a food name and calories.": "יש להזין שם מזון וקלוריות."
 }

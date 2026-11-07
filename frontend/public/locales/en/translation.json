@@ -522,5 +522,7 @@
   "Calorie estimation is unavailable. Check the server API configuration.": "Calorie estimation is unavailable. Check the server API configuration.",
   "Calorie estimation timed out. Try again or enter calories.": "Calorie estimation timed out. Try again or enter calories.",
   "Calorie estimation is busy. Try later or enter calories.": "Calorie estimation is busy. Try later or enter calories.",
-  "Could not estimate calories. Try again or enter calories.": "Could not estimate calories. Try again or enter calories."
+  "Could not estimate calories. Try again or enter calories.": "Could not estimate calories. Try again or enter calories.",
+  "Enter manually": "Enter manually",
+  "Enter a food name and calories.": "Enter a food name and calories."
 }

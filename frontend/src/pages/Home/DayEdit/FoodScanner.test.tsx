@@ -86,3 +86,14 @@ test("analysis failure clears the photo and does not change the meal", async () 
   expect(screen.queryByAltText("Meal photo preview")).toBeNull();
   expect(state.setIntake).not.toHaveBeenCalled();
 });
+
+test("camera failure offers manual entry and closes the scanner", async () => {
+ vi.mocked(navigator.mediaDevices.getUserMedia).mockRejectedValue(new Error("denied"));
+ const manual = vi.fn();
+ render(<FoodScanner onManualEntry={manual} />);
+ fireEvent.click(screen.getByText(/Scan food/));
+ await screen.findByRole("alert");
+ fireEvent.click(screen.getByText("Enter manually"));
+ expect(manual).toHaveBeenCalledOnce();
+ expect(screen.queryByRole("dialog")).toBeNull();
+});

@@ -1,45 +1,21 @@
-import { it, describe, expect, afterEach, vi } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
-import "@testing-library/jest-dom/vitest";
+import React from "react";
+import { afterEach, expect, test, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+const state = vi.hoisted(() => ({ item: { name: "Apple", calories: 0 }, change: vi.fn(), remove: vi.fn(), single: true }));
+vi.mock("./IntakeItemEditContext", () => ({ useIntakeItemEdit: () => ({ intakeItem: state.item,
+ handleInputChange: state.change, handleNameInputClick: vi.fn(), isOneItem: state.single, handleRemoveButtonClick: state.remove }) }));
+afterEach(() => { cleanup(); vi.clearAllMocks(); });
 import { IntakeItemEdit } from "./IntakeItemEdit";
-import { mockUseIntakeItemEdit } from "../../../../test/service/mockService";
-
-vi.mock("./IntakeItemEditContext");
-
-describe("DayDetails", () => {
-  afterEach(() => {
-    cleanup();
-    vi.resetAllMocks();
-  });
-
-  it("should render intake item edit", () => {
-    mockUseIntakeItemEdit({});
-    render(<IntakeItemEdit />);
-    expect(screen.getByTestId("intake-item-edit")).toBeInTheDocument();
-  });
-
-  it("should always render input name and inputs buttons", () => {
-    mockUseIntakeItemEdit({});
-    render(<IntakeItemEdit />);
-    expect(screen.getByPlaceholderText("Enter food name")).toBeInTheDocument();
-    expect(screen.getByTestId("intake-item-edit-inputs-btns")).toBeInTheDocument();
-  });
-
-  it("should render spelling suggestion list if isSuggestionListShown is true", () => {
-    mockUseIntakeItemEdit({ isSuggestionListShown: true });
-    render(<IntakeItemEdit />);
-    expect(screen.getByTestId("spelling-suggestion-list")).toBeInTheDocument();
-  });
-
-  it("should render manual inputs if isManual is true", () => {
-    mockUseIntakeItemEdit({ isManual: true });
-    render(<IntakeItemEdit />);
-    expect(screen.getByTestId("intake-item-edit-manuall-calorie-edit")).toBeInTheDocument();
-  });
-
-  it("should render intake item edit buttons if isCurrIntakeItem is true", () => {
-    mockUseIntakeItemEdit({ isCurrIntakeItem: true });
-    render(<IntakeItemEdit />);
-    expect(screen.getByTestId("intake-item-edit-btns")).toBeInTheDocument();
-  });
+test("a single manual item has only name and calories", () => {
+ state.single = true;
+ render(<IntakeItemEdit />);
+ expect(screen.getAllByRole("textbox")).toHaveLength(1);
+ expect(screen.getAllByRole("spinbutton")).toHaveLength(1);
+ expect(screen.queryByRole("button")).toBeNull();
+});
+test("multiple existing items can still be removed", () => {
+ state.single = false;
+ render(<IntakeItemEdit />);
+ fireEvent.click(screen.getByRole("button", { name: "Remove" }));
+ expect(state.remove).toHaveBeenCalledOnce();
 });

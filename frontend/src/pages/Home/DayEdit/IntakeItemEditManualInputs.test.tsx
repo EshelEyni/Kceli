@@ -1,77 +1,16 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { it, describe, expect, afterEach, vi } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom/vitest";
+import React from "react";
+import { afterEach, expect, test, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+const state = vi.hoisted(() => ({ item: { name: "Apple", calories: 0 }, change: vi.fn(), remove: vi.fn(), single: true }));
+vi.mock("./IntakeItemEditContext", () => ({ useIntakeItemEdit: () => ({ intakeItem: state.item,
+ handleInputChange: state.change, handleNameInputClick: vi.fn(), isOneItem: state.single, handleRemoveButtonClick: state.remove }) }));
+afterEach(() => { cleanup(); vi.clearAllMocks(); });
 import { IntakeItemEditManualInputs } from "./IntakeItemEditManualInputs";
-import { mockUseIntakeItemEdit } from "../../../../test/service/mockService";
-import testService from "../../../../test/service/testService";
-
-vi.mock("./IntakeItemEditContext");
-
-describe("IntakeItemEditManualInputs", () => {
-  afterEach(() => {
-    cleanup();
-    vi.resetAllMocks();
-  });
-
-  it("should render inputs", () => {
-    mockUseIntakeItemEdit({});
-    render(<IntakeItemEditManualInputs />);
-
-    expect(screen.getAllByRole("spinbutton")).toHaveLength(2);
-  });
-
-  it("should have correct values", () => {
-    const { intakeItem } = mockUseIntakeItemEdit({
-      intakeItem: {
-        ...testService.createIntakeItem({}),
-        calories: 100,
-        caloriesPer100g: 200,
-      },
-    });
-
-    render(<IntakeItemEditManualInputs />);
-    const inputs = screen.getAllByRole("spinbutton");
-
-    expect(inputs[0]).toHaveValue(intakeItem!.calories);
-    expect(inputs[1]).toHaveValue(intakeItem!.caloriesPer100g);
-  });
-
-  it("should call handleInputChange on change", () => {
-    const { handleInputChange } = mockUseIntakeItemEdit({});
-
-    render(<IntakeItemEditManualInputs />);
-
-    fireEvent.change(screen.getAllByRole("spinbutton")[0], { target: { value: "test1" } });
-
-    expect(handleInputChange).toHaveBeenCalled();
-
-    fireEvent.change(screen.getAllByRole("spinbutton")[1], { target: { value: "test2" } });
-
-    expect(handleInputChange).toHaveBeenCalled();
-  });
-
-  it("should call setInputFaded on click", () => {
-    const { setInputFaded } = mockUseIntakeItemEdit({
-      inputFaded: "calories",
-    });
-
-    render(<IntakeItemEditManualInputs />);
-
-    fireEvent.click(screen.getAllByRole("spinbutton")[0]);
-
-    expect(setInputFaded).toHaveBeenCalledWith("");
-  });
-
-  it("should not call setInputFaded on click when inputFaded is not equal to inputName", () => {
-    const { setInputFaded } = mockUseIntakeItemEdit({
-      inputFaded: "calories",
-    });
-
-    render(<IntakeItemEditManualInputs />);
-
-    fireEvent.click(screen.getAllByRole("spinbutton")[1]);
-
-    expect(setInputFaded).not.toHaveBeenCalled();
-  });
+test("shows zero calories and allows editing the total only", () => {
+ render(<IntakeItemEditManualInputs />);
+ const input = screen.getByRole("spinbutton") as HTMLInputElement;
+ expect(input.value).toBe("0");
+ expect(screen.queryByLabelText("Calories per 100g")).toBeNull();
+ fireEvent.change(input, { target: { value: "95" } });
+ expect(state.change).toHaveBeenCalledOnce();
 });

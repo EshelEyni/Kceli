@@ -85,7 +85,7 @@ function IntakeItemEditProvider({ intakeItem, children }: IntakeItemEditProvider
         break;
       }
       case "calories": {
-        const item = { ...intakeItem, calories: Number(value) };
+        const item = { ...intakeItem, calories: value === "" ? undefined : Number(value) };
         delete item.caloriesPer100g;
         handleChange(item);
         setInputFaded("caloriesPer100g");

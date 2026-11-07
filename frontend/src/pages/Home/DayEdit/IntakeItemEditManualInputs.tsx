@@ -1,42 +1,11 @@
 import { t } from "../../../i18n";
-import { FC } from "react";
 import { useIntakeItemEdit } from "./IntakeItemEditContext";
-import classnames from "classnames";
 
-export const IntakeItemEditManualInputs: FC = () => {
-  const { intakeItem, inputFaded, setInputFaded, handleInputChange } = useIntakeItemEdit();
-  const calorieInputValue = intakeItem.calories !== undefined ? Math.round(intakeItem.calories) : "";
-
-  function handleInputClick(inputName: string) {
-    if (inputFaded !== inputName) return;
-    setInputFaded("");
-  }
-
-  return (
-    <div
-      className="intake-item-edit__manuall-calorie-edit"
-      data-testid="intake-item-edit-manuall-calorie-edit"
-    >
-      <input
-        type="number"
-        name="calories"
-        aria-label={t("Calories")}
-        className={classnames("intake-item-input", { faded: inputFaded === "calories" })}
-        value={calorieInputValue}
-        placeholder={t("Calories")}
-        onChange={handleInputChange}
-        onClick={() => handleInputClick("calories")}
-      />
-      <input
-        type="number"
-        name="caloriesPer100g"
-        aria-label={t("Calories per 100g")}
-        className={classnames("intake-item-input", { faded: inputFaded === "caloriesPer100g" })}
-        value={intakeItem.caloriesPer100g || ""}
-        placeholder={t("Calories per 100g")}
-        onChange={handleInputChange}
-        onClick={() => handleInputClick("caloriesPer100g")}
-      />
-    </div>
-  );
+export const IntakeItemEditManualInputs = () => {
+  const { intakeItem, handleInputChange } = useIntakeItemEdit();
+  return <label>{t("Calories")}
+    <input type="number" name="calories" aria-label={t("Calories")} required min="0" step="any"
+      inputMode="decimal" className="intake-item-input" value={intakeItem.calories ?? ""}
+      placeholder={t("Calories")} onChange={handleInputChange} />
+  </label>;
 };
