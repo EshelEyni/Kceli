@@ -41,7 +41,11 @@ async function add(user: User): Promise<IUser> {
 }
 
 async function update(id: string, user: User): Promise<User> {
+  if (user.dailyMotivationEnabled !== undefined && typeof user.dailyMotivationEnabled !== "boolean")
+    throw new AppError("Daily motivation must be enabled or disabled explicitly", 400);
   const allowedFields: Array<keyof User> = [
+    "dailyMotivationEnabled",
+    "dailyMotivationTone",
     "language",
     "username",
     "email",

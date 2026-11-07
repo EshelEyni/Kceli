@@ -26,7 +26,11 @@ export interface UserCredenitialsWithId extends UserCredenitials {
   readonly id: string;
 }
 
+export type MotivationTone = "auto" | "warm" | "direct" | "neutral";
+
 export interface User {
+  dailyMotivationEnabled?: boolean;
+  dailyMotivationTone?: MotivationTone;
   language?: "en" | "he";
   readonly id: string;
   username: string;

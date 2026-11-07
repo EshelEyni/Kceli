@@ -8,6 +8,7 @@ import { MetricCard, PageIntro } from "../../../components/App/PageIntro/PageInt
 import { useDayEdit } from "./DayEditContext";
 import { DayGoals } from "./DayGoals";
 import { QuickFoodLog } from "./QuickFoodLog";
+import { useDailyMotivation } from "../../../hooks/useDailyMotivation";
 
 export function DayDashboard({ children }: { children: ReactNode }) {
   const { loggedInUser } = useAuth();
@@ -17,8 +18,9 @@ export function DayDashboard({ children }: { children: ReactNode }) {
     remainingCalories,
     targetCaloricIntakePerDay,
   } = useDayEdit();
+  const isToday = !!dailyData && new Date(dailyData.date).toDateString() === new Date().toDateString();
+  const motivation = useDailyMotivation(loggedInUser, isToday);
   if (!dailyData) return null;
-  const isToday = new Date(dailyData.date).toDateString() === new Date().toDateString();
   const savedDate = new Date(dailyData.date).toLocaleDateString(getLocale(), {
     month: "short",
     day: "numeric",
@@ -38,7 +40,7 @@ export function DayDashboard({ children }: { children: ReactNode }) {
         title={t("Good to see you, {{name}}.", { name: firstName })}
         description={
           isToday
-            ? t("Small steps today. A healthier you tomorrow.")
+            ? motivation || t("Small steps today. A healthier you tomorrow.")
             : t(
                 "Viewing your saved day: {{date}}. Start a new day below to log today's activities.",
                 { date: savedDate }

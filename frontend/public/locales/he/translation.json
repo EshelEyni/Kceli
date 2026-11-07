@@ -524,5 +524,13 @@
   "Calorie estimation is busy. Try later or enter calories.": "שירות ההערכה עמוס. אפשר לנסות מאוחר יותר או להזין קלוריות ידנית.",
   "Could not estimate calories. Try again or enter calories.": "לא ניתן להעריך קלוריות. אפשר לנסות שוב או להזין קלוריות ידנית.",
   "Enter manually": "הזנה ידנית",
-  "Enter a food name and calories.": "יש להזין שם מזון וקלוריות."
+  "Enter a food name and calories.": "יש להזין שם מזון וקלוריות.",
+  "Daily tips and motivation": "טיפים ומוטיבציה יומית",
+  "An optional AI message each day. You can turn it off anytime.": "מסר יומי מבוסס בינה מלאכותית, לבחירתך. אפשר לכבות בכל עת.",
+  "Preferred tone": "סגנון מועדף",
+  "Based on my profile": "לפי הפרופיל שלי",
+  "Warm and encouraging": "חם ומעודד",
+  "Direct and motivating": "ישיר ומדרבן",
+  "Calm and practical": "רגוע ומעשי",
+  "Language and tone changes apply to your next daily message.": "שינויי השפה והסגנון יחולו על המסר היומי הבא."
 }

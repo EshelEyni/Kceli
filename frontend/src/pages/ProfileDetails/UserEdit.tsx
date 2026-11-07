@@ -2,10 +2,12 @@ import { t } from "../../i18n";
 import { FC } from "react";
 import { useProfile } from "./ProfileContext";
 import { Controller, useForm } from "react-hook-form";
-import { WeightLossGoal } from "../../../../shared/types/user";
+import { MotivationTone, WeightLossGoal } from "../../../../shared/types/user";
 import { Button } from "../../components/App/Button/Button";
 
 type FormData = {
+  dailyMotivationEnabled: boolean;
+  dailyMotivationTone: MotivationTone;
   language: "en" | "he";
   username: string;
   fullname: string;
@@ -20,6 +22,8 @@ export const UserEdit: FC = () => {
   const { user, updateUser, setIsEditing, isLoadingUpdateUser } = useProfile();
 
   const defaultValues = {
+    dailyMotivationEnabled: user?.dailyMotivationEnabled === true,
+    dailyMotivationTone: user?.dailyMotivationTone || "auto",
     language: user?.language || "en",
     username: user?.username || "",
     fullname: user?.fullname || "",
@@ -31,7 +35,7 @@ export const UserEdit: FC = () => {
     targetCaloricDeficitPerDay: user?.targetCaloricDeficitPerDay || 0,
   };
 
-  const { control, handleSubmit } = useForm<FormData>({ defaultValues });
+  const { control, handleSubmit, watch } = useForm<FormData>({ defaultValues });
 
   if (!user) return null;
 
@@ -82,6 +86,31 @@ export const UserEdit: FC = () => {
           )}
         />
       </div>
+
+      <fieldset className="daily-motivation-settings">
+        <legend>{t("Daily tips and motivation")}</legend>
+        <Controller name="dailyMotivationEnabled" control={control} render={({ field }) => (
+          <label className="daily-motivation-settings__toggle" htmlFor="daily-motivation-enabled">
+            <input id="daily-motivation-enabled" type="checkbox" role="switch"
+              checked={field.value} onChange={event => field.onChange(event.target.checked)}
+              onBlur={field.onBlur} ref={field.ref} disabled={isLoadingUpdateUser} />
+            <span>{t("Daily tips and motivation")}</span>
+          </label>
+        )} />
+        <p>{t("An optional AI message each day. You can turn it off anytime.")}</p>
+        {watch("dailyMotivationEnabled") && <>
+          <label htmlFor="daily-motivation-tone">{t("Preferred tone")}</label>
+          <Controller name="dailyMotivationTone" control={control} render={({ field }) => (
+            <select id="daily-motivation-tone" {...field} disabled={isLoadingUpdateUser}>
+              <option value="auto">{t("Based on my profile")}</option>
+              <option value="warm">{t("Warm and encouraging")}</option>
+              <option value="direct">{t("Direct and motivating")}</option>
+              <option value="neutral">{t("Calm and practical")}</option>
+            </select>
+          )} />
+          <p>{t("Language and tone changes apply to your next daily message.")}</p>
+        </>}
+      </fieldset>
 
       <div className="user-edit__item-container">
         <label htmlFor="birthdate">{t("birthdate:")}</label>

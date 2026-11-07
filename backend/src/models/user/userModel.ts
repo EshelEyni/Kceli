@@ -79,6 +79,8 @@ const userSchema: Schema<IUser> = new Schema(
       },
     },
     fullname: { type: String, required: [true, "Please provide your full name"] },
+    dailyMotivationEnabled: { type: Boolean, default: false },
+    dailyMotivationTone: { type: String, enum: ["auto", "warm", "direct", "neutral"], default: "auto" },
     language: { type: String, enum: ["en", "he"], default: "en", required: true },
     email: {
       type: String,

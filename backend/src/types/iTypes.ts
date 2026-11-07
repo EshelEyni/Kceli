@@ -5,6 +5,8 @@ import { UserWorkoutSchedule, WeightLossGoal } from "../../../shared/types/user"
 import { CombinedWorkoutItem, WeightUnit } from "../../../shared/types/workout";
 
 export interface IUser extends Document {
+  dailyMotivationEnabled?: boolean;
+  dailyMotivationTone?: "auto" | "warm" | "direct" | "neutral";
   language: "en" | "he";
   username: string;
   password: string;

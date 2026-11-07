@@ -524,5 +524,13 @@
   "Calorie estimation is busy. Try later or enter calories.": "Calorie estimation is busy. Try later or enter calories.",
   "Could not estimate calories. Try again or enter calories.": "Could not estimate calories. Try again or enter calories.",
   "Enter manually": "Enter manually",
-  "Enter a food name and calories.": "Enter a food name and calories."
+  "Enter a food name and calories.": "Enter a food name and calories.",
+  "Daily tips and motivation": "Daily tips and motivation",
+  "An optional AI message each day. You can turn it off anytime.": "An optional AI message each day. You can turn it off anytime.",
+  "Preferred tone": "Preferred tone",
+  "Based on my profile": "Based on my profile",
+  "Warm and encouraging": "Warm and encouraging",
+  "Direct and motivating": "Direct and motivating",
+  "Calm and practical": "Calm and practical",
+  "Language and tone changes apply to your next daily message.": "Language and tone changes apply to your next daily message."
 }
