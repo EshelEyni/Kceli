@@ -7,11 +7,8 @@ import { WeightWaistChart } from "../../components/Charts/WeightWaistChart/Weigh
 import { useProfile } from "./ProfileContext";
 import "./ProfileDetails.scss";
 import { UserInfo } from "./UserInfo";
-import { RecommendedWeightDisplay } from "./RecommendedWeightDisplay";
-import { GoalCalender } from "./GoalCalender";
 import { UserEdit } from "./UserEdit";
 import { GoalIndicator } from "../../components/GoalIndicator/GoalIndicator";
-import { WeightToLose } from "./WeightToLose";
 import { GoalEdit } from "../../components/GoalEdit/GoalEdit";
 import { UserGoalDisplay } from "./UserGoalDisplay";
 import { usePageLoaded } from "../../hooks/usePageLoaded";
@@ -26,8 +23,6 @@ const ProfileDetails = () => {
     isLoading,
     isSuccess,
     isError,
-    timeToMaxRecommendedWeight,
-    timeToCurrentWeightLossGoal,
     isEditing,
   } = useProfile();
 
@@ -161,25 +156,6 @@ const ProfileDetails = () => {
           </section>
         </aside>
       </div>
-      <details className="ui-card ui-details ui-legacy-insights">
-        <summary>{t("Additional weight and goal insights")}</summary>
-        <div className="ui-insights-grid">
-          {timeToCurrentWeightLossGoal && (
-            <GoalCalender
-              title={t("time to current weight loss goal")}
-              time={timeToCurrentWeightLossGoal}
-            />
-          )}
-          <RecommendedWeightDisplay />
-          <WeightToLose />
-          {timeToMaxRecommendedWeight && (
-            <GoalCalender
-              title={t("time to max recommended weight")}
-              time={timeToMaxRecommendedWeight}
-            />
-          )}
-        </div>
-      </details>
       <Outlet />
     </main>
   );
