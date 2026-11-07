@@ -87,13 +87,6 @@ export function DayDashboard({ children }: { children: ReactNode }) {
       </div>
       <div className="ui-dashboard-grid">
         <div className="ui-stack">
-          <section
-            className="ui-card ui-daily-tools"
-            id="daily-tools"
-            aria-label={t("Daily logging tools")}
-          >
-            {children}
-          </section>
           <section className="ui-card ui-hero">
             <div>
               <p className="ui-eyebrow">{t("A little consistency goes a long way")}</p>
@@ -112,6 +105,13 @@ export function DayDashboard({ children }: { children: ReactNode }) {
               </Link>
             </div>
             <CalorieBudget consumed={consumedCalories} target={target} />
+          </section>
+          <section
+            className="ui-card ui-daily-tools"
+            id="daily-tools"
+            aria-label={t("Daily logging tools")}
+          >
+            {children}
           </section>
         </div>
         <aside className="ui-stack">
